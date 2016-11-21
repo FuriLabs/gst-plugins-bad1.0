@@ -1,15 +1,15 @@
 
-Release notes for GStreamer Good Plugins 1.8.3
+Release notes for GStreamer Good Plugins 1.10.1
 
-The GStreamer team is proud to announce the third bugfix release in the stable
-1.8 release series of your favourite cross-platform multimedia framework!
+The GStreamer team is proud to announce the first bugfix release in the stable
+1.10 release series of your favourite cross-platform multimedia framework!
 
 
-This release only contains bugfixes and it is safe to update from 1.8.x. For a
+This release only contains bugfixes and it is safe to update from 1.10.0. For a
 full list of bugfixes see Bugzilla.
 
 
-See /releases/1.8/ for the full release notes.
+See /releases/1.10/ for the full release notes.
 
 
 "Such ingratitude.  After all the times I've saved your life."
@@ -55,19 +55,17 @@ contains a set of codecs plugins based on libav (formerly gst-ffmpeg)
 
 Bugs fixed in this release
      
-      * 767666 : splitmuxsink: infinite change_state loop
-      * 747275 : jackaudiosink: hangs when jackd exits
-      * 766025 : rtpsession: race condition accessing ssrcs hash table
-      * 766970 : aacparse: sticky event criticals with RTL HD mpeg-ts stream
-      * 767496 : flvdemux: won't parse a date string with trailing whitespace
-      * 767680 : rtph265pay: fix nal type parsing an sps/pps/vps insertion via config-interval property
-      * 767980 : udpsrc: Receiving multicast packets from all addresses, not just the configured
-      * 768232 : rtspsrc: protocols aren't reset after rtsp redirect
-      * 768268 : qtdemux: Push caps only when it was updated
-      * 768509 : matroskamux: Segmentation fault in string comparison
-      * 768623 : udpsrc: There is no struct in_pktinfo on FreeBSD
-      * 769514 : splitmuxsink: Deadlock
-      * 769773 : multiudpsink: Randomly ceases to send to clients
+      * 769765 : v4l2: Sanitise buffer sizes provided by v4l2
+      * 770568 : rtspsrc: fails to connect when the 'control' attribute is omitted in a single media description
+      * 772610 : rtspsrc doesn't support redirect on play
+      * 773269 : rtpbin: avoid generating errors when rtcp messages are empty and check the queue is not empty
+      * 773512 : rtph263pay: Fix leak for B-fragments
+      * 773515 : rtph263ppay: Fix caps leak
+      * 773516 : rtph263depay: Don't drop mode b packets with picture start code
+      * 773784 : splitmuxsink: failed assertion on gst-launch-1.0 ^C
+      * 773861 : wavparse: element error is posted at EOS even though WAV file is OK
+      * 774507 : splitmuxsink: pad request fails for flvmux
+      * 774556 : Splitmuxsink crash (ver 1.10.0)
 
 ==== Download ====
 
@@ -104,16 +102,14 @@ subscribe to the gstreamer-devel list.
         
 Contributors to this release
     
-      * Brad Lackey
+      * Alejandro G. Castro
+      * Havard Graff
       * Jan Schmidt
-      * Jonas Holmberg
-      * Jürgen Slowack
-      * Miguel París Díaz
-      * Nicolas Dufresne
-      * Reynaldo H. Verdejo Pinochet
+      * Matt Staples
+      * Petr Kulhavy
       * Sebastian Dröge
-      * Seungha Yang
-      * Thomas Bluemel
-      * Thomas Scheuermann
+      * Stian Selnes
       * Tim-Philipp Müller
+      * Vinod Kesti
+      * William Manley
  

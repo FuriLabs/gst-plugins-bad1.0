@@ -152,6 +152,20 @@ _gst_buffer_new_and_alloc (gsize size, GstBuffer ** buffer, guint8 ** data)
   *buffer = _gst_buffer_new_wrapped (*data, size, g_free);
 }
 
+static GstFlowReturn
+gst_flv_mux_clip_running_time (GstCollectPads * pads,
+    GstCollectData * cdata, GstBuffer * buf, GstBuffer ** outbuf,
+    gpointer user_data)
+{
+  buf = gst_buffer_make_writable (buf);
+
+  if (!GST_CLOCK_TIME_IS_VALID (GST_BUFFER_PTS (buf)))
+    GST_BUFFER_PTS (buf) = GST_BUFFER_DTS (buf);
+
+  return gst_collect_pads_clip_running_time (pads, cdata, buf, outbuf,
+      user_data);
+}
+
 static void
 gst_flv_mux_class_init (GstFlvMuxClass * klass)
 {
@@ -186,12 +200,11 @@ gst_flv_mux_class_init (GstFlvMuxClass * klass)
       GST_DEBUG_FUNCPTR (gst_flv_mux_request_new_pad);
   gstelement_class->release_pad = GST_DEBUG_FUNCPTR (gst_flv_mux_release_pad);
 
-  gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&videosink_templ));
-  gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&audiosink_templ));
-  gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&src_templ));
+  gst_element_class_add_static_pad_template (gstelement_class,
+      &videosink_templ);
+  gst_element_class_add_static_pad_template (gstelement_class,
+      &audiosink_templ);
+  gst_element_class_add_static_pad_template (gstelement_class, &src_templ);
   gst_element_class_set_static_metadata (gstelement_class, "FLV muxer",
       "Codec/Muxer",
       "Muxes video/audio streams into a FLV stream",
@@ -218,7 +231,7 @@ gst_flv_mux_init (GstFlvMux * mux)
   gst_collect_pads_set_event_function (mux->collect,
       GST_DEBUG_FUNCPTR (gst_flv_mux_handle_sink_event), mux);
   gst_collect_pads_set_clip_function (mux->collect,
-      GST_DEBUG_FUNCPTR (gst_collect_pads_clip_running_time), mux);
+      GST_DEBUG_FUNCPTR (gst_flv_mux_clip_running_time), mux);
 
   gst_flv_mux_reset (GST_ELEMENT (mux));
 }

@@ -227,6 +227,7 @@ gst_rtsp_src_ntp_time_source_get_type (void)
 #define DEFAULT_NTP_TIME_SOURCE  NTP_TIME_SOURCE_NTP
 #define DEFAULT_USER_AGENT       "GStreamer/" PACKAGE_VERSION
 #define DEFAULT_MAX_RTCP_RTP_TIME_DIFF 1000
+#define DEFAULT_RFC7273_SYNC         FALSE
 
 enum
 {
@@ -265,7 +266,8 @@ enum
   PROP_DO_RETRANSMISSION,
   PROP_NTP_TIME_SOURCE,
   PROP_USER_AGENT,
-  PROP_MAX_RTCP_RTP_TIME_DIFF
+  PROP_MAX_RTCP_RTP_TIME_DIFF,
+  PROP_RFC7273_SYNC
 };
 
 #define GST_TYPE_RTSP_NAT_METHOD (gst_rtsp_nat_method_get_type())
@@ -341,13 +343,13 @@ typedef struct
 } PtMapItem;
 
 /* commands we send to out loop to notify it of events */
-#define CMD_OPEN	(1 << 0)
-#define CMD_PLAY	(1 << 1)
-#define CMD_PAUSE	(1 << 2)
-#define CMD_CLOSE	(1 << 3)
-#define CMD_WAIT	(1 << 4)
-#define CMD_RECONNECT	(1 << 5)
-#define CMD_LOOP	(1 << 6)
+#define CMD_OPEN       (1 << 0)
+#define CMD_PLAY       (1 << 1)
+#define CMD_PAUSE      (1 << 2)
+#define CMD_CLOSE      (1 << 3)
+#define CMD_WAIT       (1 << 4)
+#define CMD_RECONNECT  (1 << 5)
+#define CMD_LOOP       (1 << 6)
 
 /* mask for all commands */
 #define CMD_ALL         ((CMD_LOOP << 1) - 1)
@@ -732,6 +734,12 @@ gst_rtspsrc_class_init (GstRTSPSrcClass * klass)
           DEFAULT_MAX_RTCP_RTP_TIME_DIFF,
           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  g_object_class_install_property (gobject_class, PROP_RFC7273_SYNC,
+      g_param_spec_boolean ("rfc7273-sync", "Sync on RFC7273 clock",
+          "Synchronize received streams to the RFC7273 clock "
+          "(requires clock and offset to be provided)", DEFAULT_RFC7273_SYNC,
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   /**
    * GstRTSPSrc::handle-request:
    * @rtspsrc: a #GstRTSPSrc
@@ -828,8 +836,7 @@ gst_rtspsrc_class_init (GstRTSPSrcClass * klass)
   gstelement_class->provide_clock = gst_rtspsrc_provide_clock;
   gstelement_class->change_state = gst_rtspsrc_change_state;
 
-  gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&rtptemplate));
+  gst_element_class_add_static_pad_template (gstelement_class, &rtptemplate);
 
   gst_element_class_set_static_metadata (gstelement_class,
       "RTSP packet receiver", "Source/Network",
@@ -880,6 +887,7 @@ gst_rtspsrc_init (GstRTSPSrc * src)
   src->ntp_time_source = DEFAULT_NTP_TIME_SOURCE;
   src->user_agent = g_strdup (DEFAULT_USER_AGENT);
   src->max_rtcp_rtp_time_diff = DEFAULT_MAX_RTCP_RTP_TIME_DIFF;
+  src->rfc7273_sync = DEFAULT_RFC7273_SYNC;
 
   /* get a list of all extensions */
   src->extensions = gst_rtsp_ext_list_get ();
@@ -898,6 +906,8 @@ gst_rtspsrc_init (GstRTSPSrc * src)
   src->state = GST_RTSP_STATE_INVALID;
 
   GST_OBJECT_FLAG_SET (src, GST_ELEMENT_FLAG_SOURCE);
+  gst_bin_set_suppressed_flags (GST_BIN (src),
+      GST_ELEMENT_FLAG_SOURCE | GST_ELEMENT_FLAG_SINK);
 }
 
 static void
@@ -1159,6 +1169,9 @@ gst_rtspsrc_set_property (GObject * object, guint prop_id, const GValue * value,
     case PROP_MAX_RTCP_RTP_TIME_DIFF:
       rtspsrc->max_rtcp_rtp_time_diff = g_value_get_int (value);
       break;
+    case PROP_RFC7273_SYNC:
+      rtspsrc->rfc7273_sync = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1304,6 +1317,9 @@ gst_rtspsrc_get_property (GObject * object, guint prop_id, GValue * value,
       break;
     case PROP_MAX_RTCP_RTP_TIME_DIFF:
       g_value_set_int (value, rtspsrc->max_rtcp_rtp_time_diff);
+      break;
+    case PROP_RFC7273_SYNC:
+      g_value_set_boolean (value, rtspsrc->rfc7273_sync);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1596,7 +1612,8 @@ clear_ptmap_item (PtMapItem * item)
 }
 
 static GstRTSPStream *
-gst_rtspsrc_create_stream (GstRTSPSrc * src, GstSDPMessage * sdp, gint idx)
+gst_rtspsrc_create_stream (GstRTSPSrc * src, GstSDPMessage * sdp, gint idx,
+    gint n_streams)
 {
   GstRTSPStream *stream;
   const gchar *control_url;
@@ -1650,6 +1667,11 @@ gst_rtspsrc_create_stream (GstRTSPSrc * src, GstSDPMessage * sdp, gint idx)
   GST_DEBUG_OBJECT (src, " port: %d", stream->port);
   GST_DEBUG_OBJECT (src, " container: %d", stream->container);
   GST_DEBUG_OBJECT (src, " control: %s", GST_STR_NULL (control_url));
+
+  /* RFC 2326, C.3: missing control_url permitted in case of a single stream */
+  if (control_url == NULL && n_streams == 1) {
+    control_url = "";
+  }
 
   if (control_url != NULL) {
     stream->control_url = g_strdup (control_url);
@@ -2833,6 +2855,10 @@ request_rtcp_encoder (GstElement * rtpbin, guint session,
       gst_value_deserialize (&rtcp_auth, str);
       gst_structure_get (s, "srtp-key", GST_TYPE_BUFFER, &buf, NULL);
 
+      g_object_set_property (G_OBJECT (stream->srtpenc), "rtp-cipher",
+          &rtcp_cipher);
+      g_object_set_property (G_OBJECT (stream->srtpenc), "rtp-auth",
+          &rtcp_auth);
       g_object_set_property (G_OBJECT (stream->srtpenc), "rtcp-cipher",
           &rtcp_cipher);
       g_object_set_property (G_OBJECT (stream->srtpenc), "rtcp-auth",
@@ -3018,6 +3044,10 @@ gst_rtspsrc_stream_configure_manager (GstRTSPSrc * src, GstRTSPStream * stream,
 
       if (g_object_class_find_property (klass, "ntp-sync")) {
         g_object_set (src->manager, "ntp-sync", src->ntp_sync, NULL);
+      }
+
+      if (g_object_class_find_property (klass, "rfc7273-sync")) {
+        g_object_set (src->manager, "rfc7273-sync", src->rfc7273_sync, NULL);
       }
 
       if (src->use_pipeline_clock) {
@@ -3596,9 +3626,6 @@ gst_rtspsrc_stream_configure_udp_sinks (GstRTSPSrc * src,
     g_object_set (G_OBJECT (stream->fakesrc), "filltype", 3, "num-buffers", 5,
         "sizetype", 2, "sizemax", 200, "silent", TRUE, NULL);
 
-    /* we don't want to consider this a sink */
-    GST_OBJECT_FLAG_UNSET (stream->udpsink[0], GST_ELEMENT_FLAG_SINK);
-
     /* keep everything locked */
     gst_element_set_locked_state (stream->udpsink[0], TRUE);
     gst_element_set_locked_state (stream->fakesrc, TRUE);
@@ -3644,9 +3671,6 @@ gst_rtspsrc_stream_configure_udp_sinks (GstRTSPSrc * src,
           "close-socket", FALSE, NULL);
       g_object_unref (socket);
     }
-
-    /* we don't want to consider this a sink */
-    GST_OBJECT_FLAG_UNSET (stream->udpsink[1], GST_ELEMENT_FLAG_SINK);
 
     /* we keep this playing always */
     gst_element_set_locked_state (stream->udpsink[1], TRUE);
@@ -4160,6 +4184,7 @@ gst_rtsp_conninfo_close (GstRTSPSrc * src, GstRTSPConnInfo * info,
     GST_DEBUG_OBJECT (src, "freeing connection...");
     gst_rtsp_connection_free (info->connection);
     info->connection = NULL;
+    info->flushing = FALSE;
   }
   GST_RTSP_STATE_UNLOCK (src);
   return GST_RTSP_OK;
@@ -4856,30 +4881,26 @@ gst_rtspsrc_reconnect (GstRTSPSrc * src, gboolean async)
   if (!restart)
     goto done;
 
-  /* unless redirect, try tcp */
-  if (!src->need_redirect)
-    src->cur_protocols = GST_RTSP_LOWER_TRANS_TCP;
+  /* we can try only TCP now */
+  src->cur_protocols = GST_RTSP_LOWER_TRANS_TCP;
 
   /* close and cleanup our state */
   if ((res = gst_rtspsrc_close (src, async, FALSE)) < 0)
     goto done;
 
-  /* unless redirect, see if we have TCP left to try. Also don't 
-   * try TCP when we were configured with an SDP. */
-  if (!src->need_redirect && (!(src->protocols & GST_RTSP_LOWER_TRANS_TCP)
-          || src->from_sdp))
+  /* see if we have TCP left to try. Also don't try TCP when we were configured
+   * with an SDP. */
+  if (!(src->protocols & GST_RTSP_LOWER_TRANS_TCP) || src->from_sdp)
     goto no_protocols;
 
-  if (!src->need_redirect) {
-    /* We post a warning message now to inform the user
-     * that nothing happened. It's most likely a firewall thing. */
-    GST_ELEMENT_WARNING (src, RESOURCE, READ, (NULL),
-        ("Could not receive any UDP packets for %.4f seconds, maybe your "
-            "firewall is blocking it. Retrying using a tcp connection.",
-            gst_guint64_to_gdouble (src->udp_timeout / 1000000.0)));
-  }
+  /* We post a warning message now to inform the user
+   * that nothing happened. It's most likely a firewall thing. */
+  GST_ELEMENT_WARNING (src, RESOURCE, READ, (NULL),
+      ("Could not receive any UDP packets for %.4f seconds, maybe your "
+          "firewall is blocking it. Retrying using a tcp connection.",
+          gst_guint64_to_gdouble (src->udp_timeout) / 1000000.0));
 
-  /* unless redirect, open new connection using tcp */
+  /* open new connection using tcp */
   if (gst_rtspsrc_open (src, async) < 0)
     goto open_failed;
 
@@ -4898,7 +4919,7 @@ no_protocols:
     GST_ELEMENT_ERROR (src, RESOURCE, READ, (NULL),
         ("Could not receive any UDP packets for %.4f seconds, maybe your "
             "firewall is blocking it. No other protocols to try.",
-            gst_guint64_to_gdouble (src->udp_timeout / 1000000.0)));
+            gst_guint64_to_gdouble (src->udp_timeout) / 1000000.0));
     return GST_RTSP_ERROR;
   }
 open_failed:
@@ -5097,9 +5118,7 @@ pause:
     } else if (ret == GST_FLOW_NOT_LINKED || ret < GST_FLOW_EOS) {
       /* for fatal errors we post an error message, post the error before the
        * EOS so the app knows about the error first. */
-      GST_ELEMENT_ERROR (src, STREAM, FAILED,
-          ("Internal data flow error."),
-          ("streaming task paused, reason %s (%d)", reason, ret));
+      GST_ELEMENT_FLOW_ERROR (src, ret);
       gst_rtspsrc_push_event (src, gst_event_new_eos ());
     }
     gst_rtspsrc_loop_send_cmd (src, CMD_WAIT, CMD_LOOP);
@@ -5961,8 +5980,10 @@ default_srtcp_params (void)
 
   buf = gst_buffer_new_wrapped (key_data, KEY_SIZE);
 
-  caps = gst_caps_new_simple ("application/x-srtp",
+  caps = gst_caps_new_simple ("application/x-srtcp",
       "srtp-key", GST_TYPE_BUFFER, buf,
+      "srtp-cipher", G_TYPE_STRING, "aes-128-icm",
+      "srtp-auth", G_TYPE_STRING, "hmac-sha1-80",
       "srtcp-cipher", G_TYPE_STRING, "aes-128-icm",
       "srtcp-auth", G_TYPE_STRING, "hmac-sha1-80", NULL);
 
@@ -6649,7 +6670,7 @@ gst_rtspsrc_open_from_sdp (GstRTSPSrc * src, GstSDPMessage * sdp,
   /* create streams */
   n_streams = gst_sdp_message_medias_len (sdp);
   for (i = 0; i < n_streams; i++) {
-    gst_rtspsrc_create_stream (src, sdp, i);
+    gst_rtspsrc_create_stream (src, sdp, i, n_streams);
   }
 
   src->state = GST_RTSP_STATE_INIT;
@@ -6745,7 +6766,7 @@ restart:
               NULL)) < 0)
     goto send_error;
 
-  /* we only perform redirect for the describe, currently */
+  /* we only perform redirect for describe and play, currently */
   if (src->need_redirect) {
     /* close connection, we don't have to send a TEARDOWN yet, ignore the
      * result. */
@@ -7231,6 +7252,7 @@ gst_rtspsrc_play (GstRTSPSrc * src, GstSegment * segment, gboolean async)
 
   GST_DEBUG_OBJECT (src, "PLAY...");
 
+restart:
   if ((res = gst_rtspsrc_ensure_open (src, async)) < 0)
     goto open_failed;
 
@@ -7302,6 +7324,18 @@ gst_rtspsrc_play (GstRTSPSrc * src, GstSegment * segment, gboolean async)
 
     if ((res = gst_rtspsrc_send (src, conn, &request, &response, NULL)) < 0)
       goto send_error;
+
+    if (src->need_redirect) {
+      GST_DEBUG_OBJECT (src,
+          "redirect: tearing down and restarting with new url");
+      /* teardown and restart with new url */
+      gst_rtspsrc_close (src, TRUE, FALSE);
+      /* reset protocols to force re-negotiation with redirected url */
+      src->cur_protocols = src->protocols;
+      gst_rtsp_message_unset (&request);
+      gst_rtsp_message_unset (&response);
+      goto restart;
+    }
 
     /* seek may have silently failed as it is not supported */
     if (!(src->methods & GST_RTSP_PLAY)) {

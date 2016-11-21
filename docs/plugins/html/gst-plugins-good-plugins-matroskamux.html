@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-matroskademux.html" title="matroskademux">
-<link rel="next" href="gst-plugins-good-plugins-mj2mux.html" title="mj2mux">
+<link rel="next" href="gst-plugins-good-plugins-matroskaparse.html" title="matroskaparse">
 <meta name="generator" content="GTK-Doc V1.25 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
@@ -23,7 +23,7 @@
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
 <td><a accesskey="p" href="gst-plugins-good-plugins-matroskademux.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
-<td><a accesskey="n" href="gst-plugins-good-plugins-mj2mux.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="gst-plugins-good-plugins-matroskaparse.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
 </tr></table>
 <div class="refentry">
 <a name="gst-plugins-good-plugins-matroskamux"></a><div class="titlepage"></div>
@@ -64,6 +64,11 @@
 <td class="property_name"><a class="link" href="gst-plugins-good-plugins-matroskamux.html#GstMatroskaMux--streamable" title="The “streamable” property">streamable</a></td>
 <td class="property_flags">Read / Write</td>
 </tr>
+<tr>
+<td class="property_type"><a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gint64"><span class="type">gint64</span></a></td>
+<td class="property_name"><a class="link" href="gst-plugins-good-plugins-matroskamux.html#GstMatroskaMux--timecodescale" title="The “timecodescale” property">timecodescale</a></td>
+<td class="property_flags">Read / Write</td>
+</tr>
 </tbody>
 </table></div>
 </div>
@@ -100,7 +105,7 @@ GstMatroskaMux implements
 <a name="gst-plugins-good-plugins-matroskamux.description"></a><h2>Description</h2>
 <p>matroskamux muxes different input streams into a Matroska file.</p>
 <div class="refsect2">
-<a name="id-1.2.79.8.3"></a><h3>Example launch line</h3>
+<a name="id-1.2.86.8.3"></a><h3>Example launch line</h3>
 <div class="informalexample">
   <table class="listing_frame" border="0" cellpadding="0" cellspacing="0">
     <tbody>
@@ -127,7 +132,7 @@ GstMatroskaMux implements
 <div class="refsynopsisdiv">
 <h2>Synopsis</h2>
 <div class="refsect2">
-<a name="id-1.2.79.8.4.1"></a><h3>Element Information</h3>
+<a name="id-1.2.86.8.4.1"></a><h3>Element Information</h3>
 <div class="variablelist"><table border="0" class="variablelist">
 <colgroup>
 <col align="left" valign="top">
@@ -153,7 +158,7 @@ GstMatroskaMux implements
 </div>
 <hr>
 <div class="refsect2">
-<a name="id-1.2.79.8.4.2"></a><h3>Element Pads</h3>
+<a name="id-1.2.86.8.4.2"></a><h3>Element Pads</h3>
 <div class="variablelist"><table border="0" class="variablelist">
 <colgroup>
 <col align="left" valign="top">
@@ -310,39 +315,39 @@ GstMatroskaMux implements
 </tr>
 <tr>
 <td><p><span class="term">details</span></p></td>
-<td>video/mpeg, mpegversion=(int){ 1, 2, 4 }, systemstream=(boolean)false, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td>video/mpeg, mpegversion=(int){ 1, 2, 4 }, systemstream=(boolean)false, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-h264, stream-format=(string)avc, alignment=(string)au, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-h264, stream-format=(string)avc, alignment=(string)au, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-h265, stream-format=(string)hvc1, alignment=(string)au, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-h265, stream-format=(string)hvc1, alignment=(string)au, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-divx, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-divx, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-huffyuv, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-huffyuv, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-dv, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-dv, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-h263, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-h263, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-msmpeg, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-msmpeg, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> image/jpeg, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> image/jpeg, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
@@ -350,31 +355,31 @@ GstMatroskaMux implements
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-dirac, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-dirac, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-pn-realvideo, rmversion=(int)[ 1, 4 ], width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-pn-realvideo, rmversion=(int)[ 1, 4 ], width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-vp8, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-vp8, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-vp9, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-vp9, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-raw, format=(string){ YUY2, I420, YV12, UYVY, AYUV, GRAY8, BGR, RGB }, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-raw, format=(string){ YUY2, I420, YV12, UYVY, AYUV, GRAY8, BGR, RGB }, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-prores, width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-prores, width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 <tr>
 <td><p><span class="term"></span></p></td>
-<td> video/x-wmv, wmvversion=(int)[ 1, 3 ], width=(int)[ 16, 4096 ], height=(int)[ 16, 4096 ]</td>
+<td> video/x-wmv, wmvversion=(int)[ 1, 3 ], width=(int)[ 16, 2147483647 ], height=(int)[ 16, 2147483647 ]</td>
 </tr>
 </tbody>
 </table></div>
@@ -458,6 +463,15 @@ GstMatroskaMux implements
 <p>If set to true, the output should be as if it is to be streamed and hence no indexes written or duration written.</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GstMatroskaMux--timecodescale"></a><h3>The <code class="literal">“timecodescale”</code> property</h3>
+<pre class="programlisting">  “timecodescale”            <a href="/usr/share/gtk-doc/html/glibglib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
+<p>TimecodeScale used to calculate the Raw Timecode of a Block.</p>
+<p>Flags: Read / Write</p>
+<p>Allowed values: [1,1000000000]</p>
+<p>Default value: 1000000</p>
 </div>
 </div>
 </div>

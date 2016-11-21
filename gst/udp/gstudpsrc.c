@@ -128,7 +128,7 @@
 
 /* Required for other parts of in_pktinfo / in6_pktinfo but only
  * on non-Windows and can be included after glib.h */
-#ifndef G_OS_WIN32
+#ifndef G_PLATFORM_WIN32
 #include <netinet/ip.h>
 #endif
 
@@ -157,8 +157,10 @@ struct _GstIPPktinfoMessage
   GSocketControlMessage parent;
 
   guint ifindex;
-#ifndef G_OS_WIN32
+#ifndef G_PLATFORM_WIN32
+#ifndef __NetBSD__
   struct in_addr spec_dst;
+#endif
 #endif
   struct in_addr addr;
 };
@@ -201,8 +203,10 @@ gst_ip_pktinfo_message_deserialize (gint level,
 
   message = g_object_new (GST_TYPE_IP_PKTINFO_MESSAGE, NULL);
   message->ifindex = pktinfo->ipi_ifindex;
-#ifndef G_OS_WIN32
+#ifndef G_PLATFORM_WIN32
+#ifndef __NetBSD__
   message->spec_dst = pktinfo->ipi_spec_dst;
+#endif
 #endif
   message->addr = pktinfo->ipi_addr;
 
@@ -428,6 +432,7 @@ static GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE ("src",
 #define UDP_DEFAULT_AUTO_MULTICAST     TRUE
 #define UDP_DEFAULT_REUSE              TRUE
 #define UDP_DEFAULT_LOOP               TRUE
+#define UDP_DEFAULT_RETRIEVE_SENDER_ADDRESS TRUE
 
 enum
 {
@@ -447,7 +452,8 @@ enum
   PROP_AUTO_MULTICAST,
   PROP_REUSE,
   PROP_ADDRESS,
-  PROP_LOOP
+  PROP_LOOP,
+  PROP_RETRIEVE_SENDER_ADDRESS
 };
 
 static void gst_udpsrc_uri_handler_init (gpointer g_iface, gpointer iface_data);
@@ -567,14 +573,36 @@ gst_udpsrc_class_init (GstUDPSrcClass * klass)
           "Address to receive packets for. This is equivalent to the "
           "multicast-group property for now", UDP_DEFAULT_MULTICAST_GROUP,
           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  /**
+   * GstUDPSrc::loop:
+   *
+   * Can be used to disable multicast loopback.
+   *
+   * Since: 1.8
+   */
   g_object_class_install_property (gobject_class, PROP_LOOP,
       g_param_spec_boolean ("loop", "Multicast Loopback",
           "Used for setting the multicast loop parameter. TRUE = enable,"
           " FALSE = disable", UDP_DEFAULT_LOOP,
           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+  /**
+   * GstUDPSrc::retrieve-sender-address:
+   *
+   * Whether to retrieve the sender address and add it to the buffers as
+   * meta. Disabling this might result in minor performance improvements
+   * in certain scenarios.
+   *
+   * Since: 1.10
+   */
+  g_object_class_install_property (gobject_class, PROP_RETRIEVE_SENDER_ADDRESS,
+      g_param_spec_boolean ("retrieve-sender-address",
+          "Retrieve Sender Address",
+          "Whether to retrieve the sender address and add it to buffers as "
+          "meta. Disabling this might result in minor performance improvements "
+          "in certain scenarios", UDP_DEFAULT_RETRIEVE_SENDER_ADDRESS,
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&src_template));
+  gst_element_class_add_static_pad_template (gstelement_class, &src_template);
 
   gst_element_class_set_static_metadata (gstelement_class,
       "UDP packet receiver", "Source/Network",
@@ -612,6 +640,7 @@ gst_udpsrc_init (GstUDPSrc * udpsrc)
   udpsrc->used_socket = UDP_DEFAULT_USED_SOCKET;
   udpsrc->reuse = UDP_DEFAULT_REUSE;
   udpsrc->loop = UDP_DEFAULT_LOOP;
+  udpsrc->retrieve_sender_address = UDP_DEFAULT_RETRIEVE_SENDER_ADDRESS;
 
   /* configure basesrc to be a live source */
   gst_base_src_set_live (GST_BASE_SRC (udpsrc), TRUE);
@@ -811,18 +840,28 @@ gst_udpsrc_create (GstPushSrc * psrc, GstBuffer ** buf)
   GstUDPSrc *udpsrc;
   GstBuffer *outbuf = NULL;
   GSocketAddress *saddr = NULL;
+  GSocketAddress **p_saddr;
   gint flags = G_SOCKET_MSG_NONE;
   gboolean try_again;
   GError *err = NULL;
   gssize res;
   gsize offset;
   GSocketControlMessage **msgs = NULL;
+  GSocketControlMessage ***p_msgs;
   gint n_msgs = 0, i;
 
   udpsrc = GST_UDPSRC_CAST (psrc);
 
   if (!gst_udpsrc_ensure_mem (udpsrc))
     goto memory_alloc_error;
+
+  /* optimization: use messages only in multicast mode */
+  p_msgs =
+      (g_inet_address_get_is_multicast (g_inet_socket_address_get_address
+          (udpsrc->addr))) ? &msgs : NULL;
+
+  /* Retrieve sender address unless we've been configured not to do so */
+  p_saddr = (udpsrc->retrieve_sender_address) ? &saddr : NULL;
 
 retry:
 
@@ -864,8 +903,8 @@ retry:
   }
 
   res =
-      g_socket_receive_message (udpsrc->used_socket, &saddr, udpsrc->vec, 2,
-      &msgs, &n_msgs, &flags, udpsrc->cancellable, &err);
+      g_socket_receive_message (udpsrc->used_socket, p_saddr, udpsrc->vec, 2,
+      p_msgs, &n_msgs, &flags, udpsrc->cancellable, &err);
 
   if (G_UNLIKELY (res < 0)) {
     /* G_IO_ERROR_HOST_UNREACHABLE for a UDP socket means that a packet sent
@@ -890,44 +929,40 @@ retry:
 
   /* Retry if multicast and the destination address is not ours. We don't want
    * to receive arbitrary packets */
-  {
+  if (p_msgs) {
     GInetAddress *iaddr = g_inet_socket_address_get_address (udpsrc->addr);
     gboolean skip_packet = FALSE;
     gsize iaddr_size = g_inet_address_get_native_size (iaddr);
     const guint8 *iaddr_bytes = g_inet_address_to_bytes (iaddr);
 
-    if (g_inet_address_get_is_multicast (iaddr)) {
-
-      for (i = 0; i < n_msgs && !skip_packet; i++) {
+    for (i = 0; i < n_msgs && !skip_packet; i++) {
 #ifdef IP_PKTINFO
-        if (GST_IS_IP_PKTINFO_MESSAGE (msgs[i])) {
-          GstIPPktinfoMessage *msg = GST_IP_PKTINFO_MESSAGE (msgs[i]);
+      if (GST_IS_IP_PKTINFO_MESSAGE (msgs[i])) {
+        GstIPPktinfoMessage *msg = GST_IP_PKTINFO_MESSAGE (msgs[i]);
 
-          if (sizeof (msg->addr) == iaddr_size
-              && memcmp (iaddr_bytes, &msg->addr, sizeof (msg->addr)))
-            skip_packet = TRUE;
-        }
+        if (sizeof (msg->addr) == iaddr_size
+            && memcmp (iaddr_bytes, &msg->addr, sizeof (msg->addr)))
+          skip_packet = TRUE;
+      }
 #endif
 #ifdef IPV6_PKTINFO
-        if (GST_IS_IPV6_PKTINFO_MESSAGE (msgs[i])) {
-          GstIPV6PktinfoMessage *msg = GST_IPV6_PKTINFO_MESSAGE (msgs[i]);
+      if (GST_IS_IPV6_PKTINFO_MESSAGE (msgs[i])) {
+        GstIPV6PktinfoMessage *msg = GST_IPV6_PKTINFO_MESSAGE (msgs[i]);
 
-          if (sizeof (msg->addr) == iaddr_size
-              && memcmp (iaddr_bytes, &msg->addr, sizeof (msg->addr)))
-            skip_packet = TRUE;
-        }
+        if (sizeof (msg->addr) == iaddr_size
+            && memcmp (iaddr_bytes, &msg->addr, sizeof (msg->addr)))
+          skip_packet = TRUE;
+      }
 #endif
 #ifdef IP_RECVDSTADDR
-        if (GST_IS_IP_RECVDSTADDR_MESSAGE (msgs[i])) {
-          GstIPRecvdstaddrMessage *msg = GST_IP_RECVDSTADDR_MESSAGE (msgs[i]);
+      if (GST_IS_IP_RECVDSTADDR_MESSAGE (msgs[i])) {
+        GstIPRecvdstaddrMessage *msg = GST_IP_RECVDSTADDR_MESSAGE (msgs[i]);
 
-          if (sizeof (msg->addr) == iaddr_size
-              && memcmp (iaddr_bytes, &msg->addr, sizeof (msg->addr)))
-            skip_packet = TRUE;
-        }
-#endif
+        if (sizeof (msg->addr) == iaddr_size
+            && memcmp (iaddr_bytes, &msg->addr, sizeof (msg->addr)))
+          skip_packet = TRUE;
       }
-
+#endif
     }
 
     for (i = 0; i < n_msgs; i++) {
@@ -1163,6 +1198,9 @@ gst_udpsrc_set_property (GObject * object, guint prop_id, const GValue * value,
     case PROP_LOOP:
       udpsrc->loop = g_value_get_boolean (value);
       break;
+    case PROP_RETRIEVE_SENDER_ADDRESS:
+      udpsrc->retrieve_sender_address = g_value_get_boolean (value);
+      break;
     default:
       break;
   }
@@ -1219,6 +1257,9 @@ gst_udpsrc_get_property (GObject * object, guint prop_id, GValue * value,
       break;
     case PROP_LOOP:
       g_value_set_boolean (value, udpsrc->loop);
+      break;
+    case PROP_RETRIEVE_SENDER_ADDRESS:
+      g_value_set_boolean (value, udpsrc->retrieve_sender_address);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

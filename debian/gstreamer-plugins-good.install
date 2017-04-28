@@ -11,7 +11,7 @@ debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstauparse.so
 debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstautodetect.so
 debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstavi.so
 debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstcacasink.so
-debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstcamerabin2.so
+debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstcamerabin.so
 debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstcairo.so
 debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstcutter.so
 debian/tmp/usr/lib/*/gstreamer-@GST_ABI@/libgstdebug.so

@@ -5,7 +5,7 @@ Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -240,6 +240,7 @@
+@@ -245,6 +245,7 @@
  
  dnl GTK is optional and used in examples
  HAVE_GTK=no
@@ -13,7 +13,7 @@ Index: b/configure.ac
  GTK_REQ=3.0.0
  if test "x$BUILD_EXAMPLES" = "xyes"; then
    PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQ, HAVE_GTK=yes, HAVE_GTK=no)
-@@ -249,8 +250,20 @@
+@@ -254,8 +255,20 @@
    AC_SUBST(GTK_CFLAGS)
  fi
  AM_CONDITIONAL(HAVE_GTK, test "x$HAVE_GTK" = "xyes")
@@ -34,7 +34,7 @@ Index: b/configure.ac
  dnl Check for -Bsymbolic-functions linker flag used to avoid
  dnl intra-library PLT jumps, if available.
  AC_ARG_ENABLE(Bsymbolic,
-@@ -347,6 +360,7 @@
+@@ -352,6 +365,7 @@
  AG_GST_CHECK_PLUGIN(auparse)
  AG_GST_CHECK_PLUGIN(autodetect)
  AG_GST_CHECK_PLUGIN(avi)
@@ -42,7 +42,7 @@ Index: b/configure.ac
  AG_GST_CHECK_PLUGIN(cutter)
  AG_GST_CHECK_PLUGIN(debugutils)
  AG_GST_CHECK_PLUGIN(deinterlace)
-@@ -985,6 +999,7 @@
+@@ -997,6 +1011,7 @@
  gst/auparse/Makefile
  gst/autodetect/Makefile
  gst/avi/Makefile
@@ -50,7 +50,7 @@ Index: b/configure.ac
  gst/cutter/Makefile
  gst/deinterlace/Makefile
  gst/dtmf/Makefile
-@@ -1021,6 +1036,10 @@
+@@ -1033,6 +1048,10 @@
  gst/wavparse/Makefile
  gst/flx/Makefile
  gst/y4m/Makefile
@@ -61,7 +61,7 @@ Index: b/configure.ac
  ext/Makefile
  ext/aalib/Makefile
  ext/cairo/Makefile
-@@ -1054,6 +1073,7 @@
+@@ -1066,6 +1085,7 @@
  tests/check/Makefile
  tests/examples/Makefile
  tests/examples/audiofx/Makefile
@@ -73,7 +73,7 @@ Index: b/gst/camerabin2/camerabingeneral.c
 ===================================================================
 --- /dev/null
 +++ b/gst/camerabin2/camerabingeneral.c
-@@ -0,0 +1,259 @@
+@@ -0,0 +1,260 @@
 +/*
 + * GStreamer
 + * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
@@ -96,6 +96,7 @@ Index: b/gst/camerabin2/camerabingeneral.c
 +
 +/**
 + * SECTION:camerabingeneral
++ * @title: GstCameraBin2
 + * @short_description: helper functions for #GstCameraBin2 and it's modules
 + *
 + * Common helper functions for #GstCameraBin2, #GstCameraBin2Image and
@@ -379,7 +380,7 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 ===================================================================
 --- /dev/null
 +++ b/gst/camerabin2/gstcamerabin2.c
-@@ -0,0 +1,2416 @@
+@@ -0,0 +1,2399 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
 + *
@@ -399,41 +400,29 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 + * Boston, MA 02110-1301, USA.
 + */
 +/**
-+ * SECTION:element-camerabin2
++ * SECTION:element-camerabin
++ * @title: camerabin
 + *
-+ * CameraBin2 is a high-level camera object that encapsulates gstreamer
++ * CameraBin is a high-level camera object that encapsulates gstreamer
 + * elements, providing an API for controlling a digital camera.
 + *
-+ * <note>
-+ * Note that camerabin2 is still UNSTABLE and under
-+ * development.
-+ * </note>
++ * > Note that camerabin is still UNSTABLE and under development.
 + *
-+ * CameraBin2 has the following main features:
-+ * <itemizedlist>
-+ * <listitem>
-+ * Record videos
-+ * </listitem>
-+ * <listitem>
-+ * Capture pictures
-+ * </listitem>
-+ * <listitem>
-+ * Display a viewfinder
-+ * </listitem>
-+ * <listitem>
-+ * Post preview images for each capture (video and image)
-+ * </listitem>
-+ * </itemizedlist>
++ * CameraBin has the following main features:
 + *
-+ * <refsect2>
-+ * <title>Usage</title>
-+ * <para>
-+ * Camerabin2 can be created using gst_element_factory_make() just like
++ * * Record videos
++ * * Capture pictures
++ * * Display a viewfinder
++ * * Post preview images for each capture (video and image)
++ *
++ * ## Usage
++ *
++ * Camerabin can be created using gst_element_factory_make() just like
 + * any other element. Video or image capture mode can be selected using
 + * the #GstCameraBin:mode property and the file to save the capture is
 + * selected using #GstCameraBin:location property.
 + *
-+ * After creating camerabin2, applications might want to do some
++ * After creating camerabin, applications might want to do some
 + * customization (there's a section about this below), then select
 + * the desired mode and start capturing.
 + *
@@ -452,17 +441,16 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 + * In both modes, if #GstCameraBin:post-previews is %TRUE, a #GstBuffer
 + * will be post to the #GstBus in a field named 'buffer', in a
 + * 'preview-image' message of type %GST_MESSAGE_ELEMENT.
-+ * </para>
-+ * </refsect2>
++ *
 +
-+ * <refsect2>
-+ * <title>Customization</title>
-+ * <para>
-+ * Camerabin2 provides various customization properties, allowing the user
++ *
++ * ## Customization
++ *
++ * Camerabin provides various customization properties, allowing the user
 + * to set custom filters, selecting the viewfinder sink and formats to
 + * use to encode the captured images/videos.
 + *
-+ * #GstEncodingProfile<!-- -->s are used to tell camerabin2 which formats it
++ * #GstEncodingProfile<!-- -->s are used to tell camerabin which formats it
 + * should encode the captures to, those should be set to
 + * #GstCameraBin:image-profile and #GstCameraBin:video-profile. Default is
 + * jpeg for images, and ogg (theora and vorbis) for video. If a profile without
@@ -471,7 +459,7 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 + * #GstCameraBin:preview-caps can be used to select which format preview
 + * images should be posted on the #GstBus. It has to be a raw video format.
 + *
-+ * Camerabin2 has a #GstCameraBin:camera-source property so applications can
++ * Camerabin has a #GstCameraBin:camera-source property so applications can
 + * set their source that will provide buffers for the viewfinder and for
 + * captures. This camera source is a special type of source that has 3 pads.
 + * To use a 'regular' source with a single pad you should use
@@ -485,7 +473,7 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 + * #GstCameraBin:viewfinder-caps, these #GstCaps should be a subset of
 + * #GstCameraBin:viewfinder-supported-caps.
 + *
-+ * To select the desired resolution for captures, camerabin2 provides
++ * To select the desired resolution for captures, camerabin provides
 + * #GstCameraBin:image-capture-caps and #GstCameraBin:video-capture-caps,
 + * these caps must be a subset of what the source can produce. The allowed
 + * caps can be probed using #GstCameraBin:image-capture-supported-caps and
@@ -497,20 +485,16 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 + * of its branches: video capture, image capture, viewfinder and preview.
 + * Check #GstCameraBin:video-filter, #GstCameraBin:image-filter,
 + * #GstCameraBin:viewfinder-filter and #GstCameraBin:preview-filter.
-+ * </para>
-+ * </refsect2>
 + *
-+ * <refsect2>
-+ * <title>Example launch line</title>
-+ * <para>
-+ * Unfortunately, camerabin can't be really used from gst-launch, as you need
-+ * to send signals to control it. The following pipeline might be able
++ * ## Example launch line
++ *
++ * Unfortunately, camerabin can't be really used from gst-launch-1.0, as you
++ * need to send signals to control it. The following pipeline might be able
 + * to show the viewfinder using all the default elements.
 + * |[
-+ * gst-launch -v -m camerabin
++ * gst-launch-1.0 -v -m camerabin
 + * ]|
-+ * </para>
-+ * </refsect2>
++ *
 +
 + */
 +
@@ -3024,7 +3008,7 @@ Index: b/gst/camerabin2/gstviewfinderbin.c
 ===================================================================
 --- /dev/null
 +++ b/gst/camerabin2/gstviewfinderbin.c
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,369 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
 + *
@@ -3045,16 +3029,16 @@ Index: b/gst/camerabin2/gstviewfinderbin.c
 + */
 +/**
 + * SECTION:element-gstviewfinderbin
++ * @title: gstviewfinderbin
 + *
 + * The gstviewfinderbin element is a displaying element for camerabin2.
 + *
-+ * <refsect2>
-+ * <title>Example launch line</title>
++ * ## Example launch line
 + * |[
-+ * gst-launch -v videotestsrc ! viewfinderbin
++ * gst-launch-1.0 -v videotestsrc ! viewfinderbin
 + * ]|
 + * Feeds the viewfinderbin with video test data.
-+ * </refsect2>
++ *
 + */
 +
 +#ifdef HAVE_CONFIG_H
@@ -3149,8 +3133,7 @@ Index: b/gst/camerabin2/gstviewfinderbin.c
 +          DEFAULT_DISABLE_CONVERTERS,
 +          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 +
-+  gst_element_class_add_pad_template (element_class,
-+      gst_static_pad_template_get (&sink_template));
++  gst_element_class_add_static_pad_template (element_class, &sink_template);
 +
 +  gst_element_class_set_static_metadata (element_class, "Viewfinder Bin",
 +      "Sink/Video", "Viewfinder Bin used in camerabin2",
@@ -3489,6 +3472,7 @@ Index: b/gst/camerabin2/gstwrappercamerabinsrc.c
 +
 +/**
 + * SECTION:element-wrappercamerabinsrc
++ * @title: wrappercamerabinsrc
 + *
 + * A camera bin src element that wraps a default video source with a single
 + * pad into the 3pad model that camerabin2 expects.
@@ -4048,7 +4032,7 @@ Index: b/gst/camerabin2/gstwrappercamerabinsrc.c
 +
 +    if (!(self->digitalzoom = g_object_new (GST_TYPE_DIGITAL_ZOOM, NULL))) {
 +      GST_ELEMENT_ERROR (self, CORE, MISSING_PLUGIN,
-+          (_("Digitalzoom element cound't be created")), (NULL));
++          (_("Digitalzoom element couldn't be created")), (NULL));
 +
 +      goto done;
 +    }
@@ -4590,14 +4574,13 @@ Index: b/gst/camerabin2/gstwrappercamerabinsrc.c
 +  GST_DEBUG_CATEGORY_INIT (wrapper_camera_bin_src_debug, "wrappercamerabinsrc",
 +      0, "wrapper camera src");
 +
-+  gst_element_class_add_pad_template (gstelement_class,
-+      gst_static_pad_template_get (&vfsrc_template));
++  gst_element_class_add_static_pad_template (gstelement_class, &vfsrc_template);
 +
-+  gst_element_class_add_pad_template (gstelement_class,
-+      gst_static_pad_template_get (&imgsrc_template));
++  gst_element_class_add_static_pad_template (gstelement_class,
++      &imgsrc_template);
 +
-+  gst_element_class_add_pad_template (gstelement_class,
-+      gst_static_pad_template_get (&vidsrc_template));
++  gst_element_class_add_static_pad_template (gstelement_class,
++      &vidsrc_template);
 +
 +  gst_element_class_set_static_metadata (gstelement_class,
 +      "Wrapper camera src element for camerabin2", "Source/Video",
@@ -4784,29 +4767,29 @@ Index: b/gst/camerabin2/Makefile.am
 --- /dev/null
 +++ b/gst/camerabin2/Makefile.am
 @@ -0,0 +1,29 @@
-+plugin_LTLIBRARIES = libgstcamerabin2.la
++plugin_LTLIBRARIES = libgstcamerabin.la
 +
-+libgstcamerabin2_la_SOURCES = gstviewfinderbin.c \
++libgstcamerabin_la_SOURCES = gstviewfinderbin.c \
 +				gstdigitalzoom.c \
 +				camerabingeneral.c \
 +				gstwrappercamerabinsrc.c \
 +				gstcamerabin2.c \
 +				gstplugin.c
 +
-+libgstcamerabin2_la_CFLAGS = \
++libgstcamerabin_la_CFLAGS = \
 +	$(GST_PLUGINS_BAD_CFLAGS) \
 +	$(GST_PLUGINS_BASE_CFLAGS) \
 +	$(GST_BASE_CFLAGS) $(GST_CFLAGS) \
 +	-DGST_USE_UNSTABLE_API
 +
-+libgstcamerabin2_la_LIBADD = \
++libgstcamerabin_la_LIBADD = \
 +	$(top_builddir)/gst-libs/gst/interfaces/libgstphotography-$(GST_API_VERSION).la \
 +	$(top_builddir)/gst-libs/gst/basecamerabinsrc/libgstbasecamerabinsrc-$(GST_API_VERSION).la \
 +	$(GST_PLUGINS_BASE_LIBS) -lgsttag-$(GST_API_VERSION) -lgstapp-$(GST_API_VERSION) -lgstpbutils-$(GST_API_VERSION) \
 +	$(GST_BASE_LIBS) $(GST_LIBS)
 +
-+libgstcamerabin2_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
-+libgstcamerabin2_la_LIBTOOLFLAGS = $(GST_PLUGIN_LIBTOOLFLAGS)
++libgstcamerabin_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
++libgstcamerabin_la_LIBTOOLFLAGS = $(GST_PLUGIN_LIBTOOLFLAGS)
 +
 +noinst_HEADERS = gstviewfinderbin.h \
 +		camerabingeneral.h \
@@ -4817,11 +4800,11 @@ Index: b/gst/camerabin2/Makefile.in
 ===================================================================
 --- /dev/null
 +++ b/gst/camerabin2/Makefile.in
-@@ -0,0 +1,1137 @@
-+# Makefile.in generated by automake 1.14.1 from Makefile.am.
+@@ -0,0 +1,1191 @@
++# Makefile.in generated by automake 1.15 from Makefile.am.
 +# @configure_input@
 +
-+# Copyright (C) 1994-2013 Free Software Foundation, Inc.
++# Copyright (C) 1994-2014 Free Software Foundation, Inc.
 +
 +# This Makefile.in is free software; the Free Software Foundation
 +# gives unlimited permission to copy and/or distribute it,
@@ -4836,7 +4819,17 @@ Index: b/gst/camerabin2/Makefile.in
 +
 +
 +VPATH = @srcdir@
-+am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
++am__is_gnu_make = { \
++  if test -z '$(MAKELEVEL)'; then \
++    false; \
++  elif test -n '$(MAKE_HOST)'; then \
++    true; \
++  elif test -n '$(MAKE_VERSION)' && test -n '$(CURDIR)'; then \
++    true; \
++  else \
++    false; \
++  fi; \
++}
 +am__make_running_with_option = \
 +  case $${target_option-} in \
 +      ?) ;; \
@@ -4901,8 +4894,6 @@ Index: b/gst/camerabin2/Makefile.in
 +host_triplet = @host@
 +target_triplet = @target@
 +subdir = gst/camerabin2
-+DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-+	$(top_srcdir)/depcomp $(noinst_HEADERS)
 +ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 +am__aclocal_m4_deps = $(top_srcdir)/common/m4/as-ac-expand.m4 \
 +	$(top_srcdir)/common/m4/as-auto-alt.m4 \
@@ -4910,6 +4901,7 @@ Index: b/gst/camerabin2/Makefile.in
 +	$(top_srcdir)/common/m4/as-libtool.m4 \
 +	$(top_srcdir)/common/m4/as-version.m4 \
 +	$(top_srcdir)/common/m4/ax_create_stdint_h.m4 \
++	$(top_srcdir)/common/m4/ax_pthread.m4 \
 +	$(top_srcdir)/common/m4/gst-arch.m4 \
 +	$(top_srcdir)/common/m4/gst-args.m4 \
 +	$(top_srcdir)/common/m4/gst-check.m4 \
@@ -4923,23 +4915,22 @@ Index: b/gst/camerabin2/Makefile.in
 +	$(top_srcdir)/common/m4/gst-platform.m4 \
 +	$(top_srcdir)/common/m4/gst-plugin-docs.m4 \
 +	$(top_srcdir)/common/m4/gst-plugindir.m4 \
-+	$(top_srcdir)/common/m4/gst-x11.m4 \
 +	$(top_srcdir)/common/m4/gst.m4 \
 +	$(top_srcdir)/common/m4/gtk-doc.m4 \
 +	$(top_srcdir)/common/m4/introspection.m4 \
 +	$(top_srcdir)/common/m4/orc.m4 $(top_srcdir)/common/m4/pkg.m4 \
-+	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/gsettings.m4 \
-+	$(top_srcdir)/m4/gst-fionread.m4 $(top_srcdir)/m4/gst-sdl.m4 \
-+	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intlmacosx.m4 \
-+	$(top_srcdir)/m4/lib-ld.m4 $(top_srcdir)/m4/lib-link.m4 \
-+	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/libgcrypt.m4 \
-+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/nls.m4 \
-+	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/progtest.m4 \
-+	$(top_srcdir)/configure.ac
++	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/iconv.m4 \
++	$(top_srcdir)/m4/intlmacosx.m4 $(top_srcdir)/m4/lib-ld.m4 \
++	$(top_srcdir)/m4/lib-link.m4 $(top_srcdir)/m4/lib-prefix.m4 \
++	$(top_srcdir)/m4/libgcrypt.m4 $(top_srcdir)/m4/libtool.m4 \
++	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
++	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
++	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
++	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/configure.ac
 +am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 +	$(ACLOCAL_M4)
++DIST_COMMON = $(srcdir)/Makefile.am $(noinst_HEADERS) \
++	$(am__DIST_COMMON)
 +mkinstalldirs = $(install_sh) -d
 +CONFIG_HEADER = $(top_builddir)/config.h
 +CONFIG_CLEAN_FILES =
@@ -4974,25 +4965,26 @@ Index: b/gst/camerabin2/Makefile.in
 +am__installdirs = "$(DESTDIR)$(plugindir)"
 +LTLIBRARIES = $(plugin_LTLIBRARIES)
 +am__DEPENDENCIES_1 =
-+libgstcamerabin2_la_DEPENDENCIES = $(top_builddir)/gst-libs/gst/interfaces/libgstphotography-$(GST_API_VERSION).la \
++libgstcamerabin_la_DEPENDENCIES = $(top_builddir)/gst-libs/gst/interfaces/libgstphotography-$(GST_API_VERSION).la \
 +	$(top_builddir)/gst-libs/gst/basecamerabinsrc/libgstbasecamerabinsrc-$(GST_API_VERSION).la \
 +	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 +	$(am__DEPENDENCIES_1)
-+am_libgstcamerabin2_la_OBJECTS =  \
-+	libgstcamerabin2_la-gstviewfinderbin.lo \
-+	libgstcamerabin2_la-camerabingeneral.lo \
-+	libgstcamerabin2_la-gstwrappercamerabinsrc.lo \
-+	libgstcamerabin2_la-gstcamerabin2.lo \
-+	libgstcamerabin2_la-gstplugin.lo
-+libgstcamerabin2_la_OBJECTS = $(am_libgstcamerabin2_la_OBJECTS)
++am_libgstcamerabin_la_OBJECTS =  \
++	libgstcamerabin_la-gstviewfinderbin.lo \
++	libgstcamerabin_la-gstdigitalzoom.lo \
++	libgstcamerabin_la-camerabingeneral.lo \
++	libgstcamerabin_la-gstwrappercamerabinsrc.lo \
++	libgstcamerabin_la-gstcamerabin2.lo \
++	libgstcamerabin_la-gstplugin.lo
++libgstcamerabin_la_OBJECTS = $(am_libgstcamerabin_la_OBJECTS)
 +AM_V_lt = $(am__v_lt_@AM_V@)
 +am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 +am__v_lt_0 = --silent
 +am__v_lt_1 = 
-+libgstcamerabin2_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
-+	$(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-+	--mode=link $(CCLD) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) \
-+	$(libgstcamerabin2_la_LDFLAGS) $(LDFLAGS) -o $@
++libgstcamerabin_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
++	$(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
++	$(CCLD) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) \
++	$(libgstcamerabin_la_LDFLAGS) $(LDFLAGS) -o $@
 +AM_V_P = $(am__v_P_@AM_V@)
 +am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 +am__v_P_0 = false
@@ -5027,8 +5019,8 @@ Index: b/gst/camerabin2/Makefile.in
 +am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 +am__v_CCLD_0 = @echo "  CCLD    " $@;
 +am__v_CCLD_1 = 
-+SOURCES = $(libgstcamerabin2_la_SOURCES)
-+DIST_SOURCES = $(libgstcamerabin2_la_SOURCES)
++SOURCES = $(libgstcamerabin_la_SOURCES)
++DIST_SOURCES = $(libgstcamerabin_la_SOURCES)
 +am__can_run_installinfo = \
 +  case $$AM_UPDATE_INFO_DIR in \
 +    n|no|NO) false;; \
@@ -5054,6 +5046,7 @@ Index: b/gst/camerabin2/Makefile.in
 +  done | $(am__uniquify_input)`
 +ETAGS = etags
 +CTAGS = ctags
++am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 +DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 +ACLOCAL = @ACLOCAL@
 +ACLOCAL_AMFLAGS = @ACLOCAL_AMFLAGS@
@@ -5061,8 +5054,6 @@ Index: b/gst/camerabin2/Makefile.in
 +ACMMP3DEC_CFLAGS = @ACMMP3DEC_CFLAGS@
 +AMTAR = @AMTAR@
 +AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
-+APEXSINK_CFLAGS = @APEXSINK_CFLAGS@
-+APEXSINK_LIBS = @APEXSINK_LIBS@
 +AR = @AR@
 +AS = @AS@
 +ASSRENDER_CFLAGS = @ASSRENDER_CFLAGS@
@@ -5071,8 +5062,10 @@ Index: b/gst/camerabin2/Makefile.in
 +AUTOHEADER = @AUTOHEADER@
 +AUTOMAKE = @AUTOMAKE@
 +AWK = @AWK@
-+BLUEZ_CFLAGS = @BLUEZ_CFLAGS@
-+BLUEZ_LIBS = @BLUEZ_LIBS@
++BLUEZ5_CFLAGS = @BLUEZ5_CFLAGS@
++BLUEZ5_LIBS = @BLUEZ5_LIBS@
++BS2B_CFLAGS = @BS2B_CFLAGS@
++BS2B_LIBS = @BS2B_LIBS@
 +BZ2_LIBS = @BZ2_LIBS@
 +CC = @CC@
 +CCASFLAGS = @CCASFLAGS@
@@ -5088,6 +5081,8 @@ Index: b/gst/camerabin2/Makefile.in
 +CLUTTER_X11_LIBS = @CLUTTER_X11_LIBS@
 +CPP = @CPP@
 +CPPFLAGS = @CPPFLAGS@
++CUDA_CFLAGS = @CUDA_CFLAGS@
++CUDA_LIBS = @CUDA_LIBS@
 +CURL_CFLAGS = @CURL_CFLAGS@
 +CURL_LIBS = @CURL_LIBS@
 +CXX = @CXX@
@@ -5097,9 +5092,6 @@ Index: b/gst/camerabin2/Makefile.in
 +CYGPATH_W = @CYGPATH_W@
 +DAALA_CFLAGS = @DAALA_CFLAGS@
 +DAALA_LIBS = @DAALA_LIBS@
-+DBUS_CFLAGS = @DBUS_CFLAGS@
-+DBUS_LIBS = @DBUS_LIBS@
-+DCCP_LIBS = @DCCP_LIBS@
 +DECKLINK_CXXFLAGS = @DECKLINK_CXXFLAGS@
 +DECKLINK_LIBS = @DECKLINK_LIBS@
 +DEFAULT_AUDIOSINK = @DEFAULT_AUDIOSINK@
@@ -5111,14 +5103,17 @@ Index: b/gst/camerabin2/Makefile.in
 +DEPDIR = @DEPDIR@
 +DEPRECATED_CFLAGS = @DEPRECATED_CFLAGS@
 +DIRECT3D_LIBS = @DIRECT3D_LIBS@
-+DIRECTDRAW_LIBS = @DIRECTDRAW_LIBS@
 +DIRECTFB_CFLAGS = @DIRECTFB_CFLAGS@
 +DIRECTFB_LIBS = @DIRECTFB_LIBS@
 +DIRECTSOUND_LIBS = @DIRECTSOUND_LIBS@
 +DIRECTX_CFLAGS = @DIRECTX_CFLAGS@
 +DIRECTX_LDFLAGS = @DIRECTX_LDFLAGS@
 +DLLTOOL = @DLLTOOL@
++DSSIM_CFLAGS = @DSSIM_CFLAGS@
++DSSIM_LIBS = @DSSIM_LIBS@
 +DSYMUTIL = @DSYMUTIL@
++DTLS_CFLAGS = @DTLS_CFLAGS@
++DTLS_LIBS = @DTLS_LIBS@
 +DTS_LIBS = @DTS_LIBS@
 +DUMPBIN = @DUMPBIN@
 +DVDNAV_CFLAGS = @DVDNAV_CFLAGS@
@@ -5126,6 +5121,8 @@ Index: b/gst/camerabin2/Makefile.in
 +ECHO_C = @ECHO_C@
 +ECHO_N = @ECHO_N@
 +ECHO_T = @ECHO_T@
++EGL_CFLAGS = @EGL_CFLAGS@
++EGL_LIBS = @EGL_LIBS@
 +EGREP = @EGREP@
 +ERROR_CFLAGS = @ERROR_CFLAGS@
 +ERROR_CXXFLAGS = @ERROR_CXXFLAGS@
@@ -5134,8 +5131,9 @@ Index: b/gst/camerabin2/Makefile.in
 +EXIF_CFLAGS = @EXIF_CFLAGS@
 +EXIF_LIBS = @EXIF_LIBS@
 +FAAC_LIBS = @FAAC_LIBS@
-+FAAD_IS_NEAAC = @FAAD_IS_NEAAC@
 +FAAD_LIBS = @FAAD_LIBS@
++FDK_AAC_CFLAGS = @FDK_AAC_CFLAGS@
++FDK_AAC_LIBS = @FDK_AAC_LIBS@
 +FFLAGS = @FFLAGS@
 +FGREP = @FGREP@
 +FLITE_CFLAGS = @FLITE_CFLAGS@
@@ -5145,22 +5143,29 @@ Index: b/gst/camerabin2/Makefile.in
 +GCOV = @GCOV@
 +GCOV_CFLAGS = @GCOV_CFLAGS@
 +GCOV_LIBS = @GCOV_LIBS@
++GDBUS_CODEGEN = @GDBUS_CODEGEN@
 +GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
 +GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 +GIO_CFLAGS = @GIO_CFLAGS@
 +GIO_LDFLAGS = @GIO_LDFLAGS@
 +GIO_LIBS = @GIO_LIBS@
++GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
++GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
++GLES2_CFLAGS = @GLES2_CFLAGS@
++GLES2_LIBS = @GLES2_LIBS@
 +GLIB_CFLAGS = @GLIB_CFLAGS@
-+GLIB_COMPILE_SCHEMAS = @GLIB_COMPILE_SCHEMAS@
 +GLIB_EXTRA_CFLAGS = @GLIB_EXTRA_CFLAGS@
 +GLIB_GENMARSHAL = @GLIB_GENMARSHAL@
 +GLIB_LIBS = @GLIB_LIBS@
 +GLIB_MKENUMS = @GLIB_MKENUMS@
 +GLIB_PREFIX = @GLIB_PREFIX@
 +GLIB_REQ = @GLIB_REQ@
++GL_APIS = @GL_APIS@
 +GL_CFLAGS = @GL_CFLAGS@
 +GL_LIBS = @GL_LIBS@
 +GL_OBJCFLAGS = @GL_OBJCFLAGS@
++GL_PLATFORMS = @GL_PLATFORMS@
++GL_WINDOWS = @GL_WINDOWS@
 +GME_LIBS = @GME_LIBS@
 +GMODULE_EXPORT_CFLAGS = @GMODULE_EXPORT_CFLAGS@
 +GMODULE_EXPORT_LIBS = @GMODULE_EXPORT_LIBS@
@@ -5168,21 +5173,21 @@ Index: b/gst/camerabin2/Makefile.in
 +GMODULE_NO_EXPORT_LIBS = @GMODULE_NO_EXPORT_LIBS@
 +GMSGFMT = @GMSGFMT@
 +GMSGFMT_015 = @GMSGFMT_015@
-+GMYTH_CFLAGS = @GMYTH_CFLAGS@
-+GMYTH_LIBS = @GMYTH_LIBS@
-+GNUSTEP_CONFIG = @GNUSTEP_CONFIG@
++GNUSTL_CFLAGS = @GNUSTL_CFLAGS@
++GNUSTL_LIBS = @GNUSTL_LIBS@
 +GRAPHENE_CFLAGS = @GRAPHENE_CFLAGS@
 +GRAPHENE_LIBS = @GRAPHENE_LIBS@
 +GREP = @GREP@
-+GSETTINGS_CFLAGS = @GSETTINGS_CFLAGS@
-+GSETTINGS_DISABLE_SCHEMAS_COMPILE = @GSETTINGS_DISABLE_SCHEMAS_COMPILE@
-+GSETTINGS_LIBS = @GSETTINGS_LIBS@
 +GSM_LIBS = @GSM_LIBS@
 +GSTPB_PLUGINS_DIR = @GSTPB_PLUGINS_DIR@
 +GSTPB_PREFIX = @GSTPB_PREFIX@
 +GST_AGE = @GST_AGE@
++GST_ALLOCATORS_CFLAGS = @GST_ALLOCATORS_CFLAGS@
++GST_ALLOCATORS_LIBS = @GST_ALLOCATORS_LIBS@
 +GST_ALL_LDFLAGS = @GST_ALL_LDFLAGS@
 +GST_API_VERSION = @GST_API_VERSION@
++GST_AUDIO_CFLAGS = @GST_AUDIO_CFLAGS@
++GST_AUDIO_LIBS = @GST_AUDIO_LIBS@
 +GST_BASE_CFLAGS = @GST_BASE_CFLAGS@
 +GST_BASE_LIBS = @GST_BASE_LIBS@
 +GST_CFLAGS = @GST_CFLAGS@
@@ -5198,12 +5203,16 @@ Index: b/gst/camerabin2/Makefile.in
 +GST_LIB_LDFLAGS = @GST_LIB_LDFLAGS@
 +GST_LICENSE = @GST_LICENSE@
 +GST_LT_LDFLAGS = @GST_LT_LDFLAGS@
++GST_NET_CFLAGS = @GST_NET_CFLAGS@
++GST_NET_LIBS = @GST_NET_LIBS@
 +GST_OBJCFLAGS = @GST_OBJCFLAGS@
 +GST_OPTION_CFLAGS = @GST_OPTION_CFLAGS@
 +GST_OPTION_CXXFLAGS = @GST_OPTION_CXXFLAGS@
 +GST_OPTION_OBJCFLAGS = @GST_OPTION_OBJCFLAGS@
 +GST_PACKAGE_NAME = @GST_PACKAGE_NAME@
 +GST_PACKAGE_ORIGIN = @GST_PACKAGE_ORIGIN@
++GST_PBUTILS_CFLAGS = @GST_PBUTILS_CFLAGS@
++GST_PBUTILS_LIBS = @GST_PBUTILS_LIBS@
 +GST_PKG_CONFIG_PATH = @GST_PKG_CONFIG_PATH@
 +GST_PLUGINS_ALL = @GST_PLUGINS_ALL@
 +GST_PLUGINS_BAD_CFLAGS = @GST_PLUGINS_BAD_CFLAGS@
@@ -5232,7 +5241,13 @@ Index: b/gst/camerabin2/Makefile.in
 +GST_VIDEO_CFLAGS = @GST_VIDEO_CFLAGS@
 +GST_VIDEO_LIBS = @GST_VIDEO_LIBS@
 +GTK3_CFLAGS = @GTK3_CFLAGS@
++GTK3_GL_CFLAGS = @GTK3_GL_CFLAGS@
++GTK3_GL_LIBS = @GTK3_GL_LIBS@
 +GTK3_LIBS = @GTK3_LIBS@
++GTK3_WAYLAND_CFLAGS = @GTK3_WAYLAND_CFLAGS@
++GTK3_WAYLAND_LIBS = @GTK3_WAYLAND_LIBS@
++GTK3_X11_CFLAGS = @GTK3_X11_CFLAGS@
++GTK3_X11_LIBS = @GTK3_X11_LIBS@
 +GTKDOC_CHECK = @GTKDOC_CHECK@
 +GTKDOC_DEPS_CFLAGS = @GTKDOC_DEPS_CFLAGS@
 +GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
@@ -5249,7 +5264,6 @@ Index: b/gst/camerabin2/Makefile.in
 +HAVE_CLUTTER_X11 = @HAVE_CLUTTER_X11@
 +HAVE_CXX = @HAVE_CXX@
 +HAVE_DIRECT3D = @HAVE_DIRECT3D@
-+HAVE_DIRECTDRAW = @HAVE_DIRECTDRAW@
 +HAVE_DIRECTSOUND = @HAVE_DIRECTSOUND@
 +HAVE_DTS = @HAVE_DTS@
 +HAVE_EGL = @HAVE_EGL@
@@ -5258,12 +5272,10 @@ Index: b/gst/camerabin2/Makefile.in
 +HAVE_FLITE = @HAVE_FLITE@
 +HAVE_GL = @HAVE_GL@
 +HAVE_GLES2 = @HAVE_GLES2@
-+HAVE_GLU = @HAVE_GLU@
 +HAVE_GRAPHENE = @HAVE_GRAPHENE@
 +HAVE_GSM = @HAVE_GSM@
 +HAVE_GTK3 = @HAVE_GTK3@
 +HAVE_JPEG = @HAVE_JPEG@
-+HAVE_NAS = @HAVE_NAS@
 +HAVE_OPENJPEG = @HAVE_OPENJPEG@
 +HAVE_PNG = @HAVE_PNG@
 +HAVE_SRTP = @HAVE_SRTP@
@@ -5271,7 +5283,6 @@ Index: b/gst/camerabin2/Makefile.in
 +HAVE_WILDMIDI = @HAVE_WILDMIDI@
 +HAVE_WINKS = @HAVE_WINKS@
 +HAVE_WINSCREENCAP = @HAVE_WINSCREENCAP@
-+HAVE_X = @HAVE_X@
 +HAVE_X11 = @HAVE_X11@
 +HTML_DIR = @HTML_DIR@
 +INSTALL = @INSTALL@
@@ -5285,6 +5296,7 @@ Index: b/gst/camerabin2/Makefile.in
 +INTROSPECTION_COMPILER = @INTROSPECTION_COMPILER@
 +INTROSPECTION_GENERATE = @INTROSPECTION_GENERATE@
 +INTROSPECTION_GIRDIR = @INTROSPECTION_GIRDIR@
++INTROSPECTION_INIT = @INTROSPECTION_INIT@
 +INTROSPECTION_LIBS = @INTROSPECTION_LIBS@
 +INTROSPECTION_MAKEFILE = @INTROSPECTION_MAKEFILE@
 +INTROSPECTION_SCANNER = @INTROSPECTION_SCANNER@
@@ -5292,10 +5304,14 @@ Index: b/gst/camerabin2/Makefile.in
 +JPEG_LIBS = @JPEG_LIBS@
 +KATE_CFLAGS = @KATE_CFLAGS@
 +KATE_LIBS = @KATE_LIBS@
++KMS_DRM_CFLAGS = @KMS_DRM_CFLAGS@
++KMS_DRM_LIBS = @KMS_DRM_LIBS@
 +LD = @LD@
 +LDFLAGS = @LDFLAGS@
 +LIBDC1394_CFLAGS = @LIBDC1394_CFLAGS@
 +LIBDC1394_LIBS = @LIBDC1394_LIBS@
++LIBDE265_CFLAGS = @LIBDE265_CFLAGS@
++LIBDE265_LIBS = @LIBDE265_LIBS@
 +LIBDIR = @LIBDIR@
 +LIBGCRYPT_CFLAGS = @LIBGCRYPT_CFLAGS@
 +LIBGCRYPT_CONFIG = @LIBGCRYPT_CONFIG@
@@ -5314,10 +5330,12 @@ Index: b/gst/camerabin2/Makefile.in
 +LIBUDEV_LIBS = @LIBUDEV_LIBS@
 +LIBUSB_CFLAGS = @LIBUSB_CFLAGS@
 +LIBUSB_LIBS = @LIBUSB_LIBS@
-+LIBVISUAL_CFLAGS = @LIBVISUAL_CFLAGS@
-+LIBVISUAL_LIBS = @LIBVISUAL_LIBS@
++LIBVA_DRM_CFLAGS = @LIBVA_DRM_CFLAGS@
++LIBVA_DRM_LIBS = @LIBVA_DRM_LIBS@
 +LIBXML2_CFLAGS = @LIBXML2_CFLAGS@
 +LIBXML2_LIBS = @LIBXML2_LIBS@
++LILV_CFLAGS = @LILV_CFLAGS@
++LILV_LIBS = @LILV_LIBS@
 +LIPO = @LIPO@
 +LN_S = @LN_S@
 +LOCALEDIR = @LOCALEDIR@
@@ -5326,35 +5344,35 @@ Index: b/gst/camerabin2/Makefile.in
 +LTLIBICONV = @LTLIBICONV@
 +LTLIBINTL = @LTLIBINTL@
 +LTLIBOBJS = @LTLIBOBJS@
++LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 +MAINT = @MAINT@
 +MAKEINFO = @MAKEINFO@
 +MANIFEST_TOOL = @MANIFEST_TOOL@
-+MIMIC_CFLAGS = @MIMIC_CFLAGS@
-+MIMIC_LIBS = @MIMIC_LIBS@
 +MJPEG_CFLAGS = @MJPEG_CFLAGS@
 +MJPEG_LIBS = @MJPEG_LIBS@
 +MKDIR_P = @MKDIR_P@
++MOC = @MOC@
 +MODPLUG_CFLAGS = @MODPLUG_CFLAGS@
 +MODPLUG_LIBS = @MODPLUG_LIBS@
 +MPEG2ENC_CFLAGS = @MPEG2ENC_CFLAGS@
 +MPEG2ENC_LIBS = @MPEG2ENC_LIBS@
-+MPG123_CFLAGS = @MPG123_CFLAGS@
-+MPG123_LIBS = @MPG123_LIBS@
 +MPLEX_CFLAGS = @MPLEX_CFLAGS@
 +MPLEX_LDFLAGS = @MPLEX_LDFLAGS@
 +MPLEX_LIBS = @MPLEX_LIBS@
++MSDK_CFLAGS = @MSDK_CFLAGS@
++MSDK_LIBS = @MSDK_LIBS@
 +MSGFMT = @MSGFMT@
 +MSGFMT_015 = @MSGFMT_015@
 +MSGMERGE = @MSGMERGE@
 +MUSEPACK_LIBS = @MUSEPACK_LIBS@
-+NAS_CFLAGS = @NAS_CFLAGS@
-+NAS_LIBS = @NAS_LIBS@
 +NEON_CFLAGS = @NEON_CFLAGS@
 +NEON_LIBS = @NEON_LIBS@
 +NETTLE_CFLAGS = @NETTLE_CFLAGS@
 +NETTLE_LIBS = @NETTLE_LIBS@
 +NM = @NM@
 +NMEDIT = @NMEDIT@
++NVENCODE_CFLAGS = @NVENCODE_CFLAGS@
++NVENCODE_LIBS = @NVENCODE_LIBS@
 +OBJC = @OBJC@
 +OBJCDEPMODE = @OBJCDEPMODE@
 +OBJCFLAGS = @OBJCFLAGS@
@@ -5364,15 +5382,23 @@ Index: b/gst/camerabin2/Makefile.in
 +OFA_LIBS = @OFA_LIBS@
 +OPENAL_CFLAGS = @OPENAL_CFLAGS@
 +OPENAL_LIBS = @OPENAL_LIBS@
++OPENCV_3_CFLAGS = @OPENCV_3_CFLAGS@
++OPENCV_3_LIBS = @OPENCV_3_LIBS@
 +OPENCV_CFLAGS = @OPENCV_CFLAGS@
 +OPENCV_LIBS = @OPENCV_LIBS@
 +OPENCV_PREFIX = @OPENCV_PREFIX@
 +OPENEXR_CFLAGS = @OPENEXR_CFLAGS@
 +OPENEXR_LIBS = @OPENEXR_LIBS@
++OPENH264_CFLAGS = @OPENH264_CFLAGS@
++OPENH264_LIBS = @OPENH264_LIBS@
++OPENJPEG_2_1_CFLAGS = @OPENJPEG_2_1_CFLAGS@
++OPENJPEG_2_1_LIBS = @OPENJPEG_2_1_LIBS@
 +OPENJPEG_CFLAGS = @OPENJPEG_CFLAGS@
 +OPENJPEG_LIBS = @OPENJPEG_LIBS@
 +OPENNI2_CFLAGS = @OPENNI2_CFLAGS@
 +OPENNI2_LIBS = @OPENNI2_LIBS@
++OPENSSL_CFLAGS = @OPENSSL_CFLAGS@
++OPENSSL_LIBS = @OPENSSL_LIBS@
 +OPUS_CFLAGS = @OPUS_CFLAGS@
 +OPUS_LIBS = @OPUS_LIBS@
 +ORCC = @ORCC@
@@ -5398,16 +5424,26 @@ Index: b/gst/camerabin2/Makefile.in
 +PLUGINDIR = @PLUGINDIR@
 +POSUB = @POSUB@
 +PROFILE_CFLAGS = @PROFILE_CFLAGS@
-+PVR_CFLAGS = @PVR_CFLAGS@
-+PVR_LIBS = @PVR_LIBS@
++PTHREAD_CC = @PTHREAD_CC@
++PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
++PTHREAD_LIBS = @PTHREAD_LIBS@
 +PYTHON = @PYTHON@
 +PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
 +PYTHON_PLATFORM = @PYTHON_PLATFORM@
 +PYTHON_PREFIX = @PYTHON_PREFIX@
 +PYTHON_VERSION = @PYTHON_VERSION@
++QT_ANDROID_CFLAGS = @QT_ANDROID_CFLAGS@
++QT_ANDROID_LIBS = @QT_ANDROID_LIBS@
++QT_CFLAGS = @QT_CFLAGS@
++QT_LIBS = @QT_LIBS@
++QT_MAC_CFLAGS = @QT_MAC_CFLAGS@
++QT_MAC_LIBS = @QT_MAC_LIBS@
++QT_WAYLAND_CFLAGS = @QT_WAYLAND_CFLAGS@
++QT_WAYLAND_LIBS = @QT_WAYLAND_LIBS@
++QT_X11_CFLAGS = @QT_X11_CFLAGS@
++QT_X11_LIBS = @QT_X11_LIBS@
 +RANLIB = @RANLIB@
-+RSVG_2_36_2_CFLAGS = @RSVG_2_36_2_CFLAGS@
-+RSVG_2_36_2_LIBS = @RSVG_2_36_2_LIBS@
++RCC = @RCC@
 +RSVG_CFLAGS = @RSVG_CFLAGS@
 +RSVG_LIBS = @RSVG_LIBS@
 +RTMP_CFLAGS = @RTMP_CFLAGS@
@@ -5418,22 +5454,19 @@ Index: b/gst/camerabin2/Makefile.in
 +SCHRO_LIBS = @SCHRO_LIBS@
 +SDL_CFLAGS = @SDL_CFLAGS@
 +SDL_CLUTTER = @SDL_CLUTTER@
-+SDL_CONFIG = @SDL_CONFIG@
 +SDL_LIBS = @SDL_LIBS@
 +SED = @SED@
 +SET_MAKE = @SET_MAKE@
 +SHELL = @SHELL@
 +SHM_LIBS = @SHM_LIBS@
-+SLV2_CFLAGS = @SLV2_CFLAGS@
-+SLV2_LIBS = @SLV2_LIBS@
 +SNDFILE_CFLAGS = @SNDFILE_CFLAGS@
 +SNDFILE_LIBS = @SNDFILE_LIBS@
-+SNDIO_LIBS = @SNDIO_LIBS@
 +SOUNDTOUCH_CFLAGS = @SOUNDTOUCH_CFLAGS@
 +SOUNDTOUCH_LIBS = @SOUNDTOUCH_LIBS@
 +SPANDSP_CFLAGS = @SPANDSP_CFLAGS@
 +SPANDSP_LIBS = @SPANDSP_LIBS@
 +SPC_LIBS = @SPC_LIBS@
++SRTP_CFLAGS = @SRTP_CFLAGS@
 +SRTP_LIBS = @SRTP_LIBS@
 +SSH2_CFLAGS = @SSH2_CFLAGS@
 +SSH2_LIBS = @SSH2_LIBS@
@@ -5442,8 +5475,9 @@ Index: b/gst/camerabin2/Makefile.in
 +TELETEXTDEC_LIBS = @TELETEXTDEC_LIBS@
 +TIGER_CFLAGS = @TIGER_CFLAGS@
 +TIGER_LIBS = @TIGER_LIBS@
-+TIMIDITY_CFLAGS = @TIMIDITY_CFLAGS@
-+TIMIDITY_LIBS = @TIMIDITY_LIBS@
++TTML_CFLAGS = @TTML_CFLAGS@
++TTML_LIBS = @TTML_LIBS@
++UIC = @UIC@
 +USE_GLES2 = @USE_GLES2@
 +USE_NLS = @USE_NLS@
 +USE_OPENGL = @USE_OPENGL@
@@ -5457,6 +5491,9 @@ Index: b/gst/camerabin2/Makefile.in
 +VOAACENC_LIBS = @VOAACENC_LIBS@
 +VOAMRWBENC_CFLAGS = @VOAMRWBENC_CFLAGS@
 +VOAMRWBENC_LIBS = @VOAMRWBENC_LIBS@
++VULKAN_LIBS = @VULKAN_LIBS@
++VULKAN_WAYLAND_CFLAGS = @VULKAN_WAYLAND_CFLAGS@
++VULKAN_WAYLAND_LIBS = @VULKAN_WAYLAND_LIBS@
 +WARNING_CFLAGS = @WARNING_CFLAGS@
 +WARNING_CXXFLAGS = @WARNING_CXXFLAGS@
 +WARNING_OBJCFLAGS = @WARNING_OBJCFLAGS@
@@ -5465,8 +5502,12 @@ Index: b/gst/camerabin2/Makefile.in
 +WAYLAND_EGL_CFLAGS = @WAYLAND_EGL_CFLAGS@
 +WAYLAND_EGL_LIBS = @WAYLAND_EGL_LIBS@
 +WAYLAND_LIBS = @WAYLAND_LIBS@
++WAYLAND_PROTOCOLS_DATADIR = @WAYLAND_PROTOCOLS_DATADIR@
 +WEBP_CFLAGS = @WEBP_CFLAGS@
 +WEBP_LIBS = @WEBP_LIBS@
++WEBRTCDSP_CFLAGS = @WEBRTCDSP_CFLAGS@
++WEBRTCDSP_LIBS = @WEBRTCDSP_LIBS@
++WGET = @WGET@
 +WILDMIDI_CFLAGS = @WILDMIDI_CFLAGS@
 +WILDMIDI_LIBS = @WILDMIDI_LIBS@
 +WINKS_LIBS = @WINKS_LIBS@
@@ -5474,17 +5515,17 @@ Index: b/gst/camerabin2/Makefile.in
 +WINSOCK2_LIBS = @WINSOCK2_LIBS@
 +X11_CFLAGS = @X11_CFLAGS@
 +X11_LIBS = @X11_LIBS@
++X11_XCB_CFLAGS = @X11_XCB_CFLAGS@
++X11_XCB_LIBS = @X11_XCB_LIBS@
++X265_CFLAGS = @X265_CFLAGS@
++X265_LIBS = @X265_LIBS@
++XCB_CFLAGS = @XCB_CFLAGS@
++XCB_LIBS = @XCB_LIBS@
 +XCOMPOSITE_CFLAGS = @XCOMPOSITE_CFLAGS@
 +XCOMPOSITE_LIBS = @XCOMPOSITE_LIBS@
 +XGETTEXT = @XGETTEXT@
 +XGETTEXT_015 = @XGETTEXT_015@
 +XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+XMKMF = @XMKMF@
-+XVID_LIBS = @XVID_LIBS@
-+X_CFLAGS = @X_CFLAGS@
-+X_EXTRA_LIBS = @X_EXTRA_LIBS@
-+X_LIBS = @X_LIBS@
-+X_PRE_LIBS = @X_PRE_LIBS@
 +ZBAR_CFLAGS = @ZBAR_CFLAGS@
 +ZBAR_LIBS = @ZBAR_LIBS@
 +abs_builddir = @abs_builddir@
@@ -5501,6 +5542,7 @@ Index: b/gst/camerabin2/Makefile.in
 +am__quote = @am__quote@
 +am__tar = @am__tar@
 +am__untar = @am__untar@
++ax_pthread_config = @ax_pthread_config@
 +bindir = @bindir@
 +build = @build@
 +build_alias = @build_alias@
@@ -5513,7 +5555,6 @@ Index: b/gst/camerabin2/Makefile.in
 +docdir = @docdir@
 +dvidir = @dvidir@
 +exec_prefix = @exec_prefix@
-+gsettingsschemadir = @gsettingsschemadir@
 +host = @host@
 +host_alias = @host_alias@
 +host_cpu = @host_cpu@
@@ -5539,6 +5580,7 @@ Index: b/gst/camerabin2/Makefile.in
 +psdir = @psdir@
 +pyexecdir = @pyexecdir@
 +pythondir = @pythondir@
++runstatedir = @runstatedir@
 +sbindir = @sbindir@
 +sharedstatedir = @sharedstatedir@
 +srcdir = @srcdir@
@@ -5552,29 +5594,31 @@ Index: b/gst/camerabin2/Makefile.in
 +top_builddir = @top_builddir@
 +top_srcdir = @top_srcdir@
 +wayland_scanner = @wayland_scanner@
-+plugin_LTLIBRARIES = libgstcamerabin2.la
-+libgstcamerabin2_la_SOURCES = gstviewfinderbin.c \
++plugin_LTLIBRARIES = libgstcamerabin.la
++libgstcamerabin_la_SOURCES = gstviewfinderbin.c \
++				gstdigitalzoom.c \
 +				camerabingeneral.c \
 +				gstwrappercamerabinsrc.c \
 +				gstcamerabin2.c \
 +				gstplugin.c
 +
-+libgstcamerabin2_la_CFLAGS = \
++libgstcamerabin_la_CFLAGS = \
 +	$(GST_PLUGINS_BAD_CFLAGS) \
 +	$(GST_PLUGINS_BASE_CFLAGS) \
 +	$(GST_BASE_CFLAGS) $(GST_CFLAGS) \
 +	-DGST_USE_UNSTABLE_API
 +
-+libgstcamerabin2_la_LIBADD = \
++libgstcamerabin_la_LIBADD = \
 +	$(top_builddir)/gst-libs/gst/interfaces/libgstphotography-$(GST_API_VERSION).la \
 +	$(top_builddir)/gst-libs/gst/basecamerabinsrc/libgstbasecamerabinsrc-$(GST_API_VERSION).la \
 +	$(GST_PLUGINS_BASE_LIBS) -lgsttag-$(GST_API_VERSION) -lgstapp-$(GST_API_VERSION) -lgstpbutils-$(GST_API_VERSION) \
 +	$(GST_BASE_LIBS) $(GST_LIBS)
 +
-+libgstcamerabin2_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
-+libgstcamerabin2_la_LIBTOOLFLAGS = $(GST_PLUGIN_LIBTOOLFLAGS)
++libgstcamerabin_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
++libgstcamerabin_la_LIBTOOLFLAGS = $(GST_PLUGIN_LIBTOOLFLAGS)
 +noinst_HEADERS = gstviewfinderbin.h \
 +		camerabingeneral.h \
++		gstdigitalzoom.h \
 +		gstwrappercamerabinsrc.h \
 +		gstcamerabin2.h
 +
@@ -5594,7 +5638,6 @@ Index: b/gst/camerabin2/Makefile.in
 +	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu gst/camerabin2/Makefile'; \
 +	$(am__cd) $(top_srcdir) && \
 +	  $(AUTOMAKE) --gnu gst/camerabin2/Makefile
-+.PRECIOUS: Makefile
 +Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 +	@case '$?' in \
 +	  *config.status*) \
@@ -5648,8 +5691,8 @@ Index: b/gst/camerabin2/Makefile.in
 +	  rm -f $${locs}; \
 +	}
 +
-+libgstcamerabin2.la: $(libgstcamerabin2_la_OBJECTS) $(libgstcamerabin2_la_DEPENDENCIES) $(EXTRA_libgstcamerabin2_la_DEPENDENCIES) 
-+	$(AM_V_CCLD)$(libgstcamerabin2_la_LINK) -rpath $(plugindir) $(libgstcamerabin2_la_OBJECTS) $(libgstcamerabin2_la_LIBADD) $(LIBS)
++libgstcamerabin.la: $(libgstcamerabin_la_OBJECTS) $(libgstcamerabin_la_DEPENDENCIES) $(EXTRA_libgstcamerabin_la_DEPENDENCIES) 
++	$(AM_V_CCLD)$(libgstcamerabin_la_LINK) -rpath $(plugindir) $(libgstcamerabin_la_OBJECTS) $(libgstcamerabin_la_LIBADD) $(LIBS)
 +
 +mostlyclean-compile:
 +	-rm -f *.$(OBJEXT)
@@ -5657,11 +5700,12 @@ Index: b/gst/camerabin2/Makefile.in
 +distclean-compile:
 +	-rm -f *.tab.c
 +
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin2_la-camerabingeneral.Plo@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin2_la-gstcamerabin2.Plo@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin2_la-gstplugin.Plo@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin2_la-gstviewfinderbin.Plo@am__quote@
-+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin2_la-gstwrappercamerabinsrc.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin_la-camerabingeneral.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin_la-gstcamerabin2.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin_la-gstdigitalzoom.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin_la-gstplugin.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin_la-gstviewfinderbin.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgstcamerabin_la-gstwrappercamerabinsrc.Plo@am__quote@
 +
 +.c.o:
 +@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -5687,40 +5731,47 @@ Index: b/gst/camerabin2/Makefile.in
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 +@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 +
-+libgstcamerabin2_la-gstviewfinderbin.lo: gstviewfinderbin.c
-+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin2_la-gstviewfinderbin.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin2_la-gstviewfinderbin.Tpo -c -o libgstcamerabin2_la-gstviewfinderbin.lo `test -f 'gstviewfinderbin.c' || echo '$(srcdir)/'`gstviewfinderbin.c
-+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin2_la-gstviewfinderbin.Tpo $(DEPDIR)/libgstcamerabin2_la-gstviewfinderbin.Plo
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstviewfinderbin.c' object='libgstcamerabin2_la-gstviewfinderbin.lo' libtool=yes @AMDEPBACKSLASH@
++libgstcamerabin_la-gstviewfinderbin.lo: gstviewfinderbin.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin_la-gstviewfinderbin.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin_la-gstviewfinderbin.Tpo -c -o libgstcamerabin_la-gstviewfinderbin.lo `test -f 'gstviewfinderbin.c' || echo '$(srcdir)/'`gstviewfinderbin.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin_la-gstviewfinderbin.Tpo $(DEPDIR)/libgstcamerabin_la-gstviewfinderbin.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstviewfinderbin.c' object='libgstcamerabin_la-gstviewfinderbin.lo' libtool=yes @AMDEPBACKSLASH@
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin2_la-gstviewfinderbin.lo `test -f 'gstviewfinderbin.c' || echo '$(srcdir)/'`gstviewfinderbin.c
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin_la-gstviewfinderbin.lo `test -f 'gstviewfinderbin.c' || echo '$(srcdir)/'`gstviewfinderbin.c
 +
-+libgstcamerabin2_la-camerabingeneral.lo: camerabingeneral.c
-+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin2_la-camerabingeneral.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin2_la-camerabingeneral.Tpo -c -o libgstcamerabin2_la-camerabingeneral.lo `test -f 'camerabingeneral.c' || echo '$(srcdir)/'`camerabingeneral.c
-+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin2_la-camerabingeneral.Tpo $(DEPDIR)/libgstcamerabin2_la-camerabingeneral.Plo
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='camerabingeneral.c' object='libgstcamerabin2_la-camerabingeneral.lo' libtool=yes @AMDEPBACKSLASH@
++libgstcamerabin_la-gstdigitalzoom.lo: gstdigitalzoom.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin_la-gstdigitalzoom.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin_la-gstdigitalzoom.Tpo -c -o libgstcamerabin_la-gstdigitalzoom.lo `test -f 'gstdigitalzoom.c' || echo '$(srcdir)/'`gstdigitalzoom.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin_la-gstdigitalzoom.Tpo $(DEPDIR)/libgstcamerabin_la-gstdigitalzoom.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstdigitalzoom.c' object='libgstcamerabin_la-gstdigitalzoom.lo' libtool=yes @AMDEPBACKSLASH@
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin2_la-camerabingeneral.lo `test -f 'camerabingeneral.c' || echo '$(srcdir)/'`camerabingeneral.c
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin_la-gstdigitalzoom.lo `test -f 'gstdigitalzoom.c' || echo '$(srcdir)/'`gstdigitalzoom.c
 +
-+libgstcamerabin2_la-gstwrappercamerabinsrc.lo: gstwrappercamerabinsrc.c
-+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin2_la-gstwrappercamerabinsrc.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin2_la-gstwrappercamerabinsrc.Tpo -c -o libgstcamerabin2_la-gstwrappercamerabinsrc.lo `test -f 'gstwrappercamerabinsrc.c' || echo '$(srcdir)/'`gstwrappercamerabinsrc.c
-+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin2_la-gstwrappercamerabinsrc.Tpo $(DEPDIR)/libgstcamerabin2_la-gstwrappercamerabinsrc.Plo
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstwrappercamerabinsrc.c' object='libgstcamerabin2_la-gstwrappercamerabinsrc.lo' libtool=yes @AMDEPBACKSLASH@
++libgstcamerabin_la-camerabingeneral.lo: camerabingeneral.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin_la-camerabingeneral.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin_la-camerabingeneral.Tpo -c -o libgstcamerabin_la-camerabingeneral.lo `test -f 'camerabingeneral.c' || echo '$(srcdir)/'`camerabingeneral.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin_la-camerabingeneral.Tpo $(DEPDIR)/libgstcamerabin_la-camerabingeneral.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='camerabingeneral.c' object='libgstcamerabin_la-camerabingeneral.lo' libtool=yes @AMDEPBACKSLASH@
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin2_la-gstwrappercamerabinsrc.lo `test -f 'gstwrappercamerabinsrc.c' || echo '$(srcdir)/'`gstwrappercamerabinsrc.c
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin_la-camerabingeneral.lo `test -f 'camerabingeneral.c' || echo '$(srcdir)/'`camerabingeneral.c
 +
-+libgstcamerabin2_la-gstcamerabin2.lo: gstcamerabin2.c
-+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin2_la-gstcamerabin2.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin2_la-gstcamerabin2.Tpo -c -o libgstcamerabin2_la-gstcamerabin2.lo `test -f 'gstcamerabin2.c' || echo '$(srcdir)/'`gstcamerabin2.c
-+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin2_la-gstcamerabin2.Tpo $(DEPDIR)/libgstcamerabin2_la-gstcamerabin2.Plo
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstcamerabin2.c' object='libgstcamerabin2_la-gstcamerabin2.lo' libtool=yes @AMDEPBACKSLASH@
++libgstcamerabin_la-gstwrappercamerabinsrc.lo: gstwrappercamerabinsrc.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin_la-gstwrappercamerabinsrc.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin_la-gstwrappercamerabinsrc.Tpo -c -o libgstcamerabin_la-gstwrappercamerabinsrc.lo `test -f 'gstwrappercamerabinsrc.c' || echo '$(srcdir)/'`gstwrappercamerabinsrc.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin_la-gstwrappercamerabinsrc.Tpo $(DEPDIR)/libgstcamerabin_la-gstwrappercamerabinsrc.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstwrappercamerabinsrc.c' object='libgstcamerabin_la-gstwrappercamerabinsrc.lo' libtool=yes @AMDEPBACKSLASH@
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin2_la-gstcamerabin2.lo `test -f 'gstcamerabin2.c' || echo '$(srcdir)/'`gstcamerabin2.c
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin_la-gstwrappercamerabinsrc.lo `test -f 'gstwrappercamerabinsrc.c' || echo '$(srcdir)/'`gstwrappercamerabinsrc.c
 +
-+libgstcamerabin2_la-gstplugin.lo: gstplugin.c
-+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin2_la-gstplugin.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin2_la-gstplugin.Tpo -c -o libgstcamerabin2_la-gstplugin.lo `test -f 'gstplugin.c' || echo '$(srcdir)/'`gstplugin.c
-+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin2_la-gstplugin.Tpo $(DEPDIR)/libgstcamerabin2_la-gstplugin.Plo
-+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstplugin.c' object='libgstcamerabin2_la-gstplugin.lo' libtool=yes @AMDEPBACKSLASH@
++libgstcamerabin_la-gstcamerabin2.lo: gstcamerabin2.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin_la-gstcamerabin2.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin_la-gstcamerabin2.Tpo -c -o libgstcamerabin_la-gstcamerabin2.lo `test -f 'gstcamerabin2.c' || echo '$(srcdir)/'`gstcamerabin2.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin_la-gstcamerabin2.Tpo $(DEPDIR)/libgstcamerabin_la-gstcamerabin2.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstcamerabin2.c' object='libgstcamerabin_la-gstcamerabin2.lo' libtool=yes @AMDEPBACKSLASH@
 +@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin2_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin2_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin2_la-gstplugin.lo `test -f 'gstplugin.c' || echo '$(srcdir)/'`gstplugin.c
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin_la-gstcamerabin2.lo `test -f 'gstcamerabin2.c' || echo '$(srcdir)/'`gstcamerabin2.c
++
++libgstcamerabin_la-gstplugin.lo: gstplugin.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -MT libgstcamerabin_la-gstplugin.lo -MD -MP -MF $(DEPDIR)/libgstcamerabin_la-gstplugin.Tpo -c -o libgstcamerabin_la-gstplugin.lo `test -f 'gstplugin.c' || echo '$(srcdir)/'`gstplugin.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgstcamerabin_la-gstplugin.Tpo $(DEPDIR)/libgstcamerabin_la-gstplugin.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gstplugin.c' object='libgstcamerabin_la-gstplugin.lo' libtool=yes @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libgstcamerabin_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgstcamerabin_la_CFLAGS) $(CFLAGS) -c -o libgstcamerabin_la-gstplugin.lo `test -f 'gstplugin.c' || echo '$(srcdir)/'`gstplugin.c
 +
 +mostlyclean-libtool:
 +	-rm -f *.lo
@@ -5935,22 +5986,8 @@ Index: b/gst/camerabin2/Makefile.in
 +	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
 +	uninstall-pluginLTLIBRARIES
 +
++.PRECIOUS: Makefile
 +
-+Android.mk: Makefile.am $(BUILT_SOURCES)
-+	androgenizer \
-+	-:PROJECT libgstcamerabin2 -:SHARED libgstcamerabin2 \
-+	 -:TAGS eng debug \
-+         -:REL_TOP $(top_srcdir) -:ABS_TOP $(abs_top_srcdir) \
-+	 -:SOURCES $(libgstcamerabin2_la_SOURCES) \
-+	 -:CFLAGS $(DEFS) $(DEFAULT_INCLUDES) $(libgstcamerabin2_la_CFLAGS) \
-+	 -:LDFLAGS $(libgstcamerabin2_la_LDFLAGS) \
-+	           $(libgstcamerabin2_la_LIBADD) \
-+	           -ldl \
-+	 -:LIBFILTER_STATIC gstphotography-@GST_API_VERSION@ \
-+	          gstbasecamerabinsrc-@GST_API_VERSION@ \
-+	 -:PASSTHROUGH LOCAL_ARM_MODE:=arm \
-+		       LOCAL_MODULE_PATH:='$$(TARGET_OUT)/lib/gstreamer-0.10' \
-+	> $@
 +
 +# Tell versions [3.59,3.63) of GNU make to not export all variables.
 +# Otherwise a system limit (for SysV at least) may be exceeded.
@@ -6810,7 +6847,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
-@@ -0,0 +1,401 @@
+@@ -0,0 +1,408 @@
 +/*
 + * GStreamer
 + * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
@@ -7048,7 +7085,14 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 +  g_cond_clear (&preview->processing_cond);
 +
 +  if (preview->pipeline) {
++    GstBus *bus;
++
 +    gst_element_set_state (preview->pipeline, GST_STATE_NULL);
++
++    bus = gst_pipeline_get_bus (GST_PIPELINE (preview->pipeline));
++    gst_bus_remove_watch (bus);
++    gst_object_unref (bus);
++
 +    gst_object_unref (preview->pipeline);
 +  }
 +  g_free (preview);
@@ -7307,11 +7351,11 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/basecamerabinsrc/Makefile.in
-@@ -0,0 +1,1078 @@
-+# Makefile.in generated by automake 1.14.1 from Makefile.am.
+@@ -0,0 +1,1123 @@
++# Makefile.in generated by automake 1.15 from Makefile.am.
 +# @configure_input@
 +
-+# Copyright (C) 1994-2013 Free Software Foundation, Inc.
++# Copyright (C) 1994-2014 Free Software Foundation, Inc.
 +
 +# This Makefile.in is free software; the Free Software Foundation
 +# gives unlimited permission to copy and/or distribute it,
@@ -7326,7 +7370,17 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +
 +
 +VPATH = @srcdir@
-+am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
++am__is_gnu_make = { \
++  if test -z '$(MAKELEVEL)'; then \
++    false; \
++  elif test -n '$(MAKE_HOST)'; then \
++    true; \
++  elif test -n '$(MAKE_VERSION)' && test -n '$(CURDIR)'; then \
++    true; \
++  else \
++    false; \
++  fi; \
++}
 +am__make_running_with_option = \
 +  case $${target_option-} in \
 +      ?) ;; \
@@ -7391,9 +7445,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +host_triplet = @host@
 +target_triplet = @target@
 +subdir = gst-libs/gst/basecamerabinsrc
-+DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-+	$(top_srcdir)/depcomp \
-+	$(libgstbasecamerabinsrc_@GST_API_VERSION@include_HEADERS)
 +ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 +am__aclocal_m4_deps = $(top_srcdir)/common/m4/as-ac-expand.m4 \
 +	$(top_srcdir)/common/m4/as-auto-alt.m4 \
@@ -7401,6 +7452,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +	$(top_srcdir)/common/m4/as-libtool.m4 \
 +	$(top_srcdir)/common/m4/as-version.m4 \
 +	$(top_srcdir)/common/m4/ax_create_stdint_h.m4 \
++	$(top_srcdir)/common/m4/ax_pthread.m4 \
 +	$(top_srcdir)/common/m4/gst-arch.m4 \
 +	$(top_srcdir)/common/m4/gst-args.m4 \
 +	$(top_srcdir)/common/m4/gst-check.m4 \
@@ -7414,23 +7466,23 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +	$(top_srcdir)/common/m4/gst-platform.m4 \
 +	$(top_srcdir)/common/m4/gst-plugin-docs.m4 \
 +	$(top_srcdir)/common/m4/gst-plugindir.m4 \
-+	$(top_srcdir)/common/m4/gst-x11.m4 \
 +	$(top_srcdir)/common/m4/gst.m4 \
 +	$(top_srcdir)/common/m4/gtk-doc.m4 \
 +	$(top_srcdir)/common/m4/introspection.m4 \
 +	$(top_srcdir)/common/m4/orc.m4 $(top_srcdir)/common/m4/pkg.m4 \
-+	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/gsettings.m4 \
-+	$(top_srcdir)/m4/gst-fionread.m4 $(top_srcdir)/m4/gst-sdl.m4 \
-+	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intlmacosx.m4 \
-+	$(top_srcdir)/m4/lib-ld.m4 $(top_srcdir)/m4/lib-link.m4 \
-+	$(top_srcdir)/m4/lib-prefix.m4 $(top_srcdir)/m4/libgcrypt.m4 \
-+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/nls.m4 \
-+	$(top_srcdir)/m4/po.m4 $(top_srcdir)/m4/progtest.m4 \
-+	$(top_srcdir)/configure.ac
++	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/iconv.m4 \
++	$(top_srcdir)/m4/intlmacosx.m4 $(top_srcdir)/m4/lib-ld.m4 \
++	$(top_srcdir)/m4/lib-link.m4 $(top_srcdir)/m4/lib-prefix.m4 \
++	$(top_srcdir)/m4/libgcrypt.m4 $(top_srcdir)/m4/libtool.m4 \
++	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
++	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
++	$(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
++	$(top_srcdir)/m4/progtest.m4 $(top_srcdir)/configure.ac
 +am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 +	$(ACLOCAL_M4)
++DIST_COMMON = $(srcdir)/Makefile.am \
++	$(libgstbasecamerabinsrc_@GST_API_VERSION@include_HEADERS) \
++	$(am__DIST_COMMON)
 +mkinstalldirs = $(install_sh) -d
 +CONFIG_HEADER = $(top_builddir)/config.h
 +CONFIG_CLEAN_FILES =
@@ -7528,6 +7580,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +  esac
 +HEADERS = $(libgstbasecamerabinsrc_@GST_API_VERSION@include_HEADERS)
 +am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
++am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 +DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 +ACLOCAL = @ACLOCAL@
 +ACLOCAL_AMFLAGS = @ACLOCAL_AMFLAGS@
@@ -7535,8 +7588,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +ACMMP3DEC_CFLAGS = @ACMMP3DEC_CFLAGS@
 +AMTAR = @AMTAR@
 +AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
-+APEXSINK_CFLAGS = @APEXSINK_CFLAGS@
-+APEXSINK_LIBS = @APEXSINK_LIBS@
 +AR = @AR@
 +AS = @AS@
 +ASSRENDER_CFLAGS = @ASSRENDER_CFLAGS@
@@ -7545,8 +7596,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +AUTOHEADER = @AUTOHEADER@
 +AUTOMAKE = @AUTOMAKE@
 +AWK = @AWK@
-+BLUEZ_CFLAGS = @BLUEZ_CFLAGS@
-+BLUEZ_LIBS = @BLUEZ_LIBS@
++BLUEZ5_CFLAGS = @BLUEZ5_CFLAGS@
++BLUEZ5_LIBS = @BLUEZ5_LIBS@
++BS2B_CFLAGS = @BS2B_CFLAGS@
++BS2B_LIBS = @BS2B_LIBS@
 +BZ2_LIBS = @BZ2_LIBS@
 +CC = @CC@
 +CCASFLAGS = @CCASFLAGS@
@@ -7562,6 +7615,8 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +CLUTTER_X11_LIBS = @CLUTTER_X11_LIBS@
 +CPP = @CPP@
 +CPPFLAGS = @CPPFLAGS@
++CUDA_CFLAGS = @CUDA_CFLAGS@
++CUDA_LIBS = @CUDA_LIBS@
 +CURL_CFLAGS = @CURL_CFLAGS@
 +CURL_LIBS = @CURL_LIBS@
 +CXX = @CXX@
@@ -7571,9 +7626,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +CYGPATH_W = @CYGPATH_W@
 +DAALA_CFLAGS = @DAALA_CFLAGS@
 +DAALA_LIBS = @DAALA_LIBS@
-+DBUS_CFLAGS = @DBUS_CFLAGS@
-+DBUS_LIBS = @DBUS_LIBS@
-+DCCP_LIBS = @DCCP_LIBS@
 +DECKLINK_CXXFLAGS = @DECKLINK_CXXFLAGS@
 +DECKLINK_LIBS = @DECKLINK_LIBS@
 +DEFAULT_AUDIOSINK = @DEFAULT_AUDIOSINK@
@@ -7585,14 +7637,17 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +DEPDIR = @DEPDIR@
 +DEPRECATED_CFLAGS = @DEPRECATED_CFLAGS@
 +DIRECT3D_LIBS = @DIRECT3D_LIBS@
-+DIRECTDRAW_LIBS = @DIRECTDRAW_LIBS@
 +DIRECTFB_CFLAGS = @DIRECTFB_CFLAGS@
 +DIRECTFB_LIBS = @DIRECTFB_LIBS@
 +DIRECTSOUND_LIBS = @DIRECTSOUND_LIBS@
 +DIRECTX_CFLAGS = @DIRECTX_CFLAGS@
 +DIRECTX_LDFLAGS = @DIRECTX_LDFLAGS@
 +DLLTOOL = @DLLTOOL@
++DSSIM_CFLAGS = @DSSIM_CFLAGS@
++DSSIM_LIBS = @DSSIM_LIBS@
 +DSYMUTIL = @DSYMUTIL@
++DTLS_CFLAGS = @DTLS_CFLAGS@
++DTLS_LIBS = @DTLS_LIBS@
 +DTS_LIBS = @DTS_LIBS@
 +DUMPBIN = @DUMPBIN@
 +DVDNAV_CFLAGS = @DVDNAV_CFLAGS@
@@ -7600,6 +7655,8 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +ECHO_C = @ECHO_C@
 +ECHO_N = @ECHO_N@
 +ECHO_T = @ECHO_T@
++EGL_CFLAGS = @EGL_CFLAGS@
++EGL_LIBS = @EGL_LIBS@
 +EGREP = @EGREP@
 +ERROR_CFLAGS = @ERROR_CFLAGS@
 +ERROR_CXXFLAGS = @ERROR_CXXFLAGS@
@@ -7608,8 +7665,9 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +EXIF_CFLAGS = @EXIF_CFLAGS@
 +EXIF_LIBS = @EXIF_LIBS@
 +FAAC_LIBS = @FAAC_LIBS@
-+FAAD_IS_NEAAC = @FAAD_IS_NEAAC@
 +FAAD_LIBS = @FAAD_LIBS@
++FDK_AAC_CFLAGS = @FDK_AAC_CFLAGS@
++FDK_AAC_LIBS = @FDK_AAC_LIBS@
 +FFLAGS = @FFLAGS@
 +FGREP = @FGREP@
 +FLITE_CFLAGS = @FLITE_CFLAGS@
@@ -7619,22 +7677,29 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +GCOV = @GCOV@
 +GCOV_CFLAGS = @GCOV_CFLAGS@
 +GCOV_LIBS = @GCOV_LIBS@
++GDBUS_CODEGEN = @GDBUS_CODEGEN@
 +GETTEXT_MACRO_VERSION = @GETTEXT_MACRO_VERSION@
 +GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 +GIO_CFLAGS = @GIO_CFLAGS@
 +GIO_LDFLAGS = @GIO_LDFLAGS@
 +GIO_LIBS = @GIO_LIBS@
++GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
++GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
++GLES2_CFLAGS = @GLES2_CFLAGS@
++GLES2_LIBS = @GLES2_LIBS@
 +GLIB_CFLAGS = @GLIB_CFLAGS@
-+GLIB_COMPILE_SCHEMAS = @GLIB_COMPILE_SCHEMAS@
 +GLIB_EXTRA_CFLAGS = @GLIB_EXTRA_CFLAGS@
 +GLIB_GENMARSHAL = @GLIB_GENMARSHAL@
 +GLIB_LIBS = @GLIB_LIBS@
 +GLIB_MKENUMS = @GLIB_MKENUMS@
 +GLIB_PREFIX = @GLIB_PREFIX@
 +GLIB_REQ = @GLIB_REQ@
++GL_APIS = @GL_APIS@
 +GL_CFLAGS = @GL_CFLAGS@
 +GL_LIBS = @GL_LIBS@
 +GL_OBJCFLAGS = @GL_OBJCFLAGS@
++GL_PLATFORMS = @GL_PLATFORMS@
++GL_WINDOWS = @GL_WINDOWS@
 +GME_LIBS = @GME_LIBS@
 +GMODULE_EXPORT_CFLAGS = @GMODULE_EXPORT_CFLAGS@
 +GMODULE_EXPORT_LIBS = @GMODULE_EXPORT_LIBS@
@@ -7642,21 +7707,21 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +GMODULE_NO_EXPORT_LIBS = @GMODULE_NO_EXPORT_LIBS@
 +GMSGFMT = @GMSGFMT@
 +GMSGFMT_015 = @GMSGFMT_015@
-+GMYTH_CFLAGS = @GMYTH_CFLAGS@
-+GMYTH_LIBS = @GMYTH_LIBS@
-+GNUSTEP_CONFIG = @GNUSTEP_CONFIG@
++GNUSTL_CFLAGS = @GNUSTL_CFLAGS@
++GNUSTL_LIBS = @GNUSTL_LIBS@
 +GRAPHENE_CFLAGS = @GRAPHENE_CFLAGS@
 +GRAPHENE_LIBS = @GRAPHENE_LIBS@
 +GREP = @GREP@
-+GSETTINGS_CFLAGS = @GSETTINGS_CFLAGS@
-+GSETTINGS_DISABLE_SCHEMAS_COMPILE = @GSETTINGS_DISABLE_SCHEMAS_COMPILE@
-+GSETTINGS_LIBS = @GSETTINGS_LIBS@
 +GSM_LIBS = @GSM_LIBS@
 +GSTPB_PLUGINS_DIR = @GSTPB_PLUGINS_DIR@
 +GSTPB_PREFIX = @GSTPB_PREFIX@
 +GST_AGE = @GST_AGE@
++GST_ALLOCATORS_CFLAGS = @GST_ALLOCATORS_CFLAGS@
++GST_ALLOCATORS_LIBS = @GST_ALLOCATORS_LIBS@
 +GST_ALL_LDFLAGS = @GST_ALL_LDFLAGS@
 +GST_API_VERSION = @GST_API_VERSION@
++GST_AUDIO_CFLAGS = @GST_AUDIO_CFLAGS@
++GST_AUDIO_LIBS = @GST_AUDIO_LIBS@
 +GST_BASE_CFLAGS = @GST_BASE_CFLAGS@
 +GST_BASE_LIBS = @GST_BASE_LIBS@
 +GST_CFLAGS = @GST_CFLAGS@
@@ -7672,12 +7737,16 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +GST_LIB_LDFLAGS = @GST_LIB_LDFLAGS@
 +GST_LICENSE = @GST_LICENSE@
 +GST_LT_LDFLAGS = @GST_LT_LDFLAGS@
++GST_NET_CFLAGS = @GST_NET_CFLAGS@
++GST_NET_LIBS = @GST_NET_LIBS@
 +GST_OBJCFLAGS = @GST_OBJCFLAGS@
 +GST_OPTION_CFLAGS = @GST_OPTION_CFLAGS@
 +GST_OPTION_CXXFLAGS = @GST_OPTION_CXXFLAGS@
 +GST_OPTION_OBJCFLAGS = @GST_OPTION_OBJCFLAGS@
 +GST_PACKAGE_NAME = @GST_PACKAGE_NAME@
 +GST_PACKAGE_ORIGIN = @GST_PACKAGE_ORIGIN@
++GST_PBUTILS_CFLAGS = @GST_PBUTILS_CFLAGS@
++GST_PBUTILS_LIBS = @GST_PBUTILS_LIBS@
 +GST_PKG_CONFIG_PATH = @GST_PKG_CONFIG_PATH@
 +GST_PLUGINS_ALL = @GST_PLUGINS_ALL@
 +GST_PLUGINS_BAD_CFLAGS = @GST_PLUGINS_BAD_CFLAGS@
@@ -7706,7 +7775,13 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +GST_VIDEO_CFLAGS = @GST_VIDEO_CFLAGS@
 +GST_VIDEO_LIBS = @GST_VIDEO_LIBS@
 +GTK3_CFLAGS = @GTK3_CFLAGS@
++GTK3_GL_CFLAGS = @GTK3_GL_CFLAGS@
++GTK3_GL_LIBS = @GTK3_GL_LIBS@
 +GTK3_LIBS = @GTK3_LIBS@
++GTK3_WAYLAND_CFLAGS = @GTK3_WAYLAND_CFLAGS@
++GTK3_WAYLAND_LIBS = @GTK3_WAYLAND_LIBS@
++GTK3_X11_CFLAGS = @GTK3_X11_CFLAGS@
++GTK3_X11_LIBS = @GTK3_X11_LIBS@
 +GTKDOC_CHECK = @GTKDOC_CHECK@
 +GTKDOC_DEPS_CFLAGS = @GTKDOC_DEPS_CFLAGS@
 +GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
@@ -7723,7 +7798,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +HAVE_CLUTTER_X11 = @HAVE_CLUTTER_X11@
 +HAVE_CXX = @HAVE_CXX@
 +HAVE_DIRECT3D = @HAVE_DIRECT3D@
-+HAVE_DIRECTDRAW = @HAVE_DIRECTDRAW@
 +HAVE_DIRECTSOUND = @HAVE_DIRECTSOUND@
 +HAVE_DTS = @HAVE_DTS@
 +HAVE_EGL = @HAVE_EGL@
@@ -7732,12 +7806,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +HAVE_FLITE = @HAVE_FLITE@
 +HAVE_GL = @HAVE_GL@
 +HAVE_GLES2 = @HAVE_GLES2@
-+HAVE_GLU = @HAVE_GLU@
 +HAVE_GRAPHENE = @HAVE_GRAPHENE@
 +HAVE_GSM = @HAVE_GSM@
 +HAVE_GTK3 = @HAVE_GTK3@
 +HAVE_JPEG = @HAVE_JPEG@
-+HAVE_NAS = @HAVE_NAS@
 +HAVE_OPENJPEG = @HAVE_OPENJPEG@
 +HAVE_PNG = @HAVE_PNG@
 +HAVE_SRTP = @HAVE_SRTP@
@@ -7745,7 +7817,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +HAVE_WILDMIDI = @HAVE_WILDMIDI@
 +HAVE_WINKS = @HAVE_WINKS@
 +HAVE_WINSCREENCAP = @HAVE_WINSCREENCAP@
-+HAVE_X = @HAVE_X@
 +HAVE_X11 = @HAVE_X11@
 +HTML_DIR = @HTML_DIR@
 +INSTALL = @INSTALL@
@@ -7759,6 +7830,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +INTROSPECTION_COMPILER = @INTROSPECTION_COMPILER@
 +INTROSPECTION_GENERATE = @INTROSPECTION_GENERATE@
 +INTROSPECTION_GIRDIR = @INTROSPECTION_GIRDIR@
++INTROSPECTION_INIT = @INTROSPECTION_INIT@
 +INTROSPECTION_LIBS = @INTROSPECTION_LIBS@
 +INTROSPECTION_MAKEFILE = @INTROSPECTION_MAKEFILE@
 +INTROSPECTION_SCANNER = @INTROSPECTION_SCANNER@
@@ -7766,10 +7838,14 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +JPEG_LIBS = @JPEG_LIBS@
 +KATE_CFLAGS = @KATE_CFLAGS@
 +KATE_LIBS = @KATE_LIBS@
++KMS_DRM_CFLAGS = @KMS_DRM_CFLAGS@
++KMS_DRM_LIBS = @KMS_DRM_LIBS@
 +LD = @LD@
 +LDFLAGS = @LDFLAGS@
 +LIBDC1394_CFLAGS = @LIBDC1394_CFLAGS@
 +LIBDC1394_LIBS = @LIBDC1394_LIBS@
++LIBDE265_CFLAGS = @LIBDE265_CFLAGS@
++LIBDE265_LIBS = @LIBDE265_LIBS@
 +LIBDIR = @LIBDIR@
 +LIBGCRYPT_CFLAGS = @LIBGCRYPT_CFLAGS@
 +LIBGCRYPT_CONFIG = @LIBGCRYPT_CONFIG@
@@ -7788,10 +7864,12 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +LIBUDEV_LIBS = @LIBUDEV_LIBS@
 +LIBUSB_CFLAGS = @LIBUSB_CFLAGS@
 +LIBUSB_LIBS = @LIBUSB_LIBS@
-+LIBVISUAL_CFLAGS = @LIBVISUAL_CFLAGS@
-+LIBVISUAL_LIBS = @LIBVISUAL_LIBS@
++LIBVA_DRM_CFLAGS = @LIBVA_DRM_CFLAGS@
++LIBVA_DRM_LIBS = @LIBVA_DRM_LIBS@
 +LIBXML2_CFLAGS = @LIBXML2_CFLAGS@
 +LIBXML2_LIBS = @LIBXML2_LIBS@
++LILV_CFLAGS = @LILV_CFLAGS@
++LILV_LIBS = @LILV_LIBS@
 +LIPO = @LIPO@
 +LN_S = @LN_S@
 +LOCALEDIR = @LOCALEDIR@
@@ -7800,35 +7878,35 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +LTLIBICONV = @LTLIBICONV@
 +LTLIBINTL = @LTLIBINTL@
 +LTLIBOBJS = @LTLIBOBJS@
++LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 +MAINT = @MAINT@
 +MAKEINFO = @MAKEINFO@
 +MANIFEST_TOOL = @MANIFEST_TOOL@
-+MIMIC_CFLAGS = @MIMIC_CFLAGS@
-+MIMIC_LIBS = @MIMIC_LIBS@
 +MJPEG_CFLAGS = @MJPEG_CFLAGS@
 +MJPEG_LIBS = @MJPEG_LIBS@
 +MKDIR_P = @MKDIR_P@
++MOC = @MOC@
 +MODPLUG_CFLAGS = @MODPLUG_CFLAGS@
 +MODPLUG_LIBS = @MODPLUG_LIBS@
 +MPEG2ENC_CFLAGS = @MPEG2ENC_CFLAGS@
 +MPEG2ENC_LIBS = @MPEG2ENC_LIBS@
-+MPG123_CFLAGS = @MPG123_CFLAGS@
-+MPG123_LIBS = @MPG123_LIBS@
 +MPLEX_CFLAGS = @MPLEX_CFLAGS@
 +MPLEX_LDFLAGS = @MPLEX_LDFLAGS@
 +MPLEX_LIBS = @MPLEX_LIBS@
++MSDK_CFLAGS = @MSDK_CFLAGS@
++MSDK_LIBS = @MSDK_LIBS@
 +MSGFMT = @MSGFMT@
 +MSGFMT_015 = @MSGFMT_015@
 +MSGMERGE = @MSGMERGE@
 +MUSEPACK_LIBS = @MUSEPACK_LIBS@
-+NAS_CFLAGS = @NAS_CFLAGS@
-+NAS_LIBS = @NAS_LIBS@
 +NEON_CFLAGS = @NEON_CFLAGS@
 +NEON_LIBS = @NEON_LIBS@
 +NETTLE_CFLAGS = @NETTLE_CFLAGS@
 +NETTLE_LIBS = @NETTLE_LIBS@
 +NM = @NM@
 +NMEDIT = @NMEDIT@
++NVENCODE_CFLAGS = @NVENCODE_CFLAGS@
++NVENCODE_LIBS = @NVENCODE_LIBS@
 +OBJC = @OBJC@
 +OBJCDEPMODE = @OBJCDEPMODE@
 +OBJCFLAGS = @OBJCFLAGS@
@@ -7838,15 +7916,23 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +OFA_LIBS = @OFA_LIBS@
 +OPENAL_CFLAGS = @OPENAL_CFLAGS@
 +OPENAL_LIBS = @OPENAL_LIBS@
++OPENCV_3_CFLAGS = @OPENCV_3_CFLAGS@
++OPENCV_3_LIBS = @OPENCV_3_LIBS@
 +OPENCV_CFLAGS = @OPENCV_CFLAGS@
 +OPENCV_LIBS = @OPENCV_LIBS@
 +OPENCV_PREFIX = @OPENCV_PREFIX@
 +OPENEXR_CFLAGS = @OPENEXR_CFLAGS@
 +OPENEXR_LIBS = @OPENEXR_LIBS@
++OPENH264_CFLAGS = @OPENH264_CFLAGS@
++OPENH264_LIBS = @OPENH264_LIBS@
++OPENJPEG_2_1_CFLAGS = @OPENJPEG_2_1_CFLAGS@
++OPENJPEG_2_1_LIBS = @OPENJPEG_2_1_LIBS@
 +OPENJPEG_CFLAGS = @OPENJPEG_CFLAGS@
 +OPENJPEG_LIBS = @OPENJPEG_LIBS@
 +OPENNI2_CFLAGS = @OPENNI2_CFLAGS@
 +OPENNI2_LIBS = @OPENNI2_LIBS@
++OPENSSL_CFLAGS = @OPENSSL_CFLAGS@
++OPENSSL_LIBS = @OPENSSL_LIBS@
 +OPUS_CFLAGS = @OPUS_CFLAGS@
 +OPUS_LIBS = @OPUS_LIBS@
 +ORCC = @ORCC@
@@ -7872,16 +7958,26 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +PLUGINDIR = @PLUGINDIR@
 +POSUB = @POSUB@
 +PROFILE_CFLAGS = @PROFILE_CFLAGS@
-+PVR_CFLAGS = @PVR_CFLAGS@
-+PVR_LIBS = @PVR_LIBS@
++PTHREAD_CC = @PTHREAD_CC@
++PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
++PTHREAD_LIBS = @PTHREAD_LIBS@
 +PYTHON = @PYTHON@
 +PYTHON_EXEC_PREFIX = @PYTHON_EXEC_PREFIX@
 +PYTHON_PLATFORM = @PYTHON_PLATFORM@
 +PYTHON_PREFIX = @PYTHON_PREFIX@
 +PYTHON_VERSION = @PYTHON_VERSION@
++QT_ANDROID_CFLAGS = @QT_ANDROID_CFLAGS@
++QT_ANDROID_LIBS = @QT_ANDROID_LIBS@
++QT_CFLAGS = @QT_CFLAGS@
++QT_LIBS = @QT_LIBS@
++QT_MAC_CFLAGS = @QT_MAC_CFLAGS@
++QT_MAC_LIBS = @QT_MAC_LIBS@
++QT_WAYLAND_CFLAGS = @QT_WAYLAND_CFLAGS@
++QT_WAYLAND_LIBS = @QT_WAYLAND_LIBS@
++QT_X11_CFLAGS = @QT_X11_CFLAGS@
++QT_X11_LIBS = @QT_X11_LIBS@
 +RANLIB = @RANLIB@
-+RSVG_2_36_2_CFLAGS = @RSVG_2_36_2_CFLAGS@
-+RSVG_2_36_2_LIBS = @RSVG_2_36_2_LIBS@
++RCC = @RCC@
 +RSVG_CFLAGS = @RSVG_CFLAGS@
 +RSVG_LIBS = @RSVG_LIBS@
 +RTMP_CFLAGS = @RTMP_CFLAGS@
@@ -7892,22 +7988,19 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +SCHRO_LIBS = @SCHRO_LIBS@
 +SDL_CFLAGS = @SDL_CFLAGS@
 +SDL_CLUTTER = @SDL_CLUTTER@
-+SDL_CONFIG = @SDL_CONFIG@
 +SDL_LIBS = @SDL_LIBS@
 +SED = @SED@
 +SET_MAKE = @SET_MAKE@
 +SHELL = @SHELL@
 +SHM_LIBS = @SHM_LIBS@
-+SLV2_CFLAGS = @SLV2_CFLAGS@
-+SLV2_LIBS = @SLV2_LIBS@
 +SNDFILE_CFLAGS = @SNDFILE_CFLAGS@
 +SNDFILE_LIBS = @SNDFILE_LIBS@
-+SNDIO_LIBS = @SNDIO_LIBS@
 +SOUNDTOUCH_CFLAGS = @SOUNDTOUCH_CFLAGS@
 +SOUNDTOUCH_LIBS = @SOUNDTOUCH_LIBS@
 +SPANDSP_CFLAGS = @SPANDSP_CFLAGS@
 +SPANDSP_LIBS = @SPANDSP_LIBS@
 +SPC_LIBS = @SPC_LIBS@
++SRTP_CFLAGS = @SRTP_CFLAGS@
 +SRTP_LIBS = @SRTP_LIBS@
 +SSH2_CFLAGS = @SSH2_CFLAGS@
 +SSH2_LIBS = @SSH2_LIBS@
@@ -7916,8 +8009,9 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +TELETEXTDEC_LIBS = @TELETEXTDEC_LIBS@
 +TIGER_CFLAGS = @TIGER_CFLAGS@
 +TIGER_LIBS = @TIGER_LIBS@
-+TIMIDITY_CFLAGS = @TIMIDITY_CFLAGS@
-+TIMIDITY_LIBS = @TIMIDITY_LIBS@
++TTML_CFLAGS = @TTML_CFLAGS@
++TTML_LIBS = @TTML_LIBS@
++UIC = @UIC@
 +USE_GLES2 = @USE_GLES2@
 +USE_NLS = @USE_NLS@
 +USE_OPENGL = @USE_OPENGL@
@@ -7931,6 +8025,9 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +VOAACENC_LIBS = @VOAACENC_LIBS@
 +VOAMRWBENC_CFLAGS = @VOAMRWBENC_CFLAGS@
 +VOAMRWBENC_LIBS = @VOAMRWBENC_LIBS@
++VULKAN_LIBS = @VULKAN_LIBS@
++VULKAN_WAYLAND_CFLAGS = @VULKAN_WAYLAND_CFLAGS@
++VULKAN_WAYLAND_LIBS = @VULKAN_WAYLAND_LIBS@
 +WARNING_CFLAGS = @WARNING_CFLAGS@
 +WARNING_CXXFLAGS = @WARNING_CXXFLAGS@
 +WARNING_OBJCFLAGS = @WARNING_OBJCFLAGS@
@@ -7939,8 +8036,12 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +WAYLAND_EGL_CFLAGS = @WAYLAND_EGL_CFLAGS@
 +WAYLAND_EGL_LIBS = @WAYLAND_EGL_LIBS@
 +WAYLAND_LIBS = @WAYLAND_LIBS@
++WAYLAND_PROTOCOLS_DATADIR = @WAYLAND_PROTOCOLS_DATADIR@
 +WEBP_CFLAGS = @WEBP_CFLAGS@
 +WEBP_LIBS = @WEBP_LIBS@
++WEBRTCDSP_CFLAGS = @WEBRTCDSP_CFLAGS@
++WEBRTCDSP_LIBS = @WEBRTCDSP_LIBS@
++WGET = @WGET@
 +WILDMIDI_CFLAGS = @WILDMIDI_CFLAGS@
 +WILDMIDI_LIBS = @WILDMIDI_LIBS@
 +WINKS_LIBS = @WINKS_LIBS@
@@ -7948,17 +8049,17 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +WINSOCK2_LIBS = @WINSOCK2_LIBS@
 +X11_CFLAGS = @X11_CFLAGS@
 +X11_LIBS = @X11_LIBS@
++X11_XCB_CFLAGS = @X11_XCB_CFLAGS@
++X11_XCB_LIBS = @X11_XCB_LIBS@
++X265_CFLAGS = @X265_CFLAGS@
++X265_LIBS = @X265_LIBS@
++XCB_CFLAGS = @XCB_CFLAGS@
++XCB_LIBS = @XCB_LIBS@
 +XCOMPOSITE_CFLAGS = @XCOMPOSITE_CFLAGS@
 +XCOMPOSITE_LIBS = @XCOMPOSITE_LIBS@
 +XGETTEXT = @XGETTEXT@
 +XGETTEXT_015 = @XGETTEXT_015@
 +XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+XMKMF = @XMKMF@
-+XVID_LIBS = @XVID_LIBS@
-+X_CFLAGS = @X_CFLAGS@
-+X_EXTRA_LIBS = @X_EXTRA_LIBS@
-+X_LIBS = @X_LIBS@
-+X_PRE_LIBS = @X_PRE_LIBS@
 +ZBAR_CFLAGS = @ZBAR_CFLAGS@
 +ZBAR_LIBS = @ZBAR_LIBS@
 +abs_builddir = @abs_builddir@
@@ -7975,6 +8076,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +am__quote = @am__quote@
 +am__tar = @am__tar@
 +am__untar = @am__untar@
++ax_pthread_config = @ax_pthread_config@
 +bindir = @bindir@
 +build = @build@
 +build_alias = @build_alias@
@@ -7987,7 +8089,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +docdir = @docdir@
 +dvidir = @dvidir@
 +exec_prefix = @exec_prefix@
-+gsettingsschemadir = @gsettingsschemadir@
 +host = @host@
 +host_alias = @host_alias@
 +host_cpu = @host_cpu@
@@ -8013,6 +8114,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +psdir = @psdir@
 +pyexecdir = @pyexecdir@
 +pythondir = @pythondir@
++runstatedir = @runstatedir@
 +sbindir = @sbindir@
 +sharedstatedir = @sharedstatedir@
 +srcdir = @srcdir@
@@ -8065,7 +8167,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu gst-libs/gst/basecamerabinsrc/Makefile'; \
 +	$(am__cd) $(top_srcdir) && \
 +	  $(AUTOMAKE) --gnu gst-libs/gst/basecamerabinsrc/Makefile
-+.PRECIOUS: Makefile
 +Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 +	@case '$?' in \
 +	  *config.status*) \
@@ -8368,20 +8469,8 @@ Index: b/gst-libs/gst/basecamerabinsrc/Makefile.in
 +	uninstall-am uninstall-libLTLIBRARIES \
 +	uninstall-libgstbasecamerabinsrc_@GST_API_VERSION@includeHEADERS
 +
++.PRECIOUS: Makefile
 +
-+Android.mk: Makefile.am
-+	androgenizer -:PROJECT libgstbasecamerabinsrc -:STATIC libgstbasecamerabinsrc-@GST_API_VERSION@ \
-+	 -:TAGS eng debug \
-+         -:REL_TOP $(top_srcdir) -:ABS_TOP $(abs_top_srcdir) \
-+	 -:SOURCES $(libgstbasecamerabinsrc_@GST_API_VERSION@_la_SOURCES) \
-+	 -:CFLAGS $(DEFS) $(libgstbasecamerabinsrc_@GST_API_VERSION@_la_CFLAGS) \
-+	 -:LDFLAGS $(libgstbasecamerabinsrc_@GST_API_VERSION@_la_LDFLAGS) \
-+	           $(libgstbasecamerabinsrc_@GST_API_VERSION@_la_LIBADD) \
-+	           -ldl \
-+	 -:HEADER_TARGET gstreamer-@GST_API_VERSION@/gst/basecamerabinsrc \
-+	 -:HEADERS $(libgstbasecamerabinsrcinclude_HEADERS) \
-+	 -:PASSTHROUGH LOCAL_ARM_MODE:=arm \
-+	> $@
 +
 +# Tell versions [3.59,3.63) of GNU make to not export all variables.
 +# Otherwise a system limit (for SysV at least) may be exceeded.
@@ -14680,7 +14769,7 @@ Index: b/gst-libs/gst/interfaces/photography.c
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/interfaces/photography.c
-@@ -0,0 +1,718 @@
+@@ -0,0 +1,714 @@
 +/* GStreamer
 + *
 + * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
@@ -14982,8 +15071,6 @@ Index: b/gst-libs/gst/interfaces/photography.c
 + * Set the noise reduction mode for the #GstElement
 + *
 + * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ *
-+ * Since: 0.10.21
 + */
 +/**
 + * gst_photography_get_noise_reduction:
@@ -14993,8 +15080,6 @@ Index: b/gst-libs/gst/interfaces/photography.c
 + * Get the noise reduction mode for the #GstElement
 + *
 + * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ *
-+ * Since: 0.10.21
 + */
 +GST_PHOTOGRAPHY_FUNC_TEMPLATE (noise_reduction, GstPhotographyNoiseReduction);
 +
@@ -15403,13 +15488,12 @@ Index: b/gst-libs/gst/interfaces/photography.h
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/interfaces/photography.h
-@@ -0,0 +1,630 @@
+@@ -0,0 +1,641 @@
 +/* GStreamer
 + *
 + * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
 + *
 + * photography.h: photography interface for digital imaging
-+ *
 + *
 + * This library is free software; you can redistribute it and/or
 + * modify it under the terms of the GNU Library General Public
@@ -15515,32 +15599,32 @@ Index: b/gst-libs/gst/interfaces/photography.h
 +#define MAX_WHITE_POINT_VALUES 4
 +
 +/* Interface property names */
-+#define GST_PHOTOGRAPHY_PROP_WB_MODE      "white-balance-mode"
-+#define GST_PHOTOGRAPHY_PROP_COLOR_TONE   "color-tone-mode"
-+#define GST_PHOTOGRAPHY_PROP_SCENE_MODE   "scene-mode"
-+#define GST_PHOTOGRAPHY_PROP_FLASH_MODE   "flash-mode"
-+#define GST_PHOTOGRAPHY_PROP_NOISE_REDUCTION   "noise-reduction"
-+#define GST_PHOTOGRAPHY_PROP_FOCUS_STATUS "focus-status"
-+#define GST_PHOTOGRAPHY_PROP_CAPABILITIES "capabilities"
-+#define GST_PHOTOGRAPHY_PROP_SHAKE_RISK   "shake-risk"
-+#define GST_PHOTOGRAPHY_PROP_EV_COMP      "ev-compensation"
-+#define GST_PHOTOGRAPHY_PROP_ISO_SPEED    "iso-speed"
-+#define GST_PHOTOGRAPHY_PROP_APERTURE     "aperture"
-+#define GST_PHOTOGRAPHY_PROP_EXPOSURE_TIME     "exposure-time"
++#define GST_PHOTOGRAPHY_PROP_WB_MODE            "white-balance-mode"
++#define GST_PHOTOGRAPHY_PROP_COLOR_TONE         "color-tone-mode"
++#define GST_PHOTOGRAPHY_PROP_SCENE_MODE         "scene-mode"
++#define GST_PHOTOGRAPHY_PROP_FLASH_MODE         "flash-mode"
++#define GST_PHOTOGRAPHY_PROP_NOISE_REDUCTION    "noise-reduction"
++#define GST_PHOTOGRAPHY_PROP_FOCUS_STATUS       "focus-status"
++#define GST_PHOTOGRAPHY_PROP_CAPABILITIES       "capabilities"
++#define GST_PHOTOGRAPHY_PROP_SHAKE_RISK         "shake-risk"
++#define GST_PHOTOGRAPHY_PROP_EV_COMP            "ev-compensation"
++#define GST_PHOTOGRAPHY_PROP_ISO_SPEED          "iso-speed"
++#define GST_PHOTOGRAPHY_PROP_APERTURE           "aperture"
++#define GST_PHOTOGRAPHY_PROP_EXPOSURE_TIME      "exposure-time"
 +#define GST_PHOTOGRAPHY_PROP_IMAGE_CAPTURE_SUPPORTED_CAPS \
-+    "image-capture-supported-caps"
++                                                "image-capture-supported-caps"
 +#define GST_PHOTOGRAPHY_PROP_IMAGE_PREVIEW_SUPPORTED_CAPS \
-+    "image-preview-supported-caps"
-+#define GST_PHOTOGRAPHY_PROP_FLICKER_MODE "flicker-mode"
-+#define GST_PHOTOGRAPHY_PROP_FOCUS_MODE   "focus-mode"
-+#define GST_PHOTOGRAPHY_PROP_ZOOM   "zoom"
-+#define GST_PHOTOGRAPHY_PROP_COLOR_TEMPERATURE "color-temperature"
-+#define GST_PHOTOGRAPHY_PROP_WHITE_POINT  "white-point"
-+#define GST_PHOTOGRAPHY_PROP_ANALOG_GAIN  "analog-gain"
-+#define GST_PHOTOGRAPHY_PROP_EXPOSURE_MODE     "exposure-mode"
-+#define GST_PHOTOGRAPHY_PROP_LENS_FOCUS   "lens-focus"
-+#define GST_PHOTOGRAPHY_PROP_MIN_EXPOSURE_TIME "min-exposure-time"
-+#define GST_PHOTOGRAPHY_PROP_MAX_EXPOSURE_TIME "max-exposure-time"
++                                                "image-preview-supported-caps"
++#define GST_PHOTOGRAPHY_PROP_FLICKER_MODE       "flicker-mode"
++#define GST_PHOTOGRAPHY_PROP_FOCUS_MODE         "focus-mode"
++#define GST_PHOTOGRAPHY_PROP_ZOOM               "zoom"
++#define GST_PHOTOGRAPHY_PROP_COLOR_TEMPERATURE  "color-temperature"
++#define GST_PHOTOGRAPHY_PROP_WHITE_POINT        "white-point"
++#define GST_PHOTOGRAPHY_PROP_ANALOG_GAIN        "analog-gain"
++#define GST_PHOTOGRAPHY_PROP_EXPOSURE_MODE      "exposure-mode"
++#define GST_PHOTOGRAPHY_PROP_LENS_FOCUS         "lens-focus"
++#define GST_PHOTOGRAPHY_PROP_MIN_EXPOSURE_TIME  "min-exposure-time"
++#define GST_PHOTOGRAPHY_PROP_MAX_EXPOSURE_TIME  "max-exposure-time"
 +
 +/**
 + * GstPhotography:
@@ -15565,16 +15649,14 @@ Index: b/gst-libs/gst/interfaces/photography.h
 + * remaining noise.
 + *
 + * Noise Reduction features of a photography capture or filter element.
-+ *
-+ * Since: 0.10.21
 + */
 +typedef enum
 +{
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_BAYER = ( 1<<0 ),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_YCC = ( 1<<1 ),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_TEMPORAL= ( 1<< 2),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_FIXED = (1 << 3),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_EXTRA = (1 << 4)
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_BAYER    = (1 << 0),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_YCC      = (1 << 1),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_TEMPORAL = (1 << 2),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_FIXED    = (1 << 3),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_EXTRA    = (1 << 4)
 +} GstPhotographyNoiseReduction;
 +
 +/**
@@ -15745,22 +15827,22 @@ Index: b/gst-libs/gst/interfaces/photography.h
 + */
 +typedef enum
 +{
-+  GST_PHOTOGRAPHY_CAPS_NONE = (0 << 0),
-+  GST_PHOTOGRAPHY_CAPS_EV_COMP = (1 << 0),
-+  GST_PHOTOGRAPHY_CAPS_ISO_SPEED = (1 << 1),
-+  GST_PHOTOGRAPHY_CAPS_WB_MODE = (1 << 2),
-+  GST_PHOTOGRAPHY_CAPS_TONE = (1 << 3),
-+  GST_PHOTOGRAPHY_CAPS_SCENE = (1 << 4),
-+  GST_PHOTOGRAPHY_CAPS_FLASH = (1 << 5),
-+  GST_PHOTOGRAPHY_CAPS_ZOOM = (1 << 6),
-+  GST_PHOTOGRAPHY_CAPS_FOCUS = (1 << 7),
-+  GST_PHOTOGRAPHY_CAPS_APERTURE = (1 << 8),
-+  GST_PHOTOGRAPHY_CAPS_EXPOSURE = (1 << 9),
-+  GST_PHOTOGRAPHY_CAPS_SHAKE = (1 << 10),
-+  GST_PHOTOGRAPHY_CAPS_WHITE_BALANCE = (1 << 11),
-+  GST_PHOTOGRAPHY_CAPS_NOISE_REDUCTION = (1 << 12),
++  GST_PHOTOGRAPHY_CAPS_NONE              = (0 << 0),
++  GST_PHOTOGRAPHY_CAPS_EV_COMP           = (1 << 0),
++  GST_PHOTOGRAPHY_CAPS_ISO_SPEED         = (1 << 1),
++  GST_PHOTOGRAPHY_CAPS_WB_MODE           = (1 << 2),
++  GST_PHOTOGRAPHY_CAPS_TONE              = (1 << 3),
++  GST_PHOTOGRAPHY_CAPS_SCENE             = (1 << 4),
++  GST_PHOTOGRAPHY_CAPS_FLASH             = (1 << 5),
++  GST_PHOTOGRAPHY_CAPS_ZOOM              = (1 << 6),
++  GST_PHOTOGRAPHY_CAPS_FOCUS             = (1 << 7),
++  GST_PHOTOGRAPHY_CAPS_APERTURE          = (1 << 8),
++  GST_PHOTOGRAPHY_CAPS_EXPOSURE          = (1 << 9),
++  GST_PHOTOGRAPHY_CAPS_SHAKE             = (1 << 10),
++  GST_PHOTOGRAPHY_CAPS_WHITE_BALANCE     = (1 << 11),
++  GST_PHOTOGRAPHY_CAPS_NOISE_REDUCTION   = (1 << 12),
 +  GST_PHOTOGRAPHY_CAPS_FLICKER_REDUCTION = (1 << 13),
-+  GST_PHOTOGRAPHY_CAPS_ALL = (~0)
++  GST_PHOTOGRAPHY_CAPS_ALL               = (~0)
 +} GstPhotographyCaps;
 +
 +/**
@@ -15865,6 +15947,7 @@ Index: b/gst-libs/gst/interfaces/photography.h
 +  gfloat lens_focus;
 +  guint min_exposure_time;
 +  guint max_exposure_time;
++  /* FIXME: add padding? */
 +} GstPhotographySettings;
 +
 +/**
@@ -15878,8 +15961,7 @@ Index: b/gst-libs/gst/interfaces/photography.h
 + * will be of @configured_caps format, so this callback allows the application
 + * to e.g. reconfigure capsfilters in pipeline if any.
 + */
-+typedef void (*GstPhotographyCapturePrepared) (gpointer data,
-+    const GstCaps *configured_caps);
++typedef void (*GstPhotographyCapturePrepared) (gpointer data, const GstCaps *configured_caps);
 +
 +/**
 + * GstPhotographyInterface:
@@ -15918,54 +16000,43 @@ Index: b/gst-libs/gst/interfaces/photography.h
 +  GTypeInterface parent;
 +
 +  /* virtual functions */
-+  gboolean (*get_ev_compensation) (GstPhotography * photo, gfloat * ev_comp);
-+  gboolean (*get_iso_speed) (GstPhotography * photo, guint * iso_speed);
-+  gboolean (*get_aperture) (GstPhotography * photo, guint * aperture);
-+  gboolean (*get_exposure) (GstPhotography * photo, guint32 * exposure);
-+  gboolean (*get_white_balance_mode) (GstPhotography * photo,
-+    GstPhotographyWhiteBalanceMode * wb_mode);
-+  gboolean (*get_color_tone_mode) (GstPhotography * photo,
-+    GstPhotographyColorToneMode * tone_mode);
-+  gboolean (*get_scene_mode) (GstPhotography * photo,
-+    GstPhotographySceneMode * scene_mode);
-+  gboolean (*get_flash_mode) (GstPhotography * photo,
-+    GstPhotographyFlashMode * flash_mode);
-+  gboolean (*get_zoom) (GstPhotography * photo, gfloat * zoom);
-+    gboolean (*get_flicker_mode) (GstPhotography * photo,
-+    GstPhotographyFlickerReductionMode * flicker_mode);
-+  gboolean (*get_focus_mode) (GstPhotography * photo,
-+    GstPhotographyFocusMode * focus_mode);
++  gboolean (*get_ev_compensation)    (GstPhotography * photo, gfloat * ev_comp);
++  gboolean (*get_iso_speed)          (GstPhotography * photo, guint * iso_speed);
++  gboolean (*get_aperture)           (GstPhotography * photo, guint * aperture);
++  gboolean (*get_exposure)           (GstPhotography * photo, guint32 * exposure);
++  gboolean (*get_white_balance_mode) (GstPhotography * photo, GstPhotographyWhiteBalanceMode * wb_mode);
++  gboolean (*get_color_tone_mode)    (GstPhotography * photo, GstPhotographyColorToneMode * tone_mode);
++  gboolean (*get_scene_mode)         (GstPhotography * photo, GstPhotographySceneMode * scene_mode);
++  gboolean (*get_flash_mode)         (GstPhotography * photo, GstPhotographyFlashMode * flash_mode);
++  gboolean (*get_zoom)               (GstPhotography * photo, gfloat * zoom);
++  gboolean (*get_flicker_mode)       (GstPhotography * photo, GstPhotographyFlickerReductionMode * flicker_mode);
++  gboolean (*get_focus_mode)         (GstPhotography * photo, GstPhotographyFocusMode * focus_mode);
 +
-+  gboolean (*set_ev_compensation) (GstPhotography * photo, gfloat ev_comp);
-+  gboolean (*set_iso_speed) (GstPhotography * photo, guint iso_speed);
-+  gboolean (*set_aperture) (GstPhotography * photo, guint aperture);
-+  gboolean (*set_exposure) (GstPhotography * photo, guint32 exposure);
-+  gboolean (*set_white_balance_mode) (GstPhotography * photo,
-+    GstPhotographyWhiteBalanceMode wb_mode);
-+  gboolean (*set_color_tone_mode) (GstPhotography * photo,
-+    GstPhotographyColorToneMode tone_mode);
-+  gboolean (*set_scene_mode) (GstPhotography * photo,
-+    GstPhotographySceneMode scene_mode);
-+  gboolean (*set_flash_mode) (GstPhotography * photo,
-+    GstPhotographyFlashMode flash_mode);
-+  gboolean (*set_zoom) (GstPhotography * photo, gfloat zoom);
-+  gboolean (*set_flicker_mode) (GstPhotography * photo,
-+    GstPhotographyFlickerReductionMode flicker_mode);
-+  gboolean (*set_focus_mode) (GstPhotography * photo,
-+    GstPhotographyFocusMode focus_mode);
++  gboolean (*set_ev_compensation)    (GstPhotography * photo, gfloat ev_comp);
++  gboolean (*set_iso_speed)          (GstPhotography * photo, guint iso_speed);
++  gboolean (*set_aperture)           (GstPhotography * photo, guint aperture);
++  gboolean (*set_exposure)           (GstPhotography * photo, guint32 exposure);
++  gboolean (*set_white_balance_mode) (GstPhotography * photo, GstPhotographyWhiteBalanceMode wb_mode);
++  gboolean (*set_color_tone_mode)    (GstPhotography * photo, GstPhotographyColorToneMode tone_mode);
++  gboolean (*set_scene_mode)         (GstPhotography * photo, GstPhotographySceneMode scene_mode);
++  gboolean (*set_flash_mode)         (GstPhotography * photo, GstPhotographyFlashMode flash_mode);
++  gboolean (*set_zoom)               (GstPhotography * photo, gfloat zoom);
++  gboolean (*set_flicker_mode)       (GstPhotography * photo, GstPhotographyFlickerReductionMode flicker_mode);
++  gboolean (*set_focus_mode)         (GstPhotography * photo, GstPhotographyFocusMode focus_mode);
 +
 +  GstPhotographyCaps (*get_capabilities) (GstPhotography * photo);
-+  gboolean (*prepare_for_capture) (GstPhotography * photo,
-+    GstPhotographyCapturePrepared func, GstCaps *capture_caps, gpointer user_data);
-+  void (*set_autofocus) (GstPhotography * photo, gboolean on);
-+  gboolean (*set_config) (GstPhotography * photo, GstPhotographySettings * config);
-+  gboolean (*get_config) (GstPhotography * photo, GstPhotographySettings * config);
 +
-+  gboolean (*get_noise_reduction) (GstPhotography * photo,
-+    GstPhotographyNoiseReduction * noise_reduction);
-+  gboolean (*set_noise_reduction) (GstPhotography * photo,
-+    GstPhotographyNoiseReduction noise_reduction);
++  gboolean (*prepare_for_capture)    (GstPhotography * photo, GstPhotographyCapturePrepared func, GstCaps *capture_caps, gpointer user_data);
 +
++  void     (*set_autofocus)          (GstPhotography * photo, gboolean on);
++
++  gboolean (*set_config)             (GstPhotography * photo, GstPhotographySettings * config);
++  gboolean (*get_config)             (GstPhotography * photo, GstPhotographySettings * config);
++
++  gboolean (*get_noise_reduction)    (GstPhotography * photo, GstPhotographyNoiseReduction * noise_reduction);
++  gboolean (*set_noise_reduction)    (GstPhotography * photo, GstPhotographyNoiseReduction noise_reduction);
++
++  /* FIXME: remove padding, not needed for interfaces */
 +  /*< private > */
 +  gpointer _gst_reserved[GST_PADDING];
 +} GstPhotographyInterface;
@@ -15974,149 +16045,96 @@ Index: b/gst-libs/gst/interfaces/photography.h
 +
 +/* virtual class function wrappers */
 +gboolean gst_photography_get_ev_compensation (GstPhotography * photo,
-+    gfloat * ev_comp);
-+gboolean gst_photography_get_iso_speed (GstPhotography * photo,
-+    guint * iso_speed);
-+gboolean gst_photography_get_aperture (GstPhotography * photo,
-+    guint * aperture);
-+gboolean gst_photography_get_exposure (GstPhotography * photo,
-+    guint32 * exposure);
++                                              gfloat * ev_comp);
++
++gboolean gst_photography_get_iso_speed       (GstPhotography * photo,
++                                              guint * iso_speed);
++
++gboolean gst_photography_get_aperture        (GstPhotography * photo,
++                                              guint * aperture);
++
++gboolean gst_photography_get_exposure        (GstPhotography * photo,
++                                              guint32 * exposure);
++
 +gboolean gst_photography_get_white_balance_mode (GstPhotography * photo,
-+    GstPhotographyWhiteBalanceMode * wb_mode);
++                                                 GstPhotographyWhiteBalanceMode * wb_mode);
++
 +gboolean gst_photography_get_color_tone_mode (GstPhotography * photo,
-+    GstPhotographyColorToneMode * tone_mode);
-+gboolean gst_photography_get_scene_mode (GstPhotography * photo,
-+    GstPhotographySceneMode * scene_mode);
-+gboolean gst_photography_get_flash_mode (GstPhotography * photo,
-+    GstPhotographyFlashMode * flash_mode);
++                                              GstPhotographyColorToneMode * tone_mode);
++
++gboolean gst_photography_get_scene_mode      (GstPhotography * photo,
++                                              GstPhotographySceneMode * scene_mode);
++
++gboolean gst_photography_get_flash_mode      (GstPhotography * photo,
++                                              GstPhotographyFlashMode * flash_mode);
++
 +gboolean gst_photography_get_noise_reduction (GstPhotography * photo,
-+    GstPhotographyNoiseReduction * noise_reduction);
-+gboolean gst_photography_get_zoom (GstPhotography * photo, gfloat * zoom);
-+gboolean gst_photography_get_flicker_mode (GstPhotography * photo,
-+    GstPhotographyFlickerReductionMode *mode);
-+gboolean gst_photography_get_focus_mode (GstPhotography * photo,
-+    GstPhotographyFocusMode *mode);
++                                              GstPhotographyNoiseReduction * noise_reduction);
++
++gboolean gst_photography_get_zoom            (GstPhotography * photo, gfloat * zoom);
++
++gboolean gst_photography_get_flicker_mode    (GstPhotography * photo,
++                                              GstPhotographyFlickerReductionMode * mode);
++
++gboolean gst_photography_get_focus_mode      (GstPhotography * photo,
++                                              GstPhotographyFocusMode * mode);
 +
 +gboolean gst_photography_set_ev_compensation (GstPhotography * photo,
-+    gfloat ev_comp);
-+gboolean gst_photography_set_iso_speed (GstPhotography * photo,
-+    guint iso_speed);
-+gboolean gst_photography_set_aperture (GstPhotography * photo, guint aperture);
-+gboolean gst_photography_set_exposure (GstPhotography * photo, guint exposure);
++                                              gfloat ev_comp);
++
++gboolean gst_photography_set_iso_speed       (GstPhotography * photo,
++                                              guint iso_speed);
++
++gboolean gst_photography_set_aperture        (GstPhotography * photo, guint aperture);
++
++gboolean gst_photography_set_exposure        (GstPhotography * photo, guint exposure);
++
 +gboolean gst_photography_set_white_balance_mode (GstPhotography * photo,
-+    GstPhotographyWhiteBalanceMode wb_mode);
++                                                 GstPhotographyWhiteBalanceMode wb_mode);
++
 +gboolean gst_photography_set_color_tone_mode (GstPhotography * photo,
-+    GstPhotographyColorToneMode tone_mode);
-+gboolean gst_photography_set_scene_mode (GstPhotography * photo,
-+    GstPhotographySceneMode scene_mode);
-+gboolean gst_photography_set_flash_mode (GstPhotography * photo,
-+    GstPhotographyFlashMode flash_mode);
++                                              GstPhotographyColorToneMode tone_mode);
++
++gboolean gst_photography_set_scene_mode      (GstPhotography * photo,
++                                              GstPhotographySceneMode scene_mode);
++
++gboolean gst_photography_set_flash_mode      (GstPhotography * photo,
++                                              GstPhotographyFlashMode flash_mode);
++
 +gboolean gst_photography_set_noise_reduction (GstPhotography * photo,
-+    GstPhotographyNoiseReduction noise_reduction);
-+gboolean gst_photography_set_zoom (GstPhotography * photo, gfloat zoom);
-+gboolean gst_photography_set_flicker_mode (GstPhotography * photo,
-+    GstPhotographyFlickerReductionMode mode);
-+gboolean gst_photography_set_focus_mode (GstPhotography * photo,
-+    GstPhotographyFocusMode mode);
++                                              GstPhotographyNoiseReduction noise_reduction);
++
++gboolean gst_photography_set_zoom            (GstPhotography * photo, gfloat zoom);
++
++gboolean gst_photography_set_flicker_mode    (GstPhotography * photo,
++                                              GstPhotographyFlickerReductionMode mode);
++
++gboolean gst_photography_set_focus_mode      (GstPhotography * photo,
++                                              GstPhotographyFocusMode mode);
 +
 +GstPhotographyCaps gst_photography_get_capabilities (GstPhotography * photo);
 +
 +gboolean gst_photography_prepare_for_capture (GstPhotography * photo,
-+    GstPhotographyCapturePrepared func, GstCaps *capture_caps, gpointer user_data);
++                                              GstPhotographyCapturePrepared func,
++                                              GstCaps *capture_caps,
++                                              gpointer user_data);
 +
-+void gst_photography_set_autofocus (GstPhotography * photo, gboolean on);
++gboolean gst_photography_set_config    (GstPhotography         * photo,
++                                        GstPhotographySettings * config);
 +
-+gboolean gst_photography_set_config (GstPhotography * photo,
-+    GstPhotographySettings * config);
-+gboolean gst_photography_get_config (GstPhotography * photo,
-+    GstPhotographySettings * config);
++gboolean gst_photography_get_config    (GstPhotography         * photo,
++                                        GstPhotographySettings * config);
++
++void     gst_photography_set_autofocus (GstPhotography * photo, gboolean on);
 +
 +G_END_DECLS
 +
 +#endif /* __GST_PHOTOGRAPHY_H__ */
-Index: b/gst/camerabin2/camerabin2-src.txt
-===================================================================
---- /dev/null
-+++ b/gst/camerabin2/camerabin2-src.txt
-@@ -0,0 +1,73 @@
-+=== Camerabin2 Source Requirements (draft) ===
-+
-+This small document contains a collection of notes on different requirements
-+of a camerabin2 source element.
-+
-+
-+-- General --
-+It is recommended that camerabin2 source elements inherit from basecamerasrc
-+from gst-plugins-bad.
-+
-+
-+-- Pads --
-+Camerabin2 sources must have 3 static pads named 'vfsrc', 'imgsrc' and
-+'vidsrc'.
-+
-+From an external point of view, all 3 pads work independently and camerabin2
-+makes no assumptions about relations about them (caps they can produce, or if
-+the same buffer is pushed to 2 different pads).
-+
-+'vfsrc' is the pad where the viewfinder buffers should be pushed, it will
-+be feeding a video sink. This is the same scenario as a 'regular' source
-+feeding a video sink. Buffers should be continuously pushed on this pad.
-+
-+'imgsrc' is the pad where image capture buffers are pushed. Timestamps aren't
-+really important here as the images are going to be encoded and saved
-+separately from each other. For each capture in image mode, one buffer should
-+be pushed on this pad.
-+
-+'vidsrc' is the pad where video capture buffers are pushed. Once capture is
-+started, buffers should start being pushed on this pad until the capture is
-+stopped.
-+-> TODO - define how segments/timestamps should work here
-+-> TODO - How to make audio and video sync properly
-+
-+
-+-- Capture --
-+The sources should have a 'mode' property that informs the source of the
-+current capturing mode. The available options are image or video.
-+
-+There are 2 signals that should be implemented, start-capture and
-+stop-capture, they take no arguments.
-+
-+On image mode, start-capture tells the source to push an image capture
-+buffer on its imgsrc pad. For video mode, start-capture tells the source
-+to start pushing buffers on the vidsrc pad, it should only stop
-+pushing when a stop-capture signal is received. In either case, it is
-+recommended that the viewfinder pad keeps pushing buffers so the user
-+has a smooth experience.
-+
-+Note that basecamerasrc already has the mode property and start/stop-capture
-+signals. It has functions that should be overriden by its child classes to
-+implement the handling of these actions.
-+
-+
-+-- Previews --
-+Camerabin2 sources must have a post-previews boolean property that the user
-+can select if we wants or not preview images.
-+
-+Previews are posted on the bus as custom 'preview-image' messages. This message
-+must have a 'buffer' field that contains a GstBuffer, the preview.
-+
-+Additionally, there should be a preview-caps property that is used to inform the
-+camera source what is the expected format of the preview image.
-+
-+A preview image should be posted for each capture.
-+
-+
-+-- Negotiation --
-+Capture caps selection on camerabin2 works just like gstreamer's default
-+caps negotiation. Camerabin2 puts capsfilters downstream from each of the
-+camera source pads. The camera source can simply get_caps on the peer of
-+each of its pads to know what are the allowed caps for that pad.
-+
 Index: b/gst/camerabin2/gstdigitalzoom.c
 ===================================================================
 --- /dev/null
 +++ b/gst/camerabin2/gstdigitalzoom.c
-@@ -0,0 +1,387 @@
+@@ -0,0 +1,386 @@
 +/*
 + * GStreamer
 + * Copyright (C) 2015 Thiago Santos <thiagoss@osg.samsung.com>
@@ -16140,6 +16158,7 @@ Index: b/gst/camerabin2/gstdigitalzoom.c
 +
 +/**
 + * SECTION:element-digitalzoom
++ * @title: digitalzoom
 + *
 + * Does digital zooming by cropping and scaling an image.
 + *
@@ -16495,10 +16514,8 @@ Index: b/gst/camerabin2/gstdigitalzoom.c
 +  GST_DEBUG_CATEGORY_INIT (digital_zoom_debug, "digitalzoom",
 +      0, "digital zoom");
 +
-+  gst_element_class_add_pad_template (gstelement_class,
-+      gst_static_pad_template_get (&sink_template));
-+  gst_element_class_add_pad_template (gstelement_class,
-+      gst_static_pad_template_get (&src_template));
++  gst_element_class_add_static_pad_template (gstelement_class, &sink_template);
++  gst_element_class_add_static_pad_template (gstelement_class, &src_template);
 +
 +  gst_element_class_set_static_metadata (gstelement_class,
 +      "Digital zoom bin", "Generic/Video",
@@ -16588,47 +16605,55 @@ Index: b/gst/camerabin2/gstdigitalzoom.h
 +G_END_DECLS
 +
 +#endif /* __GST_DIGITAL_ZOOM_H__ */
-Index: b/gst/camerabin2/PORTING
+--- /dev/null
++++ b/gst/camerabin2/meson.build
+@@ -0,0 +1,18 @@
++camerabin_sources = [
++  'gstdigitalzoom.c',
++  'gstviewfinderbin.c',
++  'camerabingeneral.c',
++  'gstwrappercamerabinsrc.c',
++  'gstcamerabin2.c',
++  'gstplugin.c',
++]
++
++gstcamerabin = library('gstcamerabin',
++  camerabin_sources,
++  c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API'],
++  include_directories : [configinc, libsinc],
++  link_with : gstbasecamerabin,
++  dependencies : [gstbasecamerabin_dep, gstphotography_dep, gsttag_dep, gstapp_dep, gstpbutils_dep, gstbase_dep],
++  install : true,
++  install_dir : plugins_install_dir,
++)
+Index: b/gst-libs/gst/basecamerabinsrc/meson.build
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/PORTING
-@@ -0,0 +1,39 @@
-+This document lists the differenced between camerabin and camerabin2 from
-+the API point of view and should be used to help on porting applications
-+from camerabin to camerabin2.
++++ b/gst-libs/gst/basecamerabinsrc/meson.build
+@@ -0,0 +1,26 @@
++camerabin_sources = [
++  'gstcamerabin-enum.c',
++  'gstcamerabinpreview.c',
++  'gstbasecamerasrc.c',
++]
++camerabin_headers = [
++  'gstcamerabin-enum.h',
++  'gstcamerabinpreview.h',
++  'gstbasecamerasrc.h',
++]
++install_headers(camerabin_headers, subdir : 'gstreamer-1.0/gst/basecamerabinsrc')
 +
-+* Setting the location for the captures:
-+camerabin requires that the path of the file to save the captures is set before
-+each capture. Camerabin2 allows the application to use a multifilesink-like
-+approach, the application can set a file with a '%d' marker, this marker
-+will be automatically replaced by a number and be autoincremented after each
-+capture.
-+The property is now called 'location' instead of 'filename'
++gstbasecamerabin = library('gstbasecamerabinsrc-' + api_version,
++  camerabin_sources,
++  c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API'],
++  include_directories : [configinc, libsinc],
++  version : libversion,
++  soversion : soversion,
++  install : true,
++  dependencies : [gstapp_dep],
++  vs_module_defs: vs_module_defs_dir + 'libgstbasecamerabinsrc.def',
++)
 +
-+* Capture signals
-+The signals were renamed from capture-start/stop to start/stop-capture as
-+this is the usual naming on actions.
-+Additionally, stop-capture is now async, the user should check 'idle' property
-+to be sure that it can shut camerabin2.
-+
-+* image-done
-+In camerabin, image-done is a signal, in camerabin2, it is a bus message
-+
-+* video recording encoder/muxer
-+In camerabin, video/audio encoder/muxer are selected by passing GstElements to
-+camerabin properties. In camerabin2, a GstEncodingProfile is passed as a 
-+property and encodebin manages to instantiate the elements for the format.
-+
-+* Previews
-+new "post-previews" property for enabling/disabling preview image posting
-+set location=NULL to skip writing image to file but to receive the preview,
-+useful for scenarios that wants the image in memory.
-+
-+* Configuring resolution and framerate
-+Camerabin2 has new GstCaps type properties for configuring capture and
-+viewfinder formats:
-+  video-capture-caps
-+  image-capture-caps
-+  audio-capture-caps
-+  viewfinder-caps
-+
++gstbasecamerabin_dep = declare_dependency(link_with : gstbasecamerabin,
++  include_directories : [libsinc],
++  dependencies : [gstapp_dep])

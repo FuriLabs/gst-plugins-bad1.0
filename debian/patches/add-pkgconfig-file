@@ -54,11 +54,11 @@ Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1106,6 +1106,7 @@
+@@ -1083,6 +1083,7 @@
  docs/plugins/Makefile
  docs/version.entities
  pkgconfig/Makefile
 +pkgconfig/gstreamer-plugins-good.pc
  pkgconfig/gstreamer-plugins-good-uninstalled.pc
- gst-plugins-good.spec
  )
+ AC_OUTPUT

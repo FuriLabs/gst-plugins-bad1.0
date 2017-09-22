@@ -1,4 +1,4 @@
-Description: This is a copy of the camerabin2, basecamerabin and photography plugins from gst-plugins-good. They're needed for applications in Ubuntu main, so we move them here.
+Description: This is a copy of the camerabin2, basecamerabin and photography plugins from gst-plugins-bad. They're needed for applications in Ubuntu main, so we move them here.
 Forwarded: not-needed
 
 Index: b/configure.ac

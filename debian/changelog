@@ -1,4 +1,4 @@
-gst-plugins-good1.0 (1.13.1-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-good1.0 (1.13.1-1ubuntu1) bionic; urgency=medium
 
   * Merge with Debian unstable; remaining changes:
     + Import plugins from -bad that are needed for main applications.
@@ -13,7 +13,7 @@ gst-plugins-good1.0 (1.13.1-1ubuntu1) UNRELEASED; urgency=medium
     + debian/control{,.in}: Update Vcs-* for Ubuntu
   * debian/patches/import-camerabin: Refresh from -bad.
 
- -- Iain Lane <iain.lane@canonical.com>  Thu, 01 Mar 2018 11:00:08 +0000
+ -- Iain Lane <iain.lane@canonical.com>  Thu, 01 Mar 2018 14:55:45 +0000
 
 gst-plugins-good1.0 (1.13.1-1) experimental; urgency=medium
 

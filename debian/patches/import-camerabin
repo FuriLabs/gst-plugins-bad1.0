@@ -5,7 +5,7 @@ Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -245,6 +245,7 @@
+@@ -289,6 +289,7 @@
  
  dnl GTK is optional and used in examples
  HAVE_GTK=no
@@ -13,7 +13,7 @@ Index: b/configure.ac
  GTK_REQ=3.0.0
  if test "x$BUILD_EXAMPLES" = "xyes"; then
    PKG_CHECK_MODULES(GTK, gtk+-3.0 >= $GTK_REQ, HAVE_GTK=yes, HAVE_GTK=no)
-@@ -254,8 +255,20 @@
+@@ -298,8 +299,20 @@
    AC_SUBST(GTK_CFLAGS)
  fi
  AM_CONDITIONAL(HAVE_GTK, test "x$HAVE_GTK" = "xyes")
@@ -34,7 +34,7 @@ Index: b/configure.ac
  dnl Check for -Bsymbolic-functions linker flag used to avoid
  dnl intra-library PLT jumps, if available.
  AC_ARG_ENABLE(Bsymbolic,
-@@ -352,6 +365,7 @@
+@@ -374,6 +387,7 @@
  AG_GST_CHECK_PLUGIN(auparse)
  AG_GST_CHECK_PLUGIN(autodetect)
  AG_GST_CHECK_PLUGIN(avi)
@@ -42,7 +42,7 @@ Index: b/configure.ac
  AG_GST_CHECK_PLUGIN(cutter)
  AG_GST_CHECK_PLUGIN(debugutils)
  AG_GST_CHECK_PLUGIN(deinterlace)
-@@ -997,6 +1011,7 @@
+@@ -1215,6 +1229,7 @@
  gst/auparse/Makefile
  gst/autodetect/Makefile
  gst/avi/Makefile
@@ -50,7 +50,7 @@ Index: b/configure.ac
  gst/cutter/Makefile
  gst/deinterlace/Makefile
  gst/dtmf/Makefile
-@@ -1033,6 +1048,10 @@
+@@ -1251,6 +1266,10 @@
  gst/wavparse/Makefile
  gst/flx/Makefile
  gst/y4m/Makefile
@@ -61,14 +61,14 @@ Index: b/configure.ac
  ext/Makefile
  ext/aalib/Makefile
  ext/cairo/Makefile
-@@ -1066,6 +1085,7 @@
+@@ -1288,6 +1307,7 @@
  tests/check/Makefile
  tests/examples/Makefile
  tests/examples/audiofx/Makefile
 +tests/examples/camerabin2/Makefile
  tests/examples/cairo/Makefile
  tests/examples/equalizer/Makefile
- tests/examples/jack/Makefile
+ tests/examples/gtk/Makefile
 Index: b/gst/camerabin2/camerabingeneral.c
 ===================================================================
 --- /dev/null
@@ -16605,6 +16605,8 @@ Index: b/gst/camerabin2/gstdigitalzoom.h
 +G_END_DECLS
 +
 +#endif /* __GST_DIGITAL_ZOOM_H__ */
+Index: b/gst/camerabin2/meson.build
+===================================================================
 --- /dev/null
 +++ b/gst/camerabin2/meson.build
 @@ -0,0 +1,18 @@

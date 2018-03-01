@@ -6585,7 +6585,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
-@@ -0,0 +1,146 @@
+@@ -0,0 +1,155 @@
 +/*
 + * GStreamer
 + * Copyright (C) 2010 Texas Instruments, Inc
@@ -6637,6 +6637,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 +  (G_TYPE_CHECK_CLASS_TYPE((klass),GST_TYPE_BASE_CAMERA_SRC))
 +#define GST_BASE_CAMERA_SRC_CAST(obj) \
 +  ((GstBaseCameraSrc *) (obj))
++GST_EXPORT
 +GType gst_base_camera_src_get_type (void);
 +
 +typedef struct _GstBaseCameraSrc GstBaseCameraSrc;
@@ -6720,12 +6721,20 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 +#define MAX_ZOOM 10.0f
 +#define ZOOM_1X MIN_ZOOM
 +
++GST_EXPORT
 +gboolean gst_base_camera_src_set_mode (GstBaseCameraSrc *self, GstCameraBinMode mode);
++
++GST_EXPORT
 +void gst_base_camera_src_setup_zoom (GstBaseCameraSrc * self);
++
++GST_EXPORT
 +void gst_base_camera_src_setup_preview (GstBaseCameraSrc * self, GstCaps * preview_caps);
++
++GST_EXPORT
 +void gst_base_camera_src_finish_capture (GstBaseCameraSrc *self);
 +
 +
++GST_EXPORT
 +void gst_base_camera_src_post_preview (GstBaseCameraSrc *self, GstSample * sample);
 +// XXX add methods to get/set img capture and vid capture caps..
 +
@@ -6780,7 +6789,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,63 @@
 +/*
 + * GStreamer
 + * Copyright (C) 2009 Nokia Corporation <multimedia@maemo.org>
@@ -6838,6 +6847,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 +
 +
 +#define GST_TYPE_CAMERABIN_MODE (gst_camerabin_mode_get_type ())
++GST_EXPORT
 +GType gst_camerabin_mode_get_type (void);
 +
 +G_END_DECLS
@@ -7260,7 +7270,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
-@@ -0,0 +1,56 @@
+@@ -0,0 +1,65 @@
 +/*
 + * GStreamer
 + * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
@@ -7310,10 +7320,19 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 +
 +} GstCameraBinPreviewPipelineData;
 +
++GST_EXPORT
 +GstCameraBinPreviewPipelineData *gst_camerabin_create_preview_pipeline (GstElement * element, GstElement * filter);
++
++GST_EXPORT
 +void gst_camerabin_destroy_preview_pipeline (GstCameraBinPreviewPipelineData * preview);
++
++GST_EXPORT
 +gboolean gst_camerabin_preview_pipeline_post (GstCameraBinPreviewPipelineData * preview, GstSample * sample);
++
++GST_EXPORT
 +void gst_camerabin_preview_set_caps (GstCameraBinPreviewPipelineData * preview, GstCaps * caps);
++
++GST_EXPORT
 +gboolean gst_camerabin_preview_set_filter (GstCameraBinPreviewPipelineData * preview, GstElement * filter);
 +
 +#endif /* #ifndef __CAMERABIN_PREVIEW_H_ */
@@ -13586,7 +13605,7 @@ Index: b/gst-libs/gst/interfaces/Makefile.am
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/interfaces/Makefile.am
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,46 @@
 +lib_LTLIBRARIES = libgstphotography-@GST_API_VERSION@.la
 +libgstphotographyincludedir = \
 +        $(includedir)/gstreamer-@GST_API_VERSION@/gst/interfaces
@@ -13599,6 +13618,7 @@ Index: b/gst-libs/gst/interfaces/Makefile.am
 +glib_enum_define=GST_PHOTOGRAPHY
 +glib_gen_prefix=gst_photography
 +glib_gen_basename=photography
++glib_gen_decl_banner=GST_EXPORT
 +
 +built_sources = \
 +	photography-enumtypes.c
@@ -13632,22 +13652,6 @@ Index: b/gst-libs/gst/interfaces/Makefile.am
 +CLEANFILES = $(BUILT_SOURCES)
 +
 +include $(top_srcdir)/common/gst-glib-gen.mak
-+
-+Android.mk:  $(BUILT_SOURCES) Makefile.am
-+	androgenizer -:PROJECT libgstphotography -:STATIC libgstphotography-@GST_API_VERSION@ \
-+	 -:TAGS eng debug \
-+         -:REL_TOP $(top_srcdir) -:ABS_TOP $(abs_top_srcdir) \
-+	 -:SOURCES $(libgstphotography_@GST_API_VERSION@_la_SOURCES) \
-+         $(built_sources) \
-+	 -:CFLAGS $(DEFS) $(libgstphotography_@GST_API_VERSION@_la_CFLAGS) \
-+	 -:LDFLAGS $(libgstphotography_@GST_API_VERSION@_la_LDFLAGS) \
-+	           $(libgstphotography_@GST_API_VERSION@_la_LIBADD) \
-+	           -ldl \
-+	 -:HEADER_TARGET gstreamer-@GST_API_VERSION@/gst/photography \
-+	 -:HEADERS $(libgstphotographyinclude_HEADERS) \
-+         $(built_headers) \
-+	 -:PASSTHROUGH LOCAL_ARM_MODE:=arm \
-+	> $@
 Index: b/gst-libs/gst/interfaces/Makefile.in
 ===================================================================
 --- /dev/null
@@ -15488,7 +15492,7 @@ Index: b/gst-libs/gst/interfaces/photography.h
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/interfaces/photography.h
-@@ -0,0 +1,641 @@
+@@ -0,0 +1,672 @@
 +/* GStreamer
 + *
 + * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
@@ -16041,90 +16045,121 @@ Index: b/gst-libs/gst/interfaces/photography.h
 +  gpointer _gst_reserved[GST_PADDING];
 +} GstPhotographyInterface;
 +
++GST_EXPORT
 +GType gst_photography_get_type (void);
 +
 +/* virtual class function wrappers */
++
++GST_EXPORT
 +gboolean gst_photography_get_ev_compensation (GstPhotography * photo,
 +                                              gfloat * ev_comp);
 +
++GST_EXPORT
 +gboolean gst_photography_get_iso_speed       (GstPhotography * photo,
 +                                              guint * iso_speed);
 +
++GST_EXPORT
 +gboolean gst_photography_get_aperture        (GstPhotography * photo,
 +                                              guint * aperture);
 +
++GST_EXPORT
 +gboolean gst_photography_get_exposure        (GstPhotography * photo,
 +                                              guint32 * exposure);
 +
++GST_EXPORT
 +gboolean gst_photography_get_white_balance_mode (GstPhotography * photo,
 +                                                 GstPhotographyWhiteBalanceMode * wb_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_get_color_tone_mode (GstPhotography * photo,
 +                                              GstPhotographyColorToneMode * tone_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_get_scene_mode      (GstPhotography * photo,
 +                                              GstPhotographySceneMode * scene_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_get_flash_mode      (GstPhotography * photo,
 +                                              GstPhotographyFlashMode * flash_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_get_noise_reduction (GstPhotography * photo,
 +                                              GstPhotographyNoiseReduction * noise_reduction);
 +
++GST_EXPORT
 +gboolean gst_photography_get_zoom            (GstPhotography * photo, gfloat * zoom);
 +
++GST_EXPORT
 +gboolean gst_photography_get_flicker_mode    (GstPhotography * photo,
 +                                              GstPhotographyFlickerReductionMode * mode);
 +
++GST_EXPORT
 +gboolean gst_photography_get_focus_mode      (GstPhotography * photo,
 +                                              GstPhotographyFocusMode * mode);
 +
++GST_EXPORT
 +gboolean gst_photography_set_ev_compensation (GstPhotography * photo,
 +                                              gfloat ev_comp);
 +
++GST_EXPORT
 +gboolean gst_photography_set_iso_speed       (GstPhotography * photo,
 +                                              guint iso_speed);
 +
++GST_EXPORT
 +gboolean gst_photography_set_aperture        (GstPhotography * photo, guint aperture);
 +
++GST_EXPORT
 +gboolean gst_photography_set_exposure        (GstPhotography * photo, guint exposure);
 +
++GST_EXPORT
 +gboolean gst_photography_set_white_balance_mode (GstPhotography * photo,
 +                                                 GstPhotographyWhiteBalanceMode wb_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_set_color_tone_mode (GstPhotography * photo,
 +                                              GstPhotographyColorToneMode tone_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_set_scene_mode      (GstPhotography * photo,
 +                                              GstPhotographySceneMode scene_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_set_flash_mode      (GstPhotography * photo,
 +                                              GstPhotographyFlashMode flash_mode);
 +
++GST_EXPORT
 +gboolean gst_photography_set_noise_reduction (GstPhotography * photo,
 +                                              GstPhotographyNoiseReduction noise_reduction);
 +
++GST_EXPORT
 +gboolean gst_photography_set_zoom            (GstPhotography * photo, gfloat zoom);
 +
++GST_EXPORT
 +gboolean gst_photography_set_flicker_mode    (GstPhotography * photo,
 +                                              GstPhotographyFlickerReductionMode mode);
 +
++GST_EXPORT
 +gboolean gst_photography_set_focus_mode      (GstPhotography * photo,
 +                                              GstPhotographyFocusMode mode);
 +
++GST_EXPORT
 +GstPhotographyCaps gst_photography_get_capabilities (GstPhotography * photo);
 +
++GST_EXPORT
 +gboolean gst_photography_prepare_for_capture (GstPhotography * photo,
 +                                              GstPhotographyCapturePrepared func,
 +                                              GstCaps *capture_caps,
 +                                              gpointer user_data);
 +
++GST_EXPORT
 +gboolean gst_photography_set_config    (GstPhotography         * photo,
 +                                        GstPhotographySettings * config);
 +
++GST_EXPORT
 +gboolean gst_photography_get_config    (GstPhotography         * photo,
 +                                        GstPhotographySettings * config);
 +
++GST_EXPORT
 +void     gst_photography_set_autofocus (GstPhotography * photo, gboolean on);
 +
 +G_END_DECLS
@@ -16632,7 +16667,7 @@ Index: b/gst-libs/gst/basecamerabinsrc/meson.build
 ===================================================================
 --- /dev/null
 +++ b/gst-libs/gst/basecamerabinsrc/meson.build
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,25 @@
 +camerabin_sources = [
 +  'gstcamerabin-enum.c',
 +  'gstcamerabinpreview.c',
@@ -16653,7 +16688,6 @@ Index: b/gst-libs/gst/basecamerabinsrc/meson.build
 +  soversion : soversion,
 +  install : true,
 +  dependencies : [gstapp_dep],
-+  vs_module_defs: vs_module_defs_dir + 'libgstbasecamerabinsrc.def',
 +)
 +
 +gstbasecamerabin_dep = declare_dependency(link_with : gstbasecamerabin,

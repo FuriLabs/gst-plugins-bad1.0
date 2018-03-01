@@ -11,6 +11,7 @@ gst-plugins-good1.0 (1.13.1-1ubuntu1) UNRELEASED; urgency=medium
     + Add 'pluginsdir' variable to our added pcfile for compatibility with
       some external software
     + debian/control{,.in}: Update Vcs-* for Ubuntu
+  * debian/patches/import-camerabin: Refresh from -bad.
 
  -- Iain Lane <iain.lane@canonical.com>  Thu, 01 Mar 2018 11:00:08 +0000
 

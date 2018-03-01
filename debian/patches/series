@@ -1,3 +1,4 @@
 add-pkgconfig-file
 import-camerabin
 import-jpegformat
+0001-qml-Link-against-libEGL-explicitly.patch

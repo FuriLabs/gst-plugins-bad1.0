@@ -1,3 +1,34 @@
+gst-plugins-good1.0 (1.13.1-1ubuntu1) UNRELEASED; urgency=medium
+
+  * Merge with Debian unstable; remaining changes:
+    + Import plugins from -bad that are needed for main applications.
+      - jpegformat
+      - camerabin (+ basecamerabinsrc + photography)
+    + Break and Replace -bad versions which contained these plugins.
+    + Add a library package containing the shared library and a -dev package for
+      compiling against it. Add Breaks and Replaces against the plugins packages
+      which formerly contained files shipped here.
+    + Add 'pluginsdir' variable to our added pcfile for compatibility with
+      some external software
+    + debian/control{,.in}: Update Vcs-* for Ubuntu
+
+ -- Iain Lane <iain.lane@canonical.com>  Thu, 01 Mar 2018 11:00:08 +0000
+
+gst-plugins-good1.0 (1.13.1-1) experimental; urgency=medium
+
+  * New upstream development release.
+  * debian/build-deps.in,
+    debian/control.in:
+    + Build-depend on GTK and Qt for the QML and GTK plugins and put them into
+      their own binary package.
+  * debian/build-deps.in,
+    debian/control.in,
+    debian/gstreamer-plugins-good.install:
+    + Build-depend on LAME, mpg123 and twolame and add Conflicts/Replaces as
+      needed for gst-plugins-ugly from where the plugins moved.
+
+ -- Sebastian Dröge <slomo@debian.org>  Sat, 17 Feb 2018 21:00:50 +0200
+
 gst-plugins-good1.0 (1.12.4-1ubuntu2) bionic; urgency=medium
 
   * No-change rebuild against latest vpx

@@ -1,10 +1,4 @@
-gst-plugins-good1.0 (1.13.91-1) experimental; urgency=medium
-
-  * New upstream release candidate.
-
- -- Sebastian Dröge <slomo@debian.org>  Wed, 14 Mar 2018 11:04:44 +0200
-
-gst-plugins-good1.0 (1.13.90-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-good1.0 (1.13.91-1ubuntu1) UNRELEASED; urgency=medium
 
   * Merge with Debian unstable; remaining changes:
     + Import plugins from -bad that are needed for main applications.
@@ -18,7 +12,13 @@ gst-plugins-good1.0 (1.13.90-1ubuntu1) UNRELEASED; urgency=medium
       some external software
     + debian/control{,.in}: Update Vcs-* for Ubuntu
 
- -- Iain Lane <iain.lane@canonical.com>  Tue, 13 Mar 2018 16:47:44 +0000
+ -- Iain Lane <iain.lane@canonical.com>  Thu, 15 Mar 2018 10:07:24 +0000
+
+gst-plugins-good1.0 (1.13.91-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+
+ -- Sebastian Dröge <slomo@debian.org>  Wed, 14 Mar 2018 11:04:44 +0200
 
 gst-plugins-good1.0 (1.13.90-1) experimental; urgency=medium
 

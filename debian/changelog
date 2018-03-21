@@ -1,4 +1,4 @@
-gst-plugins-good1.0 (1.14.0-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-good1.0 (1.14.0-1ubuntu1) bionic; urgency=medium
 
   * Merge with Debian unstable; remaining changes:
     + Import plugins from -bad that are needed for main applications.
@@ -12,7 +12,7 @@ gst-plugins-good1.0 (1.14.0-1ubuntu1) UNRELEASED; urgency=medium
       some external software
     + debian/control{,.in}: Update Vcs-* for Ubuntu
 
- -- Iain Lane <iain.lane@canonical.com>  Wed, 21 Mar 2018 14:50:40 +0000
+ -- Iain Lane <iain.lane@canonical.com>  Wed, 21 Mar 2018 17:40:11 +0000
 
 gst-plugins-good1.0 (1.14.0-1) unstable; urgency=medium
 

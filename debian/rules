@@ -94,15 +94,6 @@ else
 oss4 = debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-$(gst_abi)/libgstoss4.so
 endif
 
-
-# workaround for mesa headers being broken (#894076)
-ifeq ($(DEB_HOST_ARCH),armel)
-CONFIG_ARGS += --disable-qt
-endif
-ifeq ($(DEB_HOST_ARCH),armhf)
-CONFIG_ARGS += --disable-qt
-endif
-
 ifeq ($(DEB_HOST_ARCH_OS),linux)
 DEFAULT_AUDIOSINK = autoaudiosink
 DEFAULT_AUDIOSRC = autoaudiosrc

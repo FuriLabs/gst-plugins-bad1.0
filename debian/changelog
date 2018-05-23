@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.14.1-1ubuntu1~ubuntu18.04.1) UNRELEASED; urgency=medium
+
+  * No-change backport to bionic.
+
+ -- Iain Lane <iain.lane@canonical.com>  Wed, 23 May 2018 14:01:41 +0100
+
 gst-plugins-bad1.0 (1.14.1-1ubuntu1) cosmic; urgency=medium
 
   * Merge with Debian unstable (LP: #1772898); remaining changes:

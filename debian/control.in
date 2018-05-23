@@ -7,7 +7,7 @@ Uploaders: Sebastian Dröge <slomo@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>
 Build-Depends: BUILDDEPS
 Standards-Version: 3.9.3
-Vcs-Git: git://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad@GST_ABI@
+Vcs-Git: git://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad@GST_ABI@ -b ubuntu-bionic
 Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad@GST_ABI@/+git/gst-plugins-bad@GST_ABI@
 XS-Debian-Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0.git
 XS-Debian-Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0/

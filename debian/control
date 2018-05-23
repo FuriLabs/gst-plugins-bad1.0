@@ -98,7 +98,7 @@ Build-Depends: autoconf (>= 2.69),
                nettle-dev,
                pkg-config (>= 0.11.0)
 Standards-Version: 3.9.3
-Vcs-Git: git://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad1.0
+Vcs-Git: git://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad1.0 -b ubuntu-bionic
 Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad1.0/+git/gst-plugins-bad1.0
 XS-Debian-Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0.git
 XS-Debian-Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0/

@@ -1,6 +1,6 @@
 gst-plugins-good1.0 (1.14.1-1ubuntu1) cosmic; urgency=medium
 
-  * Merge with Debian unstable; remaining changes:
+  * Merge with Debian unstable (LP: #1772898); remaining changes:
     + Import plugins from -bad that are needed for main applications.
       - jpegformat
       - camerabin (+ basecamerabinsrc + photography)

@@ -11,6 +11,8 @@ gst-plugins-good1.0 (1.14.1-1ubuntu1) UNRELEASED; urgency=medium
     + Add 'pluginsdir' variable to our added pcfile for compatibility with
       some external software
     + debian/control{,.in}: Update Vcs-* for Ubuntu
+  * Revert 1.14.0-{2,3,4}. We've worked around this issue in -base instead, so
+    we don't need to disable Qt5 here.
 
  -- Iain Lane <iain.lane@canonical.com>  Wed, 23 May 2018 11:42:40 +0100
 

@@ -1,3 +1,11 @@
+gst-plugins-good1.0 (1.14.2-1ubuntu2) cosmic; urgency=medium
+
+  * debian/patches/b03df1abf828514b0966db058388bf974ed0cf4f.patch:
+    revert upstream b03df1abf828514b0966db058388bf974ed0cf4f making
+    the package FTBFS on arm* / Ubuntu
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Thu, 26 Jul 2018 21:34:51 +0200
+
 gst-plugins-good1.0 (1.14.2-1ubuntu1) cosmic; urgency=low
 
   * Merge from Debian unstable.  Remaining changes:

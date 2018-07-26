@@ -1,0 +1,27 @@
+## Description: add some description
+## Origin/Author: add some origin or author
+## Bug: bug URL
+From b03df1abf828514b0966db058388bf974ed0cf4f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?I=C3=B1igo=20Huguet?= <inigohuguet@fanamoel.com>
+Date: Tue, 17 Jul 2018 08:23:54 +0200
+Subject: [PATCH] qmlgl: Fix conflicting declaration of type GLsync for
+ non-android
+
+https://bugzilla.gnome.org/show_bug.cgi?id=796821
+---
+ ext/qt/gstqtgl.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ext/qt/gstqtgl.h b/ext/qt/gstqtgl.h
+index 85aad6205..1f204ab11 100644
+--- a/ext/qt/gstqtgl.h
++++ b/ext/qt/gstqtgl.h
+@@ -29,7 +29,7 @@
+ #include <QtGui/qtgui-config.h>
+ #endif
+ 
++#if defined(QT_OPENGL_ES_2) && GST_GL_HAVE_WINDOW_ANDROID
+-#if defined(QT_OPENGL_ES_2)
+ #define GLsync gst_qt_GLsync
+ #include <QOpenGLContext>
+ #include <QOpenGLFunctions>

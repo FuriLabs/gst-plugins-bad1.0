@@ -1,6 +1,6 @@
-## Description: add some description
-## Origin/Author: add some origin or author
-## Bug: bug URL
+Description: revert upstream commit b03df1abf828514b0966db058388bf974ed0cf4f breaking arm* builds when GLES is enabled.
+ this is tracked on https://bugzilla.gnome.org/show_bug.cgi?id=796879
+
 From b03df1abf828514b0966db058388bf974ed0cf4f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?I=C3=B1igo=20Huguet?= <inigohuguet@fanamoel.com>
 Date: Tue, 17 Jul 2018 08:23:54 +0200

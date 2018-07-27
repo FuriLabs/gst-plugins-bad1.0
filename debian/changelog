@@ -1,3 +1,10 @@
+gst-plugins-good1.0 (1.14.2-1ubuntu3) cosmic; urgency=medium
+
+  * Add some information on previous patch about the new upstream issue:
+    https://bugzilla.gnome.org/show_bug.cgi?id=796879
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Fri, 27 Jul 2018 08:41:04 +0200
+
 gst-plugins-good1.0 (1.14.2-1ubuntu2) cosmic; urgency=medium
 
   * debian/patches/b03df1abf828514b0966db058388bf974ed0cf4f.patch:

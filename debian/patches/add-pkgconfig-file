@@ -2,10 +2,10 @@ Description: Add a pkgconfig file to facilitate linking against libgstphotograph
 Author: Iain Lane <iain.lane@canonical.com>
 Forwarded: not-needed
 
-Index: b/pkgconfig/gstreamer-plugins-good.pc.in
+Index: gst-plugins-good1.0-1.15.1/pkgconfig/gstreamer-plugins-good.pc.in
 ===================================================================
 --- /dev/null
-+++ b/pkgconfig/gstreamer-plugins-good.pc.in
++++ gst-plugins-good1.0-1.15.1/pkgconfig/gstreamer-plugins-good.pc.in
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
@@ -19,11 +19,11 @@ Index: b/pkgconfig/gstreamer-plugins-good.pc.in
 +Version: @VERSION@
 +Libs: -L${libdir} -lgstphotography-@GST_API_VERSION@
 +Cflags: -I${includedir}
-Index: b/pkgconfig/Makefile.am
+Index: gst-plugins-good1.0-1.15.1/pkgconfig/Makefile.am
 ===================================================================
---- a/pkgconfig/Makefile.am
-+++ b/pkgconfig/Makefile.am
-@@ -5,7 +5,7 @@
+--- gst-plugins-good1.0-1.15.1.orig/pkgconfig/Makefile.am
++++ gst-plugins-good1.0-1.15.1/pkgconfig/Makefile.am
+@@ -5,7 +5,7 @@ pcverfiles_uninstalled = \
  	gstreamer-plugins-good-@GST_API_VERSION@-uninstalled.pc
  
  ### all-local: $(pcverfiles) $(pcverfiles_uninstalled)
@@ -32,7 +32,7 @@ Index: b/pkgconfig/Makefile.am
  
  cp_verbose = $(cp_verbose_$(V))
  cp_verbose_ = $(cp_verbose_$(AM_DEFAULT_VERBOSITY))
-@@ -18,14 +18,14 @@
+@@ -18,14 +18,14 @@ cp_verbose_0 = @echo "  CP     $@";
  	$(cp_verbose)cp $< $@
  
  # do not install for now
@@ -50,11 +50,11 @@ Index: b/pkgconfig/Makefile.am
  
  DISTCLEANFILES = $(pcinfiles:.in=)
  EXTRA_DIST = $(pcinfiles)
-Index: b/configure.ac
+Index: gst-plugins-good1.0-1.15.1/configure.ac
 ===================================================================
---- a/configure.ac
-+++ b/configure.ac
-@@ -1083,6 +1083,7 @@
+--- gst-plugins-good1.0-1.15.1.orig/configure.ac
++++ gst-plugins-good1.0-1.15.1/configure.ac
+@@ -1316,6 +1316,7 @@ docs/Makefile
  docs/plugins/Makefile
  docs/version.entities
  pkgconfig/Makefile

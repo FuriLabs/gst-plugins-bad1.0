@@ -3,8 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 XSBC-Original-Maintainer: Maintainers of GStreamer packages <gst-plugins-good1.0@packages.debian.org>
-Uploaders: Loic Minier <lool@dooz.org>,
-           Sebastian Dröge <slomo@debian.org>,
+Uploaders: Sebastian Dröge <slomo@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>
 Build-Depends: BUILDDEPS
 Standards-Version: 3.9.3
@@ -116,9 +115,9 @@ Depends: ${misc:Depends},
          gstreamer@GST_ABI@-plugins-base,
          libgstreamer-plugins-good@GST_DEB_ABI@ (= ${binary:Version}),
 Recommends: @GST_PKGNAME@-x
-Replaces: gstreamer1.0-plugins-bad (<< 1.13.1),
+Replaces: gstreamer1.0-plugins-bad (<< 1.15.1),
           gstreamer1.0-plugins-ugly (<< 1.13.1)
-Breaks: gstreamer1.0-plugins-bad (<< 1.13.1),
+Breaks: gstreamer1.0-plugins-bad (<< 1.15.1),
         gstreamer1.0-plugins-ugly (<< 1.13.1)
 XB-GStreamer-Version: ${gstreamer:Version}
 XB-GStreamer-Elements: ${gstreamer:Elements}

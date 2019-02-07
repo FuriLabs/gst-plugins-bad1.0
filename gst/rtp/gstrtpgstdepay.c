@@ -27,6 +27,8 @@
 #include "gstrtpgstdepay.h"
 #include "gstrtputils.h"
 
+#include <gst/video/video.h>
+
 GST_DEBUG_CATEGORY_STATIC (rtpgstdepay_debug);
 #define GST_CAT_DEFAULT (rtpgstdepay_debug)
 
@@ -114,12 +116,19 @@ gst_rtp_gst_depay_finalize (GObject * object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-static void
+static gboolean
 store_cache (GstRtpGSTDepay * rtpgstdepay, guint CV, GstCaps * caps)
 {
+  gboolean changed = FALSE;
+
+  if (caps && rtpgstdepay->CV_cache[CV])
+    changed = !gst_caps_is_strictly_equal (caps, rtpgstdepay->CV_cache[CV]);
+
   if (rtpgstdepay->CV_cache[CV])
     gst_caps_unref (rtpgstdepay->CV_cache[CV]);
   rtpgstdepay->CV_cache[CV] = caps;
+
+  return changed;
 }
 
 static void
@@ -462,7 +471,8 @@ gst_rtp_gst_depay_process (GstRTPBaseDepayload * depayload, GstRTPBuffer * rtp)
       GST_DEBUG_OBJECT (rtpgstdepay,
           "inline caps %u, length %u, %" GST_PTR_FORMAT, CV, size, outcaps);
 
-      store_cache (rtpgstdepay, CV, outcaps);
+      if (store_cache (rtpgstdepay, CV, outcaps))
+        gst_pad_set_caps (depayload->srcpad, outcaps);
 
       /* skip caps */
       offset += size;
@@ -558,6 +568,11 @@ missing_caps:
   {
     GST_INFO_OBJECT (rtpgstdepay, "No caps received yet %u", CV);
     gst_buffer_unref (outbuf);
+
+    gst_pad_push_event (GST_RTP_BASE_DEPAYLOAD_SINKPAD (rtpgstdepay),
+        gst_video_event_new_upstream_force_key_unit (GST_CLOCK_TIME_NONE,
+            TRUE, 0));
+
     return NULL;
   }
 }

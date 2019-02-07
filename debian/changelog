@@ -1,4 +1,4 @@
-gst-plugins-good1.0 (1.15.1-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-good1.0 (1.15.1-1ubuntu1) disco; urgency=medium
 
   * Resynchronize on Debian, remaining changes:
     + Import plugins from -bad that are needed for main applications.

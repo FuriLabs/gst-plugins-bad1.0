@@ -1,3 +1,4 @@
 add-pkgconfig-file
 import-camerabin
 import-jpegformat
+Revert-pulsesrc-Move-to-extended-stream-API.patch

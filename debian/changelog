@@ -1,12 +1,4 @@
-gst-plugins-good1.0 (1.15.1-1ubuntu2) disco; urgency=medium
-
-  * Cherry-pick Revert-pulsesrc-Move-to-extended-stream-API.patch:
-    - Back out a feature that depends on an unreleased PulseAudio
-      feature and broke audio recording (LP: #1815670)
-
- -- Jeremy Bicha <jbicha@debian.org>  Tue, 12 Feb 2019 23:15:55 -0500
-
-gst-plugins-good1.0 (1.15.1-1ubuntu1) disco; urgency=medium
+gst-plugins-good1.0 (1.15.2-1ubuntu1) UNRELEASED; urgency=medium
 
   * Resynchronize on Debian, remaining changes:
     + Import plugins from -bad that are needed for main applications.
@@ -18,13 +10,14 @@ gst-plugins-good1.0 (1.15.1-1ubuntu1) disco; urgency=medium
     + Add 'pluginsdir' variable to our added pcfile for compatibility with
       some external software
     + debian/control{,.in}: Update Vcs-* for Ubuntu
-  * Delta not needed anymore
-    + Break and Replace -bad versions which contained these plugins.
-      (Debian updated those to the current version for other plugins)
-    + debian/patches/b03df1abf828514b0966db058388bf974ed0cf4f.patch:
-      the issue has been fixed upstream in another way
 
- -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 07 Feb 2019 12:36:17 +0100
+ -- Sebastien Bacher <seb128@ubuntu.com>  Mon, 04 Mar 2019 17:05:52 +0100
+
+gst-plugins-good1.0 (1.15.2-1) experimental; urgency=medium
+
+  * New upstream development release
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 28 Feb 2019 11:57:58 +0200
 
 gst-plugins-good1.0 (1.15.1-1) experimental; urgency=medium
 

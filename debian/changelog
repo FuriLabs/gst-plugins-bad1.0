@@ -1,10 +1,4 @@
-gst-plugins-good1.0 (1.16.0-1ubuntu2) eoan; urgency=medium
-
-  * Refresh previous camerabin patch, wrong double directory inclusion
-
- -- Gianfranco Costamagna <locutusofborg@debian.org>  Tue, 07 May 2019 15:31:01 +0200
-
-gst-plugins-good1.0 (1.16.0-1ubuntu1) eoan; urgency=medium
+gst-plugins-good1.0 (1.16.0-1ubuntu3) eoan; urgency=medium
 
   * Resynchronize on Debian, remaining changes:
     + Import plugins from -bad that are needed for main applications.

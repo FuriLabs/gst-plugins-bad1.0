@@ -143,6 +143,21 @@ index e7ae957d..b0ceae5e 100644
  AG_GST_CHECK_PLUGIN(cutter)
  AG_GST_CHECK_PLUGIN(debugutils)
  AG_GST_CHECK_PLUGIN(deinterlace)
+@@ -1162,7 +1162,13 @@ fi
+ AC_SUBST(DEPRECATED_CFLAGS)
+ 
+ VISIBILITY_CFLAGS=""
+-AS_COMPILER_FLAG([-fvisibility=hidden], [VISIBILITY_CFLAGS="-fvisibility=hidden"])
++AS_COMPILER_FLAG([-fvisibility=hidden], [
++  VISIBILITY_CFLAGS="-fvisibility=hidden"
++  AC_DEFINE(GST_API_EXPORT, [extern __attribute__ ((visibility ("default")))], [public symbol export define])
++], [
++  VISIBILITY_CFLAGS=""
++  AC_DEFINE(GST_API_EXPORT, [extern], [public symbol export define])
++])
+ AC_SUBST(VISIBILITY_CFLAGS)
+ 
+ VISIBILITY_CXXFLAGS=""
 @@ -1228,6 +1242,7 @@ gst/audioparsers/Makefile
  gst/auparse/Makefile
  gst/autodetect/Makefile

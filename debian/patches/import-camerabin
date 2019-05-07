@@ -22,10 +22,10 @@ Forwarded: not-needed
  gst-libs/gst/basecamerabinsrc/meson.build     |   27 +
  gst-libs/gst/interfaces/Makefile.am           |   49 +
  gst-libs/gst/interfaces/Makefile.in           | 1245 +++++++++
- .../gst/interfaces/interfaces/meson.build     |   30 +
- .../interfaces/photography-prelude.h          |   35 +
- .../gst/interfaces/interfaces/photography.c   |  714 +++++
- .../gst/interfaces/interfaces/photography.h   |  673 +++++
+ gst-libs/gst/interfaces/meson.build           |   30 +
+ gst-libs/gst/interfaces/photography-prelude.h |   35 +
+ gst-libs/gst/interfaces/photography.c         |  714 +++++
+ gst-libs/gst/interfaces/photography.h         |  673 +++++
  gst/camerabin2/Makefile.am                    |   28 +
  gst/camerabin2/Makefile.in                    | 1165 ++++++++
  gst/camerabin2/camerabingeneral.c             |  260 ++
@@ -63,10 +63,10 @@ Forwarded: not-needed
  create mode 100644 gst-libs/gst/basecamerabinsrc/meson.build
  create mode 100644 gst-libs/gst/interfaces/Makefile.am
  create mode 100644 gst-libs/gst/interfaces/Makefile.in
- create mode 100644 gst-libs/gst/interfaces/interfaces/meson.build
- create mode 100644 gst-libs/gst/interfaces/interfaces/photography-prelude.h
- create mode 100644 gst-libs/gst/interfaces/interfaces/photography.c
- create mode 100644 gst-libs/gst/interfaces/interfaces/photography.h
+ create mode 100644 gst-libs/gst/interfaces/meson.build
+ create mode 100644 gst-libs/gst/interfaces/photography-prelude.h
+ create mode 100644 gst-libs/gst/interfaces/photography.c
+ create mode 100644 gst-libs/gst/interfaces/photography.h
  create mode 100644 gst/camerabin2/Makefile.am
  create mode 100644 gst/camerabin2/Makefile.in
  create mode 100644 gst/camerabin2/camerabingeneral.c
@@ -4055,11 +4055,11 @@ index 00000000..af92213d
 +# Tell versions [3.59,3.63) of GNU make to not export all variables.
 +# Otherwise a system limit (for SysV at least) may be exceeded.
 +.NOEXPORT:
-diff --git a/gst-libs/gst/interfaces/interfaces/meson.build b/gst-libs/gst/interfaces/interfaces/meson.build
+diff --git a/gst-libs/gst/interfaces/meson.build b/gst-libs/gst/interfaces/meson.build
 new file mode 100644
 index 00000000..52284715
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/interfaces/meson.build
++++ b/gst-libs/gst/interfaces/meson.build
 @@ -0,0 +1,30 @@
 +photography_sources = ['photography.c']
 +photo_headers = ['photography.h', 'photography-prelude.h']
@@ -4091,11 +4091,11 @@ index 00000000..52284715
 +  include_directories : [libsinc],
 +  dependencies : [gst_dep],
 +  sources : [photoenum_h])
-diff --git a/gst-libs/gst/interfaces/interfaces/photography-prelude.h b/gst-libs/gst/interfaces/interfaces/photography-prelude.h
+diff --git a/gst-libs/gst/interfaces/photography-prelude.h b/gst-libs/gst/interfaces/photography-prelude.h
 new file mode 100644
 index 00000000..dbb7f13f
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/interfaces/photography-prelude.h
++++ b/gst-libs/gst/interfaces/photography-prelude.h
 @@ -0,0 +1,35 @@
 +/* GStreamer Photography Library
 + * Copyright (C) 2018 GStreamer developers
@@ -4132,11 +4132,11 @@ index 00000000..dbb7f13f
 +#endif
 +
 +#endif /* __GST_PHOTOGRAPHY_PRELUDE_H__ */
-diff --git a/gst-libs/gst/interfaces/interfaces/photography.c b/gst-libs/gst/interfaces/interfaces/photography.c
+diff --git a/gst-libs/gst/interfaces/photography.c b/gst-libs/gst/interfaces/photography.c
 new file mode 100644
 index 00000000..1799c52b
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/interfaces/photography.c
++++ b/gst-libs/gst/interfaces/photography.c
 @@ -0,0 +1,714 @@
 +/* GStreamer
 + *
@@ -4852,11 +4852,11 @@ index 00000000..1799c52b
 +          GST_TYPE_PHOTOGRAPHY_NOISE_REDUCTION,
 +          0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 +}
-diff --git a/gst-libs/gst/interfaces/interfaces/photography.h b/gst-libs/gst/interfaces/interfaces/photography.h
+diff --git a/gst-libs/gst/interfaces/photography.h b/gst-libs/gst/interfaces/photography.h
 new file mode 100644
 index 00000000..0475d71a
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/interfaces/photography.h
++++ b/gst-libs/gst/interfaces/photography.h
 @@ -0,0 +1,673 @@
 +/* GStreamer
 + *

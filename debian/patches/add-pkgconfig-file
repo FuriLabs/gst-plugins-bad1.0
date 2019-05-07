@@ -10,11 +10,11 @@ Forwarded: not-needed
  3 files changed, 17 insertions(+), 4 deletions(-)
  create mode 100644 pkgconfig/gstreamer-plugins-good.pc.in
 
-diff --git a/configure.ac b/configure.ac
-index 6ffaa80..93560ca 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -1316,6 +1316,7 @@ docs/Makefile
+Index: gst-plugins-good1.0-1.16.0/configure.ac
+===================================================================
+--- gst-plugins-good1.0-1.16.0.orig/configure.ac
++++ gst-plugins-good1.0-1.16.0/configure.ac
+@@ -1320,6 +1320,7 @@
  docs/plugins/Makefile
  docs/version.entities
  pkgconfig/Makefile
@@ -22,11 +22,11 @@ index 6ffaa80..93560ca 100644
  pkgconfig/gstreamer-plugins-good-uninstalled.pc
  )
  AC_OUTPUT
-diff --git a/pkgconfig/Makefile.am b/pkgconfig/Makefile.am
-index 2d7917b..6cdaadd 100644
---- a/pkgconfig/Makefile.am
-+++ b/pkgconfig/Makefile.am
-@@ -5,7 +5,7 @@ pcverfiles_uninstalled = \
+Index: gst-plugins-good1.0-1.16.0/pkgconfig/Makefile.am
+===================================================================
+--- gst-plugins-good1.0-1.16.0.orig/pkgconfig/Makefile.am
++++ gst-plugins-good1.0-1.16.0/pkgconfig/Makefile.am
+@@ -5,7 +5,7 @@
  	gstreamer-plugins-good-@GST_API_VERSION@-uninstalled.pc
  
  ### all-local: $(pcverfiles) $(pcverfiles_uninstalled)
@@ -35,7 +35,7 @@ index 2d7917b..6cdaadd 100644
  
  cp_verbose = $(cp_verbose_$(V))
  cp_verbose_ = $(cp_verbose_$(AM_DEFAULT_VERBOSITY))
-@@ -18,14 +18,14 @@ cp_verbose_0 = @echo "  CP     $@";
+@@ -18,14 +18,14 @@
  	$(cp_verbose)cp $< $@
  
  # do not install for now
@@ -53,11 +53,10 @@ index 2d7917b..6cdaadd 100644
  
  DISTCLEANFILES = $(pcinfiles:.in=)
  EXTRA_DIST = $(pcinfiles)
-diff --git a/pkgconfig/gstreamer-plugins-good.pc.in b/pkgconfig/gstreamer-plugins-good.pc.in
-new file mode 100644
-index 0000000..cab8003
+Index: gst-plugins-good1.0-1.16.0/pkgconfig/gstreamer-plugins-good.pc.in
+===================================================================
 --- /dev/null
-+++ b/pkgconfig/gstreamer-plugins-good.pc.in
++++ gst-plugins-good1.0-1.16.0/pkgconfig/gstreamer-plugins-good.pc.in
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@

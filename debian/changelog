@@ -1,3 +1,24 @@
+gst-plugins-good1.0 (1.16.0-2ubuntu1) eoan; urgency=low
+
+  * Merge from Debian unstable.  Remaining changes:
+    + Import plugins from -bad that are needed for main applications.
+      - jpegformat
+      - camerabin (+ basecamerabinsrc + photography)
+    + Add a library package containing the shared library and a -dev package for
+      compiling against it. Add Breaks and Replaces against the plugins packages
+      which formerly contained files shipped here.
+    + Add 'pluginsdir' variable to our added pcfile for compatibility with
+      some external software
+    + debian/control{,.in}: Update Vcs-* for Ubuntu
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Sat, 20 Jul 2019 10:33:57 +0200
+
+gst-plugins-good1.0 (1.16.0-2) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 18 Jul 2019 11:36:52 +0300
+
 gst-plugins-good1.0 (1.16.0-1ubuntu3) eoan; urgency=medium
 
   * Resynchronize on Debian, remaining changes:

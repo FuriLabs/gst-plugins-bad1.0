@@ -1,3 +1,32 @@
+gst-plugins-good1.0 (1.16.0-3ubuntu1) eoan; urgency=low
+
+  * Merge from Debian unstable.  Remaining changes:
+    + Import plugins from -bad that are needed for main applications.
+      - jpegformat
+      - camerabin (+ basecamerabinsrc + photography)
+    + Add a library package containing the shared library and a -dev package for
+      compiling against it. Add Breaks and Replaces against the plugins packages
+      which formerly contained files shipped here.
+    + Add 'pluginsdir' variable to our added pcfile for compatibility with
+      some external software
+    + debian/control{,.in}: Update Vcs-* for Ubuntu
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Wed, 04 Sep 2019 12:41:19 +0200
+
+gst-plugins-good1.0 (1.16.0-3) unstable; urgency=medium
+
+  * Source-only re-upload (Closes: #934788).
+  * debian/rules:
+    + Enable V4L2 codec probing code (Closes: #857286).
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 02 Sep 2019 10:21:03 +0300
+
+gst-plugins-good1.0 (1.16.0-2ubuntu2) eoan; urgency=medium
+
+  * No-change rebuild against libvpx6
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 08 Aug 2019 15:34:44 +0000
+
 gst-plugins-good1.0 (1.16.0-2ubuntu1) eoan; urgency=low
 
   * Merge from Debian unstable.  Remaining changes:

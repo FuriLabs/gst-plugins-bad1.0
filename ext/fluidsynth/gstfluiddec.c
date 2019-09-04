@@ -73,7 +73,7 @@ enum
   LAST_SIGNAL
 };
 
-#define DEFAULT_SOUNDFONT       NULL
+#define DEFAULT_SOUNDFONT       "/usr/share/sounds/sf3/default-GM.sf3"
 #define DEFAULT_SYNTH_CHORUS    TRUE
 #define DEFAULT_SYNTH_REVERB    TRUE
 #define DEFAULT_SYNTH_GAIN      0.2

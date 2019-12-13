@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.16.2-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.16.2-1ubuntu1) focal; urgency=medium
 
   * Merge from Debian unstable.  Remaining changes:
     + Stop installing camerabin2 basecamerabin jpegformat - plugins which have
@@ -14,7 +14,7 @@ gst-plugins-bad1.0 (1.16.2-1ubuntu1) UNRELEASED; urgency=medium
     + Don't hack debian/rules to build with -std=c++11 the openexr issue
       has been fixed in the new upstream version
 
- -- Sebastien Bacher <seb128@ubuntu.com>  Thu, 26 Sep 2019 13:38:01 +0200
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 13 Dec 2019 20:56:01 +0100
 
 gst-plugins-bad1.0 (1.16.2-2) unstable; urgency=medium
 

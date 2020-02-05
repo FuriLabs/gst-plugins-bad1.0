@@ -1,3 +1,32 @@
+gst-plugins-bad1.0 (1.16.2-2.1ubuntu1) focal; urgency=medium
+
+  * Merge from Debian unstable.  Remaining changes:
+    + Stop installing camerabin2 basecamerabin jpegformat - plugins which have
+      moved to -good.
+    + Provide gstreamer-plugins-bad-1.0.pc with Requires on
+      gstreamer-plugins-good-1.0 - the package we've moved the referenced
+      library to. This maintains compatibility with upstream software and
+      other distributions.
+    + Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Wed, 05 Feb 2020 22:48:25 +0100
+
+gst-plugins-bad1.0 (1.16.2-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Upload patch to fix build with newer opencv (Closes: #922583)
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Wed, 05 Feb 2020 22:46:23 +0100
+
+gst-plugins-bad1.0 (1.16.2-2ubuntu3) focal; urgency=medium
+
+  * debian/patches/opencv.patch:
+    - fix build with newer opencv
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Mon, 03 Feb 2020 12:22:34 +0100
+
 gst-plugins-bad1.0 (1.16.2-2ubuntu1) focal; urgency=low
 
   * Merge from Debian unstable.  Remaining changes:

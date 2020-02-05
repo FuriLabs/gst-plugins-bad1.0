@@ -2,3 +2,4 @@
 pcfile-requires-plugins-good
 02_opencv-data-path.patch
 03_default-soundfont.patch
+opencv.patch

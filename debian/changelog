@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.16.2-2.1ubuntu3) groovy; urgency=medium
+
+  * Add fix-openexr-check.patch: fix build failure
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 05 May 2020 19:42:45 -0400
+
 gst-plugins-bad1.0 (1.16.2-2.1ubuntu2) groovy; urgency=medium
 
   * No-change rebuild against latest libdvdread

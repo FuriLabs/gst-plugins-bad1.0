@@ -39807,298 +39807,6 @@ else
 $as_echo "yes" >&6; }
 	:
 fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
 elif test $pkg_failed = untried; then
 
 
@@ -40538,21 +40246,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -40614,28 +40307,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -41151,28 +40822,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -41696,12 +41345,512 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
 $as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
 elif test $pkg_failed = untried; then
 
                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
 $as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
 else
 	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
 	CUDA_LIBS=$pkg_cv_CUDA_LIBS
@@ -41773,28 +41922,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -41856,536 +41983,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -42854,12 +42451,22 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-8.0 cudart-8.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-8.0 cudart-8.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-8.0 cudart-8.0" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -43030,21 +42637,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -43559,21 +43151,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -44035,28 +43612,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -44180,21 +43735,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -45378,21 +44918,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -45454,28 +44979,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -45991,28 +45494,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -46536,12 +46017,512 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
 $as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
 elif test $pkg_failed = untried; then
 
                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
 $as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
 else
 	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
 	CUDA_LIBS=$pkg_cv_CUDA_LIBS
@@ -46613,28 +46594,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -46696,536 +46655,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -47694,12 +47123,22 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-8.0 cudart-8.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-8.0 cudart-8.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-8.0 cudart-8.0" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -47870,21 +47309,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -48399,21 +47823,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -48875,28 +48284,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -49020,21 +48407,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -50149,21 +49521,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -50225,28 +49582,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -50762,28 +50097,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -51307,12 +50620,512 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
 $as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
 elif test $pkg_failed = untried; then
 
                       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
 $as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
 else
 	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
 	CUDA_LIBS=$pkg_cv_CUDA_LIBS
@@ -51384,28 +51197,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -51467,536 +51258,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
-$as_echo_n "checking for CUDA... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_CFLAGS"; then
-        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$CUDA_LIBS"; then
-        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        else
-	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$CUDA_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -52465,12 +51726,22 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-8.0 cudart-8.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-8.0 cudart-8.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-8.0 cudart-8.0" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -52641,21 +51912,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -53170,21 +52426,6 @@ fi
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
 
 
 pkg_failed=no
@@ -53646,28 +52887,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -53792,21 +53011,6 @@ fi
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-elif test $pkg_failed = untried; then
-
-                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
-$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
-else
-	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
-	CUDA_LIBS=$pkg_cv_CUDA_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	:
-fi
-elif test $pkg_failed = untried; then
-
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
@@ -53967,6 +53171,298 @@ $as_echo "yes" >&6; }
 	:
 fi
 elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.0 cudart-7.0\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.0 cudart-7.0") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.0 cudart-7.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.0 cudart-7.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-6.5 cudart-6.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-6.5 cudart-6.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-6.5 cudart-6.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-6.5 cudart-6.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+elif test $pkg_failed = untried; then
+
+                      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not find cuda headers/libraries" >&5
+$as_echo "$as_me: WARNING: Could not find cuda headers/libraries" >&2;}
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+else
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	:
+fi
+elif test $pkg_failed = untried; then
+
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_CFLAGS"; then
+        pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$CUDA_LIBS"; then
+        pkg_cv_CUDA_LIBS="$CUDA_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cuda-7.5 cudart-7.5\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "cuda-7.5 cudart-7.5") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "cuda-7.5 cudart-7.5" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        else
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cuda-7.5 cudart-7.5"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CUDA_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 
 pkg_failed=no

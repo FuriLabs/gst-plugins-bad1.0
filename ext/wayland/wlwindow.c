@@ -107,10 +107,6 @@ handle_ping (void *data, struct wl_shell_surface *wl_shell_surface,
   wl_shell_surface_pong (wl_shell_surface, serial);
 }
 
-static const struct xdg_surface_listener xdg_surface_listener = {
-  handle_xdg_surface_configure,
-};
-
 static void
 handle_configure (void *data, struct wl_shell_surface *wl_shell_surface,
     uint32_t edges, int32_t width, int32_t height)

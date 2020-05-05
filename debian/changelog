@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.16.2-2.1ubuntu2) groovy; urgency=medium
+
+  * No-change rebuild against latest libdvdread
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Sat, 02 May 2020 19:23:08 -0400
+
 gst-plugins-bad1.0 (1.16.2-2.1ubuntu1) focal; urgency=medium
 
   * Merge from Debian unstable.  Remaining changes:

@@ -1,3 +1,4 @@
 add-pkgconfig-file
 import-camerabin
 import-jpegformat
+fix-build.patch

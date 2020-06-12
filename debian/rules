@@ -74,7 +74,6 @@ gst_extra_build_depends += , libwayland-dev (>= 1.11.0) [linux-any]
 gst_extra_build_depends += , libdrm-dev (>= 2.4.55) [linux-any]
 gst_extra_build_depends += , wayland-protocols (>= 1.4) [linux-any]
 gst_extra_build_depends += , libvulkan-dev [linux-any]
-gst_extra_build_depends += , libsrt-dev [linux-any]
 
 PLUGINS += plugins-bad opencv
 ifeq ($(DEB_HOST_ARCH_OS),linux)

@@ -1,3 +1,17 @@
+gst-plugins-bad1.0 (1.16.2-2.1ubuntu7) groovy; urgency=medium
+
+  * Add patch to fix the build on some plugins-bad imported code
+  * debian/patches/0001-vulkan-Drop-use-of-VK_RESULT_BEGIN_RANGE.patch:
+    - patch from arch linux to fix build with new mesa
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Fri, 12 Jun 2020 20:08:04 +0200
+
+gst-plugins-bad1.0 (1.16.2-2.1ubuntu6) groovy; urgency=medium
+
+  * Update srt-dev with srt-gnutls-dev
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Fri, 12 Jun 2020 17:51:49 +0200
+
 gst-plugins-bad1.0 (1.16.2-2.1ubuntu3) groovy; urgency=medium
 
   * Add fix-openexr-check.patch: fix build failure

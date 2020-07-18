@@ -4,5 +4,5 @@ pcfile-requires-plugins-good
 03_default-soundfont.patch
 opencv.patch
 fix-openexr-check.patch
-fix-build.patch
-0001-vulkan-Drop-use-of-VK_RESULT_BEGIN_RANGE.patch
+29bf8d8528ec694f65c8fae310adac996322cc74.patch
+fix-build-with-make-4.3.patch

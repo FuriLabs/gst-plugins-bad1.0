@@ -6,3 +6,4 @@ opencv.patch
 fix-openexr-check.patch
 29bf8d8528ec694f65c8fae310adac996322cc74.patch
 fix-build-with-make-4.3.patch
+lv2-gcc10.patch

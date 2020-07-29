@@ -221,6 +221,7 @@ clean::
 	for f in $(VERSIONIZE); do \
 		rm -f debian/$(gst_pkgname)-$$f; \
 	done
+	rm -f debian/gir1.2-gst-plugins-bad-1.0.install debian/libgstreamer-opencv1.0-0.install debian/libgstreamer-plugins-bad1.0-0.install libgstreamer-plugins-bad1.0-dev.install
 
 gst_patch = $(shell echo $(gst_version) | cut -d '.' -f 2)
 gst_patch_next = $(shell expr $(gst_patch) + 1)

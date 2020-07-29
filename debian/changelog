@@ -1,4 +1,28 @@
-gst-plugins-bad1.0 (1.16.2-2.2ubuntu1) groovy; urgency=low
+gst-plugins-bad1.0 (1.16.2-2.3ubuntu1) groovy; urgency=low
+
+  * Merge from Debian unstable.  Remaining changes:
+    - Add fix-openexr-check.patch: fix build failure
+    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
+      moved to -good.
+    - Provide gstreamer-plugins-bad-1.0.pc with Requires on
+      gstreamer-plugins-good-1.0 - the package we've moved the referenced
+      library to. This maintains compatibility with upstream software and
+      other distributions.
+    - Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Wed, 29 Jul 2020 11:05:25 +0200
+
+gst-plugins-bad1.0 (1.16.2-2.3) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Adjust make 4.3 patch to also work with make 4.2 (Closes: 965298 )
+  * Apply upstream patch to make "lv2" plugin build with gcc-10 (Closes: 957314 )
+
+ -- Peter Michael Green <plugwash@debian.org>  Thu, 23 Jul 2020 12:47:21 +0000
+
+gst-plugins-bad1.0 (1.16.2-2.2ubuntu2) groovy; urgency=low
 
   * Merge from Debian unstable.  Remaining changes:
     - Add fix-openexr-check.patch: fix build failure

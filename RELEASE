@@ -1,15 +1,18 @@
-This is GStreamer gst-plugins-bad 1.16.2.
+This is GStreamer gst-plugins-bad 1.18.0.
 
-The GStreamer team is pleased to announce another bug-fix release in the
-stable 1.x API series of your favourite cross-platform multimedia framework!
+The GStreamer team is thrilled to announce a new major feature release
+of your favourite cross-platform multimedia framework!
 
-The 1.16 release series adds new features on top of the 1.14 series and is
+As always, this release is again packed with new features, bug fixes and
+other improvements.
+
+The 1.18 release series adds new features on top of the 1.16 series and is
 part of the API and ABI-stable 1.x release series of the GStreamer multimedia
 framework.
 
-Full release notes will one day be found at:
+Full release notes can be found at:
 
-  https://gstreamer.freedesktop.org/releases/1.16/
+  https://gstreamer.freedesktop.org/releases/1.18/
 
 Binaries for Android, iOS, Mac OS X and Windows will usually be provided
 shortly after the release.

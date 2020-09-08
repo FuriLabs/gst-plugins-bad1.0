@@ -472,7 +472,7 @@ gst_rtp_mp4g_pay_flush (GstRtpMP4GPay * rtpmp4gpay)
     GstRTPBuffer rtp = { NULL };
     GstBuffer *paybuf;
 
-    /* this will be the total lenght of the packet */
+    /* this will be the total length of the packet */
     packet_len = gst_rtp_buffer_calc_packet_len (avail, 0, 0);
 
     /* fill one MTU or all available bytes, we need 4 spare bytes for
@@ -487,8 +487,9 @@ gst_rtp_mp4g_pay_flush (GstRtpMP4GPay * rtpmp4gpay)
         packet_len, payload_len);
 
     /* create buffer to hold the payload, also make room for the 4 header bytes. */
-    outbuf = gst_rtp_buffer_new_allocate (4, 0, 0);
-
+    outbuf =
+        gst_rtp_base_payload_allocate_output_buffer (GST_RTP_BASE_PAYLOAD
+        (rtpmp4gpay), 4, 0, 0);
     gst_rtp_buffer_map (outbuf, GST_MAP_WRITE, &rtp);
 
     /* copy payload */

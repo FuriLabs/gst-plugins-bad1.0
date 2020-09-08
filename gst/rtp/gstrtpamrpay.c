@@ -19,18 +19,18 @@
 
 /**
  * SECTION:element-rtpamrpay
+ * @title: rtpamrpay
  * @see_also: rtpamrdepay
  *
  * Payload AMR audio into RTP packets according to RFC 3267.
  * For detailed information see: http://www.rfc-editor.org/rfc/rfc3267.txt
  *
- * <refsect2>
- * <title>Example pipeline</title>
+ * ## Example pipeline
  * |[
  * gst-launch-1.0 -v audiotestsrc ! amrnbenc ! rtpamrpay ! udpsink
  * ]| This example pipeline will encode and payload an AMR stream. Refer to
  * the rtpamrdepay example to depayload and decode the RTP stream.
- * </refsect2>
+ *
  */
 
 /* references:
@@ -312,7 +312,9 @@ gst_rtp_amr_pay_handle_buffer (GstRTPBasePayload * basepayload,
     goto too_big;
 
   /* now alloc output buffer */
-  outbuf = gst_rtp_buffer_new_allocate (payload_len, 0, 0);
+  outbuf =
+      gst_rtp_base_payload_allocate_output_buffer (basepayload, payload_len, 0,
+      0);
 
   gst_rtp_buffer_map (outbuf, GST_MAP_WRITE, &rtp);
 

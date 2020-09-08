@@ -289,7 +289,7 @@ gst_rtp_gst_pay_create_from_adapter (GstRtpGSTPay * rtpgstpay,
     GstBuffer *paybuf;
 
 
-    /* this will be the total lenght of the packet */
+    /* this will be the total length of the packet */
     packet_len = gst_rtp_buffer_calc_packet_len (8 + avail, 0, 0);
 
     /* fill one MTU or all available bytes */
@@ -299,7 +299,9 @@ gst_rtp_gst_pay_create_from_adapter (GstRtpGSTPay * rtpgstpay,
     payload_len = gst_rtp_buffer_calc_payload_len (towrite, 0, 0);
 
     /* create buffer to hold the header */
-    outbuf = gst_rtp_buffer_new_allocate (8, 0, 0);
+    outbuf =
+        gst_rtp_base_payload_allocate_output_buffer (GST_RTP_BASE_PAYLOAD
+        (rtpgstpay), 8, 0, 0);
 
     gst_rtp_buffer_map (outbuf, GST_MAP_WRITE, &rtp);
     payload = gst_rtp_buffer_get_payload (&rtp);
@@ -421,8 +423,17 @@ gst_rtp_gst_pay_send_caps (GstRtpGSTPay * rtpgstpay, guint8 cv, GstCaps * caps)
   guint capslen;
   GstBuffer *outbuf;
 
-  if (rtpgstpay->flags & (1 << 7))
+  if (rtpgstpay->flags == ((1 << 7) | (cv << 4))) {
+    /* If caps for the current CV are pending in the adapter already, do
+     * nothing at all here
+     */
     return;
+  } else if (rtpgstpay->flags & (1 << 7)) {
+    /* Create a new standalone caps packet if caps were already pending.
+     * The next caps are going to be merged with the following buffer or
+     * sent standalone if another event is sent first */
+    gst_rtp_gst_pay_create_from_adapter (rtpgstpay, GST_CLOCK_TIME_NONE);
+  }
 
   capsstr = gst_caps_to_string (caps);
   capslen = strlen (capsstr);

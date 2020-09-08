@@ -42,8 +42,12 @@ typedef struct _GstV4l2ObjectClassHelper GstV4l2ObjectClassHelper;
 
 #include <gstv4l2bufferpool.h>
 
-/* size of v4l2 buffer pool in streaming case */
-#define GST_V4L2_MIN_BUFFERS 2
+/* size of v4l2 buffer pool in streaming case, obj->info needs to be valid */
+#define GST_V4L2_MIN_BUFFERS(obj) \
+    ((GST_VIDEO_INFO_INTERLACE_MODE (&obj->info) == \
+      GST_VIDEO_INTERLACE_MODE_ALTERNATE) ? \
+      /* 2x buffers needed with each field in its own buffer */ \
+      4 : 2)
 
 /* max frame width/height */
 #define GST_V4L2_MAX_SIZE (1<<15) /* 2^15 == 32768 */
@@ -168,6 +172,8 @@ struct _GstV4l2Object {
 
   /* optional pool */
   GstBufferPool *pool;
+  /* the sequence of pool to identify (for debugging) */
+  guint pool_seq;
 
   /* the video device's capabilities */
   struct v4l2_capability vcap;
@@ -268,7 +274,7 @@ gboolean     gst_v4l2_object_get_property_helper       (GstV4l2Object *v4l2objec
                                                         guint prop_id, GValue * value,
                                                         GParamSpec * pspec);
 /* open/close */
-gboolean     gst_v4l2_object_open            (GstV4l2Object * v4l2object);
+gboolean     gst_v4l2_object_open            (GstV4l2Object * v4l2object, GstV4l2Error * error);
 gboolean     gst_v4l2_object_open_shared     (GstV4l2Object * v4l2object, GstV4l2Object * other);
 gboolean     gst_v4l2_object_close           (GstV4l2Object * v4l2object);
 
@@ -311,7 +317,7 @@ GstStructure * gst_v4l2_object_v4l2fourcc_to_structure (guint32 fourcc);
 
 /* TODO Move to proper namespace */
 /* open/close the device */
-gboolean     gst_v4l2_open           (GstV4l2Object * v4l2object);
+gboolean     gst_v4l2_open           (GstV4l2Object * v4l2object, GstV4l2Error * error);
 gboolean     gst_v4l2_dup            (GstV4l2Object * v4l2object, GstV4l2Object * other);
 gboolean     gst_v4l2_close          (GstV4l2Object * v4l2object);
 
@@ -331,6 +337,7 @@ gboolean     gst_v4l2_signal_strength (GstV4l2Object * v4l2object, gint tunernum
 /* attribute control */
 gboolean     gst_v4l2_get_attribute   (GstV4l2Object * v4l2object, int attribute, int * value);
 gboolean     gst_v4l2_set_attribute   (GstV4l2Object * v4l2object, int attribute, const int value);
+gboolean     gst_v4l2_set_string_attribute (GstV4l2Object * v4l2object, int attribute_num, const char *value);
 gboolean     gst_v4l2_set_controls    (GstV4l2Object * v4l2object, GstStructure * controls);
 
 G_END_DECLS

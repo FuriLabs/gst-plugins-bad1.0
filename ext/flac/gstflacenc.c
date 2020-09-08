@@ -18,15 +18,15 @@
  */
 /**
  * SECTION:element-flacenc
+ * @title: flacenc
  * @see_also: #GstFlacDec
  *
  * flacenc encodes FLAC streams.
- * <ulink url="http://flac.sourceforge.net/">FLAC</ulink>
- * is a Free Lossless Audio Codec. FLAC audio can directly be written into
- * a file, or embedded into containers such as oggmux or matroskamux.
+ * [FLAC](http://flac.sourceforge.net/) is a Free Lossless Audio Codec.
+ * FLAC audio can directly be written into a file, or embedded into containers
+ * such as oggmux or matroskamux.
  *
- * <refsect2>
- * <title>Example launch line</title>
+ * ## Example launch line
  * |[
  * gst-launch-1.0 audiotestsrc num-buffers=100 ! flacenc ! filesink location=beep.flac
  * ]| Encode a short sine wave into FLAC
@@ -36,7 +36,7 @@
  * |[
  * gst-launch-1.0 cdparanoiasrc track=5 ! queue ! audioconvert ! flacenc ! filesink location=track5.flac
  * ]| Rip track 5 of an audio CD and encode it losslessly to a FLAC file
- * </refsect2>
+ *
  */
 
 /* TODO: - We currently don't handle discontinuities in the stream in a useful
@@ -361,6 +361,8 @@ gst_flac_enc_class_init (GstFlacEncClass * klass)
   base_class->getcaps = GST_DEBUG_FUNCPTR (gst_flac_enc_getcaps);
   base_class->sink_event = GST_DEBUG_FUNCPTR (gst_flac_enc_sink_event);
   base_class->sink_query = GST_DEBUG_FUNCPTR (gst_flac_enc_sink_query);
+
+  gst_type_mark_as_plugin_api (GST_TYPE_FLAC_ENC_QUALITY, 0);
 }
 
 static void
@@ -809,11 +811,10 @@ gst_flac_enc_getcaps (GstAudioEncoder * enc, GstCaps * filter)
 }
 
 static guint64
-gst_flac_enc_peer_query_total_samples (GstFlacEnc * flacenc, GstPad * pad)
+gst_flac_enc_peer_query_total_samples (GstFlacEnc * flacenc, GstPad * pad,
+    GstAudioInfo * info)
 {
   gint64 duration;
-  GstAudioInfo *info =
-      gst_audio_encoder_get_audio_info (GST_AUDIO_ENCODER (flacenc));
 
   GST_DEBUG_OBJECT (flacenc, "querying peer for DEFAULT format duration");
   if (gst_pad_peer_query_duration (pad, GST_FORMAT_DEFAULT, &duration)
@@ -882,7 +883,7 @@ gst_flac_enc_set_format (GstAudioEncoder * enc, GstAudioInfo * info)
       flacenc->channel_reorder_map);
 
   total_samples = gst_flac_enc_peer_query_total_samples (flacenc,
-      GST_AUDIO_ENCODER_SINK_PAD (enc));
+      GST_AUDIO_ENCODER_SINK_PAD (enc), info);
 
   FLAC__stream_encoder_set_bits_per_sample (flacenc->encoder,
       GST_AUDIO_INFO_DEPTH (info));

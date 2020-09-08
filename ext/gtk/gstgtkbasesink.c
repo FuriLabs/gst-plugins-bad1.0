@@ -128,6 +128,8 @@ gst_gtk_base_sink_class_init (GstGtkBaseSinkClass * klass)
   gstbasesink_class->stop = gst_gtk_base_sink_stop;
 
   gstvideosink_class->show_frame = gst_gtk_base_sink_show_frame;
+
+  gst_type_mark_as_plugin_api (GST_TYPE_GTK_BASE_SINK, 0);
 }
 
 static void
@@ -200,7 +202,7 @@ gst_gtk_base_sink_get_widget (GstGtkBaseSink * gtk_sink)
       "ignore-alpha", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
   /* Take the floating ref, other wise the destruction of the container will
-   * make this widget disapear possibly before we are done. */
+   * make this widget disappear possibly before we are done. */
   gst_object_ref_sink (gtk_sink->widget);
   gtk_sink->widget_destroy_id = g_signal_connect (gtk_sink->widget, "destroy",
       G_CALLBACK (widget_destroy_cb), gtk_sink);

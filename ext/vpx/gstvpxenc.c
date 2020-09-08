@@ -47,7 +47,7 @@ GST_DEBUG_CATEGORY_STATIC (gst_vpxenc_debug);
 #define DEFAULT_PROFILE 0
 
 #define DEFAULT_RC_END_USAGE VPX_VBR
-#define DEFAULT_RC_TARGET_BITRATE 256000
+#define DEFAULT_RC_TARGET_BITRATE 0
 #define DEFAULT_RC_MIN_QUANTIZER 4
 #define DEFAULT_RC_MAX_QUANTIZER 63
 
@@ -88,7 +88,10 @@ GST_DEBUG_CATEGORY_STATIC (gst_vpxenc_debug);
 #define DEFAULT_DEADLINE VPX_DL_BEST_QUALITY
 #define DEFAULT_NOISE_SENSITIVITY 0
 #define DEFAULT_SHARPNESS 0
-#define DEFAULT_STATIC_THRESHOLD 0
+
+/* Use same default value as Chromium/webrtc. */
+#define DEFAULT_STATIC_THRESHOLD 1
+
 #define DEFAULT_TOKEN_PARTITIONS 0
 #define DEFAULT_ARNR_MAXFRAMES 0
 #define DEFAULT_ARNR_STRENGTH 3
@@ -98,6 +101,8 @@ GST_DEBUG_CATEGORY_STATIC (gst_vpxenc_debug);
 #define DEFAULT_MAX_INTRA_BITRATE_PCT 0
 #define DEFAULT_TIMEBASE_N 0
 #define DEFAULT_TIMEBASE_D 1
+
+#define DEFAULT_BITS_PER_PIXEL 0.0434
 
 enum
 {
@@ -145,7 +150,8 @@ enum
   PROP_TUNING,
   PROP_CQ_LEVEL,
   PROP_MAX_INTRA_BITRATE_PCT,
-  PROP_TIMEBASE
+  PROP_TIMEBASE,
+  PROP_BITS_PER_PIXEL
 };
 
 
@@ -333,7 +339,8 @@ static gboolean gst_vpx_enc_propose_allocation (GstVideoEncoder * encoder,
 #define parent_class gst_vpx_enc_parent_class
 G_DEFINE_TYPE_WITH_CODE (GstVPXEnc, gst_vpx_enc, GST_TYPE_VIDEO_ENCODER,
     G_IMPLEMENT_INTERFACE (GST_TYPE_TAG_SETTER, NULL);
-    G_IMPLEMENT_INTERFACE (GST_TYPE_PRESET, NULL););
+    G_IMPLEMENT_INTERFACE (GST_TYPE_PRESET, NULL);
+    );
 
 static void
 gst_vpx_enc_class_init (GstVPXEncClass * klass)
@@ -361,117 +368,137 @@ gst_vpx_enc_class_init (GstVPXEncClass * klass)
       g_param_spec_enum ("end-usage", "Rate control mode",
           "Rate control mode",
           GST_VPX_ENC_END_USAGE_TYPE, DEFAULT_RC_END_USAGE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_TARGET_BITRATE,
       g_param_spec_int ("target-bitrate", "Target bitrate",
-          "Target bitrate (in bits/sec)",
+          "Target bitrate (in bits/sec) (0: auto - bitrate depends on "
+          "resolution, see \"bits-per-pixel\" property for more info)",
           0, G_MAXINT, DEFAULT_RC_TARGET_BITRATE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_MIN_QUANTIZER,
       g_param_spec_int ("min-quantizer", "Minimum Quantizer",
           "Minimum Quantizer (best)",
           0, 63, DEFAULT_RC_MIN_QUANTIZER,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_MAX_QUANTIZER,
       g_param_spec_int ("max-quantizer", "Maximum Quantizer",
           "Maximum Quantizer (worst)",
           0, 63, DEFAULT_RC_MAX_QUANTIZER,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_DROPFRAME_THRESH,
       g_param_spec_int ("dropframe-threshold", "Drop Frame Threshold",
           "Temporal resampling threshold (buf %)",
           0, 100, DEFAULT_RC_DROPFRAME_THRESH,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_RESIZE_ALLOWED,
       g_param_spec_boolean ("resize-allowed", "Resize Allowed",
           "Allow spatial resampling",
           DEFAULT_RC_RESIZE_ALLOWED,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_RESIZE_UP_THRESH,
       g_param_spec_int ("resize-up-threshold", "Resize Up Threshold",
           "Upscale threshold (buf %)",
           0, 100, DEFAULT_RC_RESIZE_UP_THRESH,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_RESIZE_DOWN_THRESH,
       g_param_spec_int ("resize-down-threshold", "Resize Down Threshold",
           "Downscale threshold (buf %)",
           0, 100, DEFAULT_RC_RESIZE_DOWN_THRESH,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_UNDERSHOOT_PCT,
       g_param_spec_int ("undershoot", "Undershoot PCT",
           "Datarate undershoot (min) target (%)",
           0, 1000, DEFAULT_RC_UNDERSHOOT_PCT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_OVERSHOOT_PCT,
       g_param_spec_int ("overshoot", "Overshoot PCT",
           "Datarate overshoot (max) target (%)",
           0, 1000, DEFAULT_RC_OVERSHOOT_PCT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_BUF_SZ,
       g_param_spec_int ("buffer-size", "Buffer size",
           "Client buffer size (ms)",
           0, G_MAXINT, DEFAULT_RC_BUF_SZ,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_BUF_INITIAL_SZ,
       g_param_spec_int ("buffer-initial-size", "Buffer initial size",
           "Initial client buffer size (ms)",
           0, G_MAXINT, DEFAULT_RC_BUF_INITIAL_SZ,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_BUF_OPTIMAL_SZ,
       g_param_spec_int ("buffer-optimal-size", "Buffer optimal size",
           "Optimal client buffer size (ms)",
           0, G_MAXINT, DEFAULT_RC_BUF_OPTIMAL_SZ,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_RC_2PASS_VBR_BIAS_PCT,
       g_param_spec_int ("twopass-vbr-bias", "2-pass VBR bias",
           "CBR/VBR bias (0=CBR, 100=VBR)",
           0, 100, DEFAULT_RC_2PASS_VBR_BIAS_PCT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class,
       PROP_RC_2PASS_VBR_MINSECTION_PCT,
       g_param_spec_int ("twopass-vbr-minsection", "2-pass GOP min bitrate",
           "GOP minimum bitrate (% target)", 0, G_MAXINT,
           DEFAULT_RC_2PASS_VBR_MINSECTION_PCT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class,
       PROP_RC_2PASS_VBR_MAXSECTION_PCT,
       g_param_spec_int ("twopass-vbr-maxsection", "2-pass GOP max bitrate",
           "GOP maximum bitrate (% target)", 0, G_MAXINT,
           DEFAULT_RC_2PASS_VBR_MINSECTION_PCT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_KF_MODE,
       g_param_spec_enum ("keyframe-mode", "Keyframe Mode",
           "Keyframe placement",
           GST_VPX_ENC_KF_MODE_TYPE, DEFAULT_KF_MODE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_KF_MAX_DIST,
       g_param_spec_int ("keyframe-max-dist", "Keyframe max distance",
           "Maximum distance between keyframes (number of frames)",
           0, G_MAXINT, DEFAULT_KF_MAX_DIST,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_MULTIPASS_MODE,
       g_param_spec_enum ("multipass-mode", "Multipass Mode",
           "Multipass encode mode",
           GST_VPX_ENC_MULTIPASS_MODE_TYPE, DEFAULT_MULTIPASS_MODE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_MULTIPASS_CACHE_FILE,
       g_param_spec_string ("multipass-cache-file", "Multipass Cache File",
@@ -485,7 +512,8 @@ gst_vpx_enc_class_init (GstVPXEncClass * klass)
       g_param_spec_int ("temporal-scalability-number-layers",
           "Number of coding layers", "Number of coding layers to use", 1, 5,
           DEFAULT_TS_NUMBER_LAYERS,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_TS_TARGET_BITRATE,
       g_param_spec_value_array ("temporal-scalability-target-bitrate",
@@ -493,8 +521,10 @@ gst_vpx_enc_class_init (GstVPXEncClass * klass)
           "Target bitrates for coding layers (one per layer, decreasing)",
           g_param_spec_int ("target-bitrate", "Target bitrate",
               "Target bitrate", 0, G_MAXINT, DEFAULT_RC_TARGET_BITRATE,
-              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS),
-          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT),
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+          GST_PARAM_DOC_SHOW_DEFAULT));
 
   g_object_class_install_property (gobject_class, PROP_TS_RATE_DECIMATOR,
       g_param_spec_value_array ("temporal-scalability-rate-decimator",
@@ -502,140 +532,180 @@ gst_vpx_enc_class_init (GstVPXEncClass * klass)
           "Rate decimation factors for each layer",
           g_param_spec_int ("rate-decimator", "Rate decimator",
               "Rate decimator", 0, 1000000000, 0,
-              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS),
-          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT),
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+          GST_PARAM_DOC_SHOW_DEFAULT));
 
   g_object_class_install_property (gobject_class, PROP_TS_PERIODICITY,
       g_param_spec_int ("temporal-scalability-periodicity",
           "Coding layer periodicity",
           "Length of sequence that defines layer membership periodicity", 0, 16,
           DEFAULT_TS_PERIODICITY,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_TS_LAYER_ID,
       g_param_spec_value_array ("temporal-scalability-layer-id",
           "Coding layer identification",
           "Sequence defining coding layer membership",
           g_param_spec_int ("layer-id", "Layer ID", "Layer ID", 0, 4, 0,
-              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS),
-          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT),
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+          GST_PARAM_DOC_SHOW_DEFAULT));
 
   g_object_class_install_property (gobject_class, PROP_LAG_IN_FRAMES,
       g_param_spec_int ("lag-in-frames", "Lag in frames",
           "Maximum number of frames to lag",
           0, 25, DEFAULT_LAG_IN_FRAMES,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_ERROR_RESILIENT,
       g_param_spec_flags ("error-resilient", "Error resilient",
           "Error resilience flags",
           GST_VPX_ENC_ER_FLAGS_TYPE, DEFAULT_ERROR_RESILIENT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_THREADS,
       g_param_spec_int ("threads", "Threads",
           "Number of threads to use",
           0, 64, DEFAULT_THREADS,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_DEADLINE,
       g_param_spec_int64 ("deadline", "Deadline",
           "Deadline per frame (usec, 0=disabled)",
           0, G_MAXINT64, DEFAULT_DEADLINE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_H_SCALING_MODE,
       g_param_spec_enum ("horizontal-scaling-mode", "Horizontal scaling mode",
           "Horizontal scaling mode",
           GST_VPX_ENC_SCALING_MODE_TYPE, DEFAULT_H_SCALING_MODE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_V_SCALING_MODE,
       g_param_spec_enum ("vertical-scaling-mode", "Vertical scaling mode",
           "Vertical scaling mode",
           GST_VPX_ENC_SCALING_MODE_TYPE, DEFAULT_V_SCALING_MODE,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_CPU_USED,
       g_param_spec_int ("cpu-used", "CPU used",
           "CPU used",
           -16, 16, DEFAULT_CPU_USED,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_ENABLE_AUTO_ALT_REF,
       g_param_spec_boolean ("auto-alt-ref", "Auto alt reference frames",
           "Automatically generate AltRef frames",
           DEFAULT_ENABLE_AUTO_ALT_REF,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_NOISE_SENSITIVITY,
       g_param_spec_int ("noise-sensitivity", "Noise sensitivity",
           "Noise sensisivity (frames to blur)",
           0, 6, DEFAULT_NOISE_SENSITIVITY,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_SHARPNESS,
       g_param_spec_int ("sharpness", "Sharpness",
           "Filter sharpness",
           0, 7, DEFAULT_SHARPNESS,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_STATIC_THRESHOLD,
       g_param_spec_int ("static-threshold", "Static Threshold",
-          "Motion detection threshold",
-          0, G_MAXINT, DEFAULT_STATIC_THRESHOLD,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          "Motion detection threshold. Recommendation is to set 100 for "
+          "screen/window sharing", 0, G_MAXINT, DEFAULT_STATIC_THRESHOLD,
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_TOKEN_PARTITIONS,
       g_param_spec_enum ("token-partitions", "Token partitions",
           "Number of token partitions",
           GST_VPX_ENC_TOKEN_PARTITIONS_TYPE, DEFAULT_TOKEN_PARTITIONS,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_ARNR_MAXFRAMES,
       g_param_spec_int ("arnr-maxframes", "AltRef max frames",
           "AltRef maximum number of frames",
           0, 15, DEFAULT_ARNR_MAXFRAMES,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_ARNR_STRENGTH,
       g_param_spec_int ("arnr-strength", "AltRef strength",
           "AltRef strength",
           0, 6, DEFAULT_ARNR_STRENGTH,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_ARNR_TYPE,
       g_param_spec_int ("arnr-type", "AltRef type",
           "AltRef type",
           1, 3, DEFAULT_ARNR_TYPE,
           (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
-              G_PARAM_DEPRECATED)));
+              G_PARAM_DEPRECATED | GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_TUNING,
       g_param_spec_enum ("tuning", "Tuning",
           "Tuning",
           GST_VPX_ENC_TUNING_TYPE, DEFAULT_TUNING,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_CQ_LEVEL,
       g_param_spec_int ("cq-level", "Constrained quality level",
           "Constrained quality level",
           0, 63, DEFAULT_CQ_LEVEL,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_MAX_INTRA_BITRATE_PCT,
       g_param_spec_int ("max-intra-bitrate", "Max Intra bitrate",
           "Maximum Intra frame bitrate",
           0, G_MAXINT, DEFAULT_MAX_INTRA_BITRATE_PCT,
-          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   g_object_class_install_property (gobject_class, PROP_TIMEBASE,
       gst_param_spec_fraction ("timebase", "Shortest interframe time",
           "Fraction of one second that is the shortest interframe time - normally left as zero which will default to the framerate",
           0, 1, G_MAXINT, 1, DEFAULT_TIMEBASE_N, DEFAULT_TIMEBASE_D,
-          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+          GST_PARAM_DOC_SHOW_DEFAULT));
+
+  g_object_class_install_property (gobject_class, PROP_BITS_PER_PIXEL,
+      g_param_spec_float ("bits-per-pixel", "Bits per pixel",
+          "Factor to convert number of pixels to bitrate value "
+          "(only has an effect if target-bitrate=0)",
+          0.0, G_MAXFLOAT, DEFAULT_BITS_PER_PIXEL,
+          (GParamFlags) (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+              GST_PARAM_DOC_SHOW_DEFAULT)));
 
   GST_DEBUG_CATEGORY_INIT (gst_vpxenc_debug, "vpxenc", 0, "VPX Encoder");
+
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_END_USAGE_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_MULTIPASS_MODE_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_KF_MODE_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_TUNING_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_SCALING_MODE_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_TOKEN_PARTITIONS_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_VPX_ENC_ER_FLAGS_TYPE, 0);
+  gst_type_mark_as_plugin_api (GST_TYPE_VPX_ENC, 0);
 }
 
 static void
@@ -646,7 +716,7 @@ gst_vpx_enc_init (GstVPXEnc * gst_vpx_enc)
 
   gst_vpx_enc->cfg.rc_end_usage = DEFAULT_RC_END_USAGE;
   gst_vpx_enc->cfg.rc_target_bitrate = DEFAULT_RC_TARGET_BITRATE / 1000;
-  gst_vpx_enc->rc_target_bitrate_set = FALSE;
+  gst_vpx_enc->rc_target_bitrate_auto = DEFAULT_RC_TARGET_BITRATE == 0;
   gst_vpx_enc->cfg.rc_min_quantizer = DEFAULT_RC_MIN_QUANTIZER;
   gst_vpx_enc->cfg.rc_max_quantizer = DEFAULT_RC_MAX_QUANTIZER;
   gst_vpx_enc->cfg.rc_dropframe_thresh = DEFAULT_RC_DROPFRAME_THRESH;
@@ -694,6 +764,7 @@ gst_vpx_enc_init (GstVPXEnc * gst_vpx_enc)
   gst_vpx_enc->max_intra_bitrate_pct = DEFAULT_MAX_INTRA_BITRATE_PCT;
   gst_vpx_enc->timebase_n = DEFAULT_TIMEBASE_N;
   gst_vpx_enc->timebase_d = DEFAULT_TIMEBASE_D;
+  gst_vpx_enc->bits_per_pixel = DEFAULT_BITS_PER_PIXEL;
 
   gst_vpx_enc->cfg.g_profile = DEFAULT_PROFILE;
 
@@ -724,6 +795,42 @@ gst_vpx_enc_finalize (GObject * object)
 }
 
 static void
+gst_vpx_enc_set_auto_bitrate (GstVPXEnc * encoder)
+{
+  if (encoder->input_state != NULL) {
+    guint size;
+    guint pixels_per_sec;
+    guint target_bitrate;
+    guint fps_n, fps_d;
+
+    if (GST_VIDEO_INFO_FPS_D (&encoder->input_state->info) != 0) {
+      fps_n = GST_VIDEO_INFO_FPS_N (&encoder->input_state->info);
+      fps_d = GST_VIDEO_INFO_FPS_D (&encoder->input_state->info);
+    } else {
+      /* otherwise assume 30 frames per second as a fallback */
+      fps_n = 30;
+      fps_d = 1;
+    }
+
+    size =
+        GST_VIDEO_INFO_WIDTH (&encoder->input_state->info) *
+        GST_VIDEO_INFO_HEIGHT (&encoder->input_state->info);
+    pixels_per_sec = size * fps_n / fps_d;
+    target_bitrate = pixels_per_sec * encoder->bits_per_pixel;
+
+    GST_DEBUG_OBJECT (encoder,
+        "Setting autobitrate for %ux%ux @ %u/%ufps %.4f = %ubps",
+        GST_VIDEO_INFO_WIDTH (&encoder->input_state->info),
+        GST_VIDEO_INFO_HEIGHT (&encoder->input_state->info),
+        GST_VIDEO_INFO_FPS_N (&encoder->input_state->info),
+        GST_VIDEO_INFO_FPS_D (&encoder->input_state->info),
+        encoder->bits_per_pixel, target_bitrate);
+
+    encoder->cfg.rc_target_bitrate = target_bitrate / 1000;
+  }
+}
+
+static void
 gst_vpx_enc_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec)
 {
@@ -742,8 +849,13 @@ gst_vpx_enc_set_property (GObject * object, guint prop_id,
       global = TRUE;
       break;
     case PROP_RC_TARGET_BITRATE:
-      gst_vpx_enc->cfg.rc_target_bitrate = g_value_get_int (value) / 1000;
-      gst_vpx_enc->rc_target_bitrate_set = TRUE;
+      if (g_value_get_int (value) == 0) {
+        gst_vpx_enc_set_auto_bitrate (gst_vpx_enc);
+        gst_vpx_enc->rc_target_bitrate_auto = TRUE;
+      } else {
+        gst_vpx_enc->cfg.rc_target_bitrate = g_value_get_int (value) / 1000;
+        gst_vpx_enc->rc_target_bitrate_auto = FALSE;
+      }
       global = TRUE;
       break;
     case PROP_RC_MIN_QUANTIZER:
@@ -1086,6 +1198,13 @@ gst_vpx_enc_set_property (GObject * object, guint prop_id,
       gst_vpx_enc->timebase_n = gst_value_get_fraction_numerator (value);
       gst_vpx_enc->timebase_d = gst_value_get_fraction_denominator (value);
       break;
+    case PROP_BITS_PER_PIXEL:
+      gst_vpx_enc->bits_per_pixel = g_value_get_float (value);
+      if (gst_vpx_enc->rc_target_bitrate_auto) {
+        gst_vpx_enc_set_auto_bitrate (gst_vpx_enc);
+        global = TRUE;
+      }
+      break;
     default:
       break;
   }
@@ -1307,6 +1426,9 @@ gst_vpx_enc_get_property (GObject * object, guint prop_id, GValue * value,
       gst_value_set_fraction (value, gst_vpx_enc->timebase_n,
           gst_vpx_enc->timebase_d);
       break;
+    case PROP_BITS_PER_PIXEL:
+      g_value_set_float (value, gst_vpx_enc->bits_per_pixel);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1441,14 +1563,6 @@ gst_vpx_enc_set_format (GstVideoEncoder * video_encoder,
   }
 
   encoder->cfg.g_profile = gst_vpx_enc_get_downstream_profile (encoder);
-
-  /* Scale default bitrate to our size */
-  if (!encoder->rc_target_bitrate_set)
-    encoder->cfg.rc_target_bitrate =
-        gst_util_uint64_scale (DEFAULT_RC_TARGET_BITRATE,
-        GST_VIDEO_INFO_WIDTH (info) * GST_VIDEO_INFO_HEIGHT (info),
-        320 * 240 * 1000);
-
   encoder->cfg.g_w = GST_VIDEO_INFO_WIDTH (info);
   encoder->cfg.g_h = GST_VIDEO_INFO_HEIGHT (info);
 
@@ -1630,6 +1744,10 @@ gst_vpx_enc_set_format (GstVideoEncoder * video_encoder,
     gst_video_codec_state_unref (encoder->input_state);
   encoder->input_state = gst_video_codec_state_ref (state);
 
+  /* Scale default bitrate to our size */
+  if (encoder->rc_target_bitrate_auto)
+    gst_vpx_enc_set_auto_bitrate (encoder);
+
   /* prepare cached image buffer setup */
   image = &encoder->image;
   memset (image, 0, sizeof (*image));
@@ -1720,7 +1838,8 @@ gst_vpx_enc_process (GstVPXEnc * encoder)
           encoder->cfg.g_timebase.den,
           encoder->cfg.g_timebase.num * (GstClockTime) GST_SECOND);
       GST_TRACE_OBJECT (encoder, "vpx pts: %" G_GINT64_FORMAT
-          ", gst frame pts: %" G_GINT64_FORMAT, pkt->data.frame.pts, pts);
+          ", gst frame pts: %" G_GINT64_FORMAT, (gint64) pkt->data.frame.pts,
+          (gint64) pts);
     } while (pkt->data.frame.pts > pts);
 
     g_assert (frame != NULL);

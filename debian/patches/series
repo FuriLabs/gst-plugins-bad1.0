@@ -1,0 +1,3 @@
+import-camerabin
+import-jpegformat
+add-pkgconfig-file

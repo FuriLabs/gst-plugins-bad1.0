@@ -41,9 +41,9 @@ endif
 ifeq ($(DEB_HOST_ARCH),armel)
 conf_flags += -Dqt5=disabled
 endif
-ifeq ($(DEB_HOST_ARCH),armhf)
-conf_flags += -Dqt5=disabled
-endif
+#ifeq ($(DEB_HOST_ARCH),armhf)
+#conf_flags += -Dqt5=disabled
+#endif
 
 %:
 	dh $@ --buildsystem=meson
@@ -74,5 +74,6 @@ endif
 
 	mkdir -p $(CURDIR)/fake-home
 	HOME=$(CURDIR)/fake-home \
-	dh_gstscancodecs
+	LD_LIBRARY_PATH=debian/libgstreamer-plugins-good1.0-0/usr/lib/$(DEB_HOST_MULTIARCH) \
+	    dh_gstscancodecs
 	rm -rf $(CURDIR)/fake-home

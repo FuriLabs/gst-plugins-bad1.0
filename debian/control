@@ -52,8 +52,10 @@ Build-Depends: debhelper,
                libgudev-1.0-dev (>= 147) [linux-any],
                nasm (>= 2.13) [any-amd64]
 Standards-Version: 4.5.0
-Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-good1.0.git
-Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-good1.0/
+Vcs-Git: git://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-good1.0
+Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-good1.0/+git/gst-plugins-good1.0
+XS-Debian-Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-good1.0.git
+XS-Debian-Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-good1.0/
 Homepage: https://gstreamer.freedesktop.org
 
 Package: gstreamer1.0-pulseaudio
@@ -75,8 +77,8 @@ Description: GStreamer plugin for PulseAudio (transitional package)
  This is a transitional package.
 
 Package: gstreamer1.0-qt5
-#Architecture: any
-Architecture: any-amd64 any-arm64 any-i386 any-mips any-mips64el any-mipsel any-ppc64el any-s390x any-alpha any-hppa any-ia64 any-m68k any-powerpc any-powerpcspe any-ppc64 any-riscv64 any-sh4 any-sparc64 any-x32
+Architecture: any
+#Architecture: any-amd64 any-arm64 any-i386 any-mips any-mips64el any-mipsel any-ppc64el any-s390x any-alpha any-hppa any-ia64 any-m68k any-powerpc any-powerpcspe any-ppc64 any-riscv64 any-sh4 any-sparc64 any-x32
 Multi-Arch: same
 Section: graphics
 Depends: ${misc:Depends},
@@ -133,6 +135,7 @@ Depends: ${misc:Depends},
          ${shlibs:Depends},
          gstreamer1.0-audiosink,
          gstreamer1.0-plugins-base,
+         libgstreamer-plugins-good1.0-0 (= ${binary:Version}),
 Recommends: gstreamer1.0-x
 Replaces: gstreamer1.0-plugins-bad (<< 1.15.1),
           gstreamer1.0-plugins-ugly (<< 1.13.1),
@@ -157,3 +160,44 @@ Description: GStreamer plugins from the "good" set
  .
  This package contains the GStreamer plugins from the "good" set, a set
  of good-quality plug-ins under the LGPL license.
+
+Package: libgstreamer-plugins-good1.0-0
+Architecture: any
+Section: libs
+Priority: extra
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Breaks: libgstreamer-plugins-bad1.0-0 (<< 1.0.3-1ubuntu1)
+Replaces: gstreamer1.0-plugins-good (= 1.0.3-1ubuntu1),
+          libgstreamer-plugins-bad1.0-0 (<< 1.0.3-1ubuntu1)
+Description: GStreamer development files for libraries from the "good" set
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains shared GStreamer libraries from the "good" set. The API
+ is not guaranteed to be stable.
+
+Package: libgstreamer-plugins-good1.0-dev
+Architecture: any
+Section: libdevel
+Priority: extra
+Depends: ${misc:Depends},
+     libgstreamer-plugins-good1.0-0 (= ${binary:Version}),
+     libgstreamer1.0-dev
+Description: GStreamer development files for libraries from the "good" set
+ GStreamer is a streaming media framework, based on graphs of filters
+ which operate on media data.  Applications using this library can do
+ anything from real-time sound processing to playing videos, and just
+ about anything else media-related.  Its plugin-based architecture means
+ that new data types or processing capabilities can be added simply by
+ installing new plug-ins.
+ .
+ This package contains development files for GStreamer libraries from the
+ "good" set. The API is not guaranteed to be stable.
+

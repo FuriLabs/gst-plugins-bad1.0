@@ -10,6 +10,7 @@ debian/tmp/usr/lib/*/gstreamer-1.0/libgstauparse.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstautodetect.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstavi.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstcacasink.so
+debian/tmp/usr/lib/*/gstreamer-1.0/libgstcamerabin.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstcairo.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstcutter.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstdebug.so
@@ -30,6 +31,7 @@ debian/tmp/usr/lib/*/gstreamer-1.0/libgstinterleave.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstid3demux.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstjack.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstjpeg.so
+debian/tmp/usr/lib/*/gstreamer-1.0/libgstjpegformat.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstlame.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstlevel.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstmatroska.so

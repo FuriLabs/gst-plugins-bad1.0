@@ -68,7 +68,8 @@ override_dh_install:
 		$(CURDIR)/debian/tmp/usr/include/gstreamer-1.0/gst/interfaces/photography* \
 		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstbasecamerabinsrc* \
 		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstphotography* \
-		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstjpegformat.so
+		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstjpegformat.so \
+		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstcamerabin.so
 
 	dh_install $(NO_I386_ARGS)
 

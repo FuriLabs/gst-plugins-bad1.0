@@ -1,7 +1,5 @@
 debian/tmp/usr/lib/*/libgstadaptivedemux-1.0.so.*
-debian/tmp/usr/lib/*/libgstphotography-1.0.so.*
 debian/tmp/usr/lib/*/libgstbadaudio-1.0.so.*
-debian/tmp/usr/lib/*/libgstbasecamerabinsrc-1.0.so.*
 debian/tmp/usr/lib/*/libgstinsertbin-1.0.so.*
 debian/tmp/usr/lib/*/libgstcodecparsers-1.0.so.*
 debian/tmp/usr/lib/*/libgstcodecs-1.0.so.*

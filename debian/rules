@@ -29,6 +29,16 @@ GST_PACKAGE_NAME := "GStreamer Bad Plugins (Ubuntu)"
 GST_PACKAGE_ORIGIN="https://launchpad.net/distros/ubuntu/+source/gst-plugins-bad1.0"
 endif
 
+ifeq ($(shell dpkg-vendor --is Ubuntu && echo yes) $(DEB_HOST_ARCH), yes i386)
+NO_I386_ARGS = -Ngstreamer1.0-opencv -Nlibgstreamer-opencv1.0-0 -Ngstreamer1.0-wpe
+
+override_dh_builddeb:
+	dh_builddeb $(NO_I386_ARGS)
+
+override_dh_gencontrol:
+	dh_gencontrol $(NO_I386_ARGS)
+endif
+
 conf_flags = --libdir=lib/$(DEB_HOST_MULTIARCH) --libexecdir=lib/$(DEB_HOST_MULTIARCH)/gstreamer1.0
 conf_flags += -Dpackage-name=$(GST_PACKAGE_NAME) -Dpackage-origin=$(GST_PACKAGE_ORIGIN)
 conf_flags += -Dsctp-internal-usrsctp=enabled
@@ -54,7 +64,13 @@ override_dh_makeshlibs:
 	dh_makeshlibs -plibgstreamer-opencv1.0-0 -X "/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0" -V 'libgstreamer-opencv1.0-0 (>= $(gst_version))' -- -c4
 
 override_dh_install:
-	dh_install
+	rm -rv $(CURDIR)/debian/tmp/usr/include/gstreamer-1.0/gst/basecamerabinsrc \
+		$(CURDIR)/debian/tmp/usr/include/gstreamer-1.0/gst/interfaces/photography* \
+		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstbasecamerabinsrc* \
+		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstphotography* \
+		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstjpegformat.so
+
+	dh_install $(NO_I386_ARGS)
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstdvb.so
@@ -71,7 +87,9 @@ ifeq ($(DEB_HOST_ARCH_OS),linux)
 	# dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstvulkan.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstva.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstv4l2codecs.so
+ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstopenni2.so
+endif
 ifeq ($(DEB_HOST_ARCH),amd64)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstmsdk.so
 endif

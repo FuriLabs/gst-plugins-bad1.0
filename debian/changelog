@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.18.0-2ubuntu1) groovy; urgency=low
+gst-plugins-bad1.0 (1.18.0-2ubuntu2) groovy; urgency=low
 
   [ Gianfranco Costamagna ]
   * Merge from Debian unstable.  Remaining changes:

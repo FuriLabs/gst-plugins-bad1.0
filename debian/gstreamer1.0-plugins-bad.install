@@ -14,7 +14,6 @@ debian/tmp/usr/lib/*/gstreamer-1.0/libgstautoconvert.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstbayer.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstbs2b.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstbz2.so
-debian/tmp/usr/lib/*/gstreamer-1.0/libgstcamerabin.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstchromaprint.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstclosedcaption.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstcoloreffects.so

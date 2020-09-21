@@ -7,6 +7,10 @@ bluez_sources = [
   'gstavrcputil.c',
 ]
 
+if host_system == 'windows'
+  subdir_done()
+endif
+
 bluez_dep = dependency('bluez', version : '>= 5.0', required : get_option('bluez'))
 gio_unix_dep = dependency('gio-unix-2.0', version : glib_req,
                           fallback: ['glib', 'libgiounix_dep'],
@@ -27,4 +31,5 @@ if bluez_dep.found() and gio_unix_dep.found()
     install_dir : plugins_install_dir,
   )
   pkgconfig.generate(gstbluez, install_dir : plugins_pkgconfig_install_dir)
+  plugins += [gstbluez]
 endif

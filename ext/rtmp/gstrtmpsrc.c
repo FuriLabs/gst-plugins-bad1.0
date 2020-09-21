@@ -43,7 +43,7 @@
 #include "config.h"
 #endif
 
-#include <glib/gi18n-lib.h>
+#include <gst/gst-i18n-plugin.h>
 
 #include "gstrtmpsrc.h"
 
@@ -579,7 +579,7 @@ success:
   /* This is set here so that the call to create() above doesn't clear it */
   src->discont = TRUE;
 
-  GST_DEBUG_OBJECT (src, "Seek to %" GST_TIME_FORMAT " successfull",
+  GST_DEBUG_OBJECT (src, "Seek to %" GST_TIME_FORMAT " successful",
       GST_TIME_ARGS (segment->start));
 
   return TRUE;

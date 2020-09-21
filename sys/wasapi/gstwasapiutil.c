@@ -22,6 +22,14 @@
 #  include <config.h>
 #endif
 
+/* Note: initguid.h can not be included in gstwasapiutil.h, otherwise a
+ * symbol redefinition error will be raised.
+ * initguid.h must be included in the C file before mmdeviceapi.h
+ * which is included in gstwasapiutil.h.
+ */
+#ifdef _MSC_VER
+#include <initguid.h>
+#endif
 #include "gstwasapiutil.h"
 #include "gstwasapidevice.h"
 
@@ -162,6 +170,8 @@ gst_wasapi_device_role_to_erole (gint role)
     default:
       g_assert_not_reached ();
   }
+
+  return -1;
 }
 
 gint
@@ -177,6 +187,8 @@ gst_wasapi_erole_to_device_role (gint erole)
     default:
       g_assert_not_reached ();
   }
+
+  return -1;
 }
 
 static const gchar *
@@ -280,32 +292,21 @@ hresult_to_string_fallback (HRESULT hr)
 gchar *
 gst_wasapi_util_hresult_to_string (HRESULT hr)
 {
-  DWORD flags;
-  gchar *ret_text;
-  LPTSTR error_text = NULL;
+  gchar *error_text = NULL;
 
-  flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER
-      | FORMAT_MESSAGE_IGNORE_INSERTS;
-  FormatMessage (flags, NULL, hr, MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
-      (LPTSTR) & error_text, 0, NULL);
+  error_text = g_win32_error_message ((gint) hr);
+  /* g_win32_error_message() seems to be returning empty string for
+   * AUDCLNT_* cases */
+  if (!error_text || strlen (error_text) == 0) {
+    g_free (error_text);
+    error_text = g_strdup (hresult_to_string_fallback (hr));
+  }
 
-  /* If we couldn't get the error msg, try the fallback switch statement */
-  if (error_text == NULL)
-    return g_strdup (hresult_to_string_fallback (hr));
-
-#ifdef UNICODE
-  /* If UNICODE is defined, LPTSTR is LPWSTR which is UTF-16 */
-  ret_text = g_utf16_to_utf8 (error_text, 0, NULL, NULL, NULL);
-#else
-  ret_text = g_strdup (error_text);
-#endif
-
-  LocalFree (error_text);
-  return ret_text;
+  return error_text;
 }
 
 static IMMDeviceEnumerator *
-gst_wasapi_util_get_device_enumerator (GstElement * self)
+gst_wasapi_util_get_device_enumerator (GstObject * self)
 {
   HRESULT hr;
   IMMDeviceEnumerator *enumerator = NULL;
@@ -318,7 +319,7 @@ gst_wasapi_util_get_device_enumerator (GstElement * self)
 }
 
 gboolean
-gst_wasapi_util_get_devices (GstElement * self, gboolean active,
+gst_wasapi_util_get_devices (GstObject * self, gboolean active,
     GList ** devices)
 {
   gboolean res = FALSE;
@@ -542,7 +543,7 @@ gst_wasapi_util_get_device_client (GstElement * self,
   IMMDevice *device = NULL;
   IAudioClient *client = NULL;
 
-  if (!(enumerator = gst_wasapi_util_get_device_enumerator (self)))
+  if (!(enumerator = gst_wasapi_util_get_device_enumerator (GST_OBJECT (self))))
     goto beach;
 
   if (!device_strid) {
@@ -907,7 +908,9 @@ gst_wasapi_util_initialize_audioclient (GstElement * self,
 
     *ret_devicep_frames = n_frames;
   } else {
-    *ret_devicep_frames = (rate * device_period * 100) / GST_SECOND;
+    /* device_period can be a non-power-of-10 value so round while converting */
+    *ret_devicep_frames =
+        gst_util_uint64_scale_round (device_period, rate * 100, GST_SECOND);
   }
 
   return TRUE;

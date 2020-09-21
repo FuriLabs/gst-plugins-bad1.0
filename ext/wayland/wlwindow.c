@@ -190,6 +190,7 @@ static GstWlWindow *
 gst_wl_window_new_internal (GstWlDisplay * display, GMutex * render_lock)
 {
   GstWlWindow *window;
+  struct wl_region *region;
 
   window = g_object_new (GST_TYPE_WL_WINDOW, NULL);
   window->display = g_object_ref (display);
@@ -222,8 +223,13 @@ gst_wl_window_new_internal (GstWlDisplay * display, GMutex * render_lock)
   }
 
   /* do not accept input */
-  wl_surface_set_input_region (window->area_surface, NULL);
-  wl_surface_set_input_region (window->video_surface, NULL);
+  region = wl_compositor_create_region (display->compositor);
+  wl_surface_set_input_region (window->area_surface, region);
+  wl_region_destroy (region);
+
+  region = wl_compositor_create_region (display->compositor);
+  wl_surface_set_input_region (window->video_surface, region);
+  wl_region_destroy (region);
 
   return window;
 }
@@ -253,12 +259,13 @@ gst_wl_window_new_toplevel (GstWlDisplay * display, const GstVideoInfo * info,
     gboolean fullscreen, GMutex * render_lock)
 {
   GstWlWindow *window;
-  gint width;
 
   window = gst_wl_window_new_internal (display, render_lock);
 
   /* Check which protocol we will use (in order of preference) */
   if (display->xdg_wm_base) {
+    gint64 timeout;
+
     /* First create the XDG surface */
     window->xdg_surface = xdg_wm_base_get_xdg_surface (display->xdg_wm_base,
         window->area_surface);
@@ -286,8 +293,14 @@ gst_wl_window_new_toplevel (GstWlDisplay * display, const GstVideoInfo * info,
     wl_display_flush (display->display);
 
     g_mutex_lock (&window->configure_mutex);
-    while (!window->configured)
-      g_cond_wait (&window->configure_cond, &window->configure_mutex);
+    timeout = g_get_monotonic_time () + 100 * G_TIME_SPAN_MILLISECOND;
+    while (!window->configured) {
+      if (!g_cond_wait_until (&window->configure_cond, &window->configure_mutex,
+              timeout)) {
+        GST_WARNING ("The compositor did not send configure event.");
+        break;
+      }
+    }
     g_mutex_unlock (&window->configure_mutex);
   } else if (display->wl_shell) {
     /* go toplevel */
@@ -311,10 +324,14 @@ gst_wl_window_new_toplevel (GstWlDisplay * display, const GstVideoInfo * info,
     goto error;
   }
 
-  /* set the initial size to be the same as the reported video size */
-  width =
-      gst_util_uint64_scale_int_round (info->width, info->par_n, info->par_d);
-  gst_wl_window_set_render_rectangle (window, 0, 0, width, info->height);
+  /* render_rectangle is already set via toplevel_configure in
+   * xdg_shell fullscreen mode */
+  if (!(display->xdg_wm_base && fullscreen)) {
+    /* set the initial size to be the same as the reported video size */
+    gint width =
+        gst_util_uint64_scale_int_round (info->width, info->par_n, info->par_d);
+    gst_wl_window_set_render_rectangle (window, 0, 0, width, info->height);
+  }
 
   return window;
 
@@ -335,6 +352,8 @@ gst_wl_window_new_in_surface (GstWlDisplay * display,
       wl_subcompositor_get_subsurface (display->subcompositor,
       window->area_surface, parent);
   wl_subsurface_set_desync (window->area_subsurface);
+
+  wl_surface_commit (parent);
 
   return window;
 }
@@ -443,14 +462,18 @@ gst_wl_window_render (GstWlWindow * window, GstWlBuffer * buffer,
     gst_wl_window_set_opaque (window, info);
   }
 
-  if (G_LIKELY (buffer))
+  if (G_LIKELY (buffer)) {
     gst_wl_buffer_attach (buffer, window->video_surface_wrapper);
-  else
+    wl_surface_damage (window->video_surface_wrapper, 0, 0,
+        window->video_rectangle.w, window->video_rectangle.h);
+    wl_surface_commit (window->video_surface_wrapper);
+  } else {
+    /* clear both video and parent surfaces */
     wl_surface_attach (window->video_surface_wrapper, NULL, 0, 0);
-
-  wl_surface_damage (window->video_surface_wrapper, 0, 0,
-      window->video_rectangle.w, window->video_rectangle.h);
-  wl_surface_commit (window->video_surface_wrapper);
+    wl_surface_commit (window->video_surface_wrapper);
+    wl_surface_attach (window->area_surface_wrapper, NULL, 0, 0);
+    wl_surface_commit (window->area_surface_wrapper);
+  }
 
   if (G_UNLIKELY (info)) {
     /* commit also the parent (area_surface) in order to change
@@ -490,11 +513,7 @@ gst_wl_window_update_borders (GstWlWindow * window)
   }
 
   /* we want WL_SHM_FORMAT_XRGB8888 */
-#if G_BYTE_ORDER == G_BIG_ENDIAN
-  format = GST_VIDEO_FORMAT_xRGB;
-#else
   format = GST_VIDEO_FORMAT_BGRx;
-#endif
 
   /* draw the area_subsurface */
   gst_video_info_set_format (&info, format, width, height);
@@ -535,6 +554,9 @@ gst_wl_window_set_render_rectangle (GstWlWindow * window, gint x, gint y,
     wp_viewport_set_destination (window->area_viewport, w, h);
 
   gst_wl_window_update_borders (window);
+
+  if (!window->configured)
+    return;
 
   if (window->video_width != 0) {
     wl_subsurface_set_sync (window->video_subsurface);

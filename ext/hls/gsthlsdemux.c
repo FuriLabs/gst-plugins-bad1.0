@@ -73,6 +73,7 @@ static gboolean gst_hls_demux_update_playlist (GstHLSDemux * demux,
     gboolean update, GError ** err);
 static gchar *gst_hls_src_buf_to_utf8_playlist (GstBuffer * buf);
 
+/* FIXME: the return value is never used? */
 static gboolean gst_hls_demux_change_playlist (GstHLSDemux * demux,
     guint max_bitrate, gboolean * changed);
 static GstBuffer *gst_hls_demux_decrypt_fragment (GstHLSDemux * demux,
@@ -566,7 +567,7 @@ gst_hls_demux_set_current_variant (GstHLSDemux * hlsdemux,
   if (hlsdemux->current_variant != NULL) {
     gint i;
 
-    //#warning FIXME: Synching fragments across variants
+    //#warning FIXME: Syncing fragments across variants
     //  should be done based on media timestamps, and
     //  discont-sequence-numbers not sequence numbers.
     variant->m3u8->sequence_position =
@@ -646,7 +647,7 @@ gst_hls_demux_process_manifest (GstAdaptiveDemux * demux, GstBuffer * buf)
     gst_hls_demux_set_current_variant (hlsdemux, variant);      // FIXME: inline?
   }
 
-  /* get the selected media playlist (unless the inital list was one already) */
+  /* get the selected media playlist (unless the initial list was one already) */
   if (!hlsdemux->master->is_simple) {
     GError *err = NULL;
 
@@ -769,16 +770,23 @@ gst_hls_demux_start_fragment (GstAdaptiveDemux * demux,
   if (key == NULL)
     goto key_failed;
 
-  gst_hls_demux_stream_decrypt_start (hls_stream, key->data,
-      hls_stream->current_iv);
+  if (!gst_hls_demux_stream_decrypt_start (hls_stream, key->data,
+          hls_stream->current_iv))
+    goto decrypt_start_failed;
 
   return TRUE;
 
 key_failed:
   {
-    GST_ELEMENT_ERROR (demux, STREAM, DEMUX,
+    GST_ELEMENT_ERROR (demux, STREAM, DECRYPT_NOKEY,
         ("Couldn't retrieve key for decryption"), (NULL));
     GST_WARNING_OBJECT (demux, "Failed to decrypt data");
+    return FALSE;
+  }
+decrypt_start_failed:
+  {
+    GST_ELEMENT_ERROR (demux, STREAM, DECRYPT, ("Failed to start decrypt"),
+        ("Couldn't set key and IV or plugin was built without crypto library"));
     return FALSE;
   }
 }
@@ -947,6 +955,9 @@ gst_hls_demux_finish_fragment (GstAdaptiveDemux * demux,
     }
   }
 
+  if (G_UNLIKELY (stream->downloading_header || stream->downloading_index))
+    return GST_FLOW_OK;
+
   gst_hls_demux_stream_clear_pending_data (hls_stream);
 
   if (ret == GST_FLOW_OK || ret == GST_FLOW_NOT_LINKED)
@@ -1087,6 +1098,18 @@ gst_hls_demux_update_fragment_info (GstAdaptiveDemuxStream * stream)
     return GST_FLOW_EOS;
   }
 
+  if (GST_ADAPTIVE_DEMUX_STREAM_NEED_HEADER (stream) && file->init_file) {
+    GstM3U8InitFile *header_file = file->init_file;
+    stream->fragment.header_uri = g_strdup (header_file->uri);
+    stream->fragment.header_range_start = header_file->offset;
+    if (header_file->size != -1) {
+      stream->fragment.header_range_end =
+          header_file->offset + header_file->size - 1;
+    } else {
+      stream->fragment.header_range_end = -1;
+    }
+  }
+
   if (stream->discont)
     discont = TRUE;
 
@@ -1157,6 +1180,8 @@ static void
 gst_hls_demux_reset (GstAdaptiveDemux * ademux)
 {
   GstHLSDemux *demux = GST_HLS_DEMUX_CAST (ademux);
+
+  GST_DEBUG_OBJECT (demux, "resetting");
 
   GST_M3U8_CLIENT_LOCK (hlsdemux->client);
   if (demux->master) {
@@ -1379,7 +1404,8 @@ retry:
   if (download == NULL) {
     gchar *base_uri;
 
-    if (!update || main_checked || demux->master->is_simple) {
+    if (!update || main_checked || demux->master->is_simple
+        || !gst_adaptive_demux_is_running (GST_ADAPTIVE_DEMUX_CAST (demux))) {
       g_free (uri);
       return FALSE;
     }
@@ -1612,7 +1638,7 @@ retry_failover_protection:
     if (changed)
       *changed = TRUE;
     stream->discont = TRUE;
-  } else {
+  } else if (gst_adaptive_demux_is_running (GST_ADAPTIVE_DEMUX_CAST (demux))) {
     GstHLSVariantStream *failover_variant = NULL;
     GList *failover;
 
@@ -1709,7 +1735,7 @@ static gboolean
 gst_hls_demux_stream_decrypt_start (GstHLSDemuxStream * stream,
     const guint8 * key_data, const guint8 * iv_data)
 {
-  aes_set_decrypt_key (&stream->aes_ctx.ctx, 16, key_data);
+  aes128_set_decrypt_key (&stream->aes_ctx.ctx, key_data);
   CBC_SET_IV (&stream->aes_ctx, iv_data);
 
   return TRUE;
@@ -1722,7 +1748,7 @@ decrypt_fragment (GstHLSDemuxStream * stream, gsize length,
   if (length % 16 != 0)
     return FALSE;
 
-  CBC_DECRYPT (&stream->aes_ctx, aes_decrypt, length, decrypted_data,
+  CBC_DECRYPT (&stream->aes_ctx, aes128_decrypt, length, decrypted_data,
       encrypted_data);
 
   return TRUE;
@@ -1734,7 +1760,7 @@ gst_hls_demux_stream_decrypt_end (GstHLSDemuxStream * stream)
   /* NOP */
 }
 
-#else
+#elif defined(HAVE_LIBGCRYPT)
 static gboolean
 gst_hls_demux_stream_decrypt_start (GstHLSDemuxStream * stream,
     const guint8 * key_data, const guint8 * iv_data)
@@ -1781,6 +1807,30 @@ gst_hls_demux_stream_decrypt_end (GstHLSDemuxStream * stream)
     gcry_cipher_close (stream->aes_ctx);
     stream->aes_ctx = NULL;
   }
+}
+
+#else
+/* NO crypto available */
+static gboolean
+gst_hls_demux_stream_decrypt_start (GstHLSDemuxStream * stream,
+    const guint8 * key_data, const guint8 * iv_data)
+{
+  GST_ERROR ("No crypto available");
+  return FALSE;
+}
+
+static gboolean
+decrypt_fragment (GstHLSDemuxStream * stream, gsize length,
+    const guint8 * encrypted_data, guint8 * decrypted_data)
+{
+  GST_ERROR ("Cannot decrypt fragment, no crypto available");
+  return FALSE;
+}
+
+static void
+gst_hls_demux_stream_decrypt_end (GstHLSDemuxStream * stream)
+{
+  return;
 }
 #endif
 

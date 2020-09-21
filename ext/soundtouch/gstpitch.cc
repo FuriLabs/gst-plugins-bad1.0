@@ -73,13 +73,13 @@ enum
     "audio/x-raw, " \
       "format = (string) " GST_AUDIO_NE (F32) ", " \
       "rate = (int) [ 8000, MAX ], " \
-      "channels = (int) [ 1, 2 ]"
+      "channels = (int) [ 1, MAX ]"
 #elif defined(SOUNDTOUCH_INTEGER_SAMPLES)
   #define SUPPORTED_CAPS \
     "audio/x-raw, " \
       "format = (string) " GST_AUDIO_NE (S16) ", " \
       "rate = (int) [ 8000, MAX ], " \
-      "channels = (int) [ 1, 2 ]"
+      "channels = (int) [ 1, MAX ]"
 #else
 #error "Only integer or float samples are supported"
 #endif
@@ -669,7 +669,7 @@ gst_pitch_src_query (GstPad * pad, GstObject * parent, GstQuery * query)
 /* this function returns FALSE if not enough data is known to transform the
  * segment into proper downstream values.  If the function does return false
  * the segment should be stalled until enough information is available.
- * If the funtion returns TRUE, event will be replaced by the new downstream
+ * If the function returns TRUE, event will be replaced by the new downstream
  * compatible event.
  */
 static gboolean
@@ -876,7 +876,9 @@ gst_pitch_chain (GstPad * pad, GstObject * parent, GstBuffer * buffer)
   }
 
   gst_buffer_map (buffer, &info, GST_MAP_READ);
+  GST_OBJECT_LOCK (pitch);
   priv->st->putSamples ((soundtouch::SAMPLETYPE *) info.data, info.size / pitch->info.bpf);
+  GST_OBJECT_UNLOCK (pitch);
   gst_buffer_unmap (buffer, &info);
   gst_buffer_unref (buffer);
 

@@ -23,6 +23,8 @@
  * SECTION:gstplayer
  * @title: GstPlayer
  * @short_description: Player
+ * @symbols:
+ * - GstPlayer
  *
  */
 
@@ -69,6 +71,9 @@ GST_DEBUG_CATEGORY_STATIC (gst_player_debug);
 #define DEFAULT_AUDIO_VIDEO_OFFSET 0
 #define DEFAULT_SUBTITLE_VIDEO_OFFSET 0
 
+/**
+ * gst_player_error_quark:
+ */
 GQuark
 gst_player_error_quark (void)
 {
@@ -1185,9 +1190,9 @@ error_cb (G_GNUC_UNUSED GstBus * bus, GstMessage * msg, gpointer user_data)
         g_strdup_printf ("Error from element %s: %s\n%s", name, message,
         err->message);
 
-  GST_ERROR_OBJECT (self, "ERROR: from element %s: %s\n", name, err->message);
+  GST_ERROR_OBJECT (self, "ERROR: from element %s: %s", name, err->message);
   if (debug != NULL)
-    GST_ERROR_OBJECT (self, "Additional debug info:\n%s\n", debug);
+    GST_ERROR_OBJECT (self, "Additional debug info: %s", debug);
 
   player_err =
       g_error_new_literal (GST_PLAYER_ERROR, GST_PLAYER_ERROR_FAILED,
@@ -1224,10 +1229,9 @@ warning_cb (G_GNUC_UNUSED GstBus * bus, GstMessage * msg, gpointer user_data)
         g_strdup_printf ("Warning from element %s: %s\n%s", name, message,
         err->message);
 
-  GST_WARNING_OBJECT (self, "WARNING: from element %s: %s\n", name,
-      err->message);
+  GST_WARNING_OBJECT (self, "WARNING: from element %s: %s", name, err->message);
   if (debug != NULL)
-    GST_WARNING_OBJECT (self, "Additional debug info:\n%s\n", debug);
+    GST_WARNING_OBJECT (self, "Additional debug info: %s", debug);
 
   player_err =
       g_error_new_literal (GST_PLAYER_ERROR, GST_PLAYER_ERROR_FAILED,
@@ -3357,7 +3361,7 @@ gst_player_seek_internal_locked (GstPlayer * self)
 
   if (rate >= 0.0) {
     s_event = gst_event_new_seek (rate, GST_FORMAT_TIME, flags,
-        GST_SEEK_TYPE_SET, position, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+        GST_SEEK_TYPE_SET, position, GST_SEEK_TYPE_SET, GST_CLOCK_TIME_NONE);
   } else {
     s_event = gst_event_new_seek (rate, GST_FORMAT_TIME, flags,
         GST_SEEK_TYPE_SET, G_GINT64_CONSTANT (0), GST_SEEK_TYPE_SET, position);
@@ -3928,7 +3932,7 @@ gst_player_set_video_track (GstPlayer * self, gint stream_index)
  *
  * Returns: %TRUE or %FALSE
  *
- * Sets the subtitle strack @stream_index.
+ * Sets the subtitle stack @stream_index.
  */
 gboolean
 gst_player_set_subtitle_track (GstPlayer * self, gint stream_index)
@@ -4331,7 +4335,7 @@ gst_player_set_multiview_flags (GstPlayer * self, GstVideoMultiviewFlags flags)
  *
  * Returns: The current value of audio-video-offset in nanoseconds
  *
- * Since 1.10
+ * Since: 1.10
  */
 gint64
 gst_player_get_audio_video_offset (GstPlayer * self)
@@ -4352,7 +4356,7 @@ gst_player_get_audio_video_offset (GstPlayer * self)
  *
  * Sets audio-video-offset property by value of @offset
  *
- * Since 1.10
+ * Since: 1.10
  */
 void
 gst_player_set_audio_video_offset (GstPlayer * self, gint64 offset)
@@ -4370,7 +4374,7 @@ gst_player_set_audio_video_offset (GstPlayer * self, gint64 offset)
  *
  * Returns: The current value of subtitle-video-offset in nanoseconds
  *
- * Since 1.16
+ * Since: 1.16
  */
 gint64
 gst_player_get_subtitle_video_offset (GstPlayer * self)
@@ -4391,7 +4395,7 @@ gst_player_get_subtitle_video_offset (GstPlayer * self)
  *
  * Sets subtitle-video-offset property by value of @offset
  *
- * Since 1.16
+ * Since: 1.16
  */
 void
 gst_player_set_subtitle_video_offset (GstPlayer * self, gint64 offset)
@@ -4547,7 +4551,7 @@ gst_player_error_get_name (GstPlayerError error)
  * This function takes ownership of @config.
  *
  * Returns: %TRUE when the configuration could be set.
- * Since 1.10
+ * Since: 1.10
  */
 gboolean
 gst_player_set_config (GstPlayer * self, GstStructure * config)
@@ -4583,7 +4587,7 @@ gst_player_set_config (GstPlayer * self, GstStructure * config)
  * Returns: (transfer full): a copy of the current configuration of @player. Use
  * gst_structure_free() after usage or gst_player_set_config().
  *
- * Since 1.10
+ * Since: 1.10
  */
 GstStructure *
 gst_player_get_config (GstPlayer * self)
@@ -4608,7 +4612,7 @@ gst_player_get_config (GstPlayer * self)
  * to a server during playback. This is typically used when playing HTTP
  * or RTSP streams.
  *
- * Since 1.10
+ * Since: 1.10
  */
 void
 gst_player_config_set_user_agent (GstStructure * config, const gchar * agent)
@@ -4628,7 +4632,7 @@ gst_player_config_set_user_agent (GstStructure * config, const gchar * agent)
  * gst_player_config_set_user_agent() if any.
  *
  * Returns: (transfer full): the configured agent, or %NULL
- * Since 1.10
+ * Since: 1.10
  */
 gchar *
 gst_player_config_get_user_agent (const GstStructure * config)
@@ -4650,7 +4654,7 @@ gst_player_config_get_user_agent (const GstStructure * config)
  *
  * set interval in milliseconds between two position-updated signals.
  * pass 0 to stop updating the position.
- * Since 1.10
+ * Since: 1.10
  */
 void
 gst_player_config_set_position_update_interval (GstStructure * config,
@@ -4669,7 +4673,7 @@ gst_player_config_set_position_update_interval (GstStructure * config,
  *
  * Returns: current position update interval in milliseconds
  *
- * Since 1.10
+ * Since: 1.10
  */
 guint
 gst_player_config_get_position_update_interval (const GstStructure * config)
@@ -4716,7 +4720,7 @@ gst_player_config_set_seek_accurate (GstStructure * config, gboolean accurate)
  *
  * Returns: %TRUE if accurate seeking is enabled
  *
- * Since 1.12
+ * Since: 1.12
  */
 gboolean
 gst_player_config_get_seek_accurate (const GstStructure * config)
@@ -4746,7 +4750,7 @@ gst_player_config_get_seek_accurate (const GstStructure * config)
  *
  * Returns: (transfer full):  Current video snapshot sample or %NULL on failure
  *
- * Since 1.12
+ * Since: 1.12
  */
 GstSample *
 gst_player_get_video_snapshot (GstPlayer * self,

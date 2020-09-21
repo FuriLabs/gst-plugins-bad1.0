@@ -56,7 +56,8 @@ GST_DEBUG_CATEGORY_STATIC (GST_CAT_DEFAULT);
 G_DEFINE_TYPE_WITH_CODE (TransportReceiveBin, transport_receive_bin,
     GST_TYPE_BIN,
     GST_DEBUG_CATEGORY_INIT (gst_webrtc_transport_receive_bin_debug,
-        "webrtctransportreceivebin", 0, "webrtctransportreceivebin"););
+        "webrtctransportreceivebin", 0, "webrtctransportreceivebin");
+    );
 
 static GstStaticPadTemplate rtp_sink_template =
 GST_STATIC_PAD_TEMPLATE ("rtp_src",
@@ -88,8 +89,6 @@ _receive_state_to_string (ReceiveState state)
   switch (state) {
     case RECEIVE_STATE_BLOCK:
       return "block";
-    case RECEIVE_STATE_DROP:
-      return "drop";
     case RECEIVE_STATE_PASS:
       return "pass";
     default:
@@ -100,36 +99,81 @@ _receive_state_to_string (ReceiveState state)
 static GstPadProbeReturn
 pad_block (GstPad * pad, GstPadProbeInfo * info, TransportReceiveBin * receive)
 {
-  GstPadProbeReturn ret;
+  /* Drop all events: we don't care about them and don't want to block on
+   * them. Sticky events would be forwarded again later once we unblock
+   * and we don't want to forward them here already because that might
+   * cause a spurious GST_FLOW_FLUSHING */
+  if (GST_IS_EVENT (info->data))
+    return GST_PAD_PROBE_DROP;
 
-  g_mutex_lock (&receive->pad_block_lock);
-  while (receive->receive_state == RECEIVE_STATE_BLOCK) {
-    g_cond_wait (&receive->pad_block_cond, &receive->pad_block_lock);
-    GST_DEBUG_OBJECT (pad, "probe waited. new state %s",
-        _receive_state_to_string (receive->receive_state));
-  }
-  ret = GST_PAD_PROBE_PASS;
+  /* But block on any actual data-flow so we don't accidentally send that
+   * to a pad that is not ready yet, causing GST_FLOW_FLUSHING and everything
+   * to silently stop.
+   */
+  GST_LOG_OBJECT (pad, "blocking pad with data %" GST_PTR_FORMAT, info->data);
 
-  if (receive->receive_state == RECEIVE_STATE_DROP) {
-    ret = GST_PAD_PROBE_DROP;
-  } else if (receive->receive_state == RECEIVE_STATE_PASS) {
-    ret = GST_PAD_PROBE_OK;
-  }
-
-  g_mutex_unlock (&receive->pad_block_lock);
-
-  return ret;
+  return GST_PAD_PROBE_OK;
 }
 
 void
 transport_receive_bin_set_receive_state (TransportReceiveBin * receive,
     ReceiveState state)
 {
+
   g_mutex_lock (&receive->pad_block_lock);
+  if (receive->receive_state != state) {
+    GST_DEBUG_OBJECT (receive, "changing receive state to %s",
+        _receive_state_to_string (state));
+  }
+
+  if (state == RECEIVE_STATE_PASS) {
+    if (receive->rtp_block)
+      _free_pad_block (receive->rtp_block);
+    receive->rtp_block = NULL;
+
+    if (receive->rtcp_block)
+      _free_pad_block (receive->rtcp_block);
+    receive->rtcp_block = NULL;
+  } else {
+    g_assert (state == RECEIVE_STATE_BLOCK);
+    if (receive->rtp_block == NULL) {
+      GstWebRTCDTLSTransport *transport;
+      GstElement *dtlssrtpdec;
+      GstPad *pad, *peer_pad;
+
+      if (receive->stream) {
+        transport = receive->stream->transport;
+        dtlssrtpdec = transport->dtlssrtpdec;
+        pad = gst_element_get_static_pad (dtlssrtpdec, "sink");
+        peer_pad = gst_pad_get_peer (pad);
+        receive->rtp_block =
+            _create_pad_block (GST_ELEMENT (receive), peer_pad, 0, NULL, NULL);
+        receive->rtp_block->block_id =
+            gst_pad_add_probe (peer_pad,
+            GST_PAD_PROBE_TYPE_BLOCK |
+            GST_PAD_PROBE_TYPE_DATA_DOWNSTREAM,
+            (GstPadProbeCallback) pad_block, receive, NULL);
+        gst_object_unref (peer_pad);
+        gst_object_unref (pad);
+
+        transport = receive->stream->rtcp_transport;
+        dtlssrtpdec = transport->dtlssrtpdec;
+        pad = gst_element_get_static_pad (dtlssrtpdec, "sink");
+        peer_pad = gst_pad_get_peer (pad);
+        receive->rtcp_block =
+            _create_pad_block (GST_ELEMENT (receive), peer_pad, 0, NULL, NULL);
+        receive->rtcp_block->block_id =
+            gst_pad_add_probe (peer_pad,
+            GST_PAD_PROBE_TYPE_BLOCK |
+            GST_PAD_PROBE_TYPE_DATA_DOWNSTREAM,
+            (GstPadProbeCallback) pad_block, receive, NULL);
+        gst_object_unref (peer_pad);
+        gst_object_unref (pad);
+      }
+    }
+  }
+
   receive->receive_state = state;
-  GST_DEBUG_OBJECT (receive, "changing receive state to %s",
-      _receive_state_to_string (state));
-  g_cond_signal (&receive->pad_block_cond);
   g_mutex_unlock (&receive->pad_block_lock);
 }
 
@@ -176,7 +220,6 @@ transport_receive_bin_finalize (GObject * object)
   TransportReceiveBin *receive = TRANSPORT_RECEIVE_BIN (object);
 
   g_mutex_clear (&receive->pad_block_lock);
-  g_cond_clear (&receive->pad_block_cond);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -194,29 +237,12 @@ transport_receive_bin_change_state (GstElement * element,
 
   switch (transition) {
     case GST_STATE_CHANGE_NULL_TO_READY:{
-      GstWebRTCDTLSTransport *transport;
-      GstElement *elem, *dtlssrtpdec;
-      GstPad *pad;
+      GstElement *elem;
 
-      transport = receive->stream->transport;
-      dtlssrtpdec = transport->dtlssrtpdec;
-      pad = gst_element_get_static_pad (dtlssrtpdec, "sink");
-      receive->rtp_block =
-          _create_pad_block (GST_ELEMENT (receive), pad, 0, NULL, NULL);
-      receive->rtp_block->block_id =
-          gst_pad_add_probe (pad, GST_PAD_PROBE_TYPE_ALL_BOTH,
-          (GstPadProbeCallback) pad_block, receive, NULL);
-      gst_object_unref (pad);
-
-      transport = receive->stream->rtcp_transport;
-      dtlssrtpdec = transport->dtlssrtpdec;
-      pad = gst_element_get_static_pad (dtlssrtpdec, "sink");
-      receive->rtcp_block =
-          _create_pad_block (GST_ELEMENT (receive), pad, 0, NULL, NULL);
-      receive->rtcp_block->block_id =
-          gst_pad_add_probe (pad, GST_PAD_PROBE_TYPE_ALL_BOTH,
-          (GstPadProbeCallback) pad_block, receive, NULL);
-      gst_object_unref (pad);
+      /* We want to start blocked, unless someone already switched us
+       * to PASS mode. receive_state is set to BLOCKED in _init(),
+       * so set up blocks with whatever the mode is now. */
+      transport_receive_bin_set_receive_state (receive, receive->receive_state);
 
       /* XXX: because nice needs the nicesrc internal main loop running in order
        * correctly STUN... */
@@ -251,9 +277,11 @@ transport_receive_bin_change_state (GstElement * element,
       if (receive->rtp_block)
         _free_pad_block (receive->rtp_block);
       receive->rtp_block = NULL;
+
       if (receive->rtcp_block)
         _free_pad_block (receive->rtcp_block);
       receive->rtcp_block = NULL;
+
       break;
     }
     default:
@@ -347,9 +375,9 @@ transport_receive_bin_constructed (GObject * object)
     g_warn_if_reached ();
 
   pad = gst_element_get_static_pad (funnel, "src");
-  ghost = gst_ghost_pad_new ("rtp_src", pad);
+  receive->rtp_src = gst_ghost_pad_new ("rtp_src", pad);
 
-  gst_element_add_pad (GST_ELEMENT (receive), ghost);
+  gst_element_add_pad (GST_ELEMENT (receive), receive->rtp_src);
   gst_object_unref (pad);
 
   /* create funnel for rtcp_src */
@@ -363,8 +391,8 @@ transport_receive_bin_constructed (GObject * object)
     g_warn_if_reached ();
 
   pad = gst_element_get_static_pad (funnel, "src");
-  ghost = gst_ghost_pad_new ("rtcp_src", pad);
-  gst_element_add_pad (GST_ELEMENT (receive), ghost);
+  receive->rtcp_src = gst_ghost_pad_new ("rtcp_src", pad);
+  gst_element_add_pad (GST_ELEMENT (receive), receive->rtcp_src);
   gst_object_unref (pad);
 
   /* create funnel for data_src */
@@ -411,7 +439,7 @@ transport_receive_bin_class_init (TransportReceiveBinClass * klass)
   g_object_class_install_property (gobject_class,
       PROP_STREAM,
       g_param_spec_object ("stream", "Stream",
-          "The TransportStream for this receiveing bin",
+          "The TransportStream for this receiving bin",
           transport_stream_get_type (),
           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 }
@@ -419,6 +447,6 @@ transport_receive_bin_class_init (TransportReceiveBinClass * klass)
 static void
 transport_receive_bin_init (TransportReceiveBin * receive)
 {
+  receive->receive_state = RECEIVE_STATE_BLOCK;
   g_mutex_init (&receive->pad_block_lock);
-  g_cond_init (&receive->pad_block_cond);
 }

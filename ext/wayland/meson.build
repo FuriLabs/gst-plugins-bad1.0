@@ -8,6 +8,8 @@ wl_sources = [
     'wllinuxdmabuf.c'
 ]
 
+libdrm_dep = dependency('libdrm', version: '>= 2.4.55', required:get_option('wayland'))
+
 if use_wayland
     protocols_datadir = wl_protocol_dep.get_pkgconfig_variable('pkgdatadir')
 
@@ -45,4 +47,5 @@ if use_wayland
         install_dir : plugins_install_dir,
     )
     pkgconfig.generate(gstwaylandsink, install_dir : plugins_pkgconfig_install_dir)
+    plugins += [gstwaylandsink]
 endif

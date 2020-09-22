@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.18.0-2ubuntu4) groovy; urgency=medium
+
+  [ Gianfranco Costamagna, Iain Lane ]
+  * Don't depend on opencv package on i386
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Tue, 22 Sep 2020 14:17:53 +0200
+
 gst-plugins-bad1.0 (1.18.0-2ubuntu3) groovy; urgency=low
 
   [ Gianfranco Costamagna ]

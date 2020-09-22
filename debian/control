@@ -280,7 +280,7 @@ Section: libdevel
 Priority: optional
 Depends: ${misc:Depends},
          libgstreamer-plugins-bad1.0-0 (= ${binary:Version}),
-         libgstreamer-opencv1.0-0 (= ${binary:Version}),
+         libgstreamer-opencv1.0-0 (= ${binary:Version}) [!i386],
          libgstreamer1.0-dev,
          libgstreamer-plugins-base1.0-dev,
          libgstreamer-plugins-good1.0-dev,

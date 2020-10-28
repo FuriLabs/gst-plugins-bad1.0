@@ -1,3 +1,38 @@
+gst-plugins-bad1.0 (1.18.1-1ubuntu1) hirsute; urgency=low
+
+  * Merge from Debian unstable. Remaining changes:
+    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
+      moved to -good.
+    - Provide gstreamer-plugins-bad-1.0.pc with Requires on
+      gstreamer-plugins-good-1.0 - the package we've moved the referenced
+      library to. This maintains compatibility with upstream software and
+      other distributions.
+    - Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Wed, 28 Oct 2020 17:09:49 +0100
+
+gst-plugins-bad1.0 (1.18.1-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * debian/control:
+    + Switch from libdc1394-22-dev to libdc1394-dev (Closes: #970841).
+
+ -- Sebastian Dröge <slomo@debian.org>  Tue, 27 Oct 2020 18:17:33 +0200
+
+gst-plugins-bad1.0 (1.18.0-2ubuntu6) groovy; urgency=medium
+
+  * Rebuild against new libopenexr25.
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Sun, 04 Oct 2020 09:07:56 +0200
+
+gst-plugins-bad1.0 (1.18.0-2ubuntu5) groovy; urgency=medium
+
+  * Rebuild against new libdc1394-25.
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Thu, 24 Sep 2020 08:41:20 +0200
+
 gst-plugins-bad1.0 (1.18.0-2ubuntu4) groovy; urgency=medium
 
   [ Gianfranco Costamagna, Iain Lane ]
@@ -3953,4 +3988,3 @@ gst-plugins-bad0.10 (0.10.0+cvs20060214-1) unstable; urgency=low
   * Initial release.
 
  -- Joe Wreschnig <piman@debian.org>  Tue, 14 Feb 2006 13:22:33 -0600
-

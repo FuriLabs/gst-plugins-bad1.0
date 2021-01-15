@@ -49,7 +49,12 @@ if have_nasm and host_cpu == 'x86_64'
   endif
 
   # Assembly has to be told when the symbols have to be prefixed with _
-  if cc.symbols_have_underscore_prefix()
+  # Note that symbols_have_underscore_prefix does not work properly on macos
+  # if the compiler -g flag is used. See:
+  # https://github.com/mesonbuild/meson/issues/5482
+  if ['darwin', 'ios'].contains(host_system)
+    asm_prefix_def = '-DPREFIX'
+  elif cc.symbols_have_underscore_prefix()
     asm_prefix_def = '-DPREFIX'
   else
     asm_prefix_def = '-UPREFIX'
@@ -65,8 +70,7 @@ if have_nasm and host_cpu == 'x86_64'
   else
     asm_outformat = 'elf64'
   endif
-  asm_x = files('x86/yadif.asm',
-                'x86/x86inc.asm')
+  asm_x = files('x86/yadif.asm')
 
   asm_stackalign_def = '-DSTACK_ALIGNMENT=64'
   asm_incdir = 'x86'

@@ -80,6 +80,9 @@
 GST_DEBUG_CATEGORY_STATIC (splitmux_debug);
 #define GST_CAT_DEFAULT splitmux_debug
 
+#define GST_SPLITMUX_STATE_LOCK(s) g_mutex_lock(&(s)->state_lock)
+#define GST_SPLITMUX_STATE_UNLOCK(s) g_mutex_unlock(&(s)->state_lock)
+
 #define GST_SPLITMUX_LOCK(s) g_mutex_lock(&(s)->lock)
 #define GST_SPLITMUX_UNLOCK(s) g_mutex_unlock(&(s)->lock)
 #define GST_SPLITMUX_WAIT_INPUT(s) g_cond_wait (&(s)->input_cond, &(s)->lock)
@@ -577,6 +580,7 @@ static void
 gst_splitmux_sink_init (GstSplitMuxSink * splitmux)
 {
   g_mutex_init (&splitmux->lock);
+  g_mutex_init (&splitmux->state_lock);
   g_cond_init (&splitmux->input_cond);
   g_cond_init (&splitmux->output_cond);
   g_queue_init (&splitmux->out_cmd_q);
@@ -650,6 +654,7 @@ gst_splitmux_sink_finalize (GObject * object)
   g_cond_clear (&splitmux->input_cond);
   g_cond_clear (&splitmux->output_cond);
   g_mutex_clear (&splitmux->lock);
+  g_mutex_clear (&splitmux->state_lock);
   g_queue_foreach (&splitmux->out_cmd_q, (GFunc) out_cmd_buf_free, NULL);
   g_queue_clear (&splitmux->out_cmd_q);
 
@@ -1103,6 +1108,9 @@ send_fragment_opened_closed_msg (GstSplitMuxSink * splitmux, gboolean opened,
           "location") != NULL)
     g_object_get (sink, "location", &location, NULL);
 
+  GST_DEBUG_OBJECT (splitmux,
+      "Sending %s message. Running time %" GST_TIME_FORMAT " location %s",
+      msg_name, GST_TIME_ARGS (running_time), GST_STR_NULL (location));
 
   /* If it's in the middle of a teardown, the reference_ctc might have become
    * NULL */
@@ -1178,16 +1186,15 @@ eos_context_async (MqStreamCtx * ctx, GstSplitMuxSink * splitmux)
   helper->pad = sinkpad;        /* Takes the reference */
 
   ctx->out_eos_async_done = TRUE;
-  /* HACK: Here, we explicitly unset the SINK flag on the target sink element
-   * that's about to be asynchronously disposed, so that it no longer
-   * participates in GstBin EOS logic. This fixes a race where if
-   * splitmuxsink really reaches EOS before an asynchronous background
-   * element has finished, then the bin won't actually send EOS to the
-   * pipeline. Even after finishing and removing the old element, the
-   * bin doesn't re-check EOS status on removing a SINK element. This
-   * should be fixed in core, making this hack unnecessary. */
-  GST_OBJECT_FLAG_UNSET (splitmux->active_sink, GST_ELEMENT_FLAG_SINK);
 
+  /* There used to be a bug here, where we had to explicitly remove
+   * the SINK flag so that GstBin would ignore it for EOS purposes.
+   * That fixed a race where if splitmuxsink really reaches EOS
+   * before an asynchronous background element has finished, then
+   * the bin wouldn't actually send EOS to the pipeline. Even after
+   * finishing and removing the old element, the bin didn't re-check
+   * EOS status on removing a SINK element. That bug was fixed
+   * in core. */
   GST_DEBUG_OBJECT (splitmux, "scheduled EOS to pad %" GST_PTR_FORMAT " ctx %p",
       sinkpad, ctx);
 
@@ -1263,6 +1270,7 @@ complete_or_wait_on_out (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
           continue;
 
         case SPLITMUX_OUTPUT_STATE_ENDING_FILE:
+        case SPLITMUX_OUTPUT_STATE_ENDING_STREAM:
           /* We've reached the max out running_time to get here, so end this file now */
           if (ctx->out_eos == FALSE) {
             if (splitmux->async_finalize) {
@@ -1313,8 +1321,13 @@ complete_or_wait_on_out (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
                 grow_blocked_queues (splitmux);
 
               if (cmd->start_new_fragment) {
-                GST_DEBUG_OBJECT (splitmux, "Got cmd to start new fragment");
-                splitmux->output_state = SPLITMUX_OUTPUT_STATE_ENDING_FILE;
+                if (splitmux->muxed_out_bytes > 0) {
+                  GST_DEBUG_OBJECT (splitmux, "Got cmd to start new fragment");
+                  splitmux->output_state = SPLITMUX_OUTPUT_STATE_ENDING_FILE;
+                } else {
+                  GST_DEBUG_OBJECT (splitmux,
+                      "Got cmd to start new fragment, but fragment is empty - ignoring.");
+                }
               } else {
                 GST_DEBUG_OBJECT (splitmux,
                     "Got new output cmd for time %" GST_STIME_FORMAT,
@@ -1586,6 +1599,12 @@ handle_mq_output (GstPad * pad, GstPadProbeInfo * info, MqStreamCtx * ctx)
         if (splitmux->output_state == SPLITMUX_OUTPUT_STATE_STOPPED)
           goto beach;
         ctx->out_eos = TRUE;
+
+        if (ctx == splitmux->reference_ctx) {
+          splitmux->output_state = SPLITMUX_OUTPUT_STATE_ENDING_STREAM;
+          GST_SPLITMUX_BROADCAST_OUTPUT (splitmux);
+        }
+
         GST_INFO_OBJECT (splitmux,
             "Have EOS event at pad %" GST_PTR_FORMAT " ctx %p", pad, ctx);
         break;
@@ -1900,7 +1919,14 @@ start_next_fragment (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
   sink = gst_object_ref (splitmux->active_sink);
 
   GST_SPLITMUX_UNLOCK (splitmux);
-  GST_STATE_LOCK (splitmux);
+  GST_SPLITMUX_STATE_LOCK (splitmux);
+
+  if (splitmux->shutdown) {
+    GST_DEBUG_OBJECT (splitmux,
+        "Shutdown requested. Aborting fragment switch.");
+    GST_SPLITMUX_STATE_UNLOCK (splitmux);
+    return;
+  }
 
   if (splitmux->async_finalize) {
     if (splitmux->muxed_out_bytes > 0
@@ -1998,9 +2024,7 @@ start_next_fragment (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
   }
 
   GST_SPLITMUX_LOCK (splitmux);
-  if (splitmux->muxed_out_bytes > 0
-      || splitmux->fragment_id == splitmux->start_index)
-    set_next_filename (splitmux, ctx);
+  set_next_filename (splitmux, ctx);
   splitmux->muxed_out_bytes = 0;
   GST_SPLITMUX_UNLOCK (splitmux);
 
@@ -2013,7 +2037,7 @@ start_next_fragment (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
   gst_object_unref (muxer);
 
   GST_SPLITMUX_LOCK (splitmux);
-  GST_STATE_UNLOCK (splitmux);
+  GST_SPLITMUX_STATE_UNLOCK (splitmux);
   splitmux->switching_fragment = FALSE;
   do_async_done (splitmux);
 
@@ -2031,7 +2055,7 @@ start_next_fragment (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
   return;
 
 fail:
-  GST_STATE_UNLOCK (splitmux);
+  GST_SPLITMUX_STATE_UNLOCK (splitmux);
   GST_ELEMENT_ERROR (splitmux, RESOURCE, SETTINGS,
       ("Could not create the new muxer/sink"), NULL);
 }
@@ -2084,7 +2108,12 @@ bus_handler (GstBin * bin, GstMessage * message)
           GST_SPLITMUX_UNLOCK (splitmux);
           return;
         }
-      } else if (splitmux->output_state == SPLITMUX_OUTPUT_STATE_ENDING_FILE) {
+      } else if (splitmux->output_state == SPLITMUX_OUTPUT_STATE_ENDING_STREAM) {
+        GST_DEBUG_OBJECT (splitmux,
+            "Passing EOS message. Output state %d max_out_running_time %"
+            GST_STIME_FORMAT, splitmux->output_state,
+            GST_STIME_ARGS (splitmux->max_out_running_time));
+      } else {
         GST_DEBUG_OBJECT (splitmux, "Caught EOS at end of fragment, dropping");
         splitmux->output_state = SPLITMUX_OUTPUT_STATE_START_NEXT_FILE;
         GST_SPLITMUX_BROADCAST_OUTPUT (splitmux);
@@ -2092,11 +2121,6 @@ bus_handler (GstBin * bin, GstMessage * message)
         gst_message_unref (message);
         GST_SPLITMUX_UNLOCK (splitmux);
         return;
-      } else {
-        GST_DEBUG_OBJECT (splitmux,
-            "Passing EOS message. Output state %d max_out_running_time %"
-            GST_STIME_FORMAT, splitmux->output_state,
-            GST_STIME_ARGS (splitmux->max_out_running_time));
       }
       GST_SPLITMUX_UNLOCK (splitmux);
       break;
@@ -2186,9 +2210,14 @@ need_new_fragment (GstSplitMuxSink * splitmux,
       && splitmux->muxer_has_reserved_props;
   GST_OBJECT_UNLOCK (splitmux);
 
-  /* Have we muxed anything into the new file at all? */
-  if (splitmux->fragment_total_bytes <= 0)
+  /* Have we muxed at least one thing from the reference
+   * stream into the file? If not, no other streams can have
+   * either */
+  if (splitmux->fragment_reference_bytes <= 0) {
+    GST_TRACE_OBJECT (splitmux,
+        "Not ready to split - nothing muxed on the reference stream");
     return FALSE;
+  }
 
   /* User told us to split now */
   if (g_atomic_int_get (&(splitmux->do_split_next_gop)) == TRUE) {
@@ -2211,6 +2240,10 @@ need_new_fragment (GstSplitMuxSink * splitmux,
       gst_queue_array_pop_head_struct (splitmux->times_to_split);
       ptr_to_time = gst_queue_array_peek_head_struct (splitmux->times_to_split);
     }
+    GST_TRACE_OBJECT (splitmux,
+        "GOP start time %" GST_STIME_FORMAT " is after requested split point %"
+        GST_STIME_FORMAT, GST_STIME_ARGS (splitmux->gop_start_time),
+        GST_STIME_ARGS (time_to_split));
     GST_OBJECT_UNLOCK (splitmux);
     return TRUE;
   }
@@ -2319,9 +2352,18 @@ handle_gathered_gop (GstSplitMuxSink * splitmux)
         splitmux->reference_ctx->in_running_time - splitmux->gop_start_time;
 
   GST_LOG_OBJECT (splitmux, " queued_bytes %" G_GUINT64_FORMAT, queued_bytes);
+  GST_LOG_OBJECT (splitmux, "mq at TS %" GST_STIME_FORMAT
+      " bytes %" G_GUINT64_FORMAT " in running time %" GST_STIME_FORMAT
+      " gop start time %" GST_STIME_FORMAT,
+      GST_STIME_ARGS (queued_time), queued_bytes,
+      GST_STIME_ARGS (splitmux->reference_ctx->in_running_time),
+      GST_STIME_ARGS (splitmux->gop_start_time));
 
-  g_assert (queued_gop_time >= 0);
-  g_assert (queued_time >= splitmux->fragment_start_time);
+  if (queued_gop_time < 0)
+    goto error_gop_duration;
+
+  if (queued_time < splitmux->fragment_start_time)
+    goto error_queued_time;
 
   queued_time -= splitmux->fragment_start_time;
   if (queued_time < queued_gop_time)
@@ -2329,13 +2371,6 @@ handle_gathered_gop (GstSplitMuxSink * splitmux)
 
   /* Expand queued bytes estimate by muxer overhead */
   queued_bytes += (queued_bytes * splitmux->mux_overhead);
-
-  GST_LOG_OBJECT (splitmux, "mq at TS %" GST_STIME_FORMAT
-      " bytes %" G_GUINT64_FORMAT " in running time %" GST_STIME_FORMAT
-      " gop start time %" GST_STIME_FORMAT,
-      GST_STIME_ARGS (queued_time), queued_bytes,
-      GST_STIME_ARGS (splitmux->reference_ctx->in_running_time),
-      GST_STIME_ARGS (splitmux->gop_start_time));
 
   /* Check for overrun - have we output at least one byte and overrun
    * either threshold? */
@@ -2361,6 +2396,7 @@ handle_gathered_gop (GstSplitMuxSink * splitmux)
     new_out_ts = splitmux->reference_ctx->in_running_time;
     splitmux->fragment_start_time = splitmux->gop_start_time;
     splitmux->fragment_total_bytes = 0;
+    splitmux->fragment_reference_bytes = 0;
 
     if (splitmux->tc_interval) {
       video_time_code_replace (&splitmux->fragment_start_tc,
@@ -2395,6 +2431,7 @@ handle_gathered_gop (GstSplitMuxSink * splitmux)
 
   /* Now either way - either there was no overflow, or we requested a new fragment: release this GOP */
   splitmux->fragment_total_bytes += splitmux->gop_total_bytes;
+  splitmux->fragment_reference_bytes += splitmux->gop_reference_bytes;
 
   if (splitmux->gop_total_bytes > 0) {
     GST_LOG_OBJECT (splitmux,
@@ -2414,6 +2451,21 @@ handle_gathered_gop (GstSplitMuxSink * splitmux)
   }
 
   splitmux->gop_total_bytes = 0;
+  splitmux->gop_reference_bytes = 0;
+  return;
+
+error_gop_duration:
+  GST_ELEMENT_ERROR (splitmux,
+      STREAM, FAILED, ("Timestamping error on input streams"),
+      ("Queued GOP time is negative %" GST_STIME_FORMAT,
+          GST_STIME_ARGS (queued_gop_time)));
+  return;
+error_queued_time:
+  GST_ELEMENT_ERROR (splitmux,
+      STREAM, FAILED, ("Timestamping error on input streams"),
+      ("Queued time is negative. Input went backwards. queued_time - %"
+          GST_STIME_FORMAT, GST_STIME_ARGS (queued_time)));
+  return;
 }
 
 /* Called with splitmux lock held */
@@ -2453,64 +2505,69 @@ check_completed_gop (GstSplitMuxSink * splitmux, MqStreamCtx * ctx)
       return;
   }
 
-  if (splitmux->input_state == SPLITMUX_INPUT_STATE_WAITING_GOP_COLLECT) {
-    gboolean ready = TRUE;
+  do {
+    if (splitmux->input_state == SPLITMUX_INPUT_STATE_WAITING_GOP_COLLECT) {
+      gboolean ready = TRUE;
 
-    /* Iterate each pad, and check that the input running time is at least
-     * up to the reference running time, and if so handle the collected GOP */
-    GST_LOG_OBJECT (splitmux, "Checking GOP collected, Max in running time %"
-        GST_STIME_FORMAT " ctx %p",
-        GST_STIME_ARGS (splitmux->max_in_running_time), ctx);
-    for (cur = g_list_first (splitmux->contexts); cur != NULL;
-        cur = g_list_next (cur)) {
-      MqStreamCtx *tmpctx = (MqStreamCtx *) (cur->data);
+      /* Iterate each pad, and check that the input running time is at least
+       * up to the reference running time, and if so handle the collected GOP */
+      GST_LOG_OBJECT (splitmux, "Checking GOP collected, Max in running time %"
+          GST_STIME_FORMAT " ctx %p",
+          GST_STIME_ARGS (splitmux->max_in_running_time), ctx);
+      for (cur = g_list_first (splitmux->contexts); cur != NULL;
+          cur = g_list_next (cur)) {
+        MqStreamCtx *tmpctx = (MqStreamCtx *) (cur->data);
 
-      GST_LOG_OBJECT (splitmux,
-          "Context %p sink pad %" GST_PTR_FORMAT " @ TS %" GST_STIME_FORMAT
-          " EOS %d", tmpctx, tmpctx->sinkpad,
-          GST_STIME_ARGS (tmpctx->in_running_time), tmpctx->in_eos);
-
-      if (splitmux->max_in_running_time != GST_CLOCK_STIME_NONE &&
-          tmpctx->in_running_time < splitmux->max_in_running_time &&
-          !tmpctx->in_eos) {
         GST_LOG_OBJECT (splitmux,
-            "Context %p sink pad %" GST_PTR_FORMAT " not ready. We'll sleep",
-            tmpctx, tmpctx->sinkpad);
-        ready = FALSE;
-        break;
+            "Context %p sink pad %" GST_PTR_FORMAT " @ TS %" GST_STIME_FORMAT
+            " EOS %d", tmpctx, tmpctx->sinkpad,
+            GST_STIME_ARGS (tmpctx->in_running_time), tmpctx->in_eos);
+
+        if (splitmux->max_in_running_time != GST_CLOCK_STIME_NONE &&
+            tmpctx->in_running_time < splitmux->max_in_running_time &&
+            !tmpctx->in_eos) {
+          GST_LOG_OBJECT (splitmux,
+              "Context %p sink pad %" GST_PTR_FORMAT " not ready. We'll sleep",
+              tmpctx, tmpctx->sinkpad);
+          ready = FALSE;
+          break;
+        }
+      }
+      if (ready) {
+        GST_DEBUG_OBJECT (splitmux,
+            "Collected GOP is complete. Processing (ctx %p)", ctx);
+        /* All pads have a complete GOP, release it into the multiqueue */
+        handle_gathered_gop (splitmux);
+
+        /* The user has requested a split, we can split now that the previous GOP
+         * has been collected to the correct location */
+        if (g_atomic_int_compare_and_exchange (&(splitmux->split_requested),
+                TRUE, FALSE)) {
+          g_atomic_int_set (&(splitmux->do_split_next_gop), TRUE);
+        }
       }
     }
-    if (ready) {
-      GST_DEBUG_OBJECT (splitmux,
-          "Collected GOP is complete. Processing (ctx %p)", ctx);
-      /* All pads have a complete GOP, release it into the multiqueue */
-      handle_gathered_gop (splitmux);
 
-      /* The user has requested a split, we can split now that the previous GOP
-       * has been collected to the correct location */
-      if (g_atomic_int_compare_and_exchange (&(splitmux->split_requested), TRUE,
-              FALSE)) {
-        g_atomic_int_set (&(splitmux->do_split_next_gop), TRUE);
-      }
+    /* If upstream reached EOS we are not expecting more data, no need to wait
+     * here. */
+    if (ctx->in_eos)
+      return;
+
+    if (splitmux->input_state == SPLITMUX_INPUT_STATE_WAITING_GOP_COLLECT &&
+        !ctx->flushing &&
+        (ctx->in_running_time >= splitmux->max_in_running_time) &&
+        (splitmux->max_in_running_time != GST_CLOCK_STIME_NONE)) {
+      /* Some pad is not yet ready, or GOP is being pushed
+       * either way, sleep and wait to get woken */
+      GST_LOG_OBJECT (splitmux, "Sleeping for GOP collection (ctx %p)", ctx);
+      GST_SPLITMUX_WAIT_INPUT (splitmux);
+      GST_LOG_OBJECT (splitmux, "Done waiting for complete GOP (ctx %p)", ctx);
+    } else {
+      /* This pad is not ready or the state changed - break out and get another
+       * buffer / event */
+      break;
     }
-  }
-
-  /* If upstream reached EOS we are not expecting more data, no need to wait
-   * here. */
-  if (ctx->in_eos)
-    return;
-
-  /* Some pad is not yet ready, or GOP is being pushed
-   * either way, sleep and wait to get woken */
-  while (splitmux->input_state == SPLITMUX_INPUT_STATE_WAITING_GOP_COLLECT &&
-      !ctx->flushing &&
-      (ctx->in_running_time >= splitmux->max_in_running_time) &&
-      (splitmux->max_in_running_time != GST_CLOCK_STIME_NONE)) {
-
-    GST_LOG_OBJECT (splitmux, "Sleeping for GOP collection (ctx %p)", ctx);
-    GST_SPLITMUX_WAIT_INPUT (splitmux);
-    GST_LOG_OBJECT (splitmux, "Done waiting for complete GOP (ctx %p)", ctx);
-  }
+  } while (splitmux->input_state == SPLITMUX_INPUT_STATE_WAITING_GOP_COLLECT);
 }
 
 static GstPadProbeReturn
@@ -2711,7 +2768,12 @@ handle_mq_input (GstPad * pad, GstPadProbeInfo * info, MqStreamCtx * ctx)
 
     switch (splitmux->input_state) {
       case SPLITMUX_INPUT_STATE_COLLECTING_GOP_START:
-        if (ctx->is_reference) {
+        if (ctx->is_releasing) {
+          /* The pad belonging to this context is being released */
+          GST_WARNING_OBJECT (pad, "Pad is being released while the muxer is "
+              "running. Data might not drain correctly");
+          loop_again = FALSE;
+        } else if (ctx->is_reference) {
           /* This is the reference context. If it's a keyframe,
            * it marks the start of a new GOP and we should wait in
            * check_completed_gop before continuing, but either way
@@ -2798,6 +2860,9 @@ handle_mq_input (GstPad * pad, GstPadProbeInfo * info, MqStreamCtx * ctx)
 
   /* Update total input byte counter for overflow detect */
   splitmux->gop_total_bytes += buf_info->buf_size;
+  if (ctx->is_reference) {
+    splitmux->gop_reference_bytes += buf_info->buf_size;
+  }
 
   /* Now add this buffer to the queue just before returning */
   g_queue_push_head (&ctx->queued_bufs, buf_info);
@@ -3160,11 +3225,20 @@ gst_splitmux_sink_release_pad (GstElement * element, GstPad * pad)
   /* Remove the context from our consideration */
   splitmux->contexts = g_list_remove (splitmux->contexts, ctx);
 
-  if (ctx->sink_pad_block_id)
+  GST_SPLITMUX_UNLOCK (splitmux);
+
+  if (ctx->sink_pad_block_id) {
     gst_pad_remove_probe (ctx->sinkpad, ctx->sink_pad_block_id);
+    gst_pad_send_event (ctx->sinkpad, gst_event_new_flush_start ());
+  }
 
   if (ctx->src_pad_block_id)
     gst_pad_remove_probe (ctx->srcpad, ctx->src_pad_block_id);
+
+  GST_SPLITMUX_LOCK (splitmux);
+
+  ctx->is_releasing = TRUE;
+  GST_SPLITMUX_BROADCAST_INPUT (splitmux);
 
   /* Can release the context now */
   mq_stream_ctx_free (ctx);
@@ -3187,6 +3261,10 @@ gst_splitmux_sink_release_pad (GstElement * element, GstPad * pad)
   /* Reset the internal elements only after all request pads are released */
   if (splitmux->contexts == NULL)
     gst_splitmux_reset_elements (splitmux);
+
+  /* Wake up other input streams to check if the completion conditions have
+   * changed */
+  GST_SPLITMUX_BROADCAST_INPUT (splitmux);
 
 fail:
   GST_SPLITMUX_UNLOCK (splitmux);
@@ -3486,7 +3564,9 @@ gst_splitmux_sink_reset (GstSplitMuxSink * splitmux)
       GST_CLOCK_STIME_NONE;
   splitmux->max_out_running_time = 0;
   splitmux->fragment_total_bytes = 0;
+  splitmux->fragment_reference_bytes = 0;
   splitmux->gop_total_bytes = 0;
+  splitmux->gop_reference_bytes = 0;
   splitmux->muxed_out_bytes = 0;
   splitmux->ready_for_output = FALSE;
 
@@ -3532,12 +3612,21 @@ gst_splitmux_sink_change_state (GstElement * element, GstStateChange transition)
       splitmux->output_state = SPLITMUX_OUTPUT_STATE_START_NEXT_FILE;
 
       GST_SPLITMUX_UNLOCK (splitmux);
+
+      GST_SPLITMUX_STATE_LOCK (splitmux);
+      splitmux->shutdown = FALSE;
+      GST_SPLITMUX_STATE_UNLOCK (splitmux);
       break;
     }
     case GST_STATE_CHANGE_PAUSED_TO_READY:
       g_atomic_int_set (&(splitmux->split_requested), FALSE);
       g_atomic_int_set (&(splitmux->do_split_next_gop), FALSE);
+
     case GST_STATE_CHANGE_READY_TO_NULL:
+      GST_SPLITMUX_STATE_LOCK (splitmux);
+      splitmux->shutdown = TRUE;
+      GST_SPLITMUX_STATE_UNLOCK (splitmux);
+
       GST_SPLITMUX_LOCK (splitmux);
       gst_splitmux_sink_reset (splitmux);
       splitmux->output_state = SPLITMUX_OUTPUT_STATE_STOPPED;

@@ -554,7 +554,7 @@ gst_v4l2_object_destroy (GstV4l2Object * v4l2object)
   g_return_if_fail (v4l2object != NULL);
 
   g_free (v4l2object->videodev);
-
+  g_free (v4l2object->par);
   g_free (v4l2object->channel);
 
   if (v4l2object->formats) {
@@ -1329,7 +1329,7 @@ gst_v4l2_object_v4l2fourcc_to_video_format (guint32 fourcc)
       format = GST_VIDEO_FORMAT_ABGR;
       break;
     case V4L2_PIX_FMT_RGBA32:
-      format = GST_VIDEO_FORMAT_RGB;
+      format = GST_VIDEO_FORMAT_RGBA;
       break;
     case V4L2_PIX_FMT_ARGB32:
       format = GST_VIDEO_FORMAT_ARGB;
@@ -1644,10 +1644,11 @@ static GstCaps *
 gst_v4l2_object_get_caps_helper (GstV4L2FormatFlags flags)
 {
   GstStructure *structure;
-  GstCaps *caps;
+  GstCaps *caps, *caps_interlaced;
   guint i;
 
   caps = gst_caps_new_empty ();
+  caps_interlaced = gst_caps_new_empty ();
   for (i = 0; i < GST_V4L2_FORMAT_COUNT; i++) {
 
     if ((gst_v4l2_formats[i].flags & flags) == 0)
@@ -1680,14 +1681,19 @@ gst_v4l2_object_get_caps_helper (GstV4L2FormatFlags flags)
 
       gst_caps_append_structure (caps, structure);
 
-      if (alt_s)
+      if (alt_s) {
         gst_caps_append_structure (caps, alt_s);
+        add_alternate_variant (NULL, caps_interlaced, alt_s);
+      }
 
-      add_alternate_variant (NULL, caps, structure);
+      add_alternate_variant (NULL, caps_interlaced, structure);
     }
   }
 
-  return gst_caps_simplify (caps);
+  caps = gst_caps_simplify (caps);
+  caps_interlaced = gst_caps_simplify (caps_interlaced);
+
+  return gst_caps_merge (caps, caps_interlaced);
 }
 
 GstCaps *
@@ -4980,7 +4986,7 @@ no_downstream_pool:
 gboolean
 gst_v4l2_object_propose_allocation (GstV4l2Object * obj, GstQuery * query)
 {
-  GstBufferPool *pool = NULL;
+  GstBufferPool *pool;
   /* we need at least 2 buffers to operate */
   guint size, min, max;
   GstCaps *caps;
@@ -4999,12 +5005,11 @@ gst_v4l2_object_propose_allocation (GstV4l2Object * obj, GstQuery * query)
   switch (obj->mode) {
     case GST_V4L2_IO_MMAP:
     case GST_V4L2_IO_DMABUF:
-      if (need_pool && obj->pool) {
-        if (!gst_buffer_pool_is_active (obj->pool))
-          pool = gst_object_ref (obj->pool);
-      }
+      if ((pool = obj->pool))
+        gst_object_ref (pool);
       break;
     default:
+      pool = NULL;
       break;
   }
 

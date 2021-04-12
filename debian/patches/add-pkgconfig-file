@@ -4,11 +4,11 @@ Subject: Add a pkgconfig file to facilitate linking against libgstphotography
 
 Forwarded: not-needed
 
-Index: b/meson.build
+Index: gst-plugins-good1.0/meson.build
 ===================================================================
---- a/meson.build
-+++ b/meson.build
-@@ -472,6 +472,7 @@
+--- gst-plugins-good1.0.orig/meson.build
++++ gst-plugins-good1.0/meson.build
+@@ -470,6 +470,7 @@ gir_init_section = [ '--add-init-section
  
  subdir('gst-libs')
  subdir('gst')
@@ -16,10 +16,10 @@ Index: b/meson.build
  subdir('sys')
  subdir('ext')
  subdir('tests')
-Index: b/pkgconfig/gstreamer-plugins-good.pc.in
+Index: gst-plugins-good1.0/pkgconfig/gstreamer-plugins-good.pc.in
 ===================================================================
 --- /dev/null
-+++ b/pkgconfig/gstreamer-plugins-good.pc.in
++++ gst-plugins-good1.0/pkgconfig/gstreamer-plugins-good.pc.in
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
@@ -33,10 +33,10 @@ Index: b/pkgconfig/gstreamer-plugins-good.pc.in
 +Version: @VERSION@
 +Libs: -L${libdir} -lgstphotography-@GST_API_VERSION@
 +Cflags: -I${includedir}
-Index: b/pkgconfig/meson.build
+Index: gst-plugins-good1.0/pkgconfig/meson.build
 ===================================================================
 --- /dev/null
-+++ b/pkgconfig/meson.build
++++ gst-plugins-good1.0/pkgconfig/meson.build
 @@ -0,0 +1,25 @@
 +pkgconf = configuration_data()
 +

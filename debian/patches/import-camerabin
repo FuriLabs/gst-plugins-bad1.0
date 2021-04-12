@@ -3,10 +3,10 @@ Subject: This is a copy of the camerabin2,
  for applications in Ubuntu main, so we move them here.
 
 Forwarded: not-needed
-Index: b/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
 @@ -0,0 +1,35 @@
 +/* GStreamer BaseCameraBinSrc Library
 + * Copyright (C) 2018 GStreamer developers
@@ -43,10 +43,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
 +#endif
 +
 +#endif /* __GST_BASE_CAMERA_BIN_SRC_PRELUDE_H__ */
-Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
 @@ -0,0 +1,587 @@
 +/*
 + * GStreamer
@@ -635,10 +635,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
 +    GST_DEBUG_OBJECT (self, "Previews not enabled, not posting");
 +  }
 +}
-Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 @@ -0,0 +1,159 @@
 +/*
 + * GStreamer
@@ -799,10 +799,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 +G_END_DECLS
 +
 +#endif /* __GST_BASE_CAMERA_SRC_H__ */
-Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
 @@ -0,0 +1,45 @@
 +/*
 + * GStreamer
@@ -849,10 +849,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
 +  }
 +  return gtype;
 +}
-Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 @@ -0,0 +1,68 @@
 +/*
 + * GStreamer
@@ -922,10 +922,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 +G_END_DECLS
 +
 +#endif                          /* #ifndef __GST_CAMERABIN_ENUM_H__ */
-Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 @@ -0,0 +1,409 @@
 +/*
 + * GStreamer
@@ -1336,10 +1336,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 +
 +  return ret;
 +}
-Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 @@ -0,0 +1,69 @@
 +/*
 + * GStreamer
@@ -1410,10 +1410,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 +gboolean gst_camerabin_preview_set_filter (GstCameraBinPreviewPipelineData * preview, GstElement * filter);
 +
 +#endif /* #ifndef __CAMERABIN_PREVIEW_H_ */
-Index: b/gst-libs/gst/basecamerabinsrc/meson.build
+Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/meson.build
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/basecamerabinsrc/meson.build
++++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/meson.build
 @@ -0,0 +1,45 @@
 +camerabin_sources = [
 +  'gstcamerabin-enum.c',
@@ -1460,10 +1460,10 @@ Index: b/gst-libs/gst/basecamerabinsrc/meson.build
 +gstbasecamerabin_dep = declare_dependency(link_with : gstbasecamerabin,
 +  include_directories : [libsinc],
 +  dependencies : [gstapp_dep])
-Index: b/gst/camerabin2/PORTING
+Index: gst-plugins-good1.0/gst/camerabin2/PORTING
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/PORTING
++++ gst-plugins-good1.0/gst/camerabin2/PORTING
 @@ -0,0 +1,39 @@
 +This document lists the differenced between camerabin and camerabin2 from
 +the API point of view and should be used to help on porting applications
@@ -1504,10 +1504,10 @@ Index: b/gst/camerabin2/PORTING
 +  audio-capture-caps
 +  viewfinder-caps
 +
-Index: b/gst/camerabin2/camerabin2-src.txt
+Index: gst-plugins-good1.0/gst/camerabin2/camerabin2-src.txt
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/camerabin2-src.txt
++++ gst-plugins-good1.0/gst/camerabin2/camerabin2-src.txt
 @@ -0,0 +1,73 @@
 +=== Camerabin2 Source Requirements (draft) ===
 +
@@ -1582,10 +1582,10 @@ Index: b/gst/camerabin2/camerabin2-src.txt
 +camera source pads. The camera source can simply get_caps on the peer of
 +each of its pads to know what are the allowed caps for that pad.
 +
-Index: b/gst/camerabin2/camerabingeneral.c
+Index: gst-plugins-good1.0/gst/camerabin2/camerabingeneral.c
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/camerabingeneral.c
++++ gst-plugins-good1.0/gst/camerabin2/camerabingeneral.c
 @@ -0,0 +1,260 @@
 +/*
 + * GStreamer
@@ -1847,10 +1847,10 @@ Index: b/gst/camerabin2/camerabingeneral.c
 +  }
 +  gst_iterator_free (iter);
 +}
-Index: b/gst/camerabin2/camerabingeneral.h
+Index: gst-plugins-good1.0/gst/camerabin2/camerabingeneral.h
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/camerabingeneral.h
++++ gst-plugins-good1.0/gst/camerabin2/camerabingeneral.h
 @@ -0,0 +1,37 @@
 +/*
 + * GStreamer
@@ -1889,10 +1889,10 @@ Index: b/gst/camerabin2/camerabingeneral.h
 +void gst_camerabin_remove_elements_from_bin (GstBin * bin);
 +
 +#endif /* #ifndef __CAMERABIN_GENERAL_H_ */
-Index: b/gst/camerabin2/gstcamerabin2.c
+Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.c
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstcamerabin2.c
++++ gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.c
 @@ -0,0 +1,2401 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -4295,10 +4295,10 @@ Index: b/gst/camerabin2/gstcamerabin2.c
 +  return gst_element_register (plugin, "camerabin", GST_RANK_NONE,
 +      gst_camera_bin2_get_type ());
 +}
-Index: b/gst/camerabin2/gstcamerabin2.h
+Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.h
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstcamerabin2.h
++++ gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.h
 @@ -0,0 +1,168 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -4468,10 +4468,10 @@ Index: b/gst/camerabin2/gstcamerabin2.h
 +G_END_DECLS
 +
 +#endif
-Index: b/gst/camerabin2/gstdigitalzoom.c
+Index: gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.c
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstdigitalzoom.c
++++ gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.c
 @@ -0,0 +1,386 @@
 +/*
 + * GStreamer
@@ -4859,10 +4859,10 @@ Index: b/gst/camerabin2/gstdigitalzoom.c
 +      "Digital zoom bin", "Generic/Video",
 +      "Digital zoom bin", "Thiago Santos <thiagoss@osg.samsung.com>");
 +}
-Index: b/gst/camerabin2/gstdigitalzoom.h
+Index: gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.h
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstdigitalzoom.h
++++ gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.h
 @@ -0,0 +1,79 @@
 +/*
 + * GStreamer
@@ -4943,10 +4943,10 @@ Index: b/gst/camerabin2/gstdigitalzoom.h
 +G_END_DECLS
 +
 +#endif /* __GST_DIGITAL_ZOOM_H__ */
-Index: b/gst/camerabin2/gstplugin.c
+Index: gst-plugins-good1.0/gst/camerabin2/gstplugin.c
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstplugin.c
++++ gst-plugins-good1.0/gst/camerabin2/gstplugin.c
 @@ -0,0 +1,46 @@
 +/* GStreamer
 + * Copyright (C) <2010> Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -4994,10 +4994,10 @@ Index: b/gst/camerabin2/gstplugin.c
 +    GST_VERSION_MINOR,
 +    camerabin, "Take image snapshots and record movies from camera",
 +    plugin_init, VERSION, "LGPL", GST_PACKAGE_NAME, GST_PACKAGE_ORIGIN)
-Index: b/gst/camerabin2/gstviewfinderbin.c
+Index: gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.c
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstviewfinderbin.c
++++ gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.c
 @@ -0,0 +1,369 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -5368,10 +5368,10 @@ Index: b/gst/camerabin2/gstviewfinderbin.c
 +  return gst_element_register (plugin, "viewfinderbin", GST_RANK_NONE,
 +      gst_viewfinder_bin_get_type ());
 +}
-Index: b/gst/camerabin2/gstviewfinderbin.h
+Index: gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.h
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstviewfinderbin.h
++++ gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.h
 @@ -0,0 +1,60 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -5433,10 +5433,10 @@ Index: b/gst/camerabin2/gstviewfinderbin.h
 +G_END_DECLS
 +
 +#endif
-Index: b/gst/camerabin2/gstwrappercamerabinsrc.c
+Index: gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.c
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstwrappercamerabinsrc.c
++++ gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.c
 @@ -0,0 +1,1178 @@
 +/*
 + * GStreamer
@@ -6616,10 +6616,10 @@ Index: b/gst/camerabin2/gstwrappercamerabinsrc.c
 +  return gst_element_register (plugin, "wrappercamerabinsrc", GST_RANK_NONE,
 +      gst_wrapper_camera_bin_src_get_type ());
 +}
-Index: b/gst/camerabin2/gstwrappercamerabinsrc.h
+Index: gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.h
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/gstwrappercamerabinsrc.h
++++ gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.h
 @@ -0,0 +1,131 @@
 +/*
 + * GStreamer
@@ -6752,10 +6752,10 @@ Index: b/gst/camerabin2/gstwrappercamerabinsrc.h
 +G_END_DECLS
 +
 +#endif /* __GST_WRAPPER_CAMERA_BIN_SRC_H__ */
-Index: b/gst/camerabin2/meson.build
+Index: gst-plugins-good1.0/gst/camerabin2/meson.build
 ===================================================================
 --- /dev/null
-+++ b/gst/camerabin2/meson.build
++++ gst-plugins-good1.0/gst/camerabin2/meson.build
 @@ -0,0 +1,20 @@
 +camerabin_sources = [
 +  'gstdigitalzoom.c',
@@ -6777,10 +6777,10 @@ Index: b/gst/camerabin2/meson.build
 +)
 +pkgconfig.generate(gstcamerabin, install_dir : plugins_pkgconfig_install_dir)
 +plugins += [gstcamerabin]
-Index: b/gst/meson.build
+Index: gst-plugins-good1.0/gst/meson.build
 ===================================================================
---- a/gst/meson.build
-+++ b/gst/meson.build
+--- gst-plugins-good1.0.orig/gst/meson.build
++++ gst-plugins-good1.0/gst/meson.build
 @@ -1,5 +1,5 @@
  foreach plugin : ['alpha', 'apetag', 'audiofx', 'audioparsers', 'auparse',
 -                  'autodetect', 'avi', 'cutter', 'debugutils', 'deinterlace',
@@ -6788,11 +6788,11 @@ Index: b/gst/meson.build
                    'dtmf', 'effectv', 'equalizer', 'flv', 'flx', 'goom',
                    'goom2k1', 'icydemux', 'id3demux', 'imagefreeze',
                    'interleave', 'isomp4', 'law', 'level', 'matroska',
-Index: b/meson_options.txt
+Index: gst-plugins-good1.0/meson_options.txt
 ===================================================================
---- a/meson_options.txt
-+++ b/meson_options.txt
-@@ -6,6 +6,7 @@
+--- gst-plugins-good1.0.orig/meson_options.txt
++++ gst-plugins-good1.0/meson_options.txt
+@@ -6,6 +6,7 @@ option('audioparsers', type : 'feature',
  option('auparse', type : 'feature', value : 'auto')
  option('autodetect', type : 'feature', value : 'auto')
  option('avi', type : 'feature', value : 'auto')
@@ -6800,10 +6800,10 @@ Index: b/meson_options.txt
  option('cutter', type : 'feature', value : 'auto')
  option('debugutils', type : 'feature', value : 'auto')
  option('deinterlace', type : 'feature', value : 'auto')
-Index: b/tests/check/elements/camerabin.c
+Index: gst-plugins-good1.0/tests/check/elements/camerabin.c
 ===================================================================
 --- /dev/null
-+++ b/tests/check/elements/camerabin.c
++++ gst-plugins-good1.0/tests/check/elements/camerabin.c
 @@ -0,0 +1,1998 @@
 +/* GStreamer
 + *
@@ -8803,11 +8803,11 @@ Index: b/tests/check/elements/camerabin.c
 +}
 +
 +GST_CHECK_MAIN (camerabin);
-Index: b/tests/check/meson.build
+Index: gst-plugins-good1.0/tests/check/meson.build
 ===================================================================
---- a/tests/check/meson.build
-+++ b/tests/check/meson.build
-@@ -30,6 +30,7 @@
+--- gst-plugins-good1.0.orig/tests/check/meson.build
++++ gst-plugins-good1.0/tests/check/meson.build
+@@ -30,6 +30,7 @@ good_tests = [
    [ 'elements/alpha' ],
    [ 'elements/avimux', false, [gstriff_dep] ],
    [ 'elements/avisubtitle', false, [gstriff_dep] ],
@@ -8815,7 +8815,7 @@ Index: b/tests/check/meson.build
    [ 'elements/capssetter' ],
    [ 'elements/aacparse', false, [libparser_dep] ],
    [ 'elements/ac3parse', false, [libparser_dep] ],
-@@ -178,7 +179,7 @@
+@@ -179,7 +180,7 @@ state_ignore_elements = '''aasink autoau
   pulsesink pulsesrc pulsemixer v4l2src'''
  
  # FIXME: check, also + PTHREAD_CFLAGS
@@ -8824,10 +8824,10 @@ Index: b/tests/check/meson.build
    gstvideo_dep, gstpbutils_dep, gstrtp_dep, gstrtsp_dep, gsttag_dep,
    gstapp_dep, gio_dep, valgrind_dep] + glib_deps
  
-Index: b/tests/examples/camerabin2/gst-camera2.c
+Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.c
 ===================================================================
 --- /dev/null
-+++ b/tests/examples/camerabin2/gst-camera2.c
++++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.c
 @@ -0,0 +1,338 @@
 +/*
 + * GStreamer
@@ -9167,10 +9167,10 @@ Index: b/tests/examples/camerabin2/gst-camera2.c
 +  gst_object_unref (camera);
 +  return 0;
 +}
-Index: b/tests/examples/camerabin2/gst-camera2.h
+Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.h
 ===================================================================
 --- /dev/null
-+++ b/tests/examples/camerabin2/gst-camera2.h
++++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.h
 @@ -0,0 +1,54 @@
 +/*
 + * GStreamer
@@ -9226,10 +9226,10 @@ Index: b/tests/examples/camerabin2/gst-camera2.h
 +on_zoomScale_value_changed (GtkWidget * widget, gpointer data);
 +
 +#endif /* __GST_CAMERA_BIN_H__ */
-Index: b/tests/examples/camerabin2/gst-camera2.ui
+Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.ui
 ===================================================================
 --- /dev/null
-+++ b/tests/examples/camerabin2/gst-camera2.ui
++++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.ui
 @@ -0,0 +1,203 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<!-- Generated with glade 3.18.3 -->
@@ -9434,10 +9434,10 @@ Index: b/tests/examples/camerabin2/gst-camera2.ui
 +    </child>
 +  </object>
 +</interface>
-Index: b/tests/examples/camerabin2/gst-camerabin2-test.c
+Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camerabin2-test.c
 ===================================================================
 --- /dev/null
-+++ b/tests/examples/camerabin2/gst-camerabin2-test.c
++++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camerabin2-test.c
 @@ -0,0 +1,1324 @@
 +/*
 + * GStreamer
@@ -10763,10 +10763,10 @@ Index: b/tests/examples/camerabin2/gst-camerabin2-test.c
 +
 +  return 0;
 +}
-Index: b/tests/examples/camerabin2/meson.build
+Index: gst-plugins-good1.0/tests/examples/camerabin2/meson.build
 ===================================================================
 --- /dev/null
-+++ b/tests/examples/camerabin2/meson.build
++++ gst-plugins-good1.0/tests/examples/camerabin2/meson.build
 @@ -0,0 +1,24 @@
 +gtk_dep = dependency('gtk+-3.0', required : get_option('examples'))
 +gdk_x11_dep = dependency('gdk-x11-3.0', required : get_option('examples'))
@@ -10792,10 +10792,10 @@ Index: b/tests/examples/camerabin2/meson.build
 +    c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API'],
 +    install: false)
 +endif
-Index: b/tests/examples/meson.build
+Index: gst-plugins-good1.0/tests/examples/meson.build
 ===================================================================
---- a/tests/examples/meson.build
-+++ b/tests/examples/meson.build
+--- gst-plugins-good1.0.orig/tests/examples/meson.build
++++ gst-plugins-good1.0/tests/examples/meson.build
 @@ -1,5 +1,6 @@
  subdir('audiofx')
  subdir('cairo')
@@ -10803,11 +10803,11 @@ Index: b/tests/examples/meson.build
  subdir('level')
  subdir('qt')
  
-Index: b/meson.build
+Index: gst-plugins-good1.0/meson.build
 ===================================================================
---- a/meson.build
-+++ b/meson.build
-@@ -23,6 +23,12 @@
+--- gst-plugins-good1.0.orig/meson.build
++++ gst-plugins-good1.0/meson.build
+@@ -23,6 +23,12 @@ orc_req = '>= 0.4.17'
  gst_req = '>= @0@.@1@.0'.format(gst_version_major, gst_version_minor)
  
  api_version = '1.0'
@@ -10820,7 +10820,7 @@ Index: b/meson.build
  
  plugins_install_dir = join_paths(get_option('libdir'), 'gstreamer-1.0')
  plugins = []
-@@ -53,11 +59,25 @@
+@@ -53,11 +59,25 @@ if cc.has_link_argument('-Wl,-Bsymbolic-
    add_project_link_arguments('-Wl,-Bsymbolic-functions', language : 'c')
  endif
  
@@ -10847,7 +10847,7 @@ Index: b/meson.build
  # Disable strict aliasing
  if cc.has_argument('-fno-strict-aliasing')
    add_project_arguments('-fno-strict-aliasing', language: 'c')
-@@ -87,7 +107,7 @@
+@@ -87,7 +107,7 @@ if glib_checks.disabled() or (glib_check
    add_project_arguments('-DG_DISABLE_CHECKS', language: 'c')
  endif
  
@@ -10856,7 +10856,7 @@ Index: b/meson.build
  
  check_headers = [
    ['HAVE_DLFCN_H', 'dlfcn.h'],
-@@ -232,6 +252,11 @@
+@@ -232,6 +252,11 @@ endif
  cdata.set_quoted('GST_PACKAGE_NAME', gst_package_name)
  cdata.set_quoted('GST_PACKAGE_ORIGIN', get_option('package-origin'))
  
@@ -10868,7 +10868,7 @@ Index: b/meson.build
  # Mandatory GST deps
  gst_dep = dependency('gstreamer-1.0', version : gst_req,
    fallback : ['gstreamer', 'gst_dep'])
-@@ -422,6 +447,10 @@
+@@ -420,6 +445,10 @@ else
    message('GStreamer debug system is enabled')
  endif
  
@@ -10879,7 +10879,7 @@ Index: b/meson.build
  presetdir = join_paths(get_option('datadir'), 'gstreamer-' + api_version, 'presets')
  
  python3 = import('python').find_installation()
-@@ -432,6 +461,16 @@
+@@ -430,6 +459,16 @@ if get_option('default_library') == 'sha
    plugins_pkgconfig_install_dir = disabler()
  endif
  
@@ -10896,10 +10896,10 @@ Index: b/meson.build
  subdir('gst')
  subdir('sys')
  subdir('ext')
-Index: b/gst-libs/gst/interfaces/meson.build
+Index: gst-plugins-good1.0/gst-libs/gst/interfaces/meson.build
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/meson.build
++++ gst-plugins-good1.0/gst-libs/gst/interfaces/meson.build
 @@ -0,0 +1,30 @@
 +photography_sources = ['photography.c']
 +photo_headers = ['photography.h', 'photography-prelude.h']
@@ -10931,10 +10931,10 @@ Index: b/gst-libs/gst/interfaces/meson.build
 +  include_directories : [libsinc],
 +  dependencies : [gst_dep],
 +  sources : [photoenum_h])
-Index: b/gst-libs/gst/interfaces/photography-prelude.h
+Index: gst-plugins-good1.0/gst-libs/gst/interfaces/photography-prelude.h
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/photography-prelude.h
++++ gst-plugins-good1.0/gst-libs/gst/interfaces/photography-prelude.h
 @@ -0,0 +1,35 @@
 +/* GStreamer Photography Library
 + * Copyright (C) 2018 GStreamer developers
@@ -10971,10 +10971,10 @@ Index: b/gst-libs/gst/interfaces/photography-prelude.h
 +#endif
 +
 +#endif /* __GST_PHOTOGRAPHY_PRELUDE_H__ */
-Index: b/gst-libs/gst/interfaces/photography.c
+Index: gst-plugins-good1.0/gst-libs/gst/interfaces/photography.c
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/photography.c
++++ gst-plugins-good1.0/gst-libs/gst/interfaces/photography.c
 @@ -0,0 +1,732 @@
 +/* GStreamer
 + *
@@ -11708,10 +11708,10 @@ Index: b/gst-libs/gst/interfaces/photography.c
 +          GST_TYPE_PHOTOGRAPHY_EXPOSURE_MODE,
 +          0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 +}
-Index: b/gst-libs/gst/interfaces/photography.h
+Index: gst-plugins-good1.0/gst-libs/gst/interfaces/photography.h
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/interfaces/photography.h
++++ gst-plugins-good1.0/gst-libs/gst/interfaces/photography.h
 @@ -0,0 +1,685 @@
 +/* GStreamer
 + *
@@ -12398,16 +12398,16 @@ Index: b/gst-libs/gst/interfaces/photography.h
 +G_END_DECLS
 +
 +#endif /* __GST_PHOTOGRAPHY_H__ */
-Index: b/gst-libs/meson.build
+Index: gst-plugins-good1.0/gst-libs/meson.build
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/meson.build
++++ gst-plugins-good1.0/gst-libs/meson.build
 @@ -0,0 +1 @@
 +subdir('gst')
-Index: b/gst-libs/gst/meson.build
+Index: gst-plugins-good1.0/gst-libs/gst/meson.build
 ===================================================================
 --- /dev/null
-+++ b/gst-libs/gst/meson.build
++++ gst-plugins-good1.0/gst-libs/gst/meson.build
 @@ -0,0 +1,2 @@
 +subdir('basecamerabinsrc')
 +subdir('interfaces')

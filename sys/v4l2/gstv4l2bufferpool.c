@@ -1019,36 +1019,6 @@ orphan_failed:
   return ret;
 }
 
-gboolean
-gst_v4l2_buffer_pool_orphan (GstBufferPool ** bpool)
-{
-  GstV4l2BufferPool *pool = GST_V4L2_BUFFER_POOL (*bpool);
-  gboolean ret;
-
-  if (!GST_V4L2_ALLOCATOR_CAN_ORPHAN_BUFS (pool->vallocator))
-    return FALSE;
-
-  if (g_getenv ("GST_V4L2_FORCE_DRAIN"))
-    return FALSE;
-
-  GST_DEBUG_OBJECT (pool, "orphaning pool");
-
-  gst_buffer_pool_set_active (*bpool, FALSE);
-  /*
-   * If the buffer pool has outstanding buffers, it will not be stopped
-   * by the base class when set inactive. Stop it manually and mark it
-   * as orphaned
-   */
-  ret = gst_v4l2_buffer_pool_stop (*bpool);
-  if (!ret)
-    gst_v4l2_allocator_orphan (pool->vallocator);
-
-  pool->orphaned = TRUE;
-  gst_object_unref (*bpool);
-  *bpool = NULL;
-  return ret;
-}
-
 static void
 gst_v4l2_buffer_pool_flush_start (GstBufferPool * bpool)
 {

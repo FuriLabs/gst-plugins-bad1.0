@@ -1,3 +1,22 @@
+gst-plugins-good1.0 (1.16.2-1ubuntu2.1) focal-security; urgency=medium
+
+  * SECURITY UPDATE: Use after free
+    - debian/patches/CVE-2021-3497.patch: Fix extraction of multichannel WavPack
+      in gst/matroska/matroska-demux.c, gst/matroska/matroska-ids.h.
+    - CVE-2021-3497
+  * SECURITY UPDATE: Heap corruption
+    - debian/patches/CVE-2021-3498.patch: Initialize track context out parameter to NULL
+      before parsing in gst/matroska/matroska-demux.c.
+    - CVE-2021-3498
+
+ -- Leonidas Da Silva Barbosa <leo.barbosa@canonical.com>  Thu, 15 Apr 2021 11:49:56 -0300
+
+gst-plugins-good1.0 (1.16.2-1ubuntu2) focal; urgency=medium
+
+  * No-change rebuild for libgcc-s1 package name change.
+
+ -- Matthias Klose <doko@ubuntu.com>  Sat, 21 Mar 2020 13:27:34 +0100
+
 gst-plugins-good1.0 (1.16.2-1ubuntu1) focal; urgency=medium
 
   * Merge from Debian unstable.  Remaining changes:

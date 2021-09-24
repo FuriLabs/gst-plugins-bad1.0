@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.18.5-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.18.5-1ubuntu1) impish; urgency=medium
 
   * Merge from Debian unstable. Remaining changes:
     - Stop installing camerabin2 basecamerabin jpegformat - plugins which have

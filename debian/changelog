@@ -1,3 +1,35 @@
+gst-plugins-good1.0 (1.18.5-1ubuntu1) UNRELEASED; urgency=medium
+
+  * Merge from Debian unstable. Remaining changes:
+    + Import plugins from -bad that are needed for main applications.
+      - jpegformat
+      - camerabin (+ basecamerabinsrc + photography)
+    + Add a library package containing the shared library and a -dev package for
+      compiling against it. Add Breaks and Replaces against the plugins packages
+      which formerly contained files shipped here.
+    + Add 'pluginsdir' variable to our added pcfile for compatibility with
+      some external software
+    + debian/control{,.in}: Update Vcs-* for Ubuntu
+
+ -- Sebastien Bacher <seb128@debian.org>  Fri, 24 Sep 2021 12:10:37 +0200
+
+gst-plugins-good1.0 (1.18.5-1) unstable; urgency=medium
+
+  * debian/control:
+    + Depend on qtbase5-private-dev, libqt5waylandclient5-dev to enable the
+      Wayland support in the Qt/QML plugin.
+  * New upstream bugfix release.
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 13 Sep 2021 09:37:12 +0300
+
+gst-plugins-good1.0 (1.18.4-2) unstable; urgency=medium
+
+  * Upload to unstable:
+    + Fixes CVE-2021-3497 (Closes: #986910).
+    + Fixes CVE-2021-3498 (Closes: #986911).
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 22 Apr 2021 20:48:09 +0300
+
 gst-plugins-good1.0 (1.18.4-1ubuntu2) impish; urgency=medium
 
   * debian/patches/git_gcc11_build.patch:

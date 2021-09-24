@@ -2159,7 +2159,7 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.c
 +          "elements", "no-image-conversion"},
 +    {0, NULL, NULL}
 +  };
-+  static volatile GType id = 0;
++  static GType id = 0;
 +
 +  if (g_once_init_enter ((gsize *) & id)) {
 +    GType _id;

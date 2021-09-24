@@ -1,9 +1,9 @@
 Subject: This is a copy of the jpegformat plugin from gst-plugins-good. It's
  needed for Ubuntu main, so we copy it.
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjifmux.c
+Index: gst-plugins-good1.0/gst/jpegformat/gstjifmux.c
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjifmux.c
++++ gst-plugins-good1.0/gst/jpegformat/gstjifmux.c
 @@ -0,0 +1,757 @@
 +/* GStreamer
 + *
@@ -762,10 +762,10 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjifmux.c
 +
 +  return ret;
 +}
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjifmux.h
+Index: gst-plugins-good1.0/gst/jpegformat/gstjifmux.h
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjifmux.h
++++ gst-plugins-good1.0/gst/jpegformat/gstjifmux.h
 @@ -0,0 +1,66 @@
 +/* GStreamer
 + *
@@ -833,10 +833,10 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjifmux.h
 +G_END_DECLS
 +
 +#endif /* __GST_JFIF_MUX_H__ */
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegformat.c
+Index: gst-plugins-good1.0/gst/jpegformat/gstjpegformat.c
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegformat.c
++++ gst-plugins-good1.0/gst/jpegformat/gstjpegformat.c
 @@ -0,0 +1,47 @@
 +/* GStreamer
 + *
@@ -885,10 +885,10 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegformat.c
 +    jpegformat,
 +    "JPEG interchange format plugin",
 +    plugin_init, VERSION, "LGPL", GST_PACKAGE_NAME, GST_PACKAGE_ORIGIN)
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegformat.h
+Index: gst-plugins-good1.0/gst/jpegformat/gstjpegformat.h
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegformat.h
++++ gst-plugins-good1.0/gst/jpegformat/gstjpegformat.h
 @@ -0,0 +1,92 @@
 +/* GStreamer
 + *
@@ -982,11 +982,11 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegformat.h
 +G_END_DECLS
 +
 +#endif /* __GST_JPEG_FORMAT_H__ */
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.c
+Index: gst-plugins-good1.0/gst/jpegformat/gstjpegparse.c
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.c
-@@ -0,0 +1,898 @@
++++ gst-plugins-good1.0/gst/jpegformat/gstjpegparse.c
+@@ -0,0 +1,899 @@
 +/* GStreamer
 + *
 + * jpegparse: a parser for JPEG streams
@@ -1708,7 +1708,8 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.c
 +  GstJpegParse *parse = GST_JPEG_PARSE_CAST (bparse);
 +  GstBuffer *outbuf = frame->buffer;
 +
-+  if (parse->has_fps && !GST_CLOCK_TIME_IS_VALID (parse->next_ts))
++  if (parse->has_fps && parse->framerate_numerator != 0
++      && !GST_CLOCK_TIME_IS_VALID (parse->next_ts))
 +    parse->next_ts = bparse->segment.start;
 +
 +  GST_BUFFER_TIMESTAMP (outbuf) = parse->next_ts;
@@ -1885,10 +1886,10 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.c
 +
 +  return TRUE;
 +}
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.h
+Index: gst-plugins-good1.0/gst/jpegformat/gstjpegparse.h
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.h
++++ gst-plugins-good1.0/gst/jpegformat/gstjpegparse.h
 @@ -0,0 +1,92 @@
 +/* GStreamer
 + *
@@ -1982,10 +1983,10 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/gstjpegparse.h
 +G_END_DECLS
 +
 +#endif /* __GST_JPEG_PARSE_H__ */
-Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/meson.build
+Index: gst-plugins-good1.0/gst/jpegformat/meson.build
 ===================================================================
 --- /dev/null
-+++ gst-plugins-good1.0-1.18.0/gst/jpegformat/meson.build
++++ gst-plugins-good1.0/gst/jpegformat/meson.build
 @@ -0,0 +1,16 @@
 +jpegf_sources = [
 +  'gstjpegformat.c',
@@ -2003,11 +2004,11 @@ Index: gst-plugins-good1.0-1.18.0/gst/jpegformat/meson.build
 +)
 +pkgconfig.generate(gstjpegformat, install_dir : plugins_pkgconfig_install_dir)
 +plugins += [gstjpegformat]
-Index: gst-plugins-good1.0-1.18.0/gst/meson.build
+Index: gst-plugins-good1.0/gst/meson.build
 ===================================================================
---- gst-plugins-good1.0-1.18.0.orig/gst/meson.build
-+++ gst-plugins-good1.0-1.18.0/gst/meson.build
-@@ -2,7 +2,7 @@
+--- gst-plugins-good1.0.orig/gst/meson.build
++++ gst-plugins-good1.0/gst/meson.build
+@@ -2,7 +2,7 @@ foreach plugin : ['alpha', 'apetag', 'au
                    'autodetect', 'avi', 'camerabin2', 'cutter', 'debugutils', 'deinterlace',
                    'dtmf', 'effectv', 'equalizer', 'flv', 'flx', 'goom',
                    'goom2k1', 'icydemux', 'id3demux', 'imagefreeze',
@@ -2016,11 +2017,11 @@ Index: gst-plugins-good1.0-1.18.0/gst/meson.build
                    'monoscope', 'multifile', 'multipart', 'replaygain', 'rtp',
                    'rtpmanager', 'rtsp', 'shapewipe', 'smpte', 'spectrum',
                    'udp', 'videobox', 'videocrop', 'videofilter', 'videomixer',
-Index: gst-plugins-good1.0-1.18.0/meson_options.txt
+Index: gst-plugins-good1.0/meson_options.txt
 ===================================================================
---- gst-plugins-good1.0-1.18.0.orig/meson_options.txt
-+++ gst-plugins-good1.0-1.18.0/meson_options.txt
-@@ -22,6 +22,7 @@
+--- gst-plugins-good1.0.orig/meson_options.txt
++++ gst-plugins-good1.0/meson_options.txt
+@@ -22,6 +22,7 @@ option('id3demux', type : 'feature', val
  option('imagefreeze', type : 'feature', value : 'auto')
  option('interleave', type : 'feature', value : 'auto')
  option('isomp4', type : 'feature', value : 'auto')
@@ -2028,7 +2029,7 @@ Index: gst-plugins-good1.0-1.18.0/meson_options.txt
  option('law', type : 'feature', value : 'auto')
  option('level', type : 'feature', value : 'auto')
  option('matroska', type : 'feature', value : 'auto')
-@@ -95,6 +96,7 @@
+@@ -95,6 +96,7 @@ option('v4l2-gudev', type : 'feature', v
  # Common feature options
  option('examples', type : 'feature', value : 'auto', yield : true)
  option('tests', type : 'feature', value : 'auto', yield : true)

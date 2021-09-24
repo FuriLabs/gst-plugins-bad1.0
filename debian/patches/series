@@ -1,6 +1,3 @@
 import-camerabin
 import-jpegformat
 add-pkgconfig-file
-
-#backport from upstream
-git_gcc11_build.patch

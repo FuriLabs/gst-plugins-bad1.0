@@ -91,6 +91,7 @@ ifeq ($(DEB_HOST_ARCH_OS),linux)
 ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstopenni2.so
 endif
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstsctp.so
 ifeq ($(DEB_HOST_ARCH),amd64)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstmsdk.so
 endif

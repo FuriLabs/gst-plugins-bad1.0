@@ -1,3 +1,9 @@
+gst-plugins-good1.0 (1.18.5-1ubuntu3) jammy; urgency=medium
+
+  * No change rebuild for the new libvpx soname
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 17 Nov 2021 13:23:10 +0100
+
 gst-plugins-good1.0 (1.18.5-1ubuntu2) impish; urgency=medium
 
   * debian/control: revert dependency change creating migration issues

@@ -1,12 +1,91 @@
+From: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Date: Tue, 1 Feb 2022 14:56:55 -0500
 Subject: This is a copy of the camerabin2,
  basecamerabin and photography plugins from gst-plugins-bad. They're needed
  for applications in Ubuntu main, so we move them here.
 
 Forwarded: not-needed
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
-===================================================================
+---
+ .../basecamerabinsrc/basecamerabinsrc-prelude.h    |   35 +
+ gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c   |  587 +++++
+ gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h   |  159 ++
+ gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c  |   45 +
+ gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h  |   68 +
+ .../gst/basecamerabinsrc/gstcamerabinpreview.c     |  409 ++++
+ .../gst/basecamerabinsrc/gstcamerabinpreview.h     |   69 +
+ gst-libs/gst/basecamerabinsrc/meson.build          |   45 +
+ gst-libs/gst/interfaces/meson.build                |   30 +
+ gst-libs/gst/interfaces/photography-prelude.h      |   35 +
+ gst-libs/gst/interfaces/photography.c              |  732 ++++++
+ gst-libs/gst/interfaces/photography.h              |  685 ++++++
+ gst-libs/gst/meson.build                           |    2 +
+ gst-libs/meson.build                               |    1 +
+ gst/camerabin2/PORTING                             |   39 +
+ gst/camerabin2/camerabin2-src.txt                  |   73 +
+ gst/camerabin2/camerabingeneral.c                  |  260 +++
+ gst/camerabin2/camerabingeneral.h                  |   37 +
+ gst/camerabin2/gstcamerabin2.c                     | 2401 ++++++++++++++++++++
+ gst/camerabin2/gstcamerabin2.h                     |  168 ++
+ gst/camerabin2/gstdigitalzoom.c                    |  386 ++++
+ gst/camerabin2/gstdigitalzoom.h                    |   79 +
+ gst/camerabin2/gstplugin.c                         |   46 +
+ gst/camerabin2/gstviewfinderbin.c                  |  369 +++
+ gst/camerabin2/gstviewfinderbin.h                  |   60 +
+ gst/camerabin2/gstwrappercamerabinsrc.c            | 1178 ++++++++++
+ gst/camerabin2/gstwrappercamerabinsrc.h            |  131 ++
+ gst/camerabin2/meson.build                         |   20 +
+ gst/meson.build                                    |    2 +-
+ meson.build                                        |   43 +-
+ meson_options.txt                                  |    1 +
+ tests/check/elements/camerabin.c                   | 1998 ++++++++++++++++
+ tests/check/meson.build                            |    3 +-
+ tests/examples/camerabin2/gst-camera2.c            |  338 +++
+ tests/examples/camerabin2/gst-camera2.h            |   54 +
+ tests/examples/camerabin2/gst-camera2.ui           |  203 ++
+ tests/examples/camerabin2/gst-camerabin2-test.c    | 1324 +++++++++++
+ tests/examples/camerabin2/meson.build              |   24 +
+ tests/examples/meson.build                         |    1 +
+ 39 files changed, 12136 insertions(+), 4 deletions(-)
+ create mode 100644 gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
+ create mode 100644 gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
+ create mode 100644 gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
+ create mode 100644 gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
+ create mode 100644 gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
+ create mode 100644 gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
+ create mode 100644 gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
+ create mode 100644 gst-libs/gst/basecamerabinsrc/meson.build
+ create mode 100644 gst-libs/gst/interfaces/meson.build
+ create mode 100644 gst-libs/gst/interfaces/photography-prelude.h
+ create mode 100644 gst-libs/gst/interfaces/photography.c
+ create mode 100644 gst-libs/gst/interfaces/photography.h
+ create mode 100644 gst-libs/gst/meson.build
+ create mode 100644 gst-libs/meson.build
+ create mode 100644 gst/camerabin2/PORTING
+ create mode 100644 gst/camerabin2/camerabin2-src.txt
+ create mode 100644 gst/camerabin2/camerabingeneral.c
+ create mode 100644 gst/camerabin2/camerabingeneral.h
+ create mode 100644 gst/camerabin2/gstcamerabin2.c
+ create mode 100644 gst/camerabin2/gstcamerabin2.h
+ create mode 100644 gst/camerabin2/gstdigitalzoom.c
+ create mode 100644 gst/camerabin2/gstdigitalzoom.h
+ create mode 100644 gst/camerabin2/gstplugin.c
+ create mode 100644 gst/camerabin2/gstviewfinderbin.c
+ create mode 100644 gst/camerabin2/gstviewfinderbin.h
+ create mode 100644 gst/camerabin2/gstwrappercamerabinsrc.c
+ create mode 100644 gst/camerabin2/gstwrappercamerabinsrc.h
+ create mode 100644 gst/camerabin2/meson.build
+ create mode 100644 tests/check/elements/camerabin.c
+ create mode 100644 tests/examples/camerabin2/gst-camera2.c
+ create mode 100644 tests/examples/camerabin2/gst-camera2.h
+ create mode 100644 tests/examples/camerabin2/gst-camera2.ui
+ create mode 100644 tests/examples/camerabin2/gst-camerabin2-test.c
+ create mode 100644 tests/examples/camerabin2/meson.build
+
+diff --git a/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h b/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
+new file mode 100644
+index 0000000..ec9a766
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
++++ b/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelude.h
 @@ -0,0 +1,35 @@
 +/* GStreamer BaseCameraBinSrc Library
 + * Copyright (C) 2018 GStreamer developers
@@ -43,10 +122,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/basecamerabinsrc-prelud
 +#endif
 +
 +#endif /* __GST_BASE_CAMERA_BIN_SRC_PRELUDE_H__ */
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
+new file mode 100644
+index 0000000..59d5e8b
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
++++ b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
 @@ -0,0 +1,587 @@
 +/*
 + * GStreamer
@@ -635,10 +715,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.c
 +    GST_DEBUG_OBJECT (self, "Previews not enabled, not posting");
 +  }
 +}
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
+new file mode 100644
+index 0000000..9318c01
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
++++ b/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 @@ -0,0 +1,159 @@
 +/*
 + * GStreamer
@@ -799,10 +880,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstbasecamerasrc.h
 +G_END_DECLS
 +
 +#endif /* __GST_BASE_CAMERA_SRC_H__ */
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
+new file mode 100644
+index 0000000..6963e0c
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
++++ b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
 @@ -0,0 +1,45 @@
 +/*
 + * GStreamer
@@ -849,10 +931,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.c
 +  }
 +  return gtype;
 +}
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
+new file mode 100644
+index 0000000..bba15c0
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
++++ b/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 @@ -0,0 +1,68 @@
 +/*
 + * GStreamer
@@ -922,10 +1005,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabin-enum.h
 +G_END_DECLS
 +
 +#endif                          /* #ifndef __GST_CAMERABIN_ENUM_H__ */
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
+new file mode 100644
+index 0000000..2a46490
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
++++ b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 @@ -0,0 +1,409 @@
 +/*
 + * GStreamer
@@ -1336,10 +1420,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.c
 +
 +  return ret;
 +}
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
+new file mode 100644
+index 0000000..a0f3c0f
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
++++ b/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 @@ -0,0 +1,69 @@
 +/*
 + * GStreamer
@@ -1410,10 +1495,11 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/gstcamerabinpreview.h
 +gboolean gst_camerabin_preview_set_filter (GstCameraBinPreviewPipelineData * preview, GstElement * filter);
 +
 +#endif /* #ifndef __CAMERABIN_PREVIEW_H_ */
-Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/meson.build
-===================================================================
+diff --git a/gst-libs/gst/basecamerabinsrc/meson.build b/gst-libs/gst/basecamerabinsrc/meson.build
+new file mode 100644
+index 0000000..ba6771e
 --- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/meson.build
++++ b/gst-libs/gst/basecamerabinsrc/meson.build
 @@ -0,0 +1,45 @@
 +camerabin_sources = [
 +  'gstcamerabin-enum.c',
@@ -1460,10 +1546,1532 @@ Index: gst-plugins-good1.0/gst-libs/gst/basecamerabinsrc/meson.build
 +gstbasecamerabin_dep = declare_dependency(link_with : gstbasecamerabin,
 +  include_directories : [libsinc],
 +  dependencies : [gstapp_dep])
-Index: gst-plugins-good1.0/gst/camerabin2/PORTING
-===================================================================
+diff --git a/gst-libs/gst/interfaces/meson.build b/gst-libs/gst/interfaces/meson.build
+new file mode 100644
+index 0000000..5228471
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/PORTING
++++ b/gst-libs/gst/interfaces/meson.build
+@@ -0,0 +1,30 @@
++photography_sources = ['photography.c']
++photo_headers = ['photography.h', 'photography-prelude.h']
++install_headers(photo_headers, subdir : 'gstreamer-1.0/gst/interfaces')
++
++photo_enums = gnome.mkenums_simple('photography-enumtypes',
++  sources : photo_headers,
++  body_prefix : '#ifdef HAVE_CONFIG_H\n#include "config.h"\n#endif',
++  header_prefix : '#include <gst/interfaces/photography-prelude.h>',
++  decorator: 'GST_PHOTOGRAPHY_API',
++  install_header: true,
++  install_dir : join_paths(get_option('includedir'), 'gstreamer-1.0/gst/interfaces'))
++
++photoenum_c = photo_enums[0]
++photoenum_h = photo_enums[1]
++
++gstphotography = library('gstphotography-' + api_version,
++  photography_sources, photoenum_h, photoenum_c,
++  c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API', '-DBUILDING_GST_PHOTOGRAPHY'],
++  include_directories : [configinc, libsinc],
++  version : libversion,
++  soversion : soversion,
++  darwin_versions : osxversion,
++  install : true,
++  dependencies : [gst_dep],
++)
++
++gstphotography_dep = declare_dependency(link_with : gstphotography,
++  include_directories : [libsinc],
++  dependencies : [gst_dep],
++  sources : [photoenum_h])
+diff --git a/gst-libs/gst/interfaces/photography-prelude.h b/gst-libs/gst/interfaces/photography-prelude.h
+new file mode 100644
+index 0000000..dbb7f13
+--- /dev/null
++++ b/gst-libs/gst/interfaces/photography-prelude.h
+@@ -0,0 +1,35 @@
++/* GStreamer Photography Library
++ * Copyright (C) 2018 GStreamer developers
++ *
++ * photography-prelude.h: prelude include header for gst-photography library
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Library General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Library General Public License for more details.
++ *
++ * You should have received a copy of the GNU Library General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
++ */
++
++#ifndef __GST_PHOTOGRAPHY_PRELUDE_H__
++#define __GST_PHOTOGRAPHY_PRELUDE_H__
++
++#include <gst/gst.h>
++
++#ifndef GST_PHOTOGRAPHY_API
++# ifdef BUILDING_GST_PHOTOGRAPHY
++#  define GST_PHOTOGRAPHY_API GST_API_EXPORT         /* from config.h */
++# else
++#  define GST_PHOTOGRAPHY_API GST_API_IMPORT
++# endif
++#endif
++
++#endif /* __GST_PHOTOGRAPHY_PRELUDE_H__ */
+diff --git a/gst-libs/gst/interfaces/photography.c b/gst-libs/gst/interfaces/photography.c
+new file mode 100644
+index 0000000..70836d6
+--- /dev/null
++++ b/gst-libs/gst/interfaces/photography.c
+@@ -0,0 +1,732 @@
++/* GStreamer
++ *
++ * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
++ *
++ * photography.c: photography interface for digital imaging
++ *
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Library General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Library General Public License for more details.
++ *
++ * You should have received a copy of the GNU Library General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
++ */
++
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
++#include "photography.h"
++
++/**
++ * SECTION:gstphotography
++ * @short_description: Interface for digital image capture elements
++ * @stability: Unstable
++ *
++ * The interface allows access to some common digital image capture parameters.
++ *
++ * > The GstPhotography interface is unstable API and may change in future.
++ * > One can define GST_USE_UNSTABLE_API to acknowledge and avoid this warning.
++ */
++
++static void gst_photography_iface_base_init (GstPhotographyInterface * iface);
++static void gst_photography_iface_class_init (gpointer g_class);
++
++GType
++gst_photography_get_type (void)
++{
++  static GType gst_photography_type = 0;
++
++  if (!gst_photography_type) {
++    static const GTypeInfo gst_photography_info = {
++      sizeof (GstPhotographyInterface),
++      (GBaseInitFunc) gst_photography_iface_base_init,  /* base_init */
++      NULL,                     /* base_finalize */
++      (GClassInitFunc) gst_photography_iface_class_init,        /* class_init */
++      NULL,                     /* class_finalize */
++      NULL,                     /* class_data */
++      0,
++      0,                        /* n_preallocs */
++      NULL,                     /* instance_init */
++    };
++
++    gst_photography_type = g_type_register_static (G_TYPE_INTERFACE,
++        "GstPhotography", &gst_photography_info, 0);
++  }
++
++  return gst_photography_type;
++}
++
++static void
++gst_photography_iface_base_init (GstPhotographyInterface * iface)
++{
++  /* default virtual functions */
++  iface->get_ev_compensation = NULL;
++  iface->get_iso_speed = NULL;
++  iface->get_aperture = NULL;
++  iface->get_exposure = NULL;
++  iface->get_white_balance_mode = NULL;
++  iface->get_color_tone_mode = NULL;
++  iface->get_scene_mode = NULL;
++  iface->get_flash_mode = NULL;
++  iface->get_noise_reduction = NULL;
++  iface->get_zoom = NULL;
++  iface->get_flicker_mode = NULL;
++  iface->get_focus_mode = NULL;
++
++  iface->set_ev_compensation = NULL;
++  iface->set_iso_speed = NULL;
++  iface->set_aperture = NULL;
++  iface->set_exposure = NULL;
++  iface->set_white_balance_mode = NULL;
++  iface->set_color_tone_mode = NULL;
++  iface->set_scene_mode = NULL;
++  iface->set_flash_mode = NULL;
++  iface->set_noise_reduction = NULL;
++  iface->set_zoom = NULL;
++  iface->set_flicker_mode = NULL;
++  iface->set_focus_mode = NULL;
++
++  iface->get_capabilities = NULL;
++  iface->prepare_for_capture = NULL;
++  iface->set_autofocus = NULL;
++  iface->set_config = NULL;
++  iface->get_config = NULL;
++  iface->set_exposure_mode = NULL;
++  iface->get_exposure_mode = NULL;
++  iface->set_analog_gain = NULL;
++  iface->get_analog_gain = NULL;
++  iface->set_lens_focus = NULL;
++  iface->get_lens_focus = NULL;
++  iface->set_color_temperature = NULL;
++  iface->get_color_temperature = NULL;
++  iface->set_min_exposure_time = NULL;
++  iface->get_min_exposure_time = NULL;
++  iface->set_max_exposure_time = NULL;
++  iface->get_max_exposure_time = NULL;
++}
++
++#define GST_PHOTOGRAPHY_FUNC_TEMPLATE(function_name, param_type) \
++gboolean \
++gst_photography_set_ ## function_name (GstPhotography * photo, param_type param) \
++{ \
++  GstPhotographyInterface *iface; \
++  g_return_val_if_fail (photo != NULL, FALSE); \
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo); \
++  if (iface->set_ ## function_name) { \
++    return iface->set_ ## function_name (photo, param); \
++  } \
++  return FALSE; \
++} \
++gboolean \
++gst_photography_get_ ## function_name (GstPhotography * photo, param_type * param) \
++{ \
++  GstPhotographyInterface *iface; \
++  g_return_val_if_fail (photo != NULL, FALSE); \
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo); \
++  if (iface->get_ ## function_name) { \
++    return iface->get_ ## function_name (photo, param); \
++  } \
++  return FALSE; \
++}
++
++
++/**
++ * gst_photography_set_ev_compensation:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @ev_comp: ev compensation value to set
++ *
++ * Set the ev compensation value for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_ev_compensation:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @ev_comp: ev compensation value to get
++ *
++ * Get the ev compensation value for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (ev_compensation, gfloat);
++
++/**
++ * gst_photography_set_iso_speed:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @iso_speed: ISO speed value to set
++ *
++ * Set the ISO value (light sensivity) for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_iso_speed:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @iso_speed: ISO speed value to get
++ *
++ * Get the ISO value (light sensivity) for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (iso_speed, guint);
++
++/**
++ * gst_photography_set_aperture:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @aperture: aperture value to set
++ *
++ * Set the aperture value for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_aperture:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @aperture: aperture value to get
++ *
++ * Get the aperture value for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (aperture, guint);
++
++/**
++ * gst_photography_set_exposure:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @exposure: exposure time to set
++ *
++ * Set the fixed exposure time (in us) for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_exposure:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @exposure: exposure time to get
++ *
++ * Get the fixed exposure time (in us) for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (exposure, guint32);
++
++/**
++ * gst_photography_set_white_balance_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @wb_mode: #GstPhotographyWhiteBalanceMode to set
++ *
++ * Set the white balance mode for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_white_balance_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @wb_mode: #GstPhotographyWhiteBalanceMode to get
++ *
++ * Get the white balance mode for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (white_balance_mode,
++    GstPhotographyWhiteBalanceMode);
++
++/**
++ * gst_photography_set_color_tone_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @tone_mode: #GstPhotographyColorToneMode to set
++ *
++ * Set the color tone mode for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_color_tone_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @tone_mode: #GstPhotographyColorToneMode to get
++ *
++ * Get the color tone mode for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (color_tone_mode, GstPhotographyColorToneMode);
++
++/**
++ * gst_photography_set_scene_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @scene_mode: #GstPhotographySceneMode to set
++ *
++ * Set the scene mode for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_scene_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @scene_mode: #GstPhotographySceneMode to get
++ *
++ * Get the scene mode for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (scene_mode, GstPhotographySceneMode);
++
++/**
++ * gst_photography_set_flash_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @flash_mode: #GstPhotographyFlashMode to set
++ *
++ * Set the flash mode for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_flash_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @flash_mode: #GstPhotographyFlashMode to get
++ *
++ * Get the flash mode for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (flash_mode, GstPhotographyFlashMode);
++
++/**
++ * gst_photography_set_noise_reduction:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @noise_reduction: #GstPhotographyNoiseReductionMode to set
++ *
++ * Set the noise reduction mode for the #GstElement
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_noise_reduction:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @noise_reduction: #GstPhotographyNoiseReductionMode to get
++ *
++ * Get the noise reduction mode for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (noise_reduction, GstPhotographyNoiseReduction);
++
++/**
++ * gst_photography_set_zoom:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @zoom: zoom value to set
++ *
++ * Set the zoom value for the #GstElement.
++ * E.g. 1.0 to get original image and 3.0 for 3x zoom and so on.
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_zoom:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @zoom: zoom value to get
++ *
++ * Get the zoom value for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (zoom, gfloat);
++
++/**
++ * gst_photography_set_flicker_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @flicker_mode: flicker mode value to set
++ *
++ * Set the flicker mode value for the #GstElement.
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_flicker_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @flicker_mode: flicker mode value to get
++ *
++ * Get the flicker mode value for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (flicker_mode,
++    GstPhotographyFlickerReductionMode);
++
++/**
++ * gst_photography_set_focus_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @focus_mode: focus mode value to set
++ *
++ * Set the focus mode value for the #GstElement.
++ *
++ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
++ */
++/**
++ * gst_photography_get_focus_mode:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @focus_mode: focus_mode value to get
++ *
++ * Get the focus mode value for the #GstElement
++ *
++ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
++ */
++GST_PHOTOGRAPHY_FUNC_TEMPLATE (focus_mode, GstPhotographyFocusMode);
++
++/**
++ * gst_photography_get_capabilities:
++ * @photo: #GstPhotography interface of a #GstElement
++ *
++ * Get #GstPhotographyCaps bitmask value that indicates what photography
++ * interface features the #GstElement supports
++ *
++ * Returns: #GstPhotographyCaps value
++ */
++GstPhotographyCaps
++gst_photography_get_capabilities (GstPhotography * photo)
++{
++  GstPhotographyInterface *iface;
++  g_return_val_if_fail (photo != NULL, GST_PHOTOGRAPHY_CAPS_NONE);
++
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
++  if (iface->get_capabilities) {
++    return iface->get_capabilities (photo);
++  } else {
++    return GST_PHOTOGRAPHY_CAPS_NONE;
++  }
++}
++
++/**
++ * gst_photography_prepare_for_capture:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @func: callback that is called after capturing has been prepared
++ * @capture_caps: #GstCaps defining the desired format of the captured image
++ * @user_data: user data that will be passed to the callback @func
++ *
++ * Start preparations for capture. Preparations can take indeterminate
++ * amount of time and @func callback is called after preparations are
++ * done. Image capture will begin after callback returns.
++ *
++ * Returns: %TRUE if preparations were started (caps were OK), otherwise %FALSE.
++ */
++gboolean
++gst_photography_prepare_for_capture (GstPhotography * photo,
++    GstPhotographyCapturePrepared func, GstCaps * capture_caps,
++    gpointer user_data)
++{
++  GstPhotographyInterface *iface;
++  gboolean ret = TRUE;
++
++  g_return_val_if_fail (photo != NULL, FALSE);
++
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
++  if (iface->prepare_for_capture) {
++    ret = iface->prepare_for_capture (photo, func, capture_caps, user_data);
++  }
++
++  return ret;
++}
++
++/**
++ * gst_photography_set_autofocus:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @on: %TRUE to start autofocusing, %FALSE to stop autofocusing
++ *
++ * Start or stop autofocusing. %GST_PHOTOGRAPHY_AUTOFOCUS_DONE
++ * message is posted to bus when autofocusing has finished.
++ */
++void
++gst_photography_set_autofocus (GstPhotography * photo, gboolean on)
++{
++  GstPhotographyInterface *iface;
++  g_return_if_fail (photo != NULL);
++
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
++  if (iface->set_autofocus) {
++    iface->set_autofocus (photo, on);
++  }
++}
++
++/**
++ * gst_photography_set_config:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @config: #GstPhotographySettings containing the configuration
++ *
++ * Set all configuration settings at once.
++ *
++ * Returns: TRUE if configuration was set successfully, otherwise FALSE.
++ */
++gboolean
++gst_photography_set_config (GstPhotography * photo,
++    GstPhotographySettings * config)
++{
++  GstPhotographyInterface *iface;
++  gboolean ret = FALSE;
++
++  g_return_val_if_fail (photo != NULL, FALSE);
++
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
++  if (iface->set_config) {
++    ret = iface->set_config (photo, config);
++  }
++
++  return ret;
++}
++
++/**
++ * gst_photography_get_config:
++ * @photo: #GstPhotography interface of a #GstElement
++ * @config: #GstPhotographySettings containing the configuration
++ *
++ * Get all configuration settings at once.
++ *
++ * Returns: TRUE if configuration was got successfully, otherwise FALSE.
++ */
++gboolean
++gst_photography_get_config (GstPhotography * photo,
++    GstPhotographySettings * config)
++{
++  GstPhotographyInterface *iface;
++  gboolean ret = FALSE;
++
++  g_return_val_if_fail (photo != NULL, FALSE);
++
++  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
++  if (iface->get_config) {
++    ret = iface->get_config (photo, config);
++  }
++
++  return ret;
++}
++
++/* Photography class initialization stuff */
++static void
++gst_photography_iface_class_init (gpointer g_class)
++{
++  /* create interface signals and properties here. */
++
++  /* White balance */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_WB_MODE,
++          "White balance mode property",
++          "White balance affects the color temperature of the photo",
++          GST_TYPE_PHOTOGRAPHY_WHITE_BALANCE_MODE,
++          GST_PHOTOGRAPHY_WB_MODE_AUTO,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Color tone */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_COLOR_TONE,
++          "Color tone mode property",
++          "Color tone setting changes color shading in the photo",
++          GST_TYPE_PHOTOGRAPHY_COLOR_TONE_MODE,
++          GST_PHOTOGRAPHY_COLOR_TONE_MODE_NORMAL,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Scene mode */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_SCENE_MODE,
++          "Scene mode property",
++          "Scene mode works as a preset for different photo shooting mode settings",
++          GST_TYPE_PHOTOGRAPHY_SCENE_MODE,
++          GST_PHOTOGRAPHY_SCENE_MODE_AUTO,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Flash mode */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_FLASH_MODE,
++          "Flash mode property",
++          "Flash mode defines how the flash light should be used",
++          GST_TYPE_PHOTOGRAPHY_FLASH_MODE,
++          GST_PHOTOGRAPHY_FLASH_MODE_AUTO,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Flicker reduction mode */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_FLICKER_MODE,
++          "Flicker reduction mode property",
++          "Flicker reduction mode defines a line frequency for flickering prevention",
++          GST_TYPE_PHOTOGRAPHY_FLICKER_REDUCTION_MODE,
++          GST_PHOTOGRAPHY_FLICKER_REDUCTION_OFF,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Focus mode */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_FOCUS_MODE,
++          "Focus mode property",
++          "Focus mode defines the range of focal lengths to use in autofocus search",
++          GST_TYPE_PHOTOGRAPHY_FOCUS_MODE,
++          GST_PHOTOGRAPHY_FOCUS_MODE_AUTO,
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Capabilities */
++  g_object_interface_install_property (g_class,
++      g_param_spec_ulong (GST_PHOTOGRAPHY_PROP_CAPABILITIES,
++          "Photo capabilities bitmask",
++          "Tells the photo capabilities of the device",
++          0, G_MAXULONG, 0, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
++
++  /* EV_compensation */
++  g_object_interface_install_property (g_class,
++      g_param_spec_float (GST_PHOTOGRAPHY_PROP_EV_COMP,
++          "EV compensation property",
++          "EV compensation affects the brightness of the image",
++          -2.5, 2.5, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* ISO value */
++  g_object_interface_install_property (g_class,
++      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_ISO_SPEED,
++          "ISO speed property",
++          "ISO speed defines the light sensitivity (0 = auto)",
++          0, 6400, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Aperture */
++  g_object_interface_install_property (g_class,
++      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_APERTURE,
++          "Aperture property",
++          "Aperture defines the size of lens opening  (0 = auto)",
++          0, G_MAXUINT8, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Exposure */
++  g_object_interface_install_property (g_class,
++      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_EXPOSURE_TIME,
++          "Exposure time in milliseconds",
++          "Exposure time defines how long the shutter will stay open (0 = auto)",
++          0, G_MAXUINT32, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:image-capture-supported-caps:
++   *
++   * Query caps that describe supported formats for image capture. Sometimes
++   * element may support different formats for image capture than for video
++   * streaming.
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_boxed (GST_PHOTOGRAPHY_PROP_IMAGE_CAPTURE_SUPPORTED_CAPS,
++          "Image capture supported caps",
++          "Caps describing supported image capture formats", GST_TYPE_CAPS,
++          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:image-preview-supported-caps:
++   *
++   * Query caps that describe supported formats for preview image. Sometimes
++   * element may support different formats for preview image than for video
++   * streaming.
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_boxed (GST_PHOTOGRAPHY_PROP_IMAGE_PREVIEW_SUPPORTED_CAPS,
++          "Image preview supported caps",
++          "Caps describing supported image preview formats", GST_TYPE_CAPS,
++          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
++
++  /* Zoom */
++  g_object_interface_install_property (g_class,
++      g_param_spec_float (GST_PHOTOGRAPHY_PROP_ZOOM,
++          "Zoom property",
++          "How much the resulted image will be zoomed",
++          1.0f, 10.0f, 1.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:color-temperature:
++   *
++   * Color temperature parameter for manual white balance.
++   * Control color temperature in Kelvin units.
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_COLOR_TEMPERATURE,
++          "Color temperature in Kelvin units",
++          "Color temperature in Kelvin units for manual white balance",
++          0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:white-point:
++   *
++   * White point parameter for manual white balance.
++   * Describes the color "white" as raw values.
++   *
++   * FIXME: check and document correct representation for white point
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_value_array (GST_PHOTOGRAPHY_PROP_WHITE_POINT,
++          "White point",
++          "Describe color white as raw values",
++          g_param_spec_uint ("raw-value", "Raw value",
++              "Raw value", 0, G_MAXUINT, 0,
++              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS),
++          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:analog-gain:
++   *
++   * Linear multiplicative value how much amplification is applied to the signal
++   * before A-D conversion.
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_float (GST_PHOTOGRAPHY_PROP_ANALOG_GAIN,
++          "Analog gain applied to the sensor",
++          "Analog gain applied to the sensor",
++          1.0f, G_MAXFLOAT, 1.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:lens-focus:
++   *
++   * Manual changing of lens focus in diopter units.
++   * Intended use with GST_PHOTOGRAPHY_FOCUS_MODE_MANUAL focus mode, otherwise
++   * to be ignored.
++   *
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_float (GST_PHOTOGRAPHY_PROP_LENS_FOCUS,
++          "Manual lens focus",
++          "Focus point in diopter units",
++          0.0f, G_MAXFLOAT, 0.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:min-exposure-time:
++   *
++   * Minimum exposure time for automatic exposure mode.
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_MIN_EXPOSURE_TIME,
++          "Minimum exposure time",
++          "Minimum exposure time for automatic exposure mode",
++          0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /**
++   * GstPhotography:max-exposure-time:
++   *
++   * Maximum exposure time for automatic exposure mode.
++   */
++  g_object_interface_install_property (g_class,
++      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_MAX_EXPOSURE_TIME,
++          "Maximum exposure time",
++          "Maximum exposure time for automatic exposure mode",
++          0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Noise Reduction, Bayer an YCC noise reduction are enabled by default */
++  g_object_interface_install_property (g_class,
++      g_param_spec_flags (GST_PHOTOGRAPHY_PROP_NOISE_REDUCTION,
++          "Noise Reduction settings",
++          "Which noise reduction modes are enabled (0 = disabled)",
++          GST_TYPE_PHOTOGRAPHY_NOISE_REDUCTION,
++          0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++
++  /* Exposure mode */
++  g_object_interface_install_property (g_class,
++      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_EXPOSURE_MODE,
++          "Exposure mode property",
++          "Exposure mode to either automatic or manual",
++          GST_TYPE_PHOTOGRAPHY_EXPOSURE_MODE,
++          0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
++}
+diff --git a/gst-libs/gst/interfaces/photography.h b/gst-libs/gst/interfaces/photography.h
+new file mode 100644
+index 0000000..e9ac9e6
+--- /dev/null
++++ b/gst-libs/gst/interfaces/photography.h
+@@ -0,0 +1,685 @@
++/* GStreamer
++ *
++ * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
++ *
++ * photography.h: photography interface for digital imaging
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Library General Public
++ * License as published by the Free Software Foundation; either
++ * version 2 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Library General Public License for more details.
++ *
++ * You should have received a copy of the GNU Library General Public
++ * License along with this library; if not, write to the
++ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
++ */
++
++#ifndef __GST_PHOTOGRAPHY_H__
++#define __GST_PHOTOGRAPHY_H__
++
++#ifndef GST_USE_UNSTABLE_API
++#warning "The GstPhotography interface is unstable API and may change in future."
++#warning "You can define GST_USE_UNSTABLE_API to avoid this warning." 
++#endif
++
++#include <gst/gst.h>
++#include <gst/interfaces/photography-prelude.h>
++#include <gst/interfaces/photography-enumtypes.h>
++
++G_BEGIN_DECLS
++
++#define GST_TYPE_PHOTOGRAPHY \
++  (gst_photography_get_type ())
++#define GST_PHOTOGRAPHY(obj) \
++  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GST_TYPE_PHOTOGRAPHY, GstPhotography))
++#define GST_IS_PHOTOGRAPHY(obj) \
++  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GST_TYPE_PHOTOGRAPHY))
++#define GST_PHOTOGRAPHY_GET_INTERFACE(inst) \
++  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GST_TYPE_PHOTOGRAPHY, GstPhotographyInterface))
++
++
++/**
++ * GST_PHOTOGRAPHY_AUTOFOCUS_DONE:
++ *
++ * Name of custom GstMessage that will be posted to #GstBus when autofocusing
++ * is complete.
++ * This message contains following fields:
++ *
++ * * `status` (#GstPhotographyFocusStatus): Tells if focusing succeeded or failed.
++ *
++ * * `focus-window-rows` (#G_TYPE_INT): Tells number of focus matrix rows.
++ *
++ * * `focus-window-columns` (#G_TYPE_INT): Tells number of focus matrix columns.
++ *
++ * * `focus-window-mask` (#G_TYPE_INT): Bitmask containing rows x columns bits
++ *   which mark the focus points in the focus matrix. Lowest bit (LSB) always
++ *   represents the top-left corner of the focus matrix. This field is only valid
++ *   when focusing status is SUCCESS.
++ */
++#define GST_PHOTOGRAPHY_AUTOFOCUS_DONE "autofocus-done"
++
++/**
++ * GST_PHOTOGRAPHY_SHAKE_RISK:
++ *
++ * Name of custom GstMessage that is posted to #GstBus during autofocusing
++ * process. It is posted if there is change in the risk of captured image
++ * becoming "shaken" due to camera movement and too long exposure time.
++ *
++ * This message contains following fields:
++ *
++ * * `status` (#GstPhotographyShakeRisk): Tells risk level of capturing shaken image.
++ */
++#define GST_PHOTOGRAPHY_SHAKE_RISK "shake-risk"
++
++/* Maximum white point values used in #GstPhotographySettings */
++#define MAX_WHITE_POINT_VALUES 4
++
++/* Interface property names */
++#define GST_PHOTOGRAPHY_PROP_WB_MODE            "white-balance-mode"
++#define GST_PHOTOGRAPHY_PROP_COLOR_TONE         "color-tone-mode"
++#define GST_PHOTOGRAPHY_PROP_SCENE_MODE         "scene-mode"
++#define GST_PHOTOGRAPHY_PROP_FLASH_MODE         "flash-mode"
++#define GST_PHOTOGRAPHY_PROP_NOISE_REDUCTION    "noise-reduction"
++#define GST_PHOTOGRAPHY_PROP_FOCUS_STATUS       "focus-status"
++#define GST_PHOTOGRAPHY_PROP_CAPABILITIES       "capabilities"
++#define GST_PHOTOGRAPHY_PROP_SHAKE_RISK         "shake-risk"
++#define GST_PHOTOGRAPHY_PROP_EV_COMP            "ev-compensation"
++#define GST_PHOTOGRAPHY_PROP_ISO_SPEED          "iso-speed"
++#define GST_PHOTOGRAPHY_PROP_APERTURE           "aperture"
++#define GST_PHOTOGRAPHY_PROP_EXPOSURE_TIME      "exposure-time"
++#define GST_PHOTOGRAPHY_PROP_IMAGE_CAPTURE_SUPPORTED_CAPS \
++                                                "image-capture-supported-caps"
++#define GST_PHOTOGRAPHY_PROP_IMAGE_PREVIEW_SUPPORTED_CAPS \
++                                                "image-preview-supported-caps"
++#define GST_PHOTOGRAPHY_PROP_FLICKER_MODE       "flicker-mode"
++#define GST_PHOTOGRAPHY_PROP_FOCUS_MODE         "focus-mode"
++#define GST_PHOTOGRAPHY_PROP_ZOOM               "zoom"
++#define GST_PHOTOGRAPHY_PROP_COLOR_TEMPERATURE  "color-temperature"
++#define GST_PHOTOGRAPHY_PROP_WHITE_POINT        "white-point"
++#define GST_PHOTOGRAPHY_PROP_ANALOG_GAIN        "analog-gain"
++#define GST_PHOTOGRAPHY_PROP_EXPOSURE_MODE      "exposure-mode"
++#define GST_PHOTOGRAPHY_PROP_LENS_FOCUS         "lens-focus"
++#define GST_PHOTOGRAPHY_PROP_MIN_EXPOSURE_TIME  "min-exposure-time"
++#define GST_PHOTOGRAPHY_PROP_MAX_EXPOSURE_TIME  "max-exposure-time"
++
++/**
++ * GstPhotography:
++ *
++ * Opaque #GstPhotography data structure.
++ */
++typedef struct _GstPhotography GstPhotography;
++
++/**
++ * GstPhotographyNoiseReduction:
++ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_BAYER: Adaptive noise reduction on Bayer
++ * format
++ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_YCC: reduces the noise on Y and 2-chroma
++ * images.
++ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_TEMPORAL: Multi-frame adaptive NR,
++ * provided for the video mode
++ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_FIXED: Fixed Pattern Noise refers to noise
++ * that does not change between frames. The noise is removed from the sensor
++ * image, by subtracting a previously-captured black image in memory.
++ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_EXTRA: Extra Noise Reduction. In the case
++ * of high-ISO capturing, some noise remains after YCC NR. XNR reduces this
++ * remaining noise.
++ *
++ * Noise Reduction features of a photography capture or filter element.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_BAYER    = (1 << 0),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_YCC      = (1 << 1),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_TEMPORAL = (1 << 2),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_FIXED    = (1 << 3),
++  GST_PHOTOGRAPHY_NOISE_REDUCTION_EXTRA    = (1 << 4)
++} GstPhotographyNoiseReduction;
++
++/**
++ * GstPhotographyWhiteBalanceMode:
++ * @GST_PHOTOGRAPHY_WB_MODE_AUTO: Choose white balance mode automatically
++ * @GST_PHOTOGRAPHY_WB_MODE_DAYLIGHT: Mode for daylight conditions
++ * @GST_PHOTOGRAPHY_WB_MODE_CLOUDY: Mode for cloudy conditions
++ * @GST_PHOTOGRAPHY_WB_MODE_SUNSET: Mode for sunset conditions
++ * @GST_PHOTOGRAPHY_WB_MODE_TUNGSTEN: Mode for tungsten lighting
++ * @GST_PHOTOGRAPHY_WB_MODE_FLUORESCENT: Mode for fluorescent lighting
++ * @GST_PHOTOGRAPHY_WB_MODE_MANUAL: Disable automatic white balance adjustment
++ * and keep current values.
++ * @GST_PHOTOGRAPHY_WB_MODE_WARM_FLUORESCENT: Mode for warm fluorescent lighting (Since: 1.2)
++ * @GST_PHOTOGRAPHY_WB_MODE_SHADE: Mode for shade lighting (Since: 1.2)
++ *
++ * Modes for white balance control.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_WB_MODE_AUTO = 0,
++  GST_PHOTOGRAPHY_WB_MODE_DAYLIGHT,
++  GST_PHOTOGRAPHY_WB_MODE_CLOUDY,
++  GST_PHOTOGRAPHY_WB_MODE_SUNSET,
++  GST_PHOTOGRAPHY_WB_MODE_TUNGSTEN,
++  GST_PHOTOGRAPHY_WB_MODE_FLUORESCENT,
++  GST_PHOTOGRAPHY_WB_MODE_MANUAL,
++  GST_PHOTOGRAPHY_WB_MODE_WARM_FLUORESCENT,
++  GST_PHOTOGRAPHY_WB_MODE_SHADE
++} GstPhotographyWhiteBalanceMode;
++
++/**
++ * GstPhotographyColorToneMode:
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NORMAL: No effects
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SEPIA: Sepia
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEGATIVE: Negative
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRAYSCALE: Grayscale
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NATURAL: Natural
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_VIVID: Vivid
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_COLORSWAP: Colorswap
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SOLARIZE: Solarize
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_OUT_OF_FOCUS: Out of focus
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKY_BLUE: Sky blue
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRASS_GREEN: Grass green
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKIN_WHITEN: Skin whiten
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_POSTERIZE: Posterize (Since: 1.2)
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_WHITEBOARD: Whiteboard (Since: 1.2)
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_BLACKBOARD: Blackboard (Since: 1.2)
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_AQUA: Aqua (Since: 1.2)
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_EMBOSS: Emboss (Since: 1.18)
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKETCH: Sketch (Since: 1.18)
++ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEON: Neon (Since: 1.18)
++ *
++ *
++ * Modes for special color effects.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NORMAL = 0,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SEPIA,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEGATIVE,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRAYSCALE,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NATURAL,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_VIVID,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_COLORSWAP,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SOLARIZE,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_OUT_OF_FOCUS,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKY_BLUE,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRASS_GREEN,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKIN_WHITEN,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_POSTERIZE,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_WHITEBOARD,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_BLACKBOARD,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_AQUA,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_EMBOSS,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKETCH,
++  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEON
++} GstPhotographyColorToneMode;
++
++/**
++ * GstPhotographySceneMode:
++ * @GST_PHOTOGRAPHY_SCENE_MODE_MANUAL: Set individual options manually
++ * @GST_PHOTOGRAPHY_SCENE_MODE_CLOSEUP: Mode for close objects
++ * @GST_PHOTOGRAPHY_SCENE_MODE_PORTRAIT: Mode for portraits
++ * @GST_PHOTOGRAPHY_SCENE_MODE_LANDSCAPE: Mode for landscapes
++ * @GST_PHOTOGRAPHY_SCENE_MODE_SPORT: Mode for scene with fast motion
++ * @GST_PHOTOGRAPHY_SCENE_MODE_NIGHT: Mode for night conditions
++ * @GST_PHOTOGRAPHY_SCENE_MODE_AUTO: Choose scene mode automatically
++ * @GST_PHOTOGRAPHY_SCENE_MODE_ACTION: Take photos of fast moving
++ *     objects (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_NIGHT_PORTRAIT: Take people pictures
++ *     at night (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_THEATRE: Take photos in a theater (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_BEACH: Take pictures on the beach (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_SNOW: Take pictures on the snow (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_SUNSET: Take sunset photos (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_STEADY_PHOTO: Avoid blurry pictures
++ *     (for example, due to hand shake) (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_FIREWORKS: For shooting firework
++ *     displays (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_PARTY: Take indoor low-light shot (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_CANDLELIGHT: Capture the naturally warm color
++ *     of scenes lit by candles (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_BARCODE: Applications are looking for
++ *     a barcode (Since: 1.2)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_BACKLIGHT: Backlit photos (Since: 1.18)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_FLOWERS: For shooting flowers (Since: 1.18)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_AR: Specific for Augmented Reality (Since: 1.18)
++ * @GST_PHOTOGRAPHY_SCENE_MODE_HDR: High Dynamic Range photography (Since: 1.18)
++ *
++ * Each mode contains preset #GstPhotography options in order to produce
++ * good capturing result in certain scene.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_SCENE_MODE_MANUAL = 0,
++  GST_PHOTOGRAPHY_SCENE_MODE_CLOSEUP,
++  GST_PHOTOGRAPHY_SCENE_MODE_PORTRAIT,
++  GST_PHOTOGRAPHY_SCENE_MODE_LANDSCAPE,
++  GST_PHOTOGRAPHY_SCENE_MODE_SPORT,
++  GST_PHOTOGRAPHY_SCENE_MODE_NIGHT,
++  GST_PHOTOGRAPHY_SCENE_MODE_AUTO,
++  GST_PHOTOGRAPHY_SCENE_MODE_ACTION,
++  GST_PHOTOGRAPHY_SCENE_MODE_NIGHT_PORTRAIT,
++  GST_PHOTOGRAPHY_SCENE_MODE_THEATRE,
++  GST_PHOTOGRAPHY_SCENE_MODE_BEACH,
++  GST_PHOTOGRAPHY_SCENE_MODE_SNOW,
++  GST_PHOTOGRAPHY_SCENE_MODE_SUNSET,
++  GST_PHOTOGRAPHY_SCENE_MODE_STEADY_PHOTO,
++  GST_PHOTOGRAPHY_SCENE_MODE_FIREWORKS,
++  GST_PHOTOGRAPHY_SCENE_MODE_PARTY,
++  GST_PHOTOGRAPHY_SCENE_MODE_CANDLELIGHT,
++  GST_PHOTOGRAPHY_SCENE_MODE_BARCODE,
++  GST_PHOTOGRAPHY_SCENE_MODE_BACKLIGHT,
++  GST_PHOTOGRAPHY_SCENE_MODE_FLOWERS,
++  GST_PHOTOGRAPHY_SCENE_MODE_AR,
++  GST_PHOTOGRAPHY_SCENE_MODE_HDR
++} GstPhotographySceneMode;
++
++/**
++ * GstPhotographyFlashMode:
++ * @GST_PHOTOGRAPHY_FLASH_MODE_AUTO: Fire flash automatically according to
++ * lighting conditions.
++ * @GST_PHOTOGRAPHY_FLASH_MODE_OFF: Never fire flash
++ * @GST_PHOTOGRAPHY_FLASH_MODE_ON: Always fire flash
++ * @GST_PHOTOGRAPHY_FLASH_MODE_FILL_IN: Fill in flash
++ * @GST_PHOTOGRAPHY_FLASH_MODE_RED_EYE: Flash mode for reducing chance of
++ * capturing red eyes
++ *
++ * Modes for flash control.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_FLASH_MODE_AUTO = 0,
++  GST_PHOTOGRAPHY_FLASH_MODE_OFF,
++  GST_PHOTOGRAPHY_FLASH_MODE_ON,
++  GST_PHOTOGRAPHY_FLASH_MODE_FILL_IN,
++  GST_PHOTOGRAPHY_FLASH_MODE_RED_EYE
++} GstPhotographyFlashMode;
++
++/**
++ * GstPhotographyFocusStatus:
++ * @GST_PHOTOGRAPHY_FOCUS_STATUS_NONE: No status available
++ * @GST_PHOTOGRAPHY_FOCUS_STATUS_RUNNING: Focusing is ongoing
++ * @GST_PHOTOGRAPHY_FOCUS_STATUS_FAIL: Focusing failed
++ * @GST_PHOTOGRAPHY_FOCUS_STATUS_SUCCESS: Focusing succeeded
++ *
++ * Status of the focusing operation, used in #GST_PHOTOGRAPHY_AUTOFOCUS_DONE
++ * message.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_FOCUS_STATUS_NONE = 0,
++  GST_PHOTOGRAPHY_FOCUS_STATUS_RUNNING,
++  GST_PHOTOGRAPHY_FOCUS_STATUS_FAIL,
++  GST_PHOTOGRAPHY_FOCUS_STATUS_SUCCESS
++} GstPhotographyFocusStatus;
++
++/**
++ * GstPhotographyCaps:
++ *
++ * Bitmask that indicates which #GstPhotography interface features an instance
++ * supports.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_CAPS_NONE              = (0 << 0),
++  GST_PHOTOGRAPHY_CAPS_EV_COMP           = (1 << 0),
++  GST_PHOTOGRAPHY_CAPS_ISO_SPEED         = (1 << 1),
++  GST_PHOTOGRAPHY_CAPS_WB_MODE           = (1 << 2),
++  GST_PHOTOGRAPHY_CAPS_TONE              = (1 << 3),
++  GST_PHOTOGRAPHY_CAPS_SCENE             = (1 << 4),
++  GST_PHOTOGRAPHY_CAPS_FLASH             = (1 << 5),
++  GST_PHOTOGRAPHY_CAPS_ZOOM              = (1 << 6),
++  GST_PHOTOGRAPHY_CAPS_FOCUS             = (1 << 7),
++  GST_PHOTOGRAPHY_CAPS_APERTURE          = (1 << 8),
++  GST_PHOTOGRAPHY_CAPS_EXPOSURE          = (1 << 9),
++  GST_PHOTOGRAPHY_CAPS_SHAKE             = (1 << 10),
++  GST_PHOTOGRAPHY_CAPS_WHITE_BALANCE     = (1 << 11),
++  GST_PHOTOGRAPHY_CAPS_NOISE_REDUCTION   = (1 << 12),
++  GST_PHOTOGRAPHY_CAPS_FLICKER_REDUCTION = (1 << 13),
++  GST_PHOTOGRAPHY_CAPS_ALL               = (~0)
++} GstPhotographyCaps;
++
++/**
++ * GstPhotographyShakeRisk:
++ * @GST_PHOTOGRAPHY_SHAKE_RISK_LOW: Low risk
++ * @GST_PHOTOGRAPHY_SHAKE_RISK_MEDIUM: Medium risk
++ * @GST_PHOTOGRAPHY_SHAKE_RISK_HIGH: High risk
++ *
++ * Risk level of captured image becoming "shaken" due to camera movement and
++ * too long exposure time. Used in #GST_PHOTOGRAPHY_SHAKE_RISK #GstMessage.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_SHAKE_RISK_LOW = 0,
++  GST_PHOTOGRAPHY_SHAKE_RISK_MEDIUM,
++  GST_PHOTOGRAPHY_SHAKE_RISK_HIGH,
++} GstPhotographyShakeRisk;
++
++/**
++ * GstPhotographyFlickerReductionMode:
++ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_OFF: Disable flicker reduction
++ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_50HZ: 50Hz flicker reduction
++ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_60HZ: 60Hz flicker reduction
++ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_AUTO: Choose mode automatically
++ *
++ * Reduce flicker in video caused by light source fluctuation.
++ */
++typedef enum
++{
++  GST_PHOTOGRAPHY_FLICKER_REDUCTION_OFF = 0,
++  GST_PHOTOGRAPHY_FLICKER_REDUCTION_50HZ,
++  GST_PHOTOGRAPHY_FLICKER_REDUCTION_60HZ,
++  GST_PHOTOGRAPHY_FLICKER_REDUCTION_AUTO,
++} GstPhotographyFlickerReductionMode;
++
++/**
++ * GstPhotographyFocusMode:
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_AUTO: Choose focus mode automatically
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_MACRO: Mode for focusing objects close to lens
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_PORTRAIT: Mode for portraits
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_INFINITY: Mode for landscapes and far away objects
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_HYPERFOCAL: Mode for maximum depth of field, keeping
++ * focus acceptable both in infinify and as close objects as possible
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_EXTENDED: Extended focus mode
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_NORMAL: Continuous autofocus mode
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_EXTENDED: Extended continuous
++ * autofocus mode
++ * @GST_PHOTOGRAPHY_FOCUS_MODE_MANUAL: Disable automatic focusing
++ * and keep current value. #GstPhotography:lens-focus property can
++ * be used to change focus manually.
++ *
++ * Choose mode for focusing algorithm.
++ */
++typedef enum {
++    GST_PHOTOGRAPHY_FOCUS_MODE_AUTO = 0,
++    GST_PHOTOGRAPHY_FOCUS_MODE_MACRO,
++    GST_PHOTOGRAPHY_FOCUS_MODE_PORTRAIT,
++    GST_PHOTOGRAPHY_FOCUS_MODE_INFINITY,
++    GST_PHOTOGRAPHY_FOCUS_MODE_HYPERFOCAL,
++    GST_PHOTOGRAPHY_FOCUS_MODE_EXTENDED,
++    GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_NORMAL,
++    GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_EXTENDED,
++    GST_PHOTOGRAPHY_FOCUS_MODE_MANUAL
++} GstPhotographyFocusMode;
++
++/**
++ * GstPhotographyExposureMode:
++ * @GST_PHOTOGRAPHY_EXPOSURE_MODE_AUTO: Adjust exposure automatically
++ * @GST_PHOTOGRAPHY_EXPOSURE_MODE_MANUAL: Disable automatic exposure adjustment
++ * and keep current values.
++ *
++ */
++typedef enum {
++    GST_PHOTOGRAPHY_EXPOSURE_MODE_AUTO = 0,
++    GST_PHOTOGRAPHY_EXPOSURE_MODE_MANUAL
++} GstPhotographyExposureMode;
++
++/**
++ * GstPhotographySettings:
++ *
++ * Structure containing all #GstPhotography settings, used to set all
++ * settings in one call with @gst_photography_set_config().
++ */
++typedef struct
++{
++  GstPhotographyWhiteBalanceMode wb_mode;
++  GstPhotographyColorToneMode tone_mode;
++  GstPhotographySceneMode scene_mode;
++  GstPhotographyFlashMode flash_mode;
++  guint32 exposure_time;
++  guint aperture;
++  gfloat ev_compensation;
++  guint iso_speed;
++  gfloat zoom;
++  GstPhotographyFlickerReductionMode flicker_mode;
++  GstPhotographyFocusMode focus_mode;
++  GstPhotographyNoiseReduction noise_reduction;
++  GstPhotographyExposureMode exposure_mode;
++  guint color_temperature;
++  guint white_point[MAX_WHITE_POINT_VALUES];
++  gfloat analog_gain;
++  gfloat lens_focus;
++  guint min_exposure_time;
++  guint max_exposure_time;
++  /* FIXME: add padding? */
++} GstPhotographySettings;
++
++/**
++ * GstPhotographyCapturePrepared:
++ * @data: user data that has been given, when registering the callback
++ * @configured_caps: #GstCaps defining the configured capture format.
++ *     Ownership of these caps stays in the element.
++ *
++ * This callback will be called when the element has finished preparations
++ * and is ready for image capture. The next buffer that element produces
++ * will be of @configured_caps format, so this callback allows the application
++ * to e.g. reconfigure capsfilters in pipeline if any.
++ */
++typedef void (*GstPhotographyCapturePrepared) (gpointer data, const GstCaps *configured_caps);
++
++/**
++ * GstPhotographyInterface:
++ * @parent: parent interface type.
++ * @get_ev_compensation: vmethod to get ev exposure compensation value
++ * @get_iso_speed: vmethod to get iso speed (light sensitivity) value
++ * @get_aperture: vmethod to get aperture value
++ * @get_exposure: vmethod to get exposure time value
++ * @get_white_balance_mode: vmethod to get white balance mode value
++ * @get_color_tone_mode: vmethod to get color tone mode value
++ * @get_scene_mode: vmethod to get scene mode value
++ * @get_flash_mode: vmethod to get flash mode value
++ * @get_noise_reduction: vmethod to get noise reduction mode value
++ * @get_zoom: vmethod to get zoom factor value
++ * @set_ev_compensation: vmethod to set ev exposure compensation value
++ * @set_iso_speed: vmethod to set iso speed (light sensitivity) value
++ * @set_aperture: vmethod to set aperture value
++ * @set_exposure: vmethod to set exposure time value
++ * @set_white_balance_mode: vmethod to set white balance mode value
++ * @set_color_tone_mode: vmethod to set color tone mode value
++ * @set_scene_mode: vmethod to set scene mode value
++ * @set_flash_mode: vmethod to set flash mode value
++ * @set_noise_reduction: vmethod to set noise reduction mode value
++ * @set_zoom: vmethod to set zoom factor value
++ * @get_capabilities: vmethod to get supported capabilities of the interface
++ * @prepare_for_capture: vmethod to tell the element to prepare for capturing
++ * @set_autofocus: vmethod to set autofocus on/off
++ * @set_config: vmethod to set all configuration parameters at once
++ * @get_config: vmethod to get all configuration parameters at once
++ * @get_image_capture_supported_caps: vmethod to get caps describing supported image capture formats
++ * @set_exposure_mode: vmethod to set exposure mode (Since: 1.18)
++ * @get_exposure_mode: vmethod to get exposure mode (Since: 1.18)
++ * @set_analog_gain: vmethod to set analog gain (Since: 1.18)
++ * @get_analog_gain: vmethod to get analog gain (Since: 1.18)
++ * @set_lens_focus: vmethod to set lens focus (Since: 1.18)
++ * @get_lens_focus: vmethod to get lens focus (Since: 1.18)
++ * @set_color_temperature: vmethod to set color temperature (Since: 1.18)
++ * @get_color_temperature: vmethod to get color temperature (Since: 1.18)
++ * @set_min_exposure_time: vmethod to set min exposure time (Since: 1.18)
++ * @get_min_exposure_time: vmethod to get min exposure time (Since: 1.18)
++ * @set_max_exposure_time: vmethod to set max exposure time (Since: 1.18)
++ * @get_max_exposure_time: vmethod to get max exposure time (Since: 1.18)
++ *
++ * #GstPhotographyInterface interface.
++ */
++typedef struct _GstPhotographyInterface
++{
++  GTypeInterface parent;
++
++  /* virtual functions */
++  gboolean (*get_ev_compensation)    (GstPhotography * photo, gfloat * ev_comp);
++  gboolean (*get_iso_speed)          (GstPhotography * photo, guint * iso_speed);
++  gboolean (*get_aperture)           (GstPhotography * photo, guint * aperture);
++  gboolean (*get_exposure)           (GstPhotography * photo, guint32 * exposure);
++  gboolean (*get_white_balance_mode) (GstPhotography * photo, GstPhotographyWhiteBalanceMode * wb_mode);
++  gboolean (*get_color_tone_mode)    (GstPhotography * photo, GstPhotographyColorToneMode * tone_mode);
++  gboolean (*get_scene_mode)         (GstPhotography * photo, GstPhotographySceneMode * scene_mode);
++  gboolean (*get_flash_mode)         (GstPhotography * photo, GstPhotographyFlashMode * flash_mode);
++  gboolean (*get_zoom)               (GstPhotography * photo, gfloat * zoom);
++  gboolean (*get_flicker_mode)       (GstPhotography * photo, GstPhotographyFlickerReductionMode * flicker_mode);
++  gboolean (*get_focus_mode)         (GstPhotography * photo, GstPhotographyFocusMode * focus_mode);
++
++  gboolean (*set_ev_compensation)    (GstPhotography * photo, gfloat ev_comp);
++  gboolean (*set_iso_speed)          (GstPhotography * photo, guint iso_speed);
++  gboolean (*set_aperture)           (GstPhotography * photo, guint aperture);
++  gboolean (*set_exposure)           (GstPhotography * photo, guint32 exposure);
++  gboolean (*set_white_balance_mode) (GstPhotography * photo, GstPhotographyWhiteBalanceMode wb_mode);
++  gboolean (*set_color_tone_mode)    (GstPhotography * photo, GstPhotographyColorToneMode tone_mode);
++  gboolean (*set_scene_mode)         (GstPhotography * photo, GstPhotographySceneMode scene_mode);
++  gboolean (*set_flash_mode)         (GstPhotography * photo, GstPhotographyFlashMode flash_mode);
++  gboolean (*set_zoom)               (GstPhotography * photo, gfloat zoom);
++  gboolean (*set_flicker_mode)       (GstPhotography * photo, GstPhotographyFlickerReductionMode flicker_mode);
++  gboolean (*set_focus_mode)         (GstPhotography * photo, GstPhotographyFocusMode focus_mode);
++
++  GstPhotographyCaps (*get_capabilities) (GstPhotography * photo);
++
++  gboolean (*prepare_for_capture)    (GstPhotography * photo, GstPhotographyCapturePrepared func, GstCaps *capture_caps, gpointer user_data);
++
++  void     (*set_autofocus)          (GstPhotography * photo, gboolean on);
++
++  gboolean (*set_config)             (GstPhotography * photo, GstPhotographySettings * config);
++  gboolean (*get_config)             (GstPhotography * photo, GstPhotographySettings * config);
++
++  gboolean (*get_noise_reduction)    (GstPhotography * photo, GstPhotographyNoiseReduction * noise_reduction);
++  gboolean (*set_noise_reduction)    (GstPhotography * photo, GstPhotographyNoiseReduction noise_reduction);
++
++  gboolean (*set_exposure_mode) (GstPhotography * photo, GstPhotographyExposureMode exposure_mode);
++  gboolean (*get_exposure_mode) (GstPhotography * photo, GstPhotographyExposureMode * exposure_mode);
++  gboolean (*set_analog_gain) (GstPhotography * photo, gfloat analog_gain);
++  gboolean (*get_analog_gain) (GstPhotography * photo, gfloat * analog_gain);
++  gboolean (*set_lens_focus) (GstPhotography * photo, gfloat lens_focus);
++  gboolean (*get_lens_focus) (GstPhotography * photo, gfloat * lens_focus);
++  gboolean (*set_color_temperature) (GstPhotography * photo, guint color_temperature);
++  gboolean (*get_color_temperature) (GstPhotography * photo, guint * color_temperature);
++  gboolean (*set_min_exposure_time) (GstPhotography * photo, guint min_exposure_time);
++  gboolean (*get_min_exposure_time) (GstPhotography * photo, guint * min_exposure_time);
++  gboolean (*set_max_exposure_time) (GstPhotography * photo, guint max_exposure_time);
++  gboolean (*get_max_exposure_time) (GstPhotography * photo, guint * max_exposure_time);
++
++  /* FIXME: remove padding, not needed for interfaces */
++  /*< private > */
++  gpointer _gst_reserved[GST_PADDING];
++} GstPhotographyInterface;
++
++GST_PHOTOGRAPHY_API
++GType gst_photography_get_type (void);
++
++/* virtual class function wrappers */
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_ev_compensation (GstPhotography * photo,
++                                              gfloat * ev_comp);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_iso_speed       (GstPhotography * photo,
++                                              guint * iso_speed);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_aperture        (GstPhotography * photo,
++                                              guint * aperture);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_exposure        (GstPhotography * photo,
++                                              guint32 * exposure);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_white_balance_mode (GstPhotography * photo,
++                                                 GstPhotographyWhiteBalanceMode * wb_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_color_tone_mode (GstPhotography * photo,
++                                              GstPhotographyColorToneMode * tone_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_scene_mode      (GstPhotography * photo,
++                                              GstPhotographySceneMode * scene_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_flash_mode      (GstPhotography * photo,
++                                              GstPhotographyFlashMode * flash_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_noise_reduction (GstPhotography * photo,
++                                              GstPhotographyNoiseReduction * noise_reduction);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_zoom            (GstPhotography * photo, gfloat * zoom);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_flicker_mode    (GstPhotography * photo,
++                                              GstPhotographyFlickerReductionMode * mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_focus_mode      (GstPhotography * photo,
++                                              GstPhotographyFocusMode * mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_ev_compensation (GstPhotography * photo,
++                                              gfloat ev_comp);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_iso_speed       (GstPhotography * photo,
++                                              guint iso_speed);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_aperture        (GstPhotography * photo, guint aperture);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_exposure        (GstPhotography * photo, guint exposure);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_white_balance_mode (GstPhotography * photo,
++                                                 GstPhotographyWhiteBalanceMode wb_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_color_tone_mode (GstPhotography * photo,
++                                              GstPhotographyColorToneMode tone_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_scene_mode      (GstPhotography * photo,
++                                              GstPhotographySceneMode scene_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_flash_mode      (GstPhotography * photo,
++                                              GstPhotographyFlashMode flash_mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_noise_reduction (GstPhotography * photo,
++                                              GstPhotographyNoiseReduction noise_reduction);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_zoom            (GstPhotography * photo, gfloat zoom);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_flicker_mode    (GstPhotography * photo,
++                                              GstPhotographyFlickerReductionMode mode);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_focus_mode      (GstPhotography * photo,
++                                              GstPhotographyFocusMode mode);
++
++GST_PHOTOGRAPHY_API
++GstPhotographyCaps gst_photography_get_capabilities (GstPhotography * photo);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_prepare_for_capture (GstPhotography * photo,
++                                              GstPhotographyCapturePrepared func,
++                                              GstCaps *capture_caps,
++                                              gpointer user_data);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_set_config    (GstPhotography         * photo,
++                                        GstPhotographySettings * config);
++
++GST_PHOTOGRAPHY_API
++gboolean gst_photography_get_config    (GstPhotography         * photo,
++                                        GstPhotographySettings * config);
++
++GST_PHOTOGRAPHY_API
++void     gst_photography_set_autofocus (GstPhotography * photo, gboolean on);
++
++G_END_DECLS
++
++#endif /* __GST_PHOTOGRAPHY_H__ */
+diff --git a/gst-libs/gst/meson.build b/gst-libs/gst/meson.build
+new file mode 100644
+index 0000000..93fa52b
+--- /dev/null
++++ b/gst-libs/gst/meson.build
+@@ -0,0 +1,2 @@
++subdir('basecamerabinsrc')
++subdir('interfaces')
+diff --git a/gst-libs/meson.build b/gst-libs/meson.build
+new file mode 100644
+index 0000000..668dcba
+--- /dev/null
++++ b/gst-libs/meson.build
+@@ -0,0 +1 @@
++subdir('gst')
+diff --git a/gst/camerabin2/PORTING b/gst/camerabin2/PORTING
+new file mode 100644
+index 0000000..322a7d8
+--- /dev/null
++++ b/gst/camerabin2/PORTING
 @@ -0,0 +1,39 @@
 +This document lists the differenced between camerabin and camerabin2 from
 +the API point of view and should be used to help on porting applications
@@ -1504,10 +3112,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/PORTING
 +  audio-capture-caps
 +  viewfinder-caps
 +
-Index: gst-plugins-good1.0/gst/camerabin2/camerabin2-src.txt
-===================================================================
+diff --git a/gst/camerabin2/camerabin2-src.txt b/gst/camerabin2/camerabin2-src.txt
+new file mode 100644
+index 0000000..716d959
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/camerabin2-src.txt
++++ b/gst/camerabin2/camerabin2-src.txt
 @@ -0,0 +1,73 @@
 +=== Camerabin2 Source Requirements (draft) ===
 +
@@ -1582,10 +3191,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/camerabin2-src.txt
 +camera source pads. The camera source can simply get_caps on the peer of
 +each of its pads to know what are the allowed caps for that pad.
 +
-Index: gst-plugins-good1.0/gst/camerabin2/camerabingeneral.c
-===================================================================
+diff --git a/gst/camerabin2/camerabingeneral.c b/gst/camerabin2/camerabingeneral.c
+new file mode 100644
+index 0000000..9a60d35
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/camerabingeneral.c
++++ b/gst/camerabin2/camerabingeneral.c
 @@ -0,0 +1,260 @@
 +/*
 + * GStreamer
@@ -1847,10 +3457,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/camerabingeneral.c
 +  }
 +  gst_iterator_free (iter);
 +}
-Index: gst-plugins-good1.0/gst/camerabin2/camerabingeneral.h
-===================================================================
+diff --git a/gst/camerabin2/camerabingeneral.h b/gst/camerabin2/camerabingeneral.h
+new file mode 100644
+index 0000000..b0cd05c
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/camerabingeneral.h
++++ b/gst/camerabin2/camerabingeneral.h
 @@ -0,0 +1,37 @@
 +/*
 + * GStreamer
@@ -1889,10 +3500,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/camerabingeneral.h
 +void gst_camerabin_remove_elements_from_bin (GstBin * bin);
 +
 +#endif /* #ifndef __CAMERABIN_GENERAL_H_ */
-Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.c
-===================================================================
+diff --git a/gst/camerabin2/gstcamerabin2.c b/gst/camerabin2/gstcamerabin2.c
+new file mode 100644
+index 0000000..502ed73
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.c
++++ b/gst/camerabin2/gstcamerabin2.c
 @@ -0,0 +1,2401 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -4295,10 +5907,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.c
 +  return gst_element_register (plugin, "camerabin", GST_RANK_NONE,
 +      gst_camera_bin2_get_type ());
 +}
-Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.h
-===================================================================
+diff --git a/gst/camerabin2/gstcamerabin2.h b/gst/camerabin2/gstcamerabin2.h
+new file mode 100644
+index 0000000..ba55a7e
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.h
++++ b/gst/camerabin2/gstcamerabin2.h
 @@ -0,0 +1,168 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -4468,10 +6081,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstcamerabin2.h
 +G_END_DECLS
 +
 +#endif
-Index: gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.c
-===================================================================
+diff --git a/gst/camerabin2/gstdigitalzoom.c b/gst/camerabin2/gstdigitalzoom.c
+new file mode 100644
+index 0000000..c7de9a6
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.c
++++ b/gst/camerabin2/gstdigitalzoom.c
 @@ -0,0 +1,386 @@
 +/*
 + * GStreamer
@@ -4859,10 +6473,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.c
 +      "Digital zoom bin", "Generic/Video",
 +      "Digital zoom bin", "Thiago Santos <thiagoss@osg.samsung.com>");
 +}
-Index: gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.h
-===================================================================
+diff --git a/gst/camerabin2/gstdigitalzoom.h b/gst/camerabin2/gstdigitalzoom.h
+new file mode 100644
+index 0000000..de7a300
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.h
++++ b/gst/camerabin2/gstdigitalzoom.h
 @@ -0,0 +1,79 @@
 +/*
 + * GStreamer
@@ -4943,10 +6558,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstdigitalzoom.h
 +G_END_DECLS
 +
 +#endif /* __GST_DIGITAL_ZOOM_H__ */
-Index: gst-plugins-good1.0/gst/camerabin2/gstplugin.c
-===================================================================
+diff --git a/gst/camerabin2/gstplugin.c b/gst/camerabin2/gstplugin.c
+new file mode 100644
+index 0000000..320bb2c
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstplugin.c
++++ b/gst/camerabin2/gstplugin.c
 @@ -0,0 +1,46 @@
 +/* GStreamer
 + * Copyright (C) <2010> Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -4994,10 +6610,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstplugin.c
 +    GST_VERSION_MINOR,
 +    camerabin, "Take image snapshots and record movies from camera",
 +    plugin_init, VERSION, "LGPL", GST_PACKAGE_NAME, GST_PACKAGE_ORIGIN)
-Index: gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.c
-===================================================================
+diff --git a/gst/camerabin2/gstviewfinderbin.c b/gst/camerabin2/gstviewfinderbin.c
+new file mode 100644
+index 0000000..3a96e89
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.c
++++ b/gst/camerabin2/gstviewfinderbin.c
 @@ -0,0 +1,369 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -5368,10 +6985,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.c
 +  return gst_element_register (plugin, "viewfinderbin", GST_RANK_NONE,
 +      gst_viewfinder_bin_get_type ());
 +}
-Index: gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.h
-===================================================================
+diff --git a/gst/camerabin2/gstviewfinderbin.h b/gst/camerabin2/gstviewfinderbin.h
+new file mode 100644
+index 0000000..3479120
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.h
++++ b/gst/camerabin2/gstviewfinderbin.h
 @@ -0,0 +1,60 @@
 +/* GStreamer
 + * Copyright (C) 2010 Thiago Santos <thiago.sousa.santos@collabora.co.uk>
@@ -5433,10 +7051,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstviewfinderbin.h
 +G_END_DECLS
 +
 +#endif
-Index: gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.c
-===================================================================
+diff --git a/gst/camerabin2/gstwrappercamerabinsrc.c b/gst/camerabin2/gstwrappercamerabinsrc.c
+new file mode 100644
+index 0000000..6fd1129
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.c
++++ b/gst/camerabin2/gstwrappercamerabinsrc.c
 @@ -0,0 +1,1178 @@
 +/*
 + * GStreamer
@@ -6616,10 +8235,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.c
 +  return gst_element_register (plugin, "wrappercamerabinsrc", GST_RANK_NONE,
 +      gst_wrapper_camera_bin_src_get_type ());
 +}
-Index: gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.h
-===================================================================
+diff --git a/gst/camerabin2/gstwrappercamerabinsrc.h b/gst/camerabin2/gstwrappercamerabinsrc.h
+new file mode 100644
+index 0000000..90ab0cc
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.h
++++ b/gst/camerabin2/gstwrappercamerabinsrc.h
 @@ -0,0 +1,131 @@
 +/*
 + * GStreamer
@@ -6752,10 +8372,11 @@ Index: gst-plugins-good1.0/gst/camerabin2/gstwrappercamerabinsrc.h
 +G_END_DECLS
 +
 +#endif /* __GST_WRAPPER_CAMERA_BIN_SRC_H__ */
-Index: gst-plugins-good1.0/gst/camerabin2/meson.build
-===================================================================
+diff --git a/gst/camerabin2/meson.build b/gst/camerabin2/meson.build
+new file mode 100644
+index 0000000..72008d2
 --- /dev/null
-+++ gst-plugins-good1.0/gst/camerabin2/meson.build
++++ b/gst/camerabin2/meson.build
 @@ -0,0 +1,20 @@
 +camerabin_sources = [
 +  'gstdigitalzoom.c',
@@ -6777,10 +8398,10 @@ Index: gst-plugins-good1.0/gst/camerabin2/meson.build
 +)
 +pkgconfig.generate(gstcamerabin, install_dir : plugins_pkgconfig_install_dir)
 +plugins += [gstcamerabin]
-Index: gst-plugins-good1.0/gst/meson.build
-===================================================================
---- gst-plugins-good1.0.orig/gst/meson.build
-+++ gst-plugins-good1.0/gst/meson.build
+diff --git a/gst/meson.build b/gst/meson.build
+index cbc28ca..05b0b06 100644
+--- a/gst/meson.build
++++ b/gst/meson.build
 @@ -1,5 +1,5 @@
  foreach plugin : ['alpha', 'apetag', 'audiofx', 'audioparsers', 'auparse',
 -                  'autodetect', 'avi', 'cutter', 'debugutils', 'deinterlace',
@@ -6788,11 +8409,104 @@ Index: gst-plugins-good1.0/gst/meson.build
                    'dtmf', 'effectv', 'equalizer', 'flv', 'flx', 'goom',
                    'goom2k1', 'icydemux', 'id3demux', 'imagefreeze',
                    'interleave', 'isomp4', 'law', 'level', 'matroska',
-Index: gst-plugins-good1.0/meson_options.txt
-===================================================================
---- gst-plugins-good1.0.orig/meson_options.txt
-+++ gst-plugins-good1.0/meson_options.txt
-@@ -6,6 +6,7 @@ option('audioparsers', type : 'feature',
+diff --git a/meson.build b/meson.build
+index 13b8f10..72c49f7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -29,6 +29,12 @@ else
+ endif
+ 
+ api_version = '1.0'
++soversion = 0
++# maintaining compatibility with the previous libtool versioning
++# current = minor * 100 + micro
++curversion = gst_version_minor * 100 + gst_version_micro
++libversion = '@0@.@1@.0'.format(soversion, curversion)
++osxversion = curversion + 1
+ 
+ plugins_install_dir = join_paths(get_option('libdir'), 'gstreamer-1.0')
+ plugins = []
+@@ -69,11 +75,25 @@ if cc.has_link_argument('-Wl,-Bsymbolic-functions')
+   add_project_link_arguments('-Wl,-Bsymbolic-functions', language : 'c')
+ endif
+ 
++cdata = configuration_data()
++
+ # Symbol visibility
+-if cc.has_argument('-fvisibility=hidden')
++if cc.get_id() == 'msvc'
++  export_define = '__declspec(dllexport) extern'
++elif cc.has_argument('-fvisibility=hidden')
+   add_project_arguments('-fvisibility=hidden', language: 'c')
++  add_project_arguments('-fvisibility=hidden', language: 'cpp')
++  #if have_objc
++  #  add_project_arguments('-fvisibility=hidden', language: 'objc')
++  #endif
++  export_define = 'extern __attribute__ ((visibility ("default")))'
++else
++  export_define = 'extern'
+ endif
+ 
++# Passing this through the command line would be too messy
++cdata.set('GST_API_EXPORT', export_define)
++
+ # Disable strict aliasing
+ if cc.has_argument('-fno-strict-aliasing')
+   add_project_arguments('-fno-strict-aliasing', language: 'c')
+@@ -103,7 +123,7 @@ if glib_checks.disabled() or (glib_checks.auto() and not gst_version_is_dev)
+   add_project_arguments('-DG_DISABLE_CHECKS', language: 'c')
+ endif
+ 
+-cdata = configuration_data()
++#cdata = configuration_data()
+ 
+ check_headers = [
+   ['HAVE_DLFCN_H', 'dlfcn.h'],
+@@ -251,6 +271,11 @@ endif
+ cdata.set_quoted('GST_PACKAGE_NAME', gst_package_name)
+ cdata.set_quoted('GST_PACKAGE_ORIGIN', get_option('package-origin'))
+ 
++# FIXME: This should be exposed as a configuration option
++if host_system == 'linux'
++  cdata.set_quoted('DEFAULT_VIDEOSRC', 'v4l2src')
++endif
++
+ # Mandatory GST deps
+ gst_dep = dependency('gstreamer-1.0', version : gst_req,
+   fallback : ['gstreamer', 'gst_dep'])
+@@ -439,6 +464,10 @@ else
+   message('GStreamer debug system is enabled')
+ endif
+ 
++gst_plugins_bad_args = ['-DHAVE_CONFIG_H']
++configinc = include_directories('.')
++libsinc = include_directories('gst-libs')
++
+ presetdir = join_paths(get_option('datadir'), 'gstreamer-' + api_version, 'presets')
+ 
+ python3 = import('python').find_installation()
+@@ -449,6 +478,16 @@ if get_option('default_library') == 'shared'
+   plugins_pkgconfig_install_dir = disabler()
+ endif
+ 
++gir = find_program('g-ir-scanner', required : get_option('introspection'))
++gnome = import('gnome')
++build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
++gir_init_section = [ '--add-init-section=extern void gst_init(gint*,gchar**);' + \
++    'g_setenv("GST_REGISTRY_1.0", "@0@", TRUE);'.format(meson.current_build_dir() + '/gir_empty_registry.reg') + \
++    'g_setenv("GST_PLUGIN_PATH_1_0", "", TRUE);' + \
++    'g_setenv("GST_PLUGIN_SYSTEM_PATH_1_0", "", TRUE);' + \
++    'gst_init(NULL,NULL);', '--quiet']
++
++subdir('gst-libs')
+ subdir('gst')
+ subdir('sys')
+ subdir('ext')
+diff --git a/meson_options.txt b/meson_options.txt
+index 3dafe1f..ab3e04b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -6,6 +6,7 @@ option('audioparsers', type : 'feature', value : 'auto')
  option('auparse', type : 'feature', value : 'auto')
  option('autodetect', type : 'feature', value : 'auto')
  option('avi', type : 'feature', value : 'auto')
@@ -6800,10 +8514,11 @@ Index: gst-plugins-good1.0/meson_options.txt
  option('cutter', type : 'feature', value : 'auto')
  option('debugutils', type : 'feature', value : 'auto')
  option('deinterlace', type : 'feature', value : 'auto')
-Index: gst-plugins-good1.0/tests/check/elements/camerabin.c
-===================================================================
+diff --git a/tests/check/elements/camerabin.c b/tests/check/elements/camerabin.c
+new file mode 100644
+index 0000000..c339cf5
 --- /dev/null
-+++ gst-plugins-good1.0/tests/check/elements/camerabin.c
++++ b/tests/check/elements/camerabin.c
 @@ -0,0 +1,1998 @@
 +/* GStreamer
 + *
@@ -8803,10 +10518,10 @@ Index: gst-plugins-good1.0/tests/check/elements/camerabin.c
 +}
 +
 +GST_CHECK_MAIN (camerabin);
-Index: gst-plugins-good1.0/tests/check/meson.build
-===================================================================
---- gst-plugins-good1.0.orig/tests/check/meson.build
-+++ gst-plugins-good1.0/tests/check/meson.build
+diff --git a/tests/check/meson.build b/tests/check/meson.build
+index 1920768..4a3f152 100644
+--- a/tests/check/meson.build
++++ b/tests/check/meson.build
 @@ -30,6 +30,7 @@ good_tests = [
    [ 'elements/alpha' ],
    [ 'elements/avimux', false, [gstriff_dep] ],
@@ -8815,7 +10530,7 @@ Index: gst-plugins-good1.0/tests/check/meson.build
    [ 'elements/capssetter' ],
    [ 'elements/aacparse', false, [libparser_dep] ],
    [ 'elements/ac3parse', false, [libparser_dep] ],
-@@ -179,7 +180,7 @@ state_ignore_elements = '''aasink autoau
+@@ -193,7 +194,7 @@ state_ignore_elements = '''aasink autoaudiosrc autoaudiosink autovideosrc
   pulsesink pulsesrc pulsemixer v4l2src'''
  
  # FIXME: check, also + PTHREAD_CFLAGS
@@ -8824,10 +10539,11 @@ Index: gst-plugins-good1.0/tests/check/meson.build
    gstvideo_dep, gstpbutils_dep, gstrtp_dep, gstrtsp_dep, gsttag_dep,
    gstapp_dep, gio_dep, valgrind_dep] + glib_deps
  
-Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.c
-===================================================================
+diff --git a/tests/examples/camerabin2/gst-camera2.c b/tests/examples/camerabin2/gst-camera2.c
+new file mode 100644
+index 0000000..d85a839
 --- /dev/null
-+++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.c
++++ b/tests/examples/camerabin2/gst-camera2.c
 @@ -0,0 +1,338 @@
 +/*
 + * GStreamer
@@ -9167,10 +10883,11 @@ Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.c
 +  gst_object_unref (camera);
 +  return 0;
 +}
-Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.h
-===================================================================
+diff --git a/tests/examples/camerabin2/gst-camera2.h b/tests/examples/camerabin2/gst-camera2.h
+new file mode 100644
+index 0000000..57f43ea
 --- /dev/null
-+++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.h
++++ b/tests/examples/camerabin2/gst-camera2.h
 @@ -0,0 +1,54 @@
 +/*
 + * GStreamer
@@ -9226,10 +10943,11 @@ Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.h
 +on_zoomScale_value_changed (GtkWidget * widget, gpointer data);
 +
 +#endif /* __GST_CAMERA_BIN_H__ */
-Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.ui
-===================================================================
+diff --git a/tests/examples/camerabin2/gst-camera2.ui b/tests/examples/camerabin2/gst-camera2.ui
+new file mode 100644
+index 0000000..52bcfc6
 --- /dev/null
-+++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.ui
++++ b/tests/examples/camerabin2/gst-camera2.ui
 @@ -0,0 +1,203 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<!-- Generated with glade 3.18.3 -->
@@ -9434,10 +11152,11 @@ Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camera2.ui
 +    </child>
 +  </object>
 +</interface>
-Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camerabin2-test.c
-===================================================================
+diff --git a/tests/examples/camerabin2/gst-camerabin2-test.c b/tests/examples/camerabin2/gst-camerabin2-test.c
+new file mode 100644
+index 0000000..1c61957
 --- /dev/null
-+++ gst-plugins-good1.0/tests/examples/camerabin2/gst-camerabin2-test.c
++++ b/tests/examples/camerabin2/gst-camerabin2-test.c
 @@ -0,0 +1,1324 @@
 +/*
 + * GStreamer
@@ -10763,10 +12482,11 @@ Index: gst-plugins-good1.0/tests/examples/camerabin2/gst-camerabin2-test.c
 +
 +  return 0;
 +}
-Index: gst-plugins-good1.0/tests/examples/camerabin2/meson.build
-===================================================================
+diff --git a/tests/examples/camerabin2/meson.build b/tests/examples/camerabin2/meson.build
+new file mode 100644
+index 0000000..3db3db1
 --- /dev/null
-+++ gst-plugins-good1.0/tests/examples/camerabin2/meson.build
++++ b/tests/examples/camerabin2/meson.build
 @@ -0,0 +1,24 @@
 +gtk_dep = dependency('gtk+-3.0', required : get_option('examples'))
 +gdk_x11_dep = dependency('gdk-x11-3.0', required : get_option('examples'))
@@ -10792,10 +12512,10 @@ Index: gst-plugins-good1.0/tests/examples/camerabin2/meson.build
 +    c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API'],
 +    install: false)
 +endif
-Index: gst-plugins-good1.0/tests/examples/meson.build
-===================================================================
---- gst-plugins-good1.0.orig/tests/examples/meson.build
-+++ gst-plugins-good1.0/tests/examples/meson.build
+diff --git a/tests/examples/meson.build b/tests/examples/meson.build
+index d5fa127..398560e 100644
+--- a/tests/examples/meson.build
++++ b/tests/examples/meson.build
 @@ -1,5 +1,6 @@
  subdir('audiofx')
  subdir('cairo')
@@ -10803,1611 +12523,3 @@ Index: gst-plugins-good1.0/tests/examples/meson.build
  subdir('level')
  subdir('qt')
  
-Index: gst-plugins-good1.0/meson.build
-===================================================================
---- gst-plugins-good1.0.orig/meson.build
-+++ gst-plugins-good1.0/meson.build
-@@ -23,6 +23,12 @@ orc_req = '>= 0.4.17'
- gst_req = '>= @0@.@1@.0'.format(gst_version_major, gst_version_minor)
- 
- api_version = '1.0'
-+soversion = 0
-+# maintaining compatibility with the previous libtool versioning
-+# current = minor * 100 + micro
-+curversion = gst_version_minor * 100 + gst_version_micro
-+libversion = '@0@.@1@.0'.format(soversion, curversion)
-+osxversion = curversion + 1
- 
- plugins_install_dir = join_paths(get_option('libdir'), 'gstreamer-1.0')
- plugins = []
-@@ -53,11 +59,25 @@ if cc.has_link_argument('-Wl,-Bsymbolic-
-   add_project_link_arguments('-Wl,-Bsymbolic-functions', language : 'c')
- endif
- 
-+cdata = configuration_data()
-+
- # Symbol visibility
--if cc.has_argument('-fvisibility=hidden')
-+if cc.get_id() == 'msvc'
-+  export_define = '__declspec(dllexport) extern'
-+elif cc.has_argument('-fvisibility=hidden')
-   add_project_arguments('-fvisibility=hidden', language: 'c')
-+  add_project_arguments('-fvisibility=hidden', language: 'cpp')
-+  #if have_objc
-+  #  add_project_arguments('-fvisibility=hidden', language: 'objc')
-+  #endif
-+  export_define = 'extern __attribute__ ((visibility ("default")))'
-+else
-+  export_define = 'extern'
- endif
- 
-+# Passing this through the command line would be too messy
-+cdata.set('GST_API_EXPORT', export_define)
-+
- # Disable strict aliasing
- if cc.has_argument('-fno-strict-aliasing')
-   add_project_arguments('-fno-strict-aliasing', language: 'c')
-@@ -87,7 +107,7 @@ if glib_checks.disabled() or (glib_check
-   add_project_arguments('-DG_DISABLE_CHECKS', language: 'c')
- endif
- 
--cdata = configuration_data()
-+#cdata = configuration_data()
- 
- check_headers = [
-   ['HAVE_DLFCN_H', 'dlfcn.h'],
-@@ -232,6 +252,11 @@ endif
- cdata.set_quoted('GST_PACKAGE_NAME', gst_package_name)
- cdata.set_quoted('GST_PACKAGE_ORIGIN', get_option('package-origin'))
- 
-+# FIXME: This should be exposed as a configuration option
-+if host_system == 'linux'
-+  cdata.set_quoted('DEFAULT_VIDEOSRC', 'v4l2src')
-+endif
-+
- # Mandatory GST deps
- gst_dep = dependency('gstreamer-1.0', version : gst_req,
-   fallback : ['gstreamer', 'gst_dep'])
-@@ -420,6 +445,10 @@ else
-   message('GStreamer debug system is enabled')
- endif
- 
-+gst_plugins_bad_args = ['-DHAVE_CONFIG_H']
-+configinc = include_directories('.')
-+libsinc = include_directories('gst-libs')
-+
- presetdir = join_paths(get_option('datadir'), 'gstreamer-' + api_version, 'presets')
- 
- python3 = import('python').find_installation()
-@@ -430,6 +459,16 @@ if get_option('default_library') == 'sha
-   plugins_pkgconfig_install_dir = disabler()
- endif
- 
-+gir = find_program('g-ir-scanner', required : get_option('introspection'))
-+gnome = import('gnome')
-+build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
-+gir_init_section = [ '--add-init-section=extern void gst_init(gint*,gchar**);' + \
-+    'g_setenv("GST_REGISTRY_1.0", "@0@", TRUE);'.format(meson.current_build_dir() + '/gir_empty_registry.reg') + \
-+    'g_setenv("GST_PLUGIN_PATH_1_0", "", TRUE);' + \
-+    'g_setenv("GST_PLUGIN_SYSTEM_PATH_1_0", "", TRUE);' + \
-+    'gst_init(NULL,NULL);', '--quiet']
-+
-+subdir('gst-libs')
- subdir('gst')
- subdir('sys')
- subdir('ext')
-Index: gst-plugins-good1.0/gst-libs/gst/interfaces/meson.build
-===================================================================
---- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/interfaces/meson.build
-@@ -0,0 +1,30 @@
-+photography_sources = ['photography.c']
-+photo_headers = ['photography.h', 'photography-prelude.h']
-+install_headers(photo_headers, subdir : 'gstreamer-1.0/gst/interfaces')
-+
-+photo_enums = gnome.mkenums_simple('photography-enumtypes',
-+  sources : photo_headers,
-+  body_prefix : '#ifdef HAVE_CONFIG_H\n#include "config.h"\n#endif',
-+  header_prefix : '#include <gst/interfaces/photography-prelude.h>',
-+  decorator: 'GST_PHOTOGRAPHY_API',
-+  install_header: true,
-+  install_dir : join_paths(get_option('includedir'), 'gstreamer-1.0/gst/interfaces'))
-+
-+photoenum_c = photo_enums[0]
-+photoenum_h = photo_enums[1]
-+
-+gstphotography = library('gstphotography-' + api_version,
-+  photography_sources, photoenum_h, photoenum_c,
-+  c_args : gst_plugins_bad_args + ['-DGST_USE_UNSTABLE_API', '-DBUILDING_GST_PHOTOGRAPHY'],
-+  include_directories : [configinc, libsinc],
-+  version : libversion,
-+  soversion : soversion,
-+  darwin_versions : osxversion,
-+  install : true,
-+  dependencies : [gst_dep],
-+)
-+
-+gstphotography_dep = declare_dependency(link_with : gstphotography,
-+  include_directories : [libsinc],
-+  dependencies : [gst_dep],
-+  sources : [photoenum_h])
-Index: gst-plugins-good1.0/gst-libs/gst/interfaces/photography-prelude.h
-===================================================================
---- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/interfaces/photography-prelude.h
-@@ -0,0 +1,35 @@
-+/* GStreamer Photography Library
-+ * Copyright (C) 2018 GStreamer developers
-+ *
-+ * photography-prelude.h: prelude include header for gst-photography library
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Library General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Library General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Library General Public
-+ * License along with this library; if not, write to the
-+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
-+ * Boston, MA 02110-1301, USA.
-+ */
-+
-+#ifndef __GST_PHOTOGRAPHY_PRELUDE_H__
-+#define __GST_PHOTOGRAPHY_PRELUDE_H__
-+
-+#include <gst/gst.h>
-+
-+#ifndef GST_PHOTOGRAPHY_API
-+# ifdef BUILDING_GST_PHOTOGRAPHY
-+#  define GST_PHOTOGRAPHY_API GST_API_EXPORT         /* from config.h */
-+# else
-+#  define GST_PHOTOGRAPHY_API GST_API_IMPORT
-+# endif
-+#endif
-+
-+#endif /* __GST_PHOTOGRAPHY_PRELUDE_H__ */
-Index: gst-plugins-good1.0/gst-libs/gst/interfaces/photography.c
-===================================================================
---- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/interfaces/photography.c
-@@ -0,0 +1,732 @@
-+/* GStreamer
-+ *
-+ * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
-+ *
-+ * photography.c: photography interface for digital imaging
-+ *
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Library General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Library General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Library General Public
-+ * License along with this library; if not, write to the
-+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
-+ * Boston, MA 02110-1301, USA.
-+ */
-+
-+#ifdef HAVE_CONFIG_H
-+#include "config.h"
-+#endif
-+
-+#include "photography.h"
-+
-+/**
-+ * SECTION:gstphotography
-+ * @short_description: Interface for digital image capture elements
-+ * @stability: Unstable
-+ *
-+ * The interface allows access to some common digital image capture parameters.
-+ *
-+ * > The GstPhotography interface is unstable API and may change in future.
-+ * > One can define GST_USE_UNSTABLE_API to acknowledge and avoid this warning.
-+ */
-+
-+static void gst_photography_iface_base_init (GstPhotographyInterface * iface);
-+static void gst_photography_iface_class_init (gpointer g_class);
-+
-+GType
-+gst_photography_get_type (void)
-+{
-+  static GType gst_photography_type = 0;
-+
-+  if (!gst_photography_type) {
-+    static const GTypeInfo gst_photography_info = {
-+      sizeof (GstPhotographyInterface),
-+      (GBaseInitFunc) gst_photography_iface_base_init,  /* base_init */
-+      NULL,                     /* base_finalize */
-+      (GClassInitFunc) gst_photography_iface_class_init,        /* class_init */
-+      NULL,                     /* class_finalize */
-+      NULL,                     /* class_data */
-+      0,
-+      0,                        /* n_preallocs */
-+      NULL,                     /* instance_init */
-+    };
-+
-+    gst_photography_type = g_type_register_static (G_TYPE_INTERFACE,
-+        "GstPhotography", &gst_photography_info, 0);
-+  }
-+
-+  return gst_photography_type;
-+}
-+
-+static void
-+gst_photography_iface_base_init (GstPhotographyInterface * iface)
-+{
-+  /* default virtual functions */
-+  iface->get_ev_compensation = NULL;
-+  iface->get_iso_speed = NULL;
-+  iface->get_aperture = NULL;
-+  iface->get_exposure = NULL;
-+  iface->get_white_balance_mode = NULL;
-+  iface->get_color_tone_mode = NULL;
-+  iface->get_scene_mode = NULL;
-+  iface->get_flash_mode = NULL;
-+  iface->get_noise_reduction = NULL;
-+  iface->get_zoom = NULL;
-+  iface->get_flicker_mode = NULL;
-+  iface->get_focus_mode = NULL;
-+
-+  iface->set_ev_compensation = NULL;
-+  iface->set_iso_speed = NULL;
-+  iface->set_aperture = NULL;
-+  iface->set_exposure = NULL;
-+  iface->set_white_balance_mode = NULL;
-+  iface->set_color_tone_mode = NULL;
-+  iface->set_scene_mode = NULL;
-+  iface->set_flash_mode = NULL;
-+  iface->set_noise_reduction = NULL;
-+  iface->set_zoom = NULL;
-+  iface->set_flicker_mode = NULL;
-+  iface->set_focus_mode = NULL;
-+
-+  iface->get_capabilities = NULL;
-+  iface->prepare_for_capture = NULL;
-+  iface->set_autofocus = NULL;
-+  iface->set_config = NULL;
-+  iface->get_config = NULL;
-+  iface->set_exposure_mode = NULL;
-+  iface->get_exposure_mode = NULL;
-+  iface->set_analog_gain = NULL;
-+  iface->get_analog_gain = NULL;
-+  iface->set_lens_focus = NULL;
-+  iface->get_lens_focus = NULL;
-+  iface->set_color_temperature = NULL;
-+  iface->get_color_temperature = NULL;
-+  iface->set_min_exposure_time = NULL;
-+  iface->get_min_exposure_time = NULL;
-+  iface->set_max_exposure_time = NULL;
-+  iface->get_max_exposure_time = NULL;
-+}
-+
-+#define GST_PHOTOGRAPHY_FUNC_TEMPLATE(function_name, param_type) \
-+gboolean \
-+gst_photography_set_ ## function_name (GstPhotography * photo, param_type param) \
-+{ \
-+  GstPhotographyInterface *iface; \
-+  g_return_val_if_fail (photo != NULL, FALSE); \
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo); \
-+  if (iface->set_ ## function_name) { \
-+    return iface->set_ ## function_name (photo, param); \
-+  } \
-+  return FALSE; \
-+} \
-+gboolean \
-+gst_photography_get_ ## function_name (GstPhotography * photo, param_type * param) \
-+{ \
-+  GstPhotographyInterface *iface; \
-+  g_return_val_if_fail (photo != NULL, FALSE); \
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo); \
-+  if (iface->get_ ## function_name) { \
-+    return iface->get_ ## function_name (photo, param); \
-+  } \
-+  return FALSE; \
-+}
-+
-+
-+/**
-+ * gst_photography_set_ev_compensation:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @ev_comp: ev compensation value to set
-+ *
-+ * Set the ev compensation value for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_ev_compensation:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @ev_comp: ev compensation value to get
-+ *
-+ * Get the ev compensation value for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (ev_compensation, gfloat);
-+
-+/**
-+ * gst_photography_set_iso_speed:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @iso_speed: ISO speed value to set
-+ *
-+ * Set the ISO value (light sensivity) for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_iso_speed:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @iso_speed: ISO speed value to get
-+ *
-+ * Get the ISO value (light sensivity) for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (iso_speed, guint);
-+
-+/**
-+ * gst_photography_set_aperture:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @aperture: aperture value to set
-+ *
-+ * Set the aperture value for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_aperture:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @aperture: aperture value to get
-+ *
-+ * Get the aperture value for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (aperture, guint);
-+
-+/**
-+ * gst_photography_set_exposure:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @exposure: exposure time to set
-+ *
-+ * Set the fixed exposure time (in us) for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_exposure:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @exposure: exposure time to get
-+ *
-+ * Get the fixed exposure time (in us) for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (exposure, guint32);
-+
-+/**
-+ * gst_photography_set_white_balance_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @wb_mode: #GstPhotographyWhiteBalanceMode to set
-+ *
-+ * Set the white balance mode for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_white_balance_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @wb_mode: #GstPhotographyWhiteBalanceMode to get
-+ *
-+ * Get the white balance mode for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (white_balance_mode,
-+    GstPhotographyWhiteBalanceMode);
-+
-+/**
-+ * gst_photography_set_color_tone_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @tone_mode: #GstPhotographyColorToneMode to set
-+ *
-+ * Set the color tone mode for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_color_tone_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @tone_mode: #GstPhotographyColorToneMode to get
-+ *
-+ * Get the color tone mode for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (color_tone_mode, GstPhotographyColorToneMode);
-+
-+/**
-+ * gst_photography_set_scene_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @scene_mode: #GstPhotographySceneMode to set
-+ *
-+ * Set the scene mode for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_scene_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @scene_mode: #GstPhotographySceneMode to get
-+ *
-+ * Get the scene mode for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (scene_mode, GstPhotographySceneMode);
-+
-+/**
-+ * gst_photography_set_flash_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @flash_mode: #GstPhotographyFlashMode to set
-+ *
-+ * Set the flash mode for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_flash_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @flash_mode: #GstPhotographyFlashMode to get
-+ *
-+ * Get the flash mode for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (flash_mode, GstPhotographyFlashMode);
-+
-+/**
-+ * gst_photography_set_noise_reduction:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @noise_reduction: #GstPhotographyNoiseReductionMode to set
-+ *
-+ * Set the noise reduction mode for the #GstElement
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_noise_reduction:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @noise_reduction: #GstPhotographyNoiseReductionMode to get
-+ *
-+ * Get the noise reduction mode for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (noise_reduction, GstPhotographyNoiseReduction);
-+
-+/**
-+ * gst_photography_set_zoom:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @zoom: zoom value to set
-+ *
-+ * Set the zoom value for the #GstElement.
-+ * E.g. 1.0 to get original image and 3.0 for 3x zoom and so on.
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_zoom:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @zoom: zoom value to get
-+ *
-+ * Get the zoom value for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (zoom, gfloat);
-+
-+/**
-+ * gst_photography_set_flicker_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @flicker_mode: flicker mode value to set
-+ *
-+ * Set the flicker mode value for the #GstElement.
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_flicker_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @flicker_mode: flicker mode value to get
-+ *
-+ * Get the flicker mode value for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (flicker_mode,
-+    GstPhotographyFlickerReductionMode);
-+
-+/**
-+ * gst_photography_set_focus_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @focus_mode: focus mode value to set
-+ *
-+ * Set the focus mode value for the #GstElement.
-+ *
-+ * Returns: %TRUE if setting the value succeeded, %FALSE otherwise
-+ */
-+/**
-+ * gst_photography_get_focus_mode:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @focus_mode: focus_mode value to get
-+ *
-+ * Get the focus mode value for the #GstElement
-+ *
-+ * Returns: %TRUE if getting the value succeeded, %FALSE otherwise
-+ */
-+GST_PHOTOGRAPHY_FUNC_TEMPLATE (focus_mode, GstPhotographyFocusMode);
-+
-+/**
-+ * gst_photography_get_capabilities:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ *
-+ * Get #GstPhotographyCaps bitmask value that indicates what photography
-+ * interface features the #GstElement supports
-+ *
-+ * Returns: #GstPhotographyCaps value
-+ */
-+GstPhotographyCaps
-+gst_photography_get_capabilities (GstPhotography * photo)
-+{
-+  GstPhotographyInterface *iface;
-+  g_return_val_if_fail (photo != NULL, GST_PHOTOGRAPHY_CAPS_NONE);
-+
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
-+  if (iface->get_capabilities) {
-+    return iface->get_capabilities (photo);
-+  } else {
-+    return GST_PHOTOGRAPHY_CAPS_NONE;
-+  }
-+}
-+
-+/**
-+ * gst_photography_prepare_for_capture:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @func: callback that is called after capturing has been prepared
-+ * @capture_caps: #GstCaps defining the desired format of the captured image
-+ * @user_data: user data that will be passed to the callback @func
-+ *
-+ * Start preparations for capture. Preparations can take indeterminate
-+ * amount of time and @func callback is called after preparations are
-+ * done. Image capture will begin after callback returns.
-+ *
-+ * Returns: %TRUE if preparations were started (caps were OK), otherwise %FALSE.
-+ */
-+gboolean
-+gst_photography_prepare_for_capture (GstPhotography * photo,
-+    GstPhotographyCapturePrepared func, GstCaps * capture_caps,
-+    gpointer user_data)
-+{
-+  GstPhotographyInterface *iface;
-+  gboolean ret = TRUE;
-+
-+  g_return_val_if_fail (photo != NULL, FALSE);
-+
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
-+  if (iface->prepare_for_capture) {
-+    ret = iface->prepare_for_capture (photo, func, capture_caps, user_data);
-+  }
-+
-+  return ret;
-+}
-+
-+/**
-+ * gst_photography_set_autofocus:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @on: %TRUE to start autofocusing, %FALSE to stop autofocusing
-+ *
-+ * Start or stop autofocusing. %GST_PHOTOGRAPHY_AUTOFOCUS_DONE
-+ * message is posted to bus when autofocusing has finished.
-+ */
-+void
-+gst_photography_set_autofocus (GstPhotography * photo, gboolean on)
-+{
-+  GstPhotographyInterface *iface;
-+  g_return_if_fail (photo != NULL);
-+
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
-+  if (iface->set_autofocus) {
-+    iface->set_autofocus (photo, on);
-+  }
-+}
-+
-+/**
-+ * gst_photography_set_config:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @config: #GstPhotographySettings containing the configuration
-+ *
-+ * Set all configuration settings at once.
-+ *
-+ * Returns: TRUE if configuration was set successfully, otherwise FALSE.
-+ */
-+gboolean
-+gst_photography_set_config (GstPhotography * photo,
-+    GstPhotographySettings * config)
-+{
-+  GstPhotographyInterface *iface;
-+  gboolean ret = FALSE;
-+
-+  g_return_val_if_fail (photo != NULL, FALSE);
-+
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
-+  if (iface->set_config) {
-+    ret = iface->set_config (photo, config);
-+  }
-+
-+  return ret;
-+}
-+
-+/**
-+ * gst_photography_get_config:
-+ * @photo: #GstPhotography interface of a #GstElement
-+ * @config: #GstPhotographySettings containing the configuration
-+ *
-+ * Get all configuration settings at once.
-+ *
-+ * Returns: TRUE if configuration was got successfully, otherwise FALSE.
-+ */
-+gboolean
-+gst_photography_get_config (GstPhotography * photo,
-+    GstPhotographySettings * config)
-+{
-+  GstPhotographyInterface *iface;
-+  gboolean ret = FALSE;
-+
-+  g_return_val_if_fail (photo != NULL, FALSE);
-+
-+  iface = GST_PHOTOGRAPHY_GET_INTERFACE (photo);
-+  if (iface->get_config) {
-+    ret = iface->get_config (photo, config);
-+  }
-+
-+  return ret;
-+}
-+
-+/* Photography class initialization stuff */
-+static void
-+gst_photography_iface_class_init (gpointer g_class)
-+{
-+  /* create interface signals and properties here. */
-+
-+  /* White balance */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_WB_MODE,
-+          "White balance mode property",
-+          "White balance affects the color temperature of the photo",
-+          GST_TYPE_PHOTOGRAPHY_WHITE_BALANCE_MODE,
-+          GST_PHOTOGRAPHY_WB_MODE_AUTO,
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Color tone */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_COLOR_TONE,
-+          "Color tone mode property",
-+          "Color tone setting changes color shading in the photo",
-+          GST_TYPE_PHOTOGRAPHY_COLOR_TONE_MODE,
-+          GST_PHOTOGRAPHY_COLOR_TONE_MODE_NORMAL,
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Scene mode */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_SCENE_MODE,
-+          "Scene mode property",
-+          "Scene mode works as a preset for different photo shooting mode settings",
-+          GST_TYPE_PHOTOGRAPHY_SCENE_MODE,
-+          GST_PHOTOGRAPHY_SCENE_MODE_AUTO,
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Flash mode */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_FLASH_MODE,
-+          "Flash mode property",
-+          "Flash mode defines how the flash light should be used",
-+          GST_TYPE_PHOTOGRAPHY_FLASH_MODE,
-+          GST_PHOTOGRAPHY_FLASH_MODE_AUTO,
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Flicker reduction mode */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_FLICKER_MODE,
-+          "Flicker reduction mode property",
-+          "Flicker reduction mode defines a line frequency for flickering prevention",
-+          GST_TYPE_PHOTOGRAPHY_FLICKER_REDUCTION_MODE,
-+          GST_PHOTOGRAPHY_FLICKER_REDUCTION_OFF,
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Focus mode */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_FOCUS_MODE,
-+          "Focus mode property",
-+          "Focus mode defines the range of focal lengths to use in autofocus search",
-+          GST_TYPE_PHOTOGRAPHY_FOCUS_MODE,
-+          GST_PHOTOGRAPHY_FOCUS_MODE_AUTO,
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Capabilities */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_ulong (GST_PHOTOGRAPHY_PROP_CAPABILITIES,
-+          "Photo capabilities bitmask",
-+          "Tells the photo capabilities of the device",
-+          0, G_MAXULONG, 0, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-+
-+  /* EV_compensation */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_float (GST_PHOTOGRAPHY_PROP_EV_COMP,
-+          "EV compensation property",
-+          "EV compensation affects the brightness of the image",
-+          -2.5, 2.5, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* ISO value */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_ISO_SPEED,
-+          "ISO speed property",
-+          "ISO speed defines the light sensitivity (0 = auto)",
-+          0, 6400, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Aperture */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_APERTURE,
-+          "Aperture property",
-+          "Aperture defines the size of lens opening  (0 = auto)",
-+          0, G_MAXUINT8, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Exposure */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_EXPOSURE_TIME,
-+          "Exposure time in milliseconds",
-+          "Exposure time defines how long the shutter will stay open (0 = auto)",
-+          0, G_MAXUINT32, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:image-capture-supported-caps:
-+   *
-+   * Query caps that describe supported formats for image capture. Sometimes
-+   * element may support different formats for image capture than for video
-+   * streaming.
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_boxed (GST_PHOTOGRAPHY_PROP_IMAGE_CAPTURE_SUPPORTED_CAPS,
-+          "Image capture supported caps",
-+          "Caps describing supported image capture formats", GST_TYPE_CAPS,
-+          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:image-preview-supported-caps:
-+   *
-+   * Query caps that describe supported formats for preview image. Sometimes
-+   * element may support different formats for preview image than for video
-+   * streaming.
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_boxed (GST_PHOTOGRAPHY_PROP_IMAGE_PREVIEW_SUPPORTED_CAPS,
-+          "Image preview supported caps",
-+          "Caps describing supported image preview formats", GST_TYPE_CAPS,
-+          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Zoom */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_float (GST_PHOTOGRAPHY_PROP_ZOOM,
-+          "Zoom property",
-+          "How much the resulted image will be zoomed",
-+          1.0f, 10.0f, 1.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:color-temperature:
-+   *
-+   * Color temperature parameter for manual white balance.
-+   * Control color temperature in Kelvin units.
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_COLOR_TEMPERATURE,
-+          "Color temperature in Kelvin units",
-+          "Color temperature in Kelvin units for manual white balance",
-+          0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:white-point:
-+   *
-+   * White point parameter for manual white balance.
-+   * Describes the color "white" as raw values.
-+   *
-+   * FIXME: check and document correct representation for white point
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_value_array (GST_PHOTOGRAPHY_PROP_WHITE_POINT,
-+          "White point",
-+          "Describe color white as raw values",
-+          g_param_spec_uint ("raw-value", "Raw value",
-+              "Raw value", 0, G_MAXUINT, 0,
-+              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS),
-+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:analog-gain:
-+   *
-+   * Linear multiplicative value how much amplification is applied to the signal
-+   * before A-D conversion.
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_float (GST_PHOTOGRAPHY_PROP_ANALOG_GAIN,
-+          "Analog gain applied to the sensor",
-+          "Analog gain applied to the sensor",
-+          1.0f, G_MAXFLOAT, 1.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:lens-focus:
-+   *
-+   * Manual changing of lens focus in diopter units.
-+   * Intended use with GST_PHOTOGRAPHY_FOCUS_MODE_MANUAL focus mode, otherwise
-+   * to be ignored.
-+   *
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_float (GST_PHOTOGRAPHY_PROP_LENS_FOCUS,
-+          "Manual lens focus",
-+          "Focus point in diopter units",
-+          0.0f, G_MAXFLOAT, 0.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:min-exposure-time:
-+   *
-+   * Minimum exposure time for automatic exposure mode.
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_MIN_EXPOSURE_TIME,
-+          "Minimum exposure time",
-+          "Minimum exposure time for automatic exposure mode",
-+          0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /**
-+   * GstPhotography:max-exposure-time:
-+   *
-+   * Maximum exposure time for automatic exposure mode.
-+   */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_uint (GST_PHOTOGRAPHY_PROP_MAX_EXPOSURE_TIME,
-+          "Maximum exposure time",
-+          "Maximum exposure time for automatic exposure mode",
-+          0, G_MAXUINT, 0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Noise Reduction, Bayer an YCC noise reduction are enabled by default */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_flags (GST_PHOTOGRAPHY_PROP_NOISE_REDUCTION,
-+          "Noise Reduction settings",
-+          "Which noise reduction modes are enabled (0 = disabled)",
-+          GST_TYPE_PHOTOGRAPHY_NOISE_REDUCTION,
-+          0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+
-+  /* Exposure mode */
-+  g_object_interface_install_property (g_class,
-+      g_param_spec_enum (GST_PHOTOGRAPHY_PROP_EXPOSURE_MODE,
-+          "Exposure mode property",
-+          "Exposure mode to either automatic or manual",
-+          GST_TYPE_PHOTOGRAPHY_EXPOSURE_MODE,
-+          0, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-+}
-Index: gst-plugins-good1.0/gst-libs/gst/interfaces/photography.h
-===================================================================
---- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/interfaces/photography.h
-@@ -0,0 +1,685 @@
-+/* GStreamer
-+ *
-+ * Copyright (C) 2008 Nokia Corporation <multimedia@maemo.org>
-+ *
-+ * photography.h: photography interface for digital imaging
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Library General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Library General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Library General Public
-+ * License along with this library; if not, write to the
-+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
-+ * Boston, MA 02110-1301, USA.
-+ */
-+
-+#ifndef __GST_PHOTOGRAPHY_H__
-+#define __GST_PHOTOGRAPHY_H__
-+
-+#ifndef GST_USE_UNSTABLE_API
-+#warning "The GstPhotography interface is unstable API and may change in future."
-+#warning "You can define GST_USE_UNSTABLE_API to avoid this warning." 
-+#endif
-+
-+#include <gst/gst.h>
-+#include <gst/interfaces/photography-prelude.h>
-+#include <gst/interfaces/photography-enumtypes.h>
-+
-+G_BEGIN_DECLS
-+
-+#define GST_TYPE_PHOTOGRAPHY \
-+  (gst_photography_get_type ())
-+#define GST_PHOTOGRAPHY(obj) \
-+  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GST_TYPE_PHOTOGRAPHY, GstPhotography))
-+#define GST_IS_PHOTOGRAPHY(obj) \
-+  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GST_TYPE_PHOTOGRAPHY))
-+#define GST_PHOTOGRAPHY_GET_INTERFACE(inst) \
-+  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GST_TYPE_PHOTOGRAPHY, GstPhotographyInterface))
-+
-+
-+/**
-+ * GST_PHOTOGRAPHY_AUTOFOCUS_DONE:
-+ *
-+ * Name of custom GstMessage that will be posted to #GstBus when autofocusing
-+ * is complete.
-+ * This message contains following fields:
-+ *
-+ * * `status` (#GstPhotographyFocusStatus): Tells if focusing succeeded or failed.
-+ *
-+ * * `focus-window-rows` (#G_TYPE_INT): Tells number of focus matrix rows.
-+ *
-+ * * `focus-window-columns` (#G_TYPE_INT): Tells number of focus matrix columns.
-+ *
-+ * * `focus-window-mask` (#G_TYPE_INT): Bitmask containing rows x columns bits
-+ *   which mark the focus points in the focus matrix. Lowest bit (LSB) always
-+ *   represents the top-left corner of the focus matrix. This field is only valid
-+ *   when focusing status is SUCCESS.
-+ */
-+#define GST_PHOTOGRAPHY_AUTOFOCUS_DONE "autofocus-done"
-+
-+/**
-+ * GST_PHOTOGRAPHY_SHAKE_RISK:
-+ *
-+ * Name of custom GstMessage that is posted to #GstBus during autofocusing
-+ * process. It is posted if there is change in the risk of captured image
-+ * becoming "shaken" due to camera movement and too long exposure time.
-+ *
-+ * This message contains following fields:
-+ *
-+ * * `status` (#GstPhotographyShakeRisk): Tells risk level of capturing shaken image.
-+ */
-+#define GST_PHOTOGRAPHY_SHAKE_RISK "shake-risk"
-+
-+/* Maximum white point values used in #GstPhotographySettings */
-+#define MAX_WHITE_POINT_VALUES 4
-+
-+/* Interface property names */
-+#define GST_PHOTOGRAPHY_PROP_WB_MODE            "white-balance-mode"
-+#define GST_PHOTOGRAPHY_PROP_COLOR_TONE         "color-tone-mode"
-+#define GST_PHOTOGRAPHY_PROP_SCENE_MODE         "scene-mode"
-+#define GST_PHOTOGRAPHY_PROP_FLASH_MODE         "flash-mode"
-+#define GST_PHOTOGRAPHY_PROP_NOISE_REDUCTION    "noise-reduction"
-+#define GST_PHOTOGRAPHY_PROP_FOCUS_STATUS       "focus-status"
-+#define GST_PHOTOGRAPHY_PROP_CAPABILITIES       "capabilities"
-+#define GST_PHOTOGRAPHY_PROP_SHAKE_RISK         "shake-risk"
-+#define GST_PHOTOGRAPHY_PROP_EV_COMP            "ev-compensation"
-+#define GST_PHOTOGRAPHY_PROP_ISO_SPEED          "iso-speed"
-+#define GST_PHOTOGRAPHY_PROP_APERTURE           "aperture"
-+#define GST_PHOTOGRAPHY_PROP_EXPOSURE_TIME      "exposure-time"
-+#define GST_PHOTOGRAPHY_PROP_IMAGE_CAPTURE_SUPPORTED_CAPS \
-+                                                "image-capture-supported-caps"
-+#define GST_PHOTOGRAPHY_PROP_IMAGE_PREVIEW_SUPPORTED_CAPS \
-+                                                "image-preview-supported-caps"
-+#define GST_PHOTOGRAPHY_PROP_FLICKER_MODE       "flicker-mode"
-+#define GST_PHOTOGRAPHY_PROP_FOCUS_MODE         "focus-mode"
-+#define GST_PHOTOGRAPHY_PROP_ZOOM               "zoom"
-+#define GST_PHOTOGRAPHY_PROP_COLOR_TEMPERATURE  "color-temperature"
-+#define GST_PHOTOGRAPHY_PROP_WHITE_POINT        "white-point"
-+#define GST_PHOTOGRAPHY_PROP_ANALOG_GAIN        "analog-gain"
-+#define GST_PHOTOGRAPHY_PROP_EXPOSURE_MODE      "exposure-mode"
-+#define GST_PHOTOGRAPHY_PROP_LENS_FOCUS         "lens-focus"
-+#define GST_PHOTOGRAPHY_PROP_MIN_EXPOSURE_TIME  "min-exposure-time"
-+#define GST_PHOTOGRAPHY_PROP_MAX_EXPOSURE_TIME  "max-exposure-time"
-+
-+/**
-+ * GstPhotography:
-+ *
-+ * Opaque #GstPhotography data structure.
-+ */
-+typedef struct _GstPhotography GstPhotography;
-+
-+/**
-+ * GstPhotographyNoiseReduction:
-+ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_BAYER: Adaptive noise reduction on Bayer
-+ * format
-+ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_YCC: reduces the noise on Y and 2-chroma
-+ * images.
-+ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_TEMPORAL: Multi-frame adaptive NR,
-+ * provided for the video mode
-+ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_FIXED: Fixed Pattern Noise refers to noise
-+ * that does not change between frames. The noise is removed from the sensor
-+ * image, by subtracting a previously-captured black image in memory.
-+ * @GST_PHOTOGRAPHY_NOISE_REDUCTION_EXTRA: Extra Noise Reduction. In the case
-+ * of high-ISO capturing, some noise remains after YCC NR. XNR reduces this
-+ * remaining noise.
-+ *
-+ * Noise Reduction features of a photography capture or filter element.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_BAYER    = (1 << 0),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_YCC      = (1 << 1),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_TEMPORAL = (1 << 2),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_FIXED    = (1 << 3),
-+  GST_PHOTOGRAPHY_NOISE_REDUCTION_EXTRA    = (1 << 4)
-+} GstPhotographyNoiseReduction;
-+
-+/**
-+ * GstPhotographyWhiteBalanceMode:
-+ * @GST_PHOTOGRAPHY_WB_MODE_AUTO: Choose white balance mode automatically
-+ * @GST_PHOTOGRAPHY_WB_MODE_DAYLIGHT: Mode for daylight conditions
-+ * @GST_PHOTOGRAPHY_WB_MODE_CLOUDY: Mode for cloudy conditions
-+ * @GST_PHOTOGRAPHY_WB_MODE_SUNSET: Mode for sunset conditions
-+ * @GST_PHOTOGRAPHY_WB_MODE_TUNGSTEN: Mode for tungsten lighting
-+ * @GST_PHOTOGRAPHY_WB_MODE_FLUORESCENT: Mode for fluorescent lighting
-+ * @GST_PHOTOGRAPHY_WB_MODE_MANUAL: Disable automatic white balance adjustment
-+ * and keep current values.
-+ * @GST_PHOTOGRAPHY_WB_MODE_WARM_FLUORESCENT: Mode for warm fluorescent lighting (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_WB_MODE_SHADE: Mode for shade lighting (Since: 1.2)
-+ *
-+ * Modes for white balance control.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_WB_MODE_AUTO = 0,
-+  GST_PHOTOGRAPHY_WB_MODE_DAYLIGHT,
-+  GST_PHOTOGRAPHY_WB_MODE_CLOUDY,
-+  GST_PHOTOGRAPHY_WB_MODE_SUNSET,
-+  GST_PHOTOGRAPHY_WB_MODE_TUNGSTEN,
-+  GST_PHOTOGRAPHY_WB_MODE_FLUORESCENT,
-+  GST_PHOTOGRAPHY_WB_MODE_MANUAL,
-+  GST_PHOTOGRAPHY_WB_MODE_WARM_FLUORESCENT,
-+  GST_PHOTOGRAPHY_WB_MODE_SHADE
-+} GstPhotographyWhiteBalanceMode;
-+
-+/**
-+ * GstPhotographyColorToneMode:
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NORMAL: No effects
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SEPIA: Sepia
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEGATIVE: Negative
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRAYSCALE: Grayscale
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NATURAL: Natural
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_VIVID: Vivid
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_COLORSWAP: Colorswap
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SOLARIZE: Solarize
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_OUT_OF_FOCUS: Out of focus
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKY_BLUE: Sky blue
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRASS_GREEN: Grass green
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKIN_WHITEN: Skin whiten
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_POSTERIZE: Posterize (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_WHITEBOARD: Whiteboard (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_BLACKBOARD: Blackboard (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_AQUA: Aqua (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_EMBOSS: Emboss (Since: 1.18)
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKETCH: Sketch (Since: 1.18)
-+ * @GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEON: Neon (Since: 1.18)
-+ *
-+ *
-+ * Modes for special color effects.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NORMAL = 0,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SEPIA,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEGATIVE,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRAYSCALE,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NATURAL,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_VIVID,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_COLORSWAP,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SOLARIZE,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_OUT_OF_FOCUS,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKY_BLUE,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_GRASS_GREEN,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKIN_WHITEN,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_POSTERIZE,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_WHITEBOARD,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_BLACKBOARD,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_AQUA,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_EMBOSS,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_SKETCH,
-+  GST_PHOTOGRAPHY_COLOR_TONE_MODE_NEON
-+} GstPhotographyColorToneMode;
-+
-+/**
-+ * GstPhotographySceneMode:
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_MANUAL: Set individual options manually
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_CLOSEUP: Mode for close objects
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_PORTRAIT: Mode for portraits
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_LANDSCAPE: Mode for landscapes
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_SPORT: Mode for scene with fast motion
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_NIGHT: Mode for night conditions
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_AUTO: Choose scene mode automatically
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_ACTION: Take photos of fast moving
-+ *     objects (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_NIGHT_PORTRAIT: Take people pictures
-+ *     at night (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_THEATRE: Take photos in a theater (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_BEACH: Take pictures on the beach (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_SNOW: Take pictures on the snow (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_SUNSET: Take sunset photos (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_STEADY_PHOTO: Avoid blurry pictures
-+ *     (for example, due to hand shake) (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_FIREWORKS: For shooting firework
-+ *     displays (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_PARTY: Take indoor low-light shot (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_CANDLELIGHT: Capture the naturally warm color
-+ *     of scenes lit by candles (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_BARCODE: Applications are looking for
-+ *     a barcode (Since: 1.2)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_BACKLIGHT: Backlit photos (Since: 1.18)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_FLOWERS: For shooting flowers (Since: 1.18)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_AR: Specific for Augmented Reality (Since: 1.18)
-+ * @GST_PHOTOGRAPHY_SCENE_MODE_HDR: High Dynamic Range photography (Since: 1.18)
-+ *
-+ * Each mode contains preset #GstPhotography options in order to produce
-+ * good capturing result in certain scene.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_SCENE_MODE_MANUAL = 0,
-+  GST_PHOTOGRAPHY_SCENE_MODE_CLOSEUP,
-+  GST_PHOTOGRAPHY_SCENE_MODE_PORTRAIT,
-+  GST_PHOTOGRAPHY_SCENE_MODE_LANDSCAPE,
-+  GST_PHOTOGRAPHY_SCENE_MODE_SPORT,
-+  GST_PHOTOGRAPHY_SCENE_MODE_NIGHT,
-+  GST_PHOTOGRAPHY_SCENE_MODE_AUTO,
-+  GST_PHOTOGRAPHY_SCENE_MODE_ACTION,
-+  GST_PHOTOGRAPHY_SCENE_MODE_NIGHT_PORTRAIT,
-+  GST_PHOTOGRAPHY_SCENE_MODE_THEATRE,
-+  GST_PHOTOGRAPHY_SCENE_MODE_BEACH,
-+  GST_PHOTOGRAPHY_SCENE_MODE_SNOW,
-+  GST_PHOTOGRAPHY_SCENE_MODE_SUNSET,
-+  GST_PHOTOGRAPHY_SCENE_MODE_STEADY_PHOTO,
-+  GST_PHOTOGRAPHY_SCENE_MODE_FIREWORKS,
-+  GST_PHOTOGRAPHY_SCENE_MODE_PARTY,
-+  GST_PHOTOGRAPHY_SCENE_MODE_CANDLELIGHT,
-+  GST_PHOTOGRAPHY_SCENE_MODE_BARCODE,
-+  GST_PHOTOGRAPHY_SCENE_MODE_BACKLIGHT,
-+  GST_PHOTOGRAPHY_SCENE_MODE_FLOWERS,
-+  GST_PHOTOGRAPHY_SCENE_MODE_AR,
-+  GST_PHOTOGRAPHY_SCENE_MODE_HDR
-+} GstPhotographySceneMode;
-+
-+/**
-+ * GstPhotographyFlashMode:
-+ * @GST_PHOTOGRAPHY_FLASH_MODE_AUTO: Fire flash automatically according to
-+ * lighting conditions.
-+ * @GST_PHOTOGRAPHY_FLASH_MODE_OFF: Never fire flash
-+ * @GST_PHOTOGRAPHY_FLASH_MODE_ON: Always fire flash
-+ * @GST_PHOTOGRAPHY_FLASH_MODE_FILL_IN: Fill in flash
-+ * @GST_PHOTOGRAPHY_FLASH_MODE_RED_EYE: Flash mode for reducing chance of
-+ * capturing red eyes
-+ *
-+ * Modes for flash control.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_FLASH_MODE_AUTO = 0,
-+  GST_PHOTOGRAPHY_FLASH_MODE_OFF,
-+  GST_PHOTOGRAPHY_FLASH_MODE_ON,
-+  GST_PHOTOGRAPHY_FLASH_MODE_FILL_IN,
-+  GST_PHOTOGRAPHY_FLASH_MODE_RED_EYE
-+} GstPhotographyFlashMode;
-+
-+/**
-+ * GstPhotographyFocusStatus:
-+ * @GST_PHOTOGRAPHY_FOCUS_STATUS_NONE: No status available
-+ * @GST_PHOTOGRAPHY_FOCUS_STATUS_RUNNING: Focusing is ongoing
-+ * @GST_PHOTOGRAPHY_FOCUS_STATUS_FAIL: Focusing failed
-+ * @GST_PHOTOGRAPHY_FOCUS_STATUS_SUCCESS: Focusing succeeded
-+ *
-+ * Status of the focusing operation, used in #GST_PHOTOGRAPHY_AUTOFOCUS_DONE
-+ * message.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_FOCUS_STATUS_NONE = 0,
-+  GST_PHOTOGRAPHY_FOCUS_STATUS_RUNNING,
-+  GST_PHOTOGRAPHY_FOCUS_STATUS_FAIL,
-+  GST_PHOTOGRAPHY_FOCUS_STATUS_SUCCESS
-+} GstPhotographyFocusStatus;
-+
-+/**
-+ * GstPhotographyCaps:
-+ *
-+ * Bitmask that indicates which #GstPhotography interface features an instance
-+ * supports.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_CAPS_NONE              = (0 << 0),
-+  GST_PHOTOGRAPHY_CAPS_EV_COMP           = (1 << 0),
-+  GST_PHOTOGRAPHY_CAPS_ISO_SPEED         = (1 << 1),
-+  GST_PHOTOGRAPHY_CAPS_WB_MODE           = (1 << 2),
-+  GST_PHOTOGRAPHY_CAPS_TONE              = (1 << 3),
-+  GST_PHOTOGRAPHY_CAPS_SCENE             = (1 << 4),
-+  GST_PHOTOGRAPHY_CAPS_FLASH             = (1 << 5),
-+  GST_PHOTOGRAPHY_CAPS_ZOOM              = (1 << 6),
-+  GST_PHOTOGRAPHY_CAPS_FOCUS             = (1 << 7),
-+  GST_PHOTOGRAPHY_CAPS_APERTURE          = (1 << 8),
-+  GST_PHOTOGRAPHY_CAPS_EXPOSURE          = (1 << 9),
-+  GST_PHOTOGRAPHY_CAPS_SHAKE             = (1 << 10),
-+  GST_PHOTOGRAPHY_CAPS_WHITE_BALANCE     = (1 << 11),
-+  GST_PHOTOGRAPHY_CAPS_NOISE_REDUCTION   = (1 << 12),
-+  GST_PHOTOGRAPHY_CAPS_FLICKER_REDUCTION = (1 << 13),
-+  GST_PHOTOGRAPHY_CAPS_ALL               = (~0)
-+} GstPhotographyCaps;
-+
-+/**
-+ * GstPhotographyShakeRisk:
-+ * @GST_PHOTOGRAPHY_SHAKE_RISK_LOW: Low risk
-+ * @GST_PHOTOGRAPHY_SHAKE_RISK_MEDIUM: Medium risk
-+ * @GST_PHOTOGRAPHY_SHAKE_RISK_HIGH: High risk
-+ *
-+ * Risk level of captured image becoming "shaken" due to camera movement and
-+ * too long exposure time. Used in #GST_PHOTOGRAPHY_SHAKE_RISK #GstMessage.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_SHAKE_RISK_LOW = 0,
-+  GST_PHOTOGRAPHY_SHAKE_RISK_MEDIUM,
-+  GST_PHOTOGRAPHY_SHAKE_RISK_HIGH,
-+} GstPhotographyShakeRisk;
-+
-+/**
-+ * GstPhotographyFlickerReductionMode:
-+ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_OFF: Disable flicker reduction
-+ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_50HZ: 50Hz flicker reduction
-+ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_60HZ: 60Hz flicker reduction
-+ * @GST_PHOTOGRAPHY_FLICKER_REDUCTION_AUTO: Choose mode automatically
-+ *
-+ * Reduce flicker in video caused by light source fluctuation.
-+ */
-+typedef enum
-+{
-+  GST_PHOTOGRAPHY_FLICKER_REDUCTION_OFF = 0,
-+  GST_PHOTOGRAPHY_FLICKER_REDUCTION_50HZ,
-+  GST_PHOTOGRAPHY_FLICKER_REDUCTION_60HZ,
-+  GST_PHOTOGRAPHY_FLICKER_REDUCTION_AUTO,
-+} GstPhotographyFlickerReductionMode;
-+
-+/**
-+ * GstPhotographyFocusMode:
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_AUTO: Choose focus mode automatically
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_MACRO: Mode for focusing objects close to lens
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_PORTRAIT: Mode for portraits
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_INFINITY: Mode for landscapes and far away objects
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_HYPERFOCAL: Mode for maximum depth of field, keeping
-+ * focus acceptable both in infinify and as close objects as possible
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_EXTENDED: Extended focus mode
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_NORMAL: Continuous autofocus mode
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_EXTENDED: Extended continuous
-+ * autofocus mode
-+ * @GST_PHOTOGRAPHY_FOCUS_MODE_MANUAL: Disable automatic focusing
-+ * and keep current value. #GstPhotography:lens-focus property can
-+ * be used to change focus manually.
-+ *
-+ * Choose mode for focusing algorithm.
-+ */
-+typedef enum {
-+    GST_PHOTOGRAPHY_FOCUS_MODE_AUTO = 0,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_MACRO,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_PORTRAIT,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_INFINITY,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_HYPERFOCAL,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_EXTENDED,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_NORMAL,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_CONTINUOUS_EXTENDED,
-+    GST_PHOTOGRAPHY_FOCUS_MODE_MANUAL
-+} GstPhotographyFocusMode;
-+
-+/**
-+ * GstPhotographyExposureMode:
-+ * @GST_PHOTOGRAPHY_EXPOSURE_MODE_AUTO: Adjust exposure automatically
-+ * @GST_PHOTOGRAPHY_EXPOSURE_MODE_MANUAL: Disable automatic exposure adjustment
-+ * and keep current values.
-+ *
-+ */
-+typedef enum {
-+    GST_PHOTOGRAPHY_EXPOSURE_MODE_AUTO = 0,
-+    GST_PHOTOGRAPHY_EXPOSURE_MODE_MANUAL
-+} GstPhotographyExposureMode;
-+
-+/**
-+ * GstPhotographySettings:
-+ *
-+ * Structure containing all #GstPhotography settings, used to set all
-+ * settings in one call with @gst_photography_set_config().
-+ */
-+typedef struct
-+{
-+  GstPhotographyWhiteBalanceMode wb_mode;
-+  GstPhotographyColorToneMode tone_mode;
-+  GstPhotographySceneMode scene_mode;
-+  GstPhotographyFlashMode flash_mode;
-+  guint32 exposure_time;
-+  guint aperture;
-+  gfloat ev_compensation;
-+  guint iso_speed;
-+  gfloat zoom;
-+  GstPhotographyFlickerReductionMode flicker_mode;
-+  GstPhotographyFocusMode focus_mode;
-+  GstPhotographyNoiseReduction noise_reduction;
-+  GstPhotographyExposureMode exposure_mode;
-+  guint color_temperature;
-+  guint white_point[MAX_WHITE_POINT_VALUES];
-+  gfloat analog_gain;
-+  gfloat lens_focus;
-+  guint min_exposure_time;
-+  guint max_exposure_time;
-+  /* FIXME: add padding? */
-+} GstPhotographySettings;
-+
-+/**
-+ * GstPhotographyCapturePrepared:
-+ * @data: user data that has been given, when registering the callback
-+ * @configured_caps: #GstCaps defining the configured capture format.
-+ *     Ownership of these caps stays in the element.
-+ *
-+ * This callback will be called when the element has finished preparations
-+ * and is ready for image capture. The next buffer that element produces
-+ * will be of @configured_caps format, so this callback allows the application
-+ * to e.g. reconfigure capsfilters in pipeline if any.
-+ */
-+typedef void (*GstPhotographyCapturePrepared) (gpointer data, const GstCaps *configured_caps);
-+
-+/**
-+ * GstPhotographyInterface:
-+ * @parent: parent interface type.
-+ * @get_ev_compensation: vmethod to get ev exposure compensation value
-+ * @get_iso_speed: vmethod to get iso speed (light sensitivity) value
-+ * @get_aperture: vmethod to get aperture value
-+ * @get_exposure: vmethod to get exposure time value
-+ * @get_white_balance_mode: vmethod to get white balance mode value
-+ * @get_color_tone_mode: vmethod to get color tone mode value
-+ * @get_scene_mode: vmethod to get scene mode value
-+ * @get_flash_mode: vmethod to get flash mode value
-+ * @get_noise_reduction: vmethod to get noise reduction mode value
-+ * @get_zoom: vmethod to get zoom factor value
-+ * @set_ev_compensation: vmethod to set ev exposure compensation value
-+ * @set_iso_speed: vmethod to set iso speed (light sensitivity) value
-+ * @set_aperture: vmethod to set aperture value
-+ * @set_exposure: vmethod to set exposure time value
-+ * @set_white_balance_mode: vmethod to set white balance mode value
-+ * @set_color_tone_mode: vmethod to set color tone mode value
-+ * @set_scene_mode: vmethod to set scene mode value
-+ * @set_flash_mode: vmethod to set flash mode value
-+ * @set_noise_reduction: vmethod to set noise reduction mode value
-+ * @set_zoom: vmethod to set zoom factor value
-+ * @get_capabilities: vmethod to get supported capabilities of the interface
-+ * @prepare_for_capture: vmethod to tell the element to prepare for capturing
-+ * @set_autofocus: vmethod to set autofocus on/off
-+ * @set_config: vmethod to set all configuration parameters at once
-+ * @get_config: vmethod to get all configuration parameters at once
-+ * @get_image_capture_supported_caps: vmethod to get caps describing supported image capture formats
-+ * @set_exposure_mode: vmethod to set exposure mode (Since: 1.18)
-+ * @get_exposure_mode: vmethod to get exposure mode (Since: 1.18)
-+ * @set_analog_gain: vmethod to set analog gain (Since: 1.18)
-+ * @get_analog_gain: vmethod to get analog gain (Since: 1.18)
-+ * @set_lens_focus: vmethod to set lens focus (Since: 1.18)
-+ * @get_lens_focus: vmethod to get lens focus (Since: 1.18)
-+ * @set_color_temperature: vmethod to set color temperature (Since: 1.18)
-+ * @get_color_temperature: vmethod to get color temperature (Since: 1.18)
-+ * @set_min_exposure_time: vmethod to set min exposure time (Since: 1.18)
-+ * @get_min_exposure_time: vmethod to get min exposure time (Since: 1.18)
-+ * @set_max_exposure_time: vmethod to set max exposure time (Since: 1.18)
-+ * @get_max_exposure_time: vmethod to get max exposure time (Since: 1.18)
-+ *
-+ * #GstPhotographyInterface interface.
-+ */
-+typedef struct _GstPhotographyInterface
-+{
-+  GTypeInterface parent;
-+
-+  /* virtual functions */
-+  gboolean (*get_ev_compensation)    (GstPhotography * photo, gfloat * ev_comp);
-+  gboolean (*get_iso_speed)          (GstPhotography * photo, guint * iso_speed);
-+  gboolean (*get_aperture)           (GstPhotography * photo, guint * aperture);
-+  gboolean (*get_exposure)           (GstPhotography * photo, guint32 * exposure);
-+  gboolean (*get_white_balance_mode) (GstPhotography * photo, GstPhotographyWhiteBalanceMode * wb_mode);
-+  gboolean (*get_color_tone_mode)    (GstPhotography * photo, GstPhotographyColorToneMode * tone_mode);
-+  gboolean (*get_scene_mode)         (GstPhotography * photo, GstPhotographySceneMode * scene_mode);
-+  gboolean (*get_flash_mode)         (GstPhotography * photo, GstPhotographyFlashMode * flash_mode);
-+  gboolean (*get_zoom)               (GstPhotography * photo, gfloat * zoom);
-+  gboolean (*get_flicker_mode)       (GstPhotography * photo, GstPhotographyFlickerReductionMode * flicker_mode);
-+  gboolean (*get_focus_mode)         (GstPhotography * photo, GstPhotographyFocusMode * focus_mode);
-+
-+  gboolean (*set_ev_compensation)    (GstPhotography * photo, gfloat ev_comp);
-+  gboolean (*set_iso_speed)          (GstPhotography * photo, guint iso_speed);
-+  gboolean (*set_aperture)           (GstPhotography * photo, guint aperture);
-+  gboolean (*set_exposure)           (GstPhotography * photo, guint32 exposure);
-+  gboolean (*set_white_balance_mode) (GstPhotography * photo, GstPhotographyWhiteBalanceMode wb_mode);
-+  gboolean (*set_color_tone_mode)    (GstPhotography * photo, GstPhotographyColorToneMode tone_mode);
-+  gboolean (*set_scene_mode)         (GstPhotography * photo, GstPhotographySceneMode scene_mode);
-+  gboolean (*set_flash_mode)         (GstPhotography * photo, GstPhotographyFlashMode flash_mode);
-+  gboolean (*set_zoom)               (GstPhotography * photo, gfloat zoom);
-+  gboolean (*set_flicker_mode)       (GstPhotography * photo, GstPhotographyFlickerReductionMode flicker_mode);
-+  gboolean (*set_focus_mode)         (GstPhotography * photo, GstPhotographyFocusMode focus_mode);
-+
-+  GstPhotographyCaps (*get_capabilities) (GstPhotography * photo);
-+
-+  gboolean (*prepare_for_capture)    (GstPhotography * photo, GstPhotographyCapturePrepared func, GstCaps *capture_caps, gpointer user_data);
-+
-+  void     (*set_autofocus)          (GstPhotography * photo, gboolean on);
-+
-+  gboolean (*set_config)             (GstPhotography * photo, GstPhotographySettings * config);
-+  gboolean (*get_config)             (GstPhotography * photo, GstPhotographySettings * config);
-+
-+  gboolean (*get_noise_reduction)    (GstPhotography * photo, GstPhotographyNoiseReduction * noise_reduction);
-+  gboolean (*set_noise_reduction)    (GstPhotography * photo, GstPhotographyNoiseReduction noise_reduction);
-+
-+  gboolean (*set_exposure_mode) (GstPhotography * photo, GstPhotographyExposureMode exposure_mode);
-+  gboolean (*get_exposure_mode) (GstPhotography * photo, GstPhotographyExposureMode * exposure_mode);
-+  gboolean (*set_analog_gain) (GstPhotography * photo, gfloat analog_gain);
-+  gboolean (*get_analog_gain) (GstPhotography * photo, gfloat * analog_gain);
-+  gboolean (*set_lens_focus) (GstPhotography * photo, gfloat lens_focus);
-+  gboolean (*get_lens_focus) (GstPhotography * photo, gfloat * lens_focus);
-+  gboolean (*set_color_temperature) (GstPhotography * photo, guint color_temperature);
-+  gboolean (*get_color_temperature) (GstPhotography * photo, guint * color_temperature);
-+  gboolean (*set_min_exposure_time) (GstPhotography * photo, guint min_exposure_time);
-+  gboolean (*get_min_exposure_time) (GstPhotography * photo, guint * min_exposure_time);
-+  gboolean (*set_max_exposure_time) (GstPhotography * photo, guint max_exposure_time);
-+  gboolean (*get_max_exposure_time) (GstPhotography * photo, guint * max_exposure_time);
-+
-+  /* FIXME: remove padding, not needed for interfaces */
-+  /*< private > */
-+  gpointer _gst_reserved[GST_PADDING];
-+} GstPhotographyInterface;
-+
-+GST_PHOTOGRAPHY_API
-+GType gst_photography_get_type (void);
-+
-+/* virtual class function wrappers */
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_ev_compensation (GstPhotography * photo,
-+                                              gfloat * ev_comp);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_iso_speed       (GstPhotography * photo,
-+                                              guint * iso_speed);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_aperture        (GstPhotography * photo,
-+                                              guint * aperture);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_exposure        (GstPhotography * photo,
-+                                              guint32 * exposure);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_white_balance_mode (GstPhotography * photo,
-+                                                 GstPhotographyWhiteBalanceMode * wb_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_color_tone_mode (GstPhotography * photo,
-+                                              GstPhotographyColorToneMode * tone_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_scene_mode      (GstPhotography * photo,
-+                                              GstPhotographySceneMode * scene_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_flash_mode      (GstPhotography * photo,
-+                                              GstPhotographyFlashMode * flash_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_noise_reduction (GstPhotography * photo,
-+                                              GstPhotographyNoiseReduction * noise_reduction);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_zoom            (GstPhotography * photo, gfloat * zoom);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_flicker_mode    (GstPhotography * photo,
-+                                              GstPhotographyFlickerReductionMode * mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_focus_mode      (GstPhotography * photo,
-+                                              GstPhotographyFocusMode * mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_ev_compensation (GstPhotography * photo,
-+                                              gfloat ev_comp);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_iso_speed       (GstPhotography * photo,
-+                                              guint iso_speed);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_aperture        (GstPhotography * photo, guint aperture);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_exposure        (GstPhotography * photo, guint exposure);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_white_balance_mode (GstPhotography * photo,
-+                                                 GstPhotographyWhiteBalanceMode wb_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_color_tone_mode (GstPhotography * photo,
-+                                              GstPhotographyColorToneMode tone_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_scene_mode      (GstPhotography * photo,
-+                                              GstPhotographySceneMode scene_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_flash_mode      (GstPhotography * photo,
-+                                              GstPhotographyFlashMode flash_mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_noise_reduction (GstPhotography * photo,
-+                                              GstPhotographyNoiseReduction noise_reduction);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_zoom            (GstPhotography * photo, gfloat zoom);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_flicker_mode    (GstPhotography * photo,
-+                                              GstPhotographyFlickerReductionMode mode);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_focus_mode      (GstPhotography * photo,
-+                                              GstPhotographyFocusMode mode);
-+
-+GST_PHOTOGRAPHY_API
-+GstPhotographyCaps gst_photography_get_capabilities (GstPhotography * photo);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_prepare_for_capture (GstPhotography * photo,
-+                                              GstPhotographyCapturePrepared func,
-+                                              GstCaps *capture_caps,
-+                                              gpointer user_data);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_set_config    (GstPhotography         * photo,
-+                                        GstPhotographySettings * config);
-+
-+GST_PHOTOGRAPHY_API
-+gboolean gst_photography_get_config    (GstPhotography         * photo,
-+                                        GstPhotographySettings * config);
-+
-+GST_PHOTOGRAPHY_API
-+void     gst_photography_set_autofocus (GstPhotography * photo, gboolean on);
-+
-+G_END_DECLS
-+
-+#endif /* __GST_PHOTOGRAPHY_H__ */
-Index: gst-plugins-good1.0/gst-libs/meson.build
-===================================================================
---- /dev/null
-+++ gst-plugins-good1.0/gst-libs/meson.build
-@@ -0,0 +1 @@
-+subdir('gst')
-Index: gst-plugins-good1.0/gst-libs/gst/meson.build
-===================================================================
---- /dev/null
-+++ gst-plugins-good1.0/gst-libs/gst/meson.build
-@@ -0,0 +1,2 @@
-+subdir('basecamerabinsrc')
-+subdir('interfaces')

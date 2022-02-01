@@ -3,12 +3,19 @@ Date: Mon, 23 Feb 2015 18:49:31 -0300
 Subject: Add a pkgconfig file to facilitate linking against libgstphotography
 
 Forwarded: not-needed
+---
+ meson.build                            |  1 +
+ pkgconfig/gstreamer-plugins-good.pc.in | 12 ++++++++++++
+ pkgconfig/meson.build                  | 25 +++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+)
+ create mode 100644 pkgconfig/gstreamer-plugins-good.pc.in
+ create mode 100644 pkgconfig/meson.build
 
-Index: gst-plugins-good1.0/meson.build
-===================================================================
---- gst-plugins-good1.0.orig/meson.build
-+++ gst-plugins-good1.0/meson.build
-@@ -470,6 +470,7 @@ gir_init_section = [ '--add-init-section
+diff --git a/meson.build b/meson.build
+index 72c49f7..3cdeb8a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -489,6 +489,7 @@ gir_init_section = [ '--add-init-section=extern void gst_init(gint*,gchar**);' +
  
  subdir('gst-libs')
  subdir('gst')
@@ -16,10 +23,11 @@ Index: gst-plugins-good1.0/meson.build
  subdir('sys')
  subdir('ext')
  subdir('tests')
-Index: gst-plugins-good1.0/pkgconfig/gstreamer-plugins-good.pc.in
-===================================================================
+diff --git a/pkgconfig/gstreamer-plugins-good.pc.in b/pkgconfig/gstreamer-plugins-good.pc.in
+new file mode 100644
+index 0000000..cab8003
 --- /dev/null
-+++ gst-plugins-good1.0/pkgconfig/gstreamer-plugins-good.pc.in
++++ b/pkgconfig/gstreamer-plugins-good.pc.in
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
@@ -33,10 +41,11 @@ Index: gst-plugins-good1.0/pkgconfig/gstreamer-plugins-good.pc.in
 +Version: @VERSION@
 +Libs: -L${libdir} -lgstphotography-@GST_API_VERSION@
 +Cflags: -I${includedir}
-Index: gst-plugins-good1.0/pkgconfig/meson.build
-===================================================================
+diff --git a/pkgconfig/meson.build b/pkgconfig/meson.build
+new file mode 100644
+index 0000000..5ef99bb
 --- /dev/null
-+++ gst-plugins-good1.0/pkgconfig/meson.build
++++ b/pkgconfig/meson.build
 @@ -0,0 +1,25 @@
 +pkgconf = configuration_data()
 +

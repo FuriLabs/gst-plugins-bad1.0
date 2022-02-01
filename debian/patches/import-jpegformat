@@ -1,9 +1,33 @@
+From: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Date: Tue, 1 Feb 2022 14:56:55 -0500
 Subject: This is a copy of the jpegformat plugin from gst-plugins-good. It's
  needed for Ubuntu main, so we copy it.
-Index: gst-plugins-good1.0/gst/jpegformat/gstjifmux.c
+
 ===================================================================
+---
+ gst/jpegformat/gstjifmux.c     | 757 ++++++++++++++++++++++++++++++++++
+ gst/jpegformat/gstjifmux.h     |  66 +++
+ gst/jpegformat/gstjpegformat.c |  47 +++
+ gst/jpegformat/gstjpegformat.h |  92 +++++
+ gst/jpegformat/gstjpegparse.c  | 899 +++++++++++++++++++++++++++++++++++++++++
+ gst/jpegformat/gstjpegparse.h  |  92 +++++
+ gst/jpegformat/meson.build     |  16 +
+ gst/meson.build                |   2 +-
+ meson_options.txt              |   2 +
+ 9 files changed, 1972 insertions(+), 1 deletion(-)
+ create mode 100644 gst/jpegformat/gstjifmux.c
+ create mode 100644 gst/jpegformat/gstjifmux.h
+ create mode 100644 gst/jpegformat/gstjpegformat.c
+ create mode 100644 gst/jpegformat/gstjpegformat.h
+ create mode 100644 gst/jpegformat/gstjpegparse.c
+ create mode 100644 gst/jpegformat/gstjpegparse.h
+ create mode 100644 gst/jpegformat/meson.build
+
+diff --git a/gst/jpegformat/gstjifmux.c b/gst/jpegformat/gstjifmux.c
+new file mode 100644
+index 0000000..e958f54
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/gstjifmux.c
++++ b/gst/jpegformat/gstjifmux.c
 @@ -0,0 +1,757 @@
 +/* GStreamer
 + *
@@ -762,10 +786,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/gstjifmux.c
 +
 +  return ret;
 +}
-Index: gst-plugins-good1.0/gst/jpegformat/gstjifmux.h
-===================================================================
+diff --git a/gst/jpegformat/gstjifmux.h b/gst/jpegformat/gstjifmux.h
+new file mode 100644
+index 0000000..400e64c
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/gstjifmux.h
++++ b/gst/jpegformat/gstjifmux.h
 @@ -0,0 +1,66 @@
 +/* GStreamer
 + *
@@ -833,10 +858,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/gstjifmux.h
 +G_END_DECLS
 +
 +#endif /* __GST_JFIF_MUX_H__ */
-Index: gst-plugins-good1.0/gst/jpegformat/gstjpegformat.c
-===================================================================
+diff --git a/gst/jpegformat/gstjpegformat.c b/gst/jpegformat/gstjpegformat.c
+new file mode 100644
+index 0000000..b410466
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/gstjpegformat.c
++++ b/gst/jpegformat/gstjpegformat.c
 @@ -0,0 +1,47 @@
 +/* GStreamer
 + *
@@ -885,10 +911,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/gstjpegformat.c
 +    jpegformat,
 +    "JPEG interchange format plugin",
 +    plugin_init, VERSION, "LGPL", GST_PACKAGE_NAME, GST_PACKAGE_ORIGIN)
-Index: gst-plugins-good1.0/gst/jpegformat/gstjpegformat.h
-===================================================================
+diff --git a/gst/jpegformat/gstjpegformat.h b/gst/jpegformat/gstjpegformat.h
+new file mode 100644
+index 0000000..be69268
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/gstjpegformat.h
++++ b/gst/jpegformat/gstjpegformat.h
 @@ -0,0 +1,92 @@
 +/* GStreamer
 + *
@@ -982,10 +1009,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/gstjpegformat.h
 +G_END_DECLS
 +
 +#endif /* __GST_JPEG_FORMAT_H__ */
-Index: gst-plugins-good1.0/gst/jpegformat/gstjpegparse.c
-===================================================================
+diff --git a/gst/jpegformat/gstjpegparse.c b/gst/jpegformat/gstjpegparse.c
+new file mode 100644
+index 0000000..0378129
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/gstjpegparse.c
++++ b/gst/jpegformat/gstjpegparse.c
 @@ -0,0 +1,899 @@
 +/* GStreamer
 + *
@@ -1886,10 +1914,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/gstjpegparse.c
 +
 +  return TRUE;
 +}
-Index: gst-plugins-good1.0/gst/jpegformat/gstjpegparse.h
-===================================================================
+diff --git a/gst/jpegformat/gstjpegparse.h b/gst/jpegformat/gstjpegparse.h
+new file mode 100644
+index 0000000..f809fa3
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/gstjpegparse.h
++++ b/gst/jpegformat/gstjpegparse.h
 @@ -0,0 +1,92 @@
 +/* GStreamer
 + *
@@ -1983,10 +2012,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/gstjpegparse.h
 +G_END_DECLS
 +
 +#endif /* __GST_JPEG_PARSE_H__ */
-Index: gst-plugins-good1.0/gst/jpegformat/meson.build
-===================================================================
+diff --git a/gst/jpegformat/meson.build b/gst/jpegformat/meson.build
+new file mode 100644
+index 0000000..4fd78c0
 --- /dev/null
-+++ gst-plugins-good1.0/gst/jpegformat/meson.build
++++ b/gst/jpegformat/meson.build
 @@ -0,0 +1,16 @@
 +jpegf_sources = [
 +  'gstjpegformat.c',
@@ -2004,11 +2034,11 @@ Index: gst-plugins-good1.0/gst/jpegformat/meson.build
 +)
 +pkgconfig.generate(gstjpegformat, install_dir : plugins_pkgconfig_install_dir)
 +plugins += [gstjpegformat]
-Index: gst-plugins-good1.0/gst/meson.build
-===================================================================
---- gst-plugins-good1.0.orig/gst/meson.build
-+++ gst-plugins-good1.0/gst/meson.build
-@@ -2,7 +2,7 @@ foreach plugin : ['alpha', 'apetag', 'au
+diff --git a/gst/meson.build b/gst/meson.build
+index 05b0b06..271e303 100644
+--- a/gst/meson.build
++++ b/gst/meson.build
+@@ -2,7 +2,7 @@ foreach plugin : ['alpha', 'apetag', 'audiofx', 'audioparsers', 'auparse',
                    'autodetect', 'avi', 'camerabin2', 'cutter', 'debugutils', 'deinterlace',
                    'dtmf', 'effectv', 'equalizer', 'flv', 'flx', 'goom',
                    'goom2k1', 'icydemux', 'id3demux', 'imagefreeze',
@@ -2017,11 +2047,11 @@ Index: gst-plugins-good1.0/gst/meson.build
                    'monoscope', 'multifile', 'multipart', 'replaygain', 'rtp',
                    'rtpmanager', 'rtsp', 'shapewipe', 'smpte', 'spectrum',
                    'udp', 'videobox', 'videocrop', 'videofilter', 'videomixer',
-Index: gst-plugins-good1.0/meson_options.txt
-===================================================================
---- gst-plugins-good1.0.orig/meson_options.txt
-+++ gst-plugins-good1.0/meson_options.txt
-@@ -22,6 +22,7 @@ option('id3demux', type : 'feature', val
+diff --git a/meson_options.txt b/meson_options.txt
+index ab3e04b..f871e13 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -22,6 +22,7 @@ option('id3demux', type : 'feature', value : 'auto')
  option('imagefreeze', type : 'feature', value : 'auto')
  option('interleave', type : 'feature', value : 'auto')
  option('isomp4', type : 'feature', value : 'auto')
@@ -2029,7 +2059,7 @@ Index: gst-plugins-good1.0/meson_options.txt
  option('law', type : 'feature', value : 'auto')
  option('level', type : 'feature', value : 'auto')
  option('matroska', type : 'feature', value : 'auto')
-@@ -95,6 +96,7 @@ option('v4l2-gudev', type : 'feature', v
+@@ -95,6 +96,7 @@ option('v4l2-gudev', type : 'feature', value : 'auto', description : 'Use libgud
  # Common feature options
  option('examples', type : 'feature', value : 'auto', yield : true)
  option('tests', type : 'feature', value : 'auto', yield : true)

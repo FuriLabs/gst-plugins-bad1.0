@@ -1,8 +1,8 @@
-Index: gst-plugins-bad1.0-1.18.4/ext/opencv/gstfaceblur.cpp
+Index: gst-plugins-bad1.0/ext/opencv/gstfaceblur.cpp
 ===================================================================
---- gst-plugins-bad1.0-1.18.4.orig/ext/opencv/gstfaceblur.cpp
-+++ gst-plugins-bad1.0-1.18.4/ext/opencv/gstfaceblur.cpp
-@@ -68,9 +68,8 @@
+--- gst-plugins-bad1.0.orig/ext/opencv/gstfaceblur.cpp
++++ gst-plugins-bad1.0/ext/opencv/gstfaceblur.cpp
+@@ -72,9 +72,8 @@
  GST_DEBUG_CATEGORY_STATIC (gst_face_blur_debug);
  #define GST_CAT_DEFAULT gst_face_blur_debug
  
@@ -14,11 +14,11 @@ Index: gst-plugins-bad1.0-1.18.4/ext/opencv/gstfaceblur.cpp
  #define DEFAULT_SCALE_FACTOR 1.25
  #if (CV_MAJOR_VERSION >= 4)
  #define DEFAULT_FLAGS CASCADE_DO_CANNY_PRUNING
-Index: gst-plugins-bad1.0-1.18.4/ext/opencv/gstfacedetect.cpp
+Index: gst-plugins-bad1.0/ext/opencv/gstfacedetect.cpp
 ===================================================================
---- gst-plugins-bad1.0-1.18.4.orig/ext/opencv/gstfacedetect.cpp
-+++ gst-plugins-bad1.0-1.18.4/ext/opencv/gstfacedetect.cpp
-@@ -86,9 +86,7 @@ using namespace std;
+--- gst-plugins-bad1.0.orig/ext/opencv/gstfacedetect.cpp
++++ gst-plugins-bad1.0/ext/opencv/gstfacedetect.cpp
+@@ -89,9 +89,7 @@ using namespace std;
  GST_DEBUG_CATEGORY_STATIC (gst_face_detect_debug);
  #define GST_CAT_DEFAULT gst_face_detect_debug
  

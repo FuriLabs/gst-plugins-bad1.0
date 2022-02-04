@@ -1,5 +1,6 @@
-gst-plugins-bad1.0 (1.20.0-2ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.20.0-2ubuntu1) jammy; urgency=medium
 
+  [ Jeremy Bicha ]
   * Merge from Debian unstable. Remaining changes:
     - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
       moved to -good.
@@ -10,7 +11,10 @@ gst-plugins-bad1.0 (1.20.0-2ubuntu1) UNRELEASED; urgency=medium
       of numeric-related dependencies for a binary package it's not required
       to support.
 
- -- Jeremy Bicha <jeremy.bicha@canonical.com>  Tue, 01 Feb 2022 16:43:41 -0500
+  [ Laurent Bigonville ]
+  * Do not build ldac plugin on big-endian architectures
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Fri, 04 Feb 2022 16:40:20 -0500
 
 gst-plugins-bad1.0 (1.20.0-2) unstable; urgency=medium
 

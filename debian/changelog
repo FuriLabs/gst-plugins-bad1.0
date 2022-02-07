@@ -1,3 +1,11 @@
+gst-plugins-bad1.0 (1.20.0-2ubuntu2) jammy; urgency=medium
+
+  * d/rules, d/gstreamer1.0-plugins-bad.install, d/rules:
+    - Don't require these Build-Depends on i386:
+      + libltc-dev, libopenaptx-dev, libqrencode-dev, libzxingcore-dev
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Mon, 07 Feb 2022 09:36:38 -0500
+
 gst-plugins-bad1.0 (1.20.0-2ubuntu1) jammy; urgency=medium
 
   [ Jeremy Bicha ]

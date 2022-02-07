@@ -66,7 +66,6 @@ debian/tmp/usr/lib/*/gstreamer-1.0/libgstmusepack.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstmxf.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstnetsim.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstnvcodec.so
-debian/tmp/usr/lib/*/gstreamer-1.0/libgstopenaptx.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstopenal.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstopenexr.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstopenjpeg.so
@@ -75,7 +74,6 @@ debian/tmp/usr/lib/*/gstreamer-1.0/libgstopusparse.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstpcapparse.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstpnm.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstproxy.so
-debian/tmp/usr/lib/*/gstreamer-1.0/libgstqroverlay.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstremovesilence.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstrfbsrc.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstrsvg.so
@@ -116,6 +114,5 @@ debian/tmp/usr/lib/*/gstreamer-1.0/libgstwildmidi.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstx265.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgsty4mdec.so
 debian/tmp/usr/lib/*/gstreamer-1.0/libgstzbar.so
-debian/tmp/usr/lib/*/gstreamer-1.0/libgstzxing.so
 debian/tmp/usr/share/locale
 debian/tmp/usr/share/gstreamer-1.0/presets/

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>oss4sink: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-optv.html" title="optv">
 <link rel="next" href="gst-plugins-good-plugins-oss4src.html" title="oss4src">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -72,8 +72,8 @@
 <a name="gst-plugins-good-plugins-oss4sink.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -114,7 +114,7 @@ act in passthrough-mode if no conversion is necessary).</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v audiotestsrc <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> volume volume<span class="gtkdoc opt">=</span><span class="number">0.1</span> <span class="gtkdoc opt">!</span> oss4sink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">audiotestsrc</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">volume</span> <span class="n">volume</span><span class="o">=</span><span class="mf">0.1</span> <span class="o">!</span> <span class="n">oss4sink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -126,7 +126,7 @@ a very low volume as precaution).
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v filesrc location<span class="gtkdoc opt">=</span>music<span class="gtkdoc opt">.</span>ogg <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> oss4sink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">music</span><span class="p">.</span><span class="n">ogg</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">oss4sink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -216,6 +216,7 @@ version 4.
 <a name="GstOss4Sink--device"></a><h3>The <code class="literal">“device”</code> property</h3>
 <pre class="programlisting">  “device”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>OSS4 device (e.g. /dev/oss/hdaudio0/pcm0 or /dev/dspN) (NULL = use first available playback device).</p>
+<p>Owner: GstOss4Sink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -224,6 +225,7 @@ version 4.
 <a name="GstOss4Sink--device-name"></a><h3>The <code class="literal">“device-name”</code> property</h3>
 <pre class="programlisting">  “device-name”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Human-readable name of the sound device.</p>
+<p>Owner: GstOss4Sink</p>
 <p>Flags: Read</p>
 <p>Default value: NULL</p>
 </div>
@@ -232,6 +234,7 @@ version 4.
 <a name="GstOss4Sink--mute"></a><h3>The <code class="literal">“mute”</code> property</h3>
 <pre class="programlisting">  “mute”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Mute state of this stream.</p>
+<p>Owner: GstOss4Sink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -240,6 +243,7 @@ version 4.
 <a name="GstOss4Sink--volume"></a><h3>The <code class="literal">“volume”</code> property</h3>
 <pre class="programlisting">  “volume”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Linear volume of this stream, 1.0=100%.</p>
+<p>Owner: GstOss4Sink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,10]</p>
 <p>Default value: 1</p>
@@ -247,6 +251,6 @@ version 4.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

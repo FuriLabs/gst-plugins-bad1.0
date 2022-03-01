@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>vp8enc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-vp8dec.html" title="vp8dec">
 <link rel="next" href="gst-plugins-good-plugins-vp9dec.html" title="vp9dec">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -274,8 +274,8 @@
 <a name="gst-plugins-good-plugins-vp8enc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -321,7 +321,7 @@ on the encoding parameters.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v videotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">1000</span> <span class="gtkdoc opt">!</span> vp8enc <span class="gtkdoc opt">!</span> webmmux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>videotestsrc<span class="gtkdoc opt">.</span>webm</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">videotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">1000</span> <span class="o">!</span> <span class="n">vp8enc</span> <span class="o">!</span> <span class="n">webmmux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">videotestsrc</span><span class="p">.</span><span class="n">webm</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -427,6 +427,7 @@ WebM container.
 <a name="GstVP8Enc--arnr-maxframes"></a><h3>The <code class="literal">“arnr-maxframes”</code> property</h3>
 <pre class="programlisting">  “arnr-maxframes”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>AltRef maximum number of frames.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,15]</p>
 <p>Default value: 0</p>
@@ -436,6 +437,7 @@ WebM container.
 <a name="GstVP8Enc--arnr-strength"></a><h3>The <code class="literal">“arnr-strength”</code> property</h3>
 <pre class="programlisting">  “arnr-strength”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>AltRef strength.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,6]</p>
 <p>Default value: 3</p>
@@ -445,6 +447,7 @@ WebM container.
 <a name="GstVP8Enc--arnr-type"></a><h3>The <code class="literal">“arnr-type”</code> property</h3>
 <pre class="programlisting">  “arnr-type”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>AltRef type.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,3]</p>
 <p>Default value: 3</p>
@@ -454,6 +457,7 @@ WebM container.
 <a name="GstVP8Enc--auto-alt-ref"></a><h3>The <code class="literal">“auto-alt-ref”</code> property</h3>
 <pre class="programlisting">  “auto-alt-ref”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Automatically generate AltRef frames.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -462,6 +466,7 @@ WebM container.
 <a name="GstVP8Enc--buffer-initial-size"></a><h3>The <code class="literal">“buffer-initial-size”</code> property</h3>
 <pre class="programlisting">  “buffer-initial-size”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Initial client buffer size (ms).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 4000</p>
@@ -471,6 +476,7 @@ WebM container.
 <a name="GstVP8Enc--buffer-optimal-size"></a><h3>The <code class="literal">“buffer-optimal-size”</code> property</h3>
 <pre class="programlisting">  “buffer-optimal-size”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Optimal client buffer size (ms).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 5000</p>
@@ -480,6 +486,7 @@ WebM container.
 <a name="GstVP8Enc--buffer-size"></a><h3>The <code class="literal">“buffer-size”</code> property</h3>
 <pre class="programlisting">  “buffer-size”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Client buffer size (ms).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 6000</p>
@@ -489,6 +496,7 @@ WebM container.
 <a name="GstVP8Enc--cpu-used"></a><h3>The <code class="literal">“cpu-used”</code> property</h3>
 <pre class="programlisting">  “cpu-used”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>CPU used.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-16,16]</p>
 <p>Default value: 0</p>
@@ -498,6 +506,7 @@ WebM container.
 <a name="GstVP8Enc--cq-level"></a><h3>The <code class="literal">“cq-level”</code> property</h3>
 <pre class="programlisting">  “cq-level”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Constrained quality level.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,63]</p>
 <p>Default value: 10</p>
@@ -507,6 +516,7 @@ WebM container.
 <a name="GstVP8Enc--deadline"></a><h3>The <code class="literal">“deadline”</code> property</h3>
 <pre class="programlisting">  “deadline”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>Deadline per frame (usec, 0=disabled).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -516,6 +526,7 @@ WebM container.
 <a name="GstVP8Enc--dropframe-threshold"></a><h3>The <code class="literal">“dropframe-threshold”</code> property</h3>
 <pre class="programlisting">  “dropframe-threshold”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Temporal resampling threshold (buf %).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,100]</p>
 <p>Default value: 0</p>
@@ -525,6 +536,7 @@ WebM container.
 <a name="GstVP8Enc--end-usage"></a><h3>The <code class="literal">“end-usage”</code> property</h3>
 <pre class="programlisting">  “end-usage”                <span class="type">GstVP8EncEndUsage</span></pre>
 <p>Rate control mode.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Variable Bit Rate (VBR) mode</p>
 </div>
@@ -533,6 +545,7 @@ WebM container.
 <a name="GstVP8Enc--error-resilient"></a><h3>The <code class="literal">“error-resilient”</code> property</h3>
 <pre class="programlisting">  “error-resilient”          <span class="type">GstVP8EncErFlags</span></pre>
 <p>Error resilience flags.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -540,6 +553,7 @@ WebM container.
 <a name="GstVP8Enc--lag-in-frames"></a><h3>The <code class="literal">“lag-in-frames”</code> property</h3>
 <pre class="programlisting">  “lag-in-frames”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Maximum number of frames to lag.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,25]</p>
 <p>Default value: 0</p>
@@ -549,6 +563,7 @@ WebM container.
 <a name="GstVP8Enc--max-quantizer"></a><h3>The <code class="literal">“max-quantizer”</code> property</h3>
 <pre class="programlisting">  “max-quantizer”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Maximum Quantizer (worst).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,63]</p>
 <p>Default value: 63</p>
@@ -558,6 +573,7 @@ WebM container.
 <a name="GstVP8Enc--min-quantizer"></a><h3>The <code class="literal">“min-quantizer”</code> property</h3>
 <pre class="programlisting">  “min-quantizer”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Minimum Quantizer (best).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,63]</p>
 <p>Default value: 4</p>
@@ -567,6 +583,7 @@ WebM container.
 <a name="GstVP8Enc--multipass-cache-file"></a><h3>The <code class="literal">“multipass-cache-file”</code> property</h3>
 <pre class="programlisting">  “multipass-cache-file”     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Multipass cache file. If stream caps reinited, multiple files will be created: file, file.1, file.2, ... and so on.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "multipass.cache"</p>
 </div>
@@ -575,6 +592,7 @@ WebM container.
 <a name="GstVP8Enc--multipass-mode"></a><h3>The <code class="literal">“multipass-mode”</code> property</h3>
 <pre class="programlisting">  “multipass-mode”           <span class="type">GstVP8EncMultipassMode</span></pre>
 <p>Multipass encode mode.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: One pass encoding (default)</p>
 </div>
@@ -583,6 +601,7 @@ WebM container.
 <a name="GstVP8Enc--noise-sensitivity"></a><h3>The <code class="literal">“noise-sensitivity”</code> property</h3>
 <pre class="programlisting">  “noise-sensitivity”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Noise sensisivity (frames to blur).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,6]</p>
 <p>Default value: 0</p>
@@ -592,6 +611,7 @@ WebM container.
 <a name="GstVP8Enc--resize-allowed"></a><h3>The <code class="literal">“resize-allowed”</code> property</h3>
 <pre class="programlisting">  “resize-allowed”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Allow spatial resampling.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -600,6 +620,7 @@ WebM container.
 <a name="GstVP8Enc--resize-down-threshold"></a><h3>The <code class="literal">“resize-down-threshold”</code> property</h3>
 <pre class="programlisting">  “resize-down-threshold”    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Downscale threshold (buf %).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,100]</p>
 <p>Default value: 60</p>
@@ -609,6 +630,7 @@ WebM container.
 <a name="GstVP8Enc--resize-up-threshold"></a><h3>The <code class="literal">“resize-up-threshold”</code> property</h3>
 <pre class="programlisting">  “resize-up-threshold”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Upscale threshold (buf %).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,100]</p>
 <p>Default value: 30</p>
@@ -618,6 +640,7 @@ WebM container.
 <a name="GstVP8Enc--sharpness"></a><h3>The <code class="literal">“sharpness”</code> property</h3>
 <pre class="programlisting">  “sharpness”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Filter sharpness.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,7]</p>
 <p>Default value: 0</p>
@@ -627,6 +650,7 @@ WebM container.
 <a name="GstVP8Enc--static-threshold"></a><h3>The <code class="literal">“static-threshold”</code> property</h3>
 <pre class="programlisting">  “static-threshold”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Motion detection threshold.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -636,6 +660,7 @@ WebM container.
 <a name="GstVP8Enc--target-bitrate"></a><h3>The <code class="literal">“target-bitrate”</code> property</h3>
 <pre class="programlisting">  “target-bitrate”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Target bitrate (in bits/sec).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 256000</p>
@@ -645,6 +670,7 @@ WebM container.
 <a name="GstVP8Enc--threads"></a><h3>The <code class="literal">“threads”</code> property</h3>
 <pre class="programlisting">  “threads”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Number of threads to use.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,64]</p>
 <p>Default value: 0</p>
@@ -654,6 +680,7 @@ WebM container.
 <a name="GstVP8Enc--token-partitions"></a><h3>The <code class="literal">“token-partitions”</code> property</h3>
 <pre class="programlisting">  “token-partitions”         <span class="type">GstVP8EncTokenPartitions</span></pre>
 <p>Number of token partitions.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: One token partition</p>
 </div>
@@ -662,6 +689,7 @@ WebM container.
 <a name="GstVP8Enc--tuning"></a><h3>The <code class="literal">“tuning”</code> property</h3>
 <pre class="programlisting">  “tuning”                   <span class="type">GstVP8EncTuning</span></pre>
 <p>Tuning.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Tune for PSNR</p>
 </div>
@@ -670,6 +698,7 @@ WebM container.
 <a name="GstVP8Enc--horizontal-scaling-mode"></a><h3>The <code class="literal">“horizontal-scaling-mode”</code> property</h3>
 <pre class="programlisting">  “horizontal-scaling-mode”  <span class="type">GstVP8EncScalingMode</span></pre>
 <p>Horizontal scaling mode.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Normal</p>
 </div>
@@ -678,6 +707,7 @@ WebM container.
 <a name="GstVP8Enc--keyframe-max-dist"></a><h3>The <code class="literal">“keyframe-max-dist”</code> property</h3>
 <pre class="programlisting">  “keyframe-max-dist”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Maximum distance between keyframes (number of frames).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 128</p>
@@ -687,6 +717,7 @@ WebM container.
 <a name="GstVP8Enc--keyframe-mode"></a><h3>The <code class="literal">“keyframe-mode”</code> property</h3>
 <pre class="programlisting">  “keyframe-mode”            <span class="type">GstVP8EncKfMode</span></pre>
 <p>Keyframe placement.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Determine optimal placement automatically</p>
 </div>
@@ -695,6 +726,7 @@ WebM container.
 <a name="GstVP8Enc--max-intra-bitrate"></a><h3>The <code class="literal">“max-intra-bitrate”</code> property</h3>
 <pre class="programlisting">  “max-intra-bitrate”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Maximum Intra frame bitrate.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -704,6 +736,7 @@ WebM container.
 <a name="GstVP8Enc--overshoot"></a><h3>The <code class="literal">“overshoot”</code> property</h3>
 <pre class="programlisting">  “overshoot”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Datarate overshoot (max) target (%).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1000]</p>
 <p>Default value: 100</p>
@@ -713,6 +746,7 @@ WebM container.
 <a name="GstVP8Enc--temporal-scalability-layer-id"></a><h3>The <code class="literal">“temporal-scalability-layer-id”</code> property</h3>
 <pre class="programlisting">  “temporal-scalability-layer-id” <a href="/usr/share/gtk-doc/html/gobject/gobject-Value-arrays.html#GValueArray-struct"><span class="type">GValueArray</span></a> *</pre>
 <p>Sequence defining coding layer membership.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -720,6 +754,7 @@ WebM container.
 <a name="GstVP8Enc--temporal-scalability-number-layers"></a><h3>The <code class="literal">“temporal-scalability-number-layers”</code> property</h3>
 <pre class="programlisting">  “temporal-scalability-number-layers” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Number of coding layers to use.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,5]</p>
 <p>Default value: 1</p>
@@ -729,6 +764,7 @@ WebM container.
 <a name="GstVP8Enc--temporal-scalability-periodicity"></a><h3>The <code class="literal">“temporal-scalability-periodicity”</code> property</h3>
 <pre class="programlisting">  “temporal-scalability-periodicity” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Length of sequence that defines layer membership periodicity.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,16]</p>
 <p>Default value: 0</p>
@@ -738,6 +774,7 @@ WebM container.
 <a name="GstVP8Enc--temporal-scalability-rate-decimator"></a><h3>The <code class="literal">“temporal-scalability-rate-decimator”</code> property</h3>
 <pre class="programlisting">  “temporal-scalability-rate-decimator” <a href="/usr/share/gtk-doc/html/gobject/gobject-Value-arrays.html#GValueArray-struct"><span class="type">GValueArray</span></a> *</pre>
 <p>Rate decimation factors for each layer.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -745,6 +782,7 @@ WebM container.
 <a name="GstVP8Enc--temporal-scalability-target-bitrate"></a><h3>The <code class="literal">“temporal-scalability-target-bitrate”</code> property</h3>
 <pre class="programlisting">  “temporal-scalability-target-bitrate” <a href="/usr/share/gtk-doc/html/gobject/gobject-Value-arrays.html#GValueArray-struct"><span class="type">GValueArray</span></a> *</pre>
 <p>Target bitrates for coding layers (one per layer, decreasing).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -752,6 +790,7 @@ WebM container.
 <a name="GstVP8Enc--twopass-vbr-bias"></a><h3>The <code class="literal">“twopass-vbr-bias”</code> property</h3>
 <pre class="programlisting">  “twopass-vbr-bias”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>CBR/VBR bias (0=CBR, 100=VBR).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,100]</p>
 <p>Default value: 50</p>
@@ -761,6 +800,7 @@ WebM container.
 <a name="GstVP8Enc--twopass-vbr-maxsection"></a><h3>The <code class="literal">“twopass-vbr-maxsection”</code> property</h3>
 <pre class="programlisting">  “twopass-vbr-maxsection”   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>GOP maximum bitrate (% target).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -770,6 +810,7 @@ WebM container.
 <a name="GstVP8Enc--twopass-vbr-minsection"></a><h3>The <code class="literal">“twopass-vbr-minsection”</code> property</h3>
 <pre class="programlisting">  “twopass-vbr-minsection”   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>GOP minimum bitrate (% target).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -779,6 +820,7 @@ WebM container.
 <a name="GstVP8Enc--undershoot"></a><h3>The <code class="literal">“undershoot”</code> property</h3>
 <pre class="programlisting">  “undershoot”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Datarate undershoot (min) target (%).</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1000]</p>
 <p>Default value: 100</p>
@@ -788,6 +830,7 @@ WebM container.
 <a name="GstVP8Enc--vertical-scaling-mode"></a><h3>The <code class="literal">“vertical-scaling-mode”</code> property</h3>
 <pre class="programlisting">  “vertical-scaling-mode”    <span class="type">GstVP8EncScalingMode</span></pre>
 <p>Vertical scaling mode.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Normal</p>
 </div>
@@ -796,6 +839,7 @@ WebM container.
 <a name="GstVP8Enc--timebase"></a><h3>The <code class="literal">“timebase”</code> property</h3>
 <pre class="programlisting">  “timebase”                 <span class="type">GstFraction</span></pre>
 <p>Fraction of one second that is the shortest interframe time - normally left as zero which will default to the framerate.</p>
+<p>Owner: GstVP8Enc</p>
 <p>Flags: Read / Write</p>
 </div>
 </div>
@@ -805,6 +849,6 @@ WebM container.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

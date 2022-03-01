@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>audioamplify: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-asteriskh263.html" title="asteriskh263">
 <link rel="next" href="gst-plugins-good-plugins-audiochebband.html" title="audiochebband">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -59,8 +59,8 @@
 <a name="gst-plugins-good-plugins-audioamplify.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -92,9 +92,9 @@ The difference between the clipping modes is best evaluated by testing.</p>
         <td class="listing_lines" align="right"><pre>1
 2
 3</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc wave<span class="gtkdoc opt">=</span>saw <span class="gtkdoc opt">!</span> audioamplify amplification<span class="gtkdoc opt">=</span><span class="number">1.5</span> <span class="gtkdoc opt">!</span> alsasink
-gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span><span class="string">&quot;melo1.ogg&quot;</span> <span class="gtkdoc opt">!</span> oggdemux <span class="gtkdoc opt">!</span> vorbisdec <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioamplify amplification<span class="gtkdoc opt">=</span><span class="number">1.5</span> clipping<span class="gtkdoc opt">-</span>method<span class="gtkdoc opt">=</span>wrap<span class="gtkdoc opt">-</span>negative <span class="gtkdoc opt">!</span> alsasink
-gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc wave<span class="gtkdoc opt">=</span>saw <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioamplify amplification<span class="gtkdoc opt">=</span><span class="number">1.5</span> clipping<span class="gtkdoc opt">-</span>method<span class="gtkdoc opt">=</span>wrap<span class="gtkdoc opt">-</span>positive <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> alsasink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">wave</span><span class="o">=</span><span class="n">saw</span> <span class="o">!</span> <span class="n">audioamplify</span> <span class="n">amplification</span><span class="o">=</span><span class="mf">1.5</span> <span class="o">!</span> <span class="n">alsasink</span>
+<span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;melo1.ogg&quot;</span> <span class="o">!</span> <span class="n">oggdemux</span> <span class="o">!</span> <span class="n">vorbisdec</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioamplify</span> <span class="n">amplification</span><span class="o">=</span><span class="mf">1.5</span> <span class="n">clipping</span><span class="o">-</span><span class="n">method</span><span class="o">=</span><span class="n">wrap</span><span class="o">-</span><span class="n">negative</span> <span class="o">!</span> <span class="n">alsasink</span>
+<span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">wave</span><span class="o">=</span><span class="n">saw</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioamplify</span> <span class="n">amplification</span><span class="o">=</span><span class="mf">1.5</span> <span class="n">clipping</span><span class="o">-</span><span class="n">method</span><span class="o">=</span><span class="n">wrap</span><span class="o">-</span><span class="n">positive</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">alsasink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -199,6 +199,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioAmplify--amplification"></a><h3>The <code class="literal">“amplification”</code> property</h3>
 <pre class="programlisting">  “amplification”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Factor of amplification.</p>
+<p>Owner: GstAudioAmplify</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 1</p>
 </div>
@@ -209,12 +210,13 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <p>Clipping method: clip mode set values higher than the maximum to the
 maximum. The wrap-negative mode pushes those values back from the
 opposite side, wrap-positive pushes them back from the same side.</p>
+<p>Owner: GstAudioAmplify</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Normal clipping (default)</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtpjitterbuffer: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpj2kpay.html" title="rtpj2kpay">
 <link rel="next" href="gst-plugins-good-plugins-rtpjpegdepay.html" title="rtpjpegdepay">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -171,9 +171,9 @@
 <a name="gst-plugins-good-plugins-rtpjitterbuffer.signals"></a><h2>Signals</h2>
 <div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody>
 <tr>
@@ -209,8 +209,8 @@
 <a name="gst-plugins-good-plugins-rtpjitterbuffer.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -284,7 +284,7 @@ to the pipeline.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> rtspsrc location<span class="gtkdoc opt">=</span>rtsp<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//192.168.1.133:8554/mpeg1or2AudioVideoTest ! rtpjitterbuffer ! rtpmpvdepay ! mpeg2dec ! xvimagesink</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">rtspsrc</span> <span class="n">location</span><span class="o">=</span><span class="nl">rtsp</span><span class="p">:</span><span class="c1">//192.168.1.133:8554/mpeg1or2AudioVideoTest ! rtpjitterbuffer ! rtpmpvdepay ! mpeg2dec ! xvimagesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -417,6 +417,7 @@ out-of-order RTP packets.
 <pre class="programlisting">  “do-lost”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Send out a GstRTPPacketLost event downstream when a packet is considered
 lost.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -425,6 +426,7 @@ lost.</p>
 <a name="GstRtpJitterBuffer--drop-on-latency"></a><h3>The <code class="literal">“drop-on-latency”</code> property</h3>
 <pre class="programlisting">  “drop-on-latency”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Drop oldest buffers when the queue is completely filled.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -434,6 +436,7 @@ lost.</p>
 <pre class="programlisting">  “latency”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The maximum latency of the jitterbuffer. Packets will be kept in the buffer
 for at most this time.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 200</p>
 </div>
@@ -443,6 +446,7 @@ for at most this time.</p>
 <pre class="programlisting">  “ts-offset”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>Adjust GStreamer output buffer timestamps in the jitterbuffer with offset.
 This is mainly used to ensure interstream synchronisation.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -451,6 +455,7 @@ This is mainly used to ensure interstream synchronisation.</p>
 <a name="GstRtpJitterBuffer--mode"></a><h3>The <code class="literal">“mode”</code> property</h3>
 <pre class="programlisting">  “mode”                     <span class="type">RTPJitterBufferMode</span></pre>
 <p>Control the buffering and timestamping mode used by the jitterbuffer.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Slave receiver to sender clock</p>
 </div>
@@ -459,6 +464,7 @@ This is mainly used to ensure interstream synchronisation.</p>
 <a name="GstRtpJitterBuffer--percent"></a><h3>The <code class="literal">“percent”</code> property</h3>
 <pre class="programlisting">  “percent”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>The percent of the jitterbuffer that is filled.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read</p>
 <p>Allowed values: [0,100]</p>
 <p>Default value: 0</p>
@@ -469,6 +475,7 @@ This is mainly used to ensure interstream synchronisation.</p>
 <pre class="programlisting">  “do-retransmission”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Send out a GstRTPRetransmission event upstream when a packet is considered
 late and should be retransmitted.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 <p class="since">Since: 1.2</p>
@@ -480,6 +487,7 @@ late and should be retransmitted.</p>
 <p>When a packet did not arrive at the expected time, wait this extra amount
 of time before sending a retransmission event.</p>
 <p>When -1 is used, the max jitter will be used as extra delay.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -494,6 +502,7 @@ this much packet reordering.</p>
 <p>When -1 is used, the value will be estimated based on observed packet
 reordering. When 0 is used packet reordering alone will not cause a
 retransmission event (Since 1.10).</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: 3</p>
@@ -506,6 +515,7 @@ retransmission event (Since 1.10).</p>
 <p>The amount of time to try to get a retransmission.</p>
 <p>When -1 is used, the value will be estimated based on the jitterbuffer
 latency and the observed round trip time.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -516,6 +526,7 @@ latency and the observed round trip time.</p>
 <a name="GstRtpJitterBuffer--rtx-retry-timeout"></a><h3>The <code class="literal">“rtx-retry-timeout”</code> property</h3>
 <pre class="programlisting">  “rtx-retry-timeout”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Retry sending a transmission event after this timeout in ms (-1 automatic).</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -568,6 +579,7 @@ with name application/x-rtp-jitterbuffer-stats with the following fields:</p>
   average round trip time per RTX.
   </p></li>
 </ul></div>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read</p>
 <p class="since">Since: 1.4</p>
 </div>
@@ -577,6 +589,7 @@ with name application/x-rtp-jitterbuffer-stats with the following fields:</p>
 <pre class="programlisting">  “rtx-min-delay”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>When a packet did not arrive at the expected time, wait at least this extra amount
 of time before sending a retransmission event.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 <p class="since">Since: 1.6</p>
@@ -586,6 +599,7 @@ of time before sending a retransmission event.</p>
 <a name="GstRtpJitterBuffer--rtx-min-retry-timeout"></a><h3>The <code class="literal">“rtx-min-retry-timeout”</code> property</h3>
 <pre class="programlisting">  “rtx-min-retry-timeout”    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Minimum timeout between sending a transmission event in ms (-1 automatic).</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -597,6 +611,7 @@ of time before sending a retransmission event.</p>
 <p>The maximum number of retries to request a retransmission.</p>
 <p>This implies that as maximum (rtx-max-retries + 1) retransmissions will be requested.
 When -1 is used, the number of retransmission request will not be limited.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -611,6 +626,7 @@ request for it.
 This is, when packet N arrives, a GstRTPRetransmission event is schedule
 for packet N+1. So it will be requested if it does not arrive at the expected time.
 The expected time is calculated using the dts of N and the packet spacing.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 <p class="since">Since: 1.6</p>
@@ -620,6 +636,7 @@ The expected time is calculated using the dts of N and the packet spacing.</p>
 <a name="GstRtpJitterBuffer--max-dropout-time"></a><h3>The <code class="literal">“max-dropout-time”</code> property</h3>
 <pre class="programlisting">  “max-dropout-time”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The maximum time (milliseconds) of missing packets tolerated.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= G_MAXINT</p>
 <p>Default value: 60000</p>
@@ -629,6 +646,7 @@ The expected time is calculated using the dts of N and the packet spacing.</p>
 <a name="GstRtpJitterBuffer--max-misorder-time"></a><h3>The <code class="literal">“max-misorder-time”</code> property</h3>
 <pre class="programlisting">  “max-misorder-time”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The maximum time (milliseconds) of misordered packets tolerated.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 2000</p>
 </div>
@@ -639,6 +657,7 @@ The expected time is calculated using the dts of N and the packet spacing.</p>
 <p>The maximum amount of time in ms that the RTP time in the RTCP SRs
 is allowed to be ahead of the last RTP packet we received. Use
 -1 to disable ignoring of RTCP packets.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: 1000</p>
@@ -649,6 +668,7 @@ is allowed to be ahead of the last RTP packet we received. Use
 <a name="GstRtpJitterBuffer--rfc7273-sync"></a><h3>The <code class="literal">“rfc7273-sync”</code> property</h3>
 <pre class="programlisting">  “rfc7273-sync”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Synchronize received streams to the RFC7273 clock (requires clock and offset to be provided).</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -659,6 +679,7 @@ is allowed to be ahead of the last RTP packet we received. Use
 <p>The deadline for a valid RTX request in ms.</p>
 <p>How long the RTX RTCP will be valid for.
 When -1 is used, the size of the jitterbuffer will be used.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -669,6 +690,7 @@ When -1 is used, the size of the jitterbuffer will be used.</p>
 <a name="GstRtpJitterBuffer--rtx-stats-timeout"></a><h3>The <code class="literal">“rtx-stats-timeout”</code> property</h3>
 <pre class="programlisting">  “rtx-stats-timeout”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The time to wait for a retransmitted packet after it has been considered lost in order to collect statistics (ms).</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 1000</p>
 </div>
@@ -679,6 +701,7 @@ When -1 is used, the size of the jitterbuffer will be used.</p>
 <p>The number of consecutive packets needed to start (set to 0 to
 disable faststart. The jitterbuffer will by default start after the
 latency has elapsed)</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 <p class="since">Since: 1.14</p>
@@ -689,6 +712,7 @@ latency has elapsed)</p>
 <pre class="programlisting">  “max-ts-offset-adjustment” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>The maximum number of nanoseconds per frame that time offset may be
 adjusted with. This is used to avoid sudden large changes to time stamps.</p>
+<p>Owner: GstRtpJitterBuffer</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -874,6 +898,6 @@ useful in buffering mode.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

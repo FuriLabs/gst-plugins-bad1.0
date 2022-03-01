@@ -523,6 +523,7 @@ GST_STATIC_PAD_TEMPLATE ("subtitle_%u",
 G_DEFINE_TYPE (GstQTDemux, gst_qtdemux, GST_TYPE_ELEMENT);
 
 static void gst_qtdemux_dispose (GObject * object);
+static void gst_qtdemux_finalize (GObject * object);
 
 static guint32
 gst_qtdemux_find_index_linear (GstQTDemux * qtdemux, QtDemuxStream * str,
@@ -625,6 +626,7 @@ gst_qtdemux_class_init (GstQTDemuxClass * klass)
   parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->dispose = gst_qtdemux_dispose;
+  gobject_class->finalize = gst_qtdemux_finalize;
 
   gstelement_class->change_state = GST_DEBUG_FUNCPTR (gst_qtdemux_change_state);
 #if 0
@@ -681,6 +683,16 @@ gst_qtdemux_init (GstQTDemux * qtdemux)
 }
 
 static void
+gst_qtdemux_finalize (GObject * object)
+{
+  GstQTDemux *qtdemux = GST_QTDEMUX (object);
+
+  g_free (qtdemux->redirect_location);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
 gst_qtdemux_dispose (GObject * object)
 {
   GstQTDemux *qtdemux = GST_QTDEMUX (object);
@@ -708,10 +720,11 @@ gst_qtdemux_dispose (GObject * object)
 static void
 gst_qtdemux_post_no_playable_stream_error (GstQTDemux * qtdemux)
 {
-  if (qtdemux->posted_redirect) {
-    GST_ELEMENT_ERROR (qtdemux, STREAM, DEMUX,
+  if (qtdemux->redirect_location) {
+    GST_ELEMENT_ERROR_WITH_DETAILS (qtdemux, STREAM, DEMUX,
         (_("This file contains no playable streams.")),
-        ("no known streams found, a redirect message has been posted"));
+        ("no known streams found, a redirect message has been posted"),
+        ("redirect-location", G_TYPE_STRING, qtdemux->redirect_location, NULL));
   } else {
     GST_ELEMENT_ERROR (qtdemux, STREAM, DEMUX,
         (_("This file contains no playable streams.")),
@@ -2112,7 +2125,7 @@ gst_qtdemux_reset (GstQTDemux * qtdemux, gboolean hard)
     qtdemux->neededbytes = 16;
     qtdemux->todrop = 0;
     qtdemux->pullbased = FALSE;
-    qtdemux->posted_redirect = FALSE;
+    g_clear_pointer (&qtdemux->redirect_location, g_free);
     qtdemux->first_mdat = -1;
     qtdemux->header_size = 0;
     qtdemux->mdatoffset = -1;
@@ -6038,11 +6051,12 @@ gst_qtdemux_decorate_and_push_buffer (GstQTDemux * qtdemux,
     gst_buffer_unmap (buf, &map);
     if (url != NULL && strlen (url) != 0) {
       /* we have RTSP redirect now */
+      g_free (qtdemux->redirect_location);
+      qtdemux->redirect_location = g_strdup (url);
       gst_element_post_message (GST_ELEMENT_CAST (qtdemux),
           gst_message_new_element (GST_OBJECT_CAST (qtdemux),
               gst_structure_new ("redirect",
                   "new-location", G_TYPE_STRING, url, NULL)));
-      qtdemux->posted_redirect = TRUE;
     } else {
       GST_WARNING_OBJECT (qtdemux, "Redirect URI of stream is empty, not "
           "posting");
@@ -10643,6 +10657,12 @@ qtdemux_parse_trak (GstQTDemux * qtdemux, GNode * trak)
   }
 
   stream->stsd_entries_length = stsd_entry_count = QT_UINT32 (stsd_data + 12);
+  /* each stsd entry must contain at least 8 bytes */
+  if (stream->stsd_entries_length == 0
+      || stream->stsd_entries_length > stsd_len / 8) {
+    stream->stsd_entries_length = 0;
+    goto corrupt_file;
+  }
   stream->stsd_entries = g_new0 (QtDemuxStreamStsdEntry, stsd_entry_count);
   GST_LOG_OBJECT (qtdemux, "stsd len:           %d", stsd_len);
   GST_LOG_OBJECT (qtdemux, "stsd entry count:   %u", stsd_entry_count);
@@ -12912,7 +12932,9 @@ qtdemux_expose_streams (GstQTDemux * qtdemux)
             "new-location", G_TYPE_STRING,
             QTDEMUX_NTH_STREAM (qtdemux, 0)->redirect_uri, NULL));
     gst_element_post_message (GST_ELEMENT_CAST (qtdemux), m);
-    qtdemux->posted_redirect = TRUE;
+    g_free (qtdemux->redirect_location);
+    qtdemux->redirect_location =
+        g_strdup (QTDEMUX_NTH_STREAM (qtdemux, 0)->redirect_uri);
   }
 
   g_ptr_array_foreach (qtdemux->active_streams,
@@ -13965,9 +13987,11 @@ qtdemux_process_redirects (GstQTDemux * qtdemux, GList * references)
   g_list_free (references);
 
   GST_INFO_OBJECT (qtdemux, "posting redirect message: %" GST_PTR_FORMAT, s);
+  g_free (qtdemux->redirect_location);
+  qtdemux->redirect_location =
+      g_strdup (gst_structure_get_string (s, "new-location"));
   msg = gst_message_new_element (GST_OBJECT_CAST (qtdemux), s);
   gst_element_post_message (GST_ELEMENT_CAST (qtdemux), msg);
-  qtdemux->posted_redirect = TRUE;
 }
 
 /* look for redirect nodes, collect all redirect information and
@@ -15251,6 +15275,7 @@ qtdemux_audio_caps (GstQTDemux * qtdemux, QtDemuxStream * stream,
     case 0x6d730055:
       /* MPEG layer 3, CBR only (pre QT4.1) */
     case FOURCC__mp3:
+    case FOURCC_mp3_:
       _codec ("MPEG-1 layer 3");
       /* MPEG layer 3, CBR & VBR (QT4.1 and later) */
       caps = gst_caps_new_simple ("audio/mpeg", "layer", G_TYPE_INT, 3,

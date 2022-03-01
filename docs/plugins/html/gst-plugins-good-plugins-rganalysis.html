@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rganalysis: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-revtv.html" title="revtv">
 <link rel="next" href="gst-plugins-good-plugins-rglimiter.html" title="rglimiter">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -69,8 +69,8 @@
 <a name="gst-plugins-good-plugins-rganalysis.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -114,7 +114,7 @@ album, not just the last one.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>t audiotestsrc wave<span class="gtkdoc opt">=</span>sine num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">512</span> <span class="gtkdoc opt">!</span> rganalysis <span class="gtkdoc opt">!</span> fakesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">t</span> <span class="n">audiotestsrc</span> <span class="n">wave</span><span class="o">=</span><span class="n">sine</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">512</span> <span class="o">!</span> <span class="n">rganalysis</span> <span class="o">!</span> <span class="n">fakesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -126,8 +126,8 @@ album, not just the last one.</p>
       <tr>
         <td class="listing_lines" align="right"><pre>1
 2</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>t filesrc location<span class="gtkdoc opt">=</span>filename<span class="gtkdoc opt">.</span>ext <span class="gtkdoc opt">!</span> decodebin \
-    <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> rganalysis <span class="gtkdoc opt">!</span> fakesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">t</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">filename</span><span class="p">.</span><span class="n">ext</span> <span class="o">!</span> <span class="n">decodebin</span> \
+    <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">rganalysis</span> <span class="o">!</span> <span class="n">fakesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -139,8 +139,8 @@ album, not just the last one.</p>
       <tr>
         <td class="listing_lines" align="right"><pre>1
 2</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>t gnomevfssrc location<span class="gtkdoc opt">=</span>http<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//replaygain.hydrogenaudio.org/ref_pink.wav \</span>
-    <span class="gtkdoc opt">!</span> wavparse <span class="gtkdoc opt">!</span> rganalysis <span class="gtkdoc opt">!</span> fakesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">t</span> <span class="n">gnomevfssrc</span> <span class="n">location</span><span class="o">=</span><span class="nl">http</span><span class="p">:</span><span class="c1">//replaygain.hydrogenaudio.org/ref_pink.wav \</span>
+<span class="c1">    ! wavparse ! rganalysis ! fakesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -279,6 +279,7 @@ tracks if a full set of tags is found for the first track.  If a subsequent
 track of the album is missing tags, processing cannot start again.  If this
 is undesired, the application has to scan all files beforehand and enable
 forcing of processing if needed.</p>
+<p>Owner: GstRgAnalysis</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -309,6 +310,7 @@ streams.  This cannot survive a state change to the NULL or READY state.
 If you change your pipeline's state to NULL or READY between tracks, lock
 the element's state using <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-set-locked-state"><code class="function">gst_element_set_locked_state()</code></a> when it is in
 PAUSED or PLAYING.</p>
+<p>Owner: GstRgAnalysis</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -334,6 +336,7 @@ this.</p>
 <p>The problem of the reference level being ambiguous for lack of concise
 standardization is to be solved by adopting the <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstTagList.html#GST-TAG-REFERENCE-LEVEL:CAPS"><span class="type">GST_TAG_REFERENCE_LEVEL</span></a>
 tag, which allows to store the used value alongside the gain values.</p>
+<p>Owner: GstRgAnalysis</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,150]</p>
 <p>Default value: 89</p>
@@ -343,6 +346,7 @@ tag, which allows to store the used value alongside the gain values.</p>
 <a name="GstRgAnalysis--message"></a><h3>The <code class="literal">“message”</code> property</h3>
 <pre class="programlisting">  “message”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Post statics messages.</p>
+<p>Owner: GstRgAnalysis</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -353,6 +357,6 @@ tag, which allows to store the used value alongside the gain values.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>audioecho: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-audiodynamic.html" title="audiodynamic">
 <link rel="next" href="gst-plugins-good-plugins-audiofirfilter.html" title="audiofirfilter">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -79,8 +79,8 @@
 <a name="gst-plugins-good-plugins-audioecho.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -123,9 +123,9 @@ selected using the surround-channels mask property.</p>
         <td class="listing_lines" align="right"><pre>1
 2
 3</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> autoaudiosrc <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioecho delay<span class="gtkdoc opt">=</span><span class="number">500000000</span> intensity<span class="gtkdoc opt">=</span><span class="number">0.6</span> feedback<span class="gtkdoc opt">=</span><span class="number">0.4</span> <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> autoaudiosink
-gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span><span class="string">&quot;melo1.ogg&quot;</span> <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioecho delay<span class="gtkdoc opt">=</span><span class="number">50000000</span> intensity<span class="gtkdoc opt">=</span><span class="number">0.6</span> feedback<span class="gtkdoc opt">=</span><span class="number">0.4</span> <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> autoaudiosink
-gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audio<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>channels<span class="gtkdoc opt">=</span><span class="number">4</span> <span class="gtkdoc opt">!</span> audioecho surround<span class="gtkdoc opt">-</span>delay<span class="gtkdoc opt">=</span><span class="keyword">true</span> delay<span class="gtkdoc opt">=</span><span class="number">500000000</span> <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> autoaudiosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">autoaudiosrc</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioecho</span> <span class="n">delay</span><span class="o">=</span><span class="mi">500000000</span> <span class="n">intensity</span><span class="o">=</span><span class="mf">0.6</span> <span class="n">feedback</span><span class="o">=</span><span class="mf">0.4</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">autoaudiosink</span>
+<span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;melo1.ogg&quot;</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioecho</span> <span class="n">delay</span><span class="o">=</span><span class="mi">50000000</span> <span class="n">intensity</span><span class="o">=</span><span class="mf">0.6</span> <span class="n">feedback</span><span class="o">=</span><span class="mf">0.4</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">autoaudiosink</span>
+<span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audio</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">channels</span><span class="o">=</span><span class="mi">4</span> <span class="o">!</span> <span class="n">audioecho</span> <span class="n">surround</span><span class="o">-</span><span class="n">delay</span><span class="o">=</span><span class="nb">true</span> <span class="n">delay</span><span class="o">=</span><span class="mi">500000000</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">autoaudiosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -230,6 +230,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioEcho--delay"></a><h3>The <code class="literal">“delay”</code> property</h3>
 <pre class="programlisting">  “delay”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Delay of the echo in nanoseconds.</p>
+<p>Owner: GstAudioEcho</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 1</p>
 <p>Default value: 1</p>
@@ -239,6 +240,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioEcho--feedback"></a><h3>The <code class="literal">“feedback”</code> property</h3>
 <pre class="programlisting">  “feedback”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Amount of feedback.</p>
+<p>Owner: GstAudioEcho</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0</p>
@@ -248,6 +250,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioEcho--intensity"></a><h3>The <code class="literal">“intensity”</code> property</h3>
 <pre class="programlisting">  “intensity”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Intensity of the echo.</p>
+<p>Owner: GstAudioEcho</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0</p>
@@ -257,6 +260,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioEcho--max-delay"></a><h3>The <code class="literal">“max-delay”</code> property</h3>
 <pre class="programlisting">  “max-delay”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Maximum delay of the echo in nanoseconds (can't be changed in PLAYING or PAUSED state).</p>
+<p>Owner: GstAudioEcho</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 1</p>
 <p>Default value: 1</p>
@@ -266,6 +270,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioEcho--surround-delay"></a><h3>The <code class="literal">“surround-delay”</code> property</h3>
 <pre class="programlisting">  “surround-delay”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Delay Surround Channels when TRUE instead of applying an echo effect.</p>
+<p>Owner: GstAudioEcho</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -274,6 +279,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioEcho--surround-mask"></a><h3>The <code class="literal">“surround-mask”</code> property</h3>
 <pre class="programlisting">  “surround-mask”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>A bitmask of channels that are considered surround and delayed when surround-delay = TRUE.</p>
+<p>Owner: GstAudioEcho</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 1</p>
 <p>Default value: 18446744073709551612</p>
@@ -281,6 +287,6 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

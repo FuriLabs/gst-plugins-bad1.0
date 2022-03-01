@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>shout2send: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-shapewipe.html" title="shapewipe">
 <link rel="next" href="gst-plugins-good-plugins-smptealpha.html" title="smptealpha">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -119,9 +119,9 @@
 <a name="gst-plugins-good-plugins-shout2send.signals"></a><h2>Signals</h2>
 <div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody><tr>
 <td class="signal_type"><span class="returnvalue">void</span></td>
@@ -134,8 +134,8 @@
 <a name="gst-plugins-good-plugins-shout2send.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -169,7 +169,7 @@ GstShout2send implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> uridecodebin uri<span class="gtkdoc opt">=</span>file<span class="gtkdoc opt">:</span><span class="gtkdoc slc">///path/to/audiofile ! audioconvert ! vorbisenc ! oggmux ! shout2send mount=/stream.ogg port=8000 username=source password=somepassword ip=server_IP_address_or_hostname</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">uridecodebin</span> <span class="n">uri</span><span class="o">=</span><span class="nl">file</span><span class="p">:</span><span class="c1">///path/to/audiofile ! audioconvert ! vorbisenc ! oggmux ! shout2send mount=/stream.ogg port=8000 username=source password=somepassword ip=server_IP_address_or_hostname</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -273,6 +273,7 @@ dependent.
 <a name="GstShout2send--description"></a><h3>The <code class="literal">“description”</code> property</h3>
 <pre class="programlisting">  “description”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>description.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -281,6 +282,7 @@ dependent.
 <a name="GstShout2send--genre"></a><h3>The <code class="literal">“genre”</code> property</h3>
 <pre class="programlisting">  “genre”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>genre.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -289,6 +291,7 @@ dependent.
 <a name="GstShout2send--ip"></a><h3>The <code class="literal">“ip”</code> property</h3>
 <pre class="programlisting">  “ip”                       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>IP address or hostname.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "127.0.0.1"</p>
 </div>
@@ -297,6 +300,7 @@ dependent.
 <a name="GstShout2send--mount"></a><h3>The <code class="literal">“mount”</code> property</h3>
 <pre class="programlisting">  “mount”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>mount.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -305,6 +309,7 @@ dependent.
 <a name="GstShout2send--password"></a><h3>The <code class="literal">“password”</code> property</h3>
 <pre class="programlisting">  “password”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>password.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "hackme"</p>
 </div>
@@ -313,6 +318,7 @@ dependent.
 <a name="GstShout2send--port"></a><h3>The <code class="literal">“port”</code> property</h3>
 <pre class="programlisting">  “port”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>port.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,65535]</p>
 <p>Default value: 8000</p>
@@ -322,6 +328,7 @@ dependent.
 <a name="GstShout2send--protocol"></a><h3>The <code class="literal">“protocol”</code> property</h3>
 <pre class="programlisting">  “protocol”                 <span class="type">GstShout2SendProtocol</span></pre>
 <p>Connection Protocol to use.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Http Protocol (icecast 2.x)</p>
 </div>
@@ -330,6 +337,7 @@ dependent.
 <a name="GstShout2send--streamname"></a><h3>The <code class="literal">“streamname”</code> property</h3>
 <pre class="programlisting">  “streamname”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>name of the stream.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -338,6 +346,7 @@ dependent.
 <a name="GstShout2send--url"></a><h3>The <code class="literal">“url”</code> property</h3>
 <pre class="programlisting">  “url”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>the stream's homepage URL.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -346,6 +355,7 @@ dependent.
 <a name="GstShout2send--username"></a><h3>The <code class="literal">“username”</code> property</h3>
 <pre class="programlisting">  “username”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>username.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "source"</p>
 </div>
@@ -354,6 +364,7 @@ dependent.
 <a name="GstShout2send--public"></a><h3>The <code class="literal">“public”</code> property</h3>
 <pre class="programlisting">  “public”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>If the stream should be listed on the server's stream directory.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -362,6 +373,7 @@ dependent.
 <a name="GstShout2send--timeout"></a><h3>The <code class="literal">“timeout”</code> property</h3>
 <pre class="programlisting">  “timeout”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Max amount of time to wait for network activity, in milliseconds.</p>
+<p>Owner: GstShout2send</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 1</p>
 <p>Default value: 10000</p>
@@ -380,6 +392,6 @@ user_function (<a class="link" href="gst-plugins-good-plugins-shout2send.html#Gs
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

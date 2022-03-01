@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>vp9dec: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-vp8enc.html" title="vp8enc">
 <link rel="next" href="gst-plugins-good-plugins-vp9enc.html" title="vp9enc">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -74,8 +74,8 @@
 <a name="gst-plugins-good-plugins-vp9dec.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -108,7 +108,7 @@ Theora video codec.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v filesrc location<span class="gtkdoc opt">=</span>videotestsrc<span class="gtkdoc opt">.</span>webm <span class="gtkdoc opt">!</span> matroskademux <span class="gtkdoc opt">!</span> vp9dec <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> videoscale <span class="gtkdoc opt">!</span> autovideosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">videotestsrc</span><span class="p">.</span><span class="n">webm</span> <span class="o">!</span> <span class="n">matroskademux</span> <span class="o">!</span> <span class="n">vp9dec</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">videoscale</span> <span class="o">!</span> <span class="n">autovideosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -213,6 +213,7 @@ Theora video codec.</p>
 <a name="GstVP9Dec--deblocking-level"></a><h3>The <code class="literal">“deblocking-level”</code> property</h3>
 <pre class="programlisting">  “deblocking-level”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Deblocking level.</p>
+<p>Owner: GstVP9Dec</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 16</p>
 <p>Default value: 4</p>
@@ -222,6 +223,7 @@ Theora video codec.</p>
 <a name="GstVP9Dec--noise-level"></a><h3>The <code class="literal">“noise-level”</code> property</h3>
 <pre class="programlisting">  “noise-level”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Noise level.</p>
+<p>Owner: GstVP9Dec</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 16</p>
 <p>Default value: 0</p>
@@ -231,6 +233,7 @@ Theora video codec.</p>
 <a name="GstVP9Dec--post-processing"></a><h3>The <code class="literal">“post-processing”</code> property</h3>
 <pre class="programlisting">  “post-processing”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable post processing.</p>
+<p>Owner: GstVP9Dec</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -239,6 +242,7 @@ Theora video codec.</p>
 <a name="GstVP9Dec--post-processing-flags"></a><h3>The <code class="literal">“post-processing-flags”</code> property</h3>
 <pre class="programlisting">  “post-processing-flags”    <span class="type">GstVP9DecPostProcessingFlags</span></pre>
 <p>Flags to control post processing.</p>
+<p>Owner: GstVP9Dec</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Deblock|Demacroblock</p>
 </div>
@@ -247,6 +251,7 @@ Theora video codec.</p>
 <a name="GstVP9Dec--threads"></a><h3>The <code class="literal">“threads”</code> property</h3>
 <pre class="programlisting">  “threads”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Maximum number of decoding threads.</p>
+<p>Owner: GstVP9Dec</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,16]</p>
 <p>Default value: 1</p>
@@ -258,6 +263,6 @@ Theora video codec.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

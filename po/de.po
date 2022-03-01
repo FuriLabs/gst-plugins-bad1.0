@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.15.1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2019-02-09 21:19+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
@@ -31,6 +31,10 @@ msgstr "Jack-Server nicht gefunden"
 
 msgid "Failed to decode JPEG image"
 msgstr "Dekodieren des JPEG-Bildes schlug fehl"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "Anfordern des benötigen Arbeitsspeichers schlug fehl."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -199,6 +203,10 @@ msgstr "Der Treiber von Gerät »%s« unterstützt nicht die EA-Methode %d"
 #, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Der Treiber des Geräts »%s« unterstützt keine bekannte E/A-Methode."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Ungültige Atom-Größe."
 
 #, c-format
 msgid "Device '%s' has no supported format"

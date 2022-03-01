@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.15.1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2019-01-25 12:40+0300\n"
 "Last-Translator: Mehmet Kececi <mkececi@mehmetkececi.com>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -27,6 +27,10 @@ msgstr "Jack sunucusu bulunamadı"
 
 msgid "Failed to decode JPEG image"
 msgstr "JPEG görüntüsünü çözümlenemedi"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "Gerekli bellek ayrılamıyor."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -183,6 +187,10 @@ msgid "The driver of device '%s' does not support any known IO method."
 msgstr ""
 "Bu aygıtın sürücüsü '%s' bilinen IO yöntemlerinden herhangi birisini "
 "desteklemiyor."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Geçersiz atom boyutu"
 
 #, c-format
 msgid "Device '%s' has no supported format"

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>multifilesrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-multifilesink.html" title="multifilesink">
 <link rel="next" href="gst-plugins-good-plugins-multipartdemux.html" title="multipartdemux">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -82,8 +82,8 @@
 <a name="gst-plugins-good-plugins-multifilesrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -125,9 +125,9 @@ on all buffers after the first one in accordance with the framerate.</p>
         <td class="listing_lines" align="right"><pre>1
 2
 3</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> multifilesrc location<span class="gtkdoc opt">=</span><span class="string">&quot;img.%04d.png&quot;</span> index<span class="gtkdoc opt">=</span><span class="number">0</span> caps<span class="gtkdoc opt">=</span><span class="string">&quot;image/png,framerate=\(fraction\)12/1&quot;</span> <span class="gtkdoc opt">!</span> \
-    pngdec <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> videorate <span class="gtkdoc opt">!</span> theoraenc <span class="gtkdoc opt">!</span> oggmux <span class="gtkdoc opt">!</span> \
-    filesink location<span class="gtkdoc opt">=</span><span class="string">&quot;images.ogg&quot;</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">multifilesrc</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;img.%04d.png&quot;</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span> <span class="n">caps</span><span class="o">=</span><span class="s">&quot;image/png,framerate=\(fraction\)12/1&quot;</span> <span class="o">!</span> \
+    <span class="n">pngdec</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">videorate</span> <span class="o">!</span> <span class="n">theoraenc</span> <span class="o">!</span> <span class="n">oggmux</span> <span class="o">!</span> \
+    <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;images.ogg&quot;</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -209,6 +209,7 @@ files named img.0000.png, img.0001.png, etc.
 <a name="GstMultiFileSrc--caps"></a><h3>The <code class="literal">“caps”</code> property</h3>
 <pre class="programlisting">  “caps”                     <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstCaps.html#GstCaps-struct"><span class="type">GstCaps</span></a> *</pre>
 <p>Caps describing the format of the data.</p>
+<p>Owner: GstMultiFileSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -216,6 +217,7 @@ files named img.0000.png, img.0001.png, etc.
 <a name="GstMultiFileSrc--index"></a><h3>The <code class="literal">“index”</code> property</h3>
 <pre class="programlisting">  “index”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Index to use with location property to create file names.  The index is incremented by one for each buffer read.</p>
+<p>Owner: GstMultiFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -225,6 +227,7 @@ files named img.0000.png, img.0001.png, etc.
 <a name="GstMultiFileSrc--location"></a><h3>The <code class="literal">“location”</code> property</h3>
 <pre class="programlisting">  “location”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Pattern to create file names of input files.  File names are created by calling sprintf() with the pattern and the current index.</p>
+<p>Owner: GstMultiFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "%05d"</p>
 </div>
@@ -233,6 +236,7 @@ files named img.0000.png, img.0001.png, etc.
 <a name="GstMultiFileSrc--loop"></a><h3>The <code class="literal">“loop”</code> property</h3>
 <pre class="programlisting">  “loop”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Whether to repeat from the beginning when all files have been read.</p>
+<p>Owner: GstMultiFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -241,6 +245,7 @@ files named img.0000.png, img.0001.png, etc.
 <a name="GstMultiFileSrc--start-index"></a><h3>The <code class="literal">“start-index”</code> property</h3>
 <pre class="programlisting">  “start-index”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Start value of index.  The initial value of index can be set either by setting index or start-index.  When the end of the loop is reached, the index will be set to the value start-index.</p>
+<p>Owner: GstMultiFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -250,6 +255,7 @@ files named img.0000.png, img.0001.png, etc.
 <a name="GstMultiFileSrc--stop-index"></a><h3>The <code class="literal">“stop-index”</code> property</h3>
 <pre class="programlisting">  “stop-index”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Stop value of index.  The special value -1 means no stop.</p>
+<p>Owner: GstMultiFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: 0</p>
@@ -261,6 +267,6 @@ files named img.0000.png, img.0001.png, etc.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>splitmuxsink: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-splitfilesrc.html" title="splitfilesrc">
 <link rel="next" href="gst-plugins-good-plugins-splitmuxsrc.html" title="splitmuxsrc">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -144,9 +144,9 @@
 <a name="gst-plugins-good-plugins-splitmuxsink.signals"></a><h2>Signals</h2>
 <div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody>
 <tr>
@@ -193,8 +193,8 @@
 <a name="gst-plugins-good-plugins-splitmuxsink.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -246,7 +246,7 @@ objects, together with muxer-properties and sink-properties.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>e v4l2src num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">500</span> <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">320</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">240</span> <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> timeoverlay <span class="gtkdoc opt">!</span> x264enc key<span class="gtkdoc opt">-</span><span class="gtkdoc kwb">int</span><span class="gtkdoc opt">-</span>max<span class="gtkdoc opt">=</span><span class="number">10</span> <span class="gtkdoc opt">!</span> h264parse <span class="gtkdoc opt">!</span> splitmuxsink location<span class="gtkdoc opt">=</span>video<span class="gtkdoc opt">%</span><span class="number">02</span>d<span class="gtkdoc opt">.</span>mov max<span class="gtkdoc opt">-</span>size<span class="gtkdoc opt">-</span>time<span class="gtkdoc opt">=</span><span class="number">10000000000</span> max<span class="gtkdoc opt">-</span>size<span class="gtkdoc opt">-</span>bytes<span class="gtkdoc opt">=</span><span class="number">1000000</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">e</span> <span class="n">v4l2src</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">500</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">240</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">timeoverlay</span> <span class="o">!</span> <span class="n">x264enc</span> <span class="n">key</span><span class="o">-</span><span class="kt">int</span><span class="o">-</span><span class="n">max</span><span class="o">=</span><span class="mi">10</span> <span class="o">!</span> <span class="n">h264parse</span> <span class="o">!</span> <span class="n">splitmuxsink</span> <span class="n">location</span><span class="o">=</span><span class="n">video</span><span class="o">%</span><span class="mo">02</span><span class="n">d</span><span class="p">.</span><span class="n">mov</span> <span class="n">max</span><span class="o">-</span><span class="n">size</span><span class="o">-</span><span class="n">time</span><span class="o">=</span><span class="mi">10000000000</span> <span class="n">max</span><span class="o">-</span><span class="n">size</span><span class="o">-</span><span class="n">bytes</span><span class="o">=</span><span class="mi">1000000</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -261,7 +261,7 @@ and 1MB maximum size.
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>e v4l2src num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">500</span> <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">320</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">240</span> <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> timeoverlay <span class="gtkdoc opt">!</span> x264enc key<span class="gtkdoc opt">-</span><span class="gtkdoc kwb">int</span><span class="gtkdoc opt">-</span>max<span class="gtkdoc opt">=</span><span class="number">10</span> <span class="gtkdoc opt">!</span> h264parse <span class="gtkdoc opt">!</span> splitmuxsink location<span class="gtkdoc opt">=</span>video<span class="gtkdoc opt">%</span><span class="number">02</span>d<span class="gtkdoc opt">.</span>mkv max<span class="gtkdoc opt">-</span>size<span class="gtkdoc opt">-</span>time<span class="gtkdoc opt">=</span><span class="number">10000000000</span> muxer<span class="gtkdoc opt">-</span>factory<span class="gtkdoc opt">=</span>matroskamux muxer<span class="gtkdoc opt">-</span>properties<span class="gtkdoc opt">=</span><span class="string">&quot;properties,streamable=true&quot;</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">e</span> <span class="n">v4l2src</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">500</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">240</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">timeoverlay</span> <span class="o">!</span> <span class="n">x264enc</span> <span class="n">key</span><span class="o">-</span><span class="kt">int</span><span class="o">-</span><span class="n">max</span><span class="o">=</span><span class="mi">10</span> <span class="o">!</span> <span class="n">h264parse</span> <span class="o">!</span> <span class="n">splitmuxsink</span> <span class="n">location</span><span class="o">=</span><span class="n">video</span><span class="o">%</span><span class="mo">02</span><span class="n">d</span><span class="p">.</span><span class="n">mkv</span> <span class="n">max</span><span class="o">-</span><span class="n">size</span><span class="o">-</span><span class="n">time</span><span class="o">=</span><span class="mi">10000000000</span> <span class="n">muxer</span><span class="o">-</span><span class="n">factory</span><span class="o">=</span><span class="n">matroskamux</span> <span class="n">muxer</span><span class="o">-</span><span class="n">properties</span><span class="o">=</span><span class="s">&quot;properties,streamable=true&quot;</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -417,6 +417,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--location"></a><h3>The <code class="literal">“location”</code> property</h3>
 <pre class="programlisting">  “location”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Format string pattern for the location of the files to write (e.g. video%05d.mp4).</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -425,6 +426,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--max-size-bytes"></a><h3>The <code class="literal">“max-size-bytes”</code> property</h3>
 <pre class="programlisting">  “max-size-bytes”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Max. amount of data per file (in bytes, 0=disable).</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -433,6 +435,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--max-size-time"></a><h3>The <code class="literal">“max-size-time”</code> property</h3>
 <pre class="programlisting">  “max-size-time”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Max. amount of time per file (in ns, 0=disable).</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -441,6 +444,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--mux-overhead"></a><h3>The <code class="literal">“mux-overhead”</code> property</h3>
 <pre class="programlisting">  “mux-overhead”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Extra size overhead of muxing (0.02 = 2%).</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0.02</p>
@@ -450,6 +454,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--muxer"></a><h3>The <code class="literal">“muxer”</code> property</h3>
 <pre class="programlisting">  “muxer”                    <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#GstElement-struct"><span class="type">GstElement</span></a> *</pre>
 <p>The muxer element to use (NULL = default mp4mux). Valid only for async-finalize = FALSE.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -457,6 +462,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--sink"></a><h3>The <code class="literal">“sink”</code> property</h3>
 <pre class="programlisting">  “sink”                     <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#GstElement-struct"><span class="type">GstElement</span></a> *</pre>
 <p>The sink element (or element chain) to use (NULL = default filesink). Valid only for async-finalize = FALSE.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -464,6 +470,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--max-files"></a><h3>The <code class="literal">“max-files”</code> property</h3>
 <pre class="programlisting">  “max-files”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Maximum number of files to keep on disk. Once the maximum is reached,old files start to be deleted to make room for new ones.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -472,6 +479,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--send-keyframe-requests"></a><h3>The <code class="literal">“send-keyframe-requests”</code> property</h3>
 <pre class="programlisting">  “send-keyframe-requests”   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Request a keyframe every max-size-time ns to try splitting at that point. Needs max-size-bytes to be 0 in order to be effective.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -480,6 +488,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--max-size-timecode"></a><h3>The <code class="literal">“max-size-timecode”</code> property</h3>
 <pre class="programlisting">  “max-size-timecode”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Maximum difference in timecode between first and last frame. Separator is assumed to be ":" everywhere (e.g. 01:00:00:00). Will only be effective if a timecode track is present.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -488,6 +497,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--alignment-threshold"></a><h3>The <code class="literal">“alignment-threshold”</code> property</h3>
 <pre class="programlisting">  “alignment-threshold”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Allow non-reference streams to be that many ns before the reference stream.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -496,6 +506,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--use-robust-muxing"></a><h3>The <code class="literal">“use-robust-muxing”</code> property</h3>
 <pre class="programlisting">  “use-robust-muxing”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Check if muxers support robust muxing via the reserved-max-duration and reserved-duration-remaining properties and use them if so. (Only present on qtmux and mp4mux for now). splitmuxsink may then also  create new fragments if the reserved header space is about to overflow. Note that for mp4mux and qtmux, reserved-moov-update-period must be set manually by the app to a non-zero value for robust muxing to have an effect.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -504,6 +515,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--async-finalize"></a><h3>The <code class="literal">“async-finalize”</code> property</h3>
 <pre class="programlisting">  “async-finalize”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Finalize each fragment asynchronously and start a new one.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -512,6 +524,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--muxer-factory"></a><h3>The <code class="literal">“muxer-factory”</code> property</h3>
 <pre class="programlisting">  “muxer-factory”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The muxer element factory to use (default = mp4mux). Valid only for async-finalize = TRUE.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "mp4mux"</p>
 </div>
@@ -520,6 +533,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--muxer-properties"></a><h3>The <code class="literal">“muxer-properties”</code> property</h3>
 <pre class="programlisting">  “muxer-properties”         <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#GstStructure-struct"><span class="type">GstStructure</span></a> *</pre>
 <p>The muxer element properties to use. Example: {properties,boolean-prop=true,string-prop="hi"}. Valid only for async-finalize = TRUE.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -527,6 +541,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--reset-muxer"></a><h3>The <code class="literal">“reset-muxer”</code> property</h3>
 <pre class="programlisting">  “reset-muxer”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Reset the muxer after each segment. Disabling this will not work for most muxers.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -535,6 +550,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--sink-factory"></a><h3>The <code class="literal">“sink-factory”</code> property</h3>
 <pre class="programlisting">  “sink-factory”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The sink element factory to use (default = filesink). Valid only for async-finalize = TRUE.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "filesink"</p>
 </div>
@@ -543,6 +559,7 @@ seconds. Each file will finalize asynchronously.
 <a name="GstSplitMuxSink--sink-properties"></a><h3>The <code class="literal">“sink-properties”</code> property</h3>
 <pre class="programlisting">  “sink-properties”          <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#GstStructure-struct"><span class="type">GstStructure</span></a> *</pre>
 <p>The sink element properties to use. Example: {properties,boolean-prop=true,string-prop="hi"}. Valid only for async-finalize = TRUE.</p>
+<p>Owner: GstSplitMuxSink</p>
 <p>Flags: Read / Write</p>
 </div>
 </div>
@@ -795,6 +812,6 @@ user_function (<a class="link" href="gst-plugins-good-plugins-splitmuxsink.html#
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

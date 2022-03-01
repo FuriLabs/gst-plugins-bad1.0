@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 0.10.23.2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2010-07-16 19:34+0300\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -23,6 +23,10 @@ msgid "Jack server not found"
 msgstr ""
 
 msgid "Failed to decode JPEG image"
+msgstr "Nepavyko dekoduoti JPEG paveikslėlio"
+
+#, fuzzy
+msgid "Failed to read memory"
 msgstr "Nepavyko dekoduoti JPEG paveikslėlio"
 
 msgid ""
@@ -179,6 +183,9 @@ msgstr "Įrenginio „%s“ tvarkyklė nepalaiko jokių žinomų įrašymo būd�
 #, fuzzy, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Įrenginio „%s“ tvarkyklė nepalaiko jokių žinomų įrašymo būdų."
+
+msgid "Invalid caps"
+msgstr ""
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

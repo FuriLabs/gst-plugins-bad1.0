@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 0.10.28.2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2012-05-05 19:05+0100\n"
 "Last-Translator: Savvas Radevic <vicedar@gmail.com>\n"
 "Language-Team: Greek <team@lists.gnome.gr>\n"
@@ -24,6 +24,10 @@ msgid "Jack server not found"
 msgstr ""
 
 msgid "Failed to decode JPEG image"
+msgstr "Αποτυχία αποκωδικοποίησης της εικόνας JPEG"
+
+#, fuzzy
+msgid "Failed to read memory"
 msgstr "Αποτυχία αποκωδικοποίησης της εικόνας JPEG"
 
 msgid ""
@@ -182,6 +186,10 @@ msgstr "Ο οδηγός της συσκευής '%s' δεν υποστηρίζε
 #, fuzzy, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Ο οδηγός της συσκευής '%s' δεν υποστηρίζει κάποια γνωστή μέθοδο λήψης."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Άκυρο μέγεθος ατόμου."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

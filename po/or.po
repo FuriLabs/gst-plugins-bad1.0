@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-0.8.3\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2004-09-27 13:32+0530\n"
 "Last-Translator: Gora Mohanty <gora_mohanty@yahoo.co.in>\n"
 "Language-Team: Oriya <gora_mohanty@yahoo.co.in>\n"
@@ -21,6 +21,9 @@ msgid "Jack server not found"
 msgstr ""
 
 msgid "Failed to decode JPEG image"
+msgstr ""
+
+msgid "Failed to read memory"
 msgstr ""
 
 msgid ""
@@ -172,6 +175,9 @@ msgstr ""
 
 #, c-format
 msgid "The driver of device '%s' does not support any known IO method."
+msgstr ""
+
+msgid "Invalid caps"
 msgstr ""
 
 #, fuzzy, c-format

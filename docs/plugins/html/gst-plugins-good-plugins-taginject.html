@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>taginject: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-streaktv.html" title="streaktv">
 <link rel="next" href="gst-plugins-good-plugins-testsink.html" title="testsink">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -53,8 +53,8 @@
 <a name="gst-plugins-good-plugins-taginject.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -83,7 +83,7 @@ unmodified.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> taginject tags<span class="gtkdoc opt">=</span><span class="string">&quot;title=testsrc,artist=gstreamer&quot;</span> <span class="gtkdoc opt">!</span> vorbisenc <span class="gtkdoc opt">!</span> oggmux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>ogg</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> <span class="n">taginject</span> <span class="n">tags</span><span class="o">=</span><span class="s">&quot;title=testsrc,artist=gstreamer&quot;</span> <span class="o">!</span> <span class="n">vorbisenc</span> <span class="o">!</span> <span class="n">oggmux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">ogg</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -94,7 +94,7 @@ unmodified.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> taginject tags<span class="gtkdoc opt">=</span><span class="string">&quot;keywords=\{</span><span class="gtkdoc esc">\&quot;</span><span class="string">testone</span><span class="gtkdoc esc">\&quot;</span><span class="string">,</span><span class="gtkdoc esc">\&quot;</span><span class="string">audio</span><span class="gtkdoc esc">\&quot;</span><span class="string">\},title=</span><span class="gtkdoc esc">\&quot;</span><span class="string">audio\ testtone</span><span class="gtkdoc esc">\&quot;</span><span class="string">&quot;</span> <span class="gtkdoc opt">!</span> vorbisenc <span class="gtkdoc opt">!</span> oggmux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>ogg</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> <span class="n">taginject</span> <span class="n">tags</span><span class="o">=</span><span class="s">&quot;keywords=\{</span><span class="se">\&quot;</span><span class="s">testone</span><span class="se">\&quot;</span><span class="s">,</span><span class="se">\&quot;</span><span class="s">audio</span><span class="se">\&quot;</span><span class="s">\},title=</span><span class="se">\&quot;</span><span class="s">audio\ testtone</span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">!</span> <span class="n">vorbisenc</span> <span class="o">!</span> <span class="n">oggmux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">ogg</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -200,12 +200,13 @@ unmodified.</p>
 <a name="GstTagInject--tags"></a><h3>The <code class="literal">“tags”</code> property</h3>
 <pre class="programlisting">  “tags”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>List of tags to inject into the target file.</p>
+<p>Owner: GstTagInject</p>
 <p>Flags: Write</p>
 <p>Default value: NULL</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

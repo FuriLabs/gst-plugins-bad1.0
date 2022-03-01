@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>shapewipe: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-shagadelictv.html" title="shagadelictv">
 <link rel="next" href="gst-plugins-good-plugins-shout2send.html" title="shout2send">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -59,8 +59,8 @@
 <a name="gst-plugins-good-plugins-shapewipe.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -92,7 +92,7 @@ can be added by the border property.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v videotestsrc <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>format<span class="gtkdoc opt">=</span>AYUV<span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">640</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">480</span> <span class="gtkdoc opt">!</span> shapewipe position<span class="gtkdoc opt">=</span><span class="number">0.5</span> name<span class="gtkdoc opt">=</span>shape <span class="gtkdoc opt">!</span> videomixer name<span class="gtkdoc opt">=</span>mixer <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> autovideosink     filesrc location<span class="gtkdoc opt">=</span>mask<span class="gtkdoc opt">.</span>png <span class="gtkdoc opt">!</span> typefind <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> videoscale <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> shape<span class="gtkdoc opt">.</span>mask_sink    videotestsrc pattern<span class="gtkdoc opt">=</span>snow <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>format<span class="gtkdoc opt">=</span>AYUV<span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">640</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">480</span> <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> mixer<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">videotestsrc</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="n">AYUV</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">640</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">480</span> <span class="o">!</span> <span class="n">shapewipe</span> <span class="n">position</span><span class="o">=</span><span class="mf">0.5</span> <span class="n">name</span><span class="o">=</span><span class="n">shape</span> <span class="o">!</span> <span class="n">videomixer</span> <span class="n">name</span><span class="o">=</span><span class="n">mixer</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">autovideosink</span>     <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">mask</span><span class="p">.</span><span class="n">png</span> <span class="o">!</span> <span class="n">typefind</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">videoscale</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">shape</span><span class="p">.</span><span class="n">mask_sink</span>    <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="n">snow</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="n">AYUV</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">640</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">480</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">mixer</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -225,6 +225,7 @@ can be added by the border property.</p>
 <a name="GstShapeWipe--border"></a><h3>The <code class="literal">“border”</code> property</h3>
 <pre class="programlisting">  “border”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Border of the mask.</p>
+<p>Owner: GstShapeWipe</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0</p>
@@ -234,6 +235,7 @@ can be added by the border property.</p>
 <a name="GstShapeWipe--position"></a><h3>The <code class="literal">“position”</code> property</h3>
 <pre class="programlisting">  “position”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Position of the mask.</p>
+<p>Owner: GstShapeWipe</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0</p>
@@ -241,6 +243,6 @@ can be added by the border property.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

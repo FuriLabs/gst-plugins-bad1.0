@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>videobox: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-videobalance.html" title="videobalance">
 <link rel="next" href="gst-plugins-good-plugins-videocrop.html" title="videocrop">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -89,8 +89,8 @@
 <a name="gst-plugins-good-plugins-videobox.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -144,8 +144,8 @@ but nothing stops you from doing so.</p>
       <tr>
         <td class="listing_lines" align="right"><pre>1
 2</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videotestsrc <span class="gtkdoc opt">!</span> videobox autocrop<span class="gtkdoc opt">=</span><span class="keyword">true</span> <span class="gtkdoc opt">!</span> \
-  <span class="string">&quot;video/x-raw, width=600, height=400&quot;</span> <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> ximagesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videotestsrc</span> <span class="o">!</span> <span class="n">videobox</span> <span class="n">autocrop</span><span class="o">=</span><span class="nb">true</span> <span class="o">!</span> \
+  <span class="s">&quot;video/x-raw, width=600, height=400&quot;</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">ximagesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -301,6 +301,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--alpha"></a><h3>The <code class="literal">“alpha”</code> property</h3>
 <pre class="programlisting">  “alpha”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Alpha value picture.</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 1</p>
@@ -310,6 +311,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--border-alpha"></a><h3>The <code class="literal">“border-alpha”</code> property</h3>
 <pre class="programlisting">  “border-alpha”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Alpha value of the border.</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 1</p>
@@ -319,6 +321,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--bottom"></a><h3>The <code class="literal">“bottom”</code> property</h3>
 <pre class="programlisting">  “bottom”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Pixels to box at bottom (&lt;0 = add a border).</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -327,6 +330,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--fill"></a><h3>The <code class="literal">“fill”</code> property</h3>
 <pre class="programlisting">  “fill”                     <a class="link" href="gst-plugins-good-plugins-videobox.html#GstVideoBoxFill" title="enum GstVideoBoxFill"><span class="type">GstVideoBoxFill</span></a></pre>
 <p>How to fill the borders.</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Black</p>
 </div>
@@ -335,6 +339,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--left"></a><h3>The <code class="literal">“left”</code> property</h3>
 <pre class="programlisting">  “left”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Pixels to box at left (&lt;0  = add a border).</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -343,6 +348,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--right"></a><h3>The <code class="literal">“right”</code> property</h3>
 <pre class="programlisting">  “right”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Pixels to box at right (&lt;0 = add a border).</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -351,6 +357,7 @@ but nothing stops you from doing so.</p>
 <a name="GstVideoBox--top"></a><h3>The <code class="literal">“top”</code> property</h3>
 <pre class="programlisting">  “top”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Pixels to box at top (&lt;0 = add a border).</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -360,6 +367,7 @@ but nothing stops you from doing so.</p>
 <pre class="programlisting">  “autocrop”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>If set to <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> videobox will automatically crop/pad the input
 video to be centered in the output.</p>
+<p>Owner: GstVideoBox</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -370,6 +378,6 @@ video to be centered in the output.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

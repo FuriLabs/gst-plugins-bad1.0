@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtpreddec: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpqdm2depay.html" title="rtpqdm2depay">
 <link rel="next" href="gst-plugins-good-plugins-rtpredenc.html" title="rtpredenc">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -59,8 +59,8 @@
 <a name="gst-plugins-good-plugins-rtpreddec.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -95,7 +95,7 @@ types of the RED packets.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> udpsrc port<span class="gtkdoc opt">=</span><span class="number">8888</span> caps<span class="gtkdoc opt">=</span><span class="string">&quot;application/x-rtp, payload=96, clock-rate=90000&quot;</span> <span class="gtkdoc opt">!</span> rtpreddec pt<span class="gtkdoc opt">=</span><span class="number">122</span> <span class="gtkdoc opt">!</span> rtpstorage size<span class="gtkdoc opt">-</span>time<span class="gtkdoc opt">=</span><span class="number">220000000</span> <span class="gtkdoc opt">!</span> rtpssrcdemux <span class="gtkdoc opt">!</span> application<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>rtp<span class="gtkdoc opt">,</span> payload<span class="gtkdoc opt">=</span><span class="number">96</span><span class="gtkdoc opt">,</span> clock<span class="gtkdoc opt">-</span>rate<span class="gtkdoc opt">=</span><span class="number">90000</span><span class="gtkdoc opt">,</span> media<span class="gtkdoc opt">=</span>video<span class="gtkdoc opt">,</span> encoding<span class="gtkdoc opt">-</span>name<span class="gtkdoc opt">=</span>H264 <span class="gtkdoc opt">!</span> rtpjitterbuffer <span class="keyword">do</span><span class="gtkdoc opt">-</span>lost<span class="gtkdoc opt">=</span><span class="number">1</span> latency<span class="gtkdoc opt">=</span><span class="number">200</span> <span class="gtkdoc opt">!</span>  rtpulpfecdec pt<span class="gtkdoc opt">=</span><span class="number">122</span> <span class="gtkdoc opt">!</span> rtph264depay <span class="gtkdoc opt">!</span> avdec_h264 <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> autovideosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">udpsrc</span> <span class="n">port</span><span class="o">=</span><span class="mi">8888</span> <span class="n">caps</span><span class="o">=</span><span class="s">&quot;application/x-rtp, payload=96, clock-rate=90000&quot;</span> <span class="o">!</span> <span class="n">rtpreddec</span> <span class="n">pt</span><span class="o">=</span><span class="mi">122</span> <span class="o">!</span> <span class="n">rtpstorage</span> <span class="n">size</span><span class="o">-</span><span class="n">time</span><span class="o">=</span><span class="mi">220000000</span> <span class="o">!</span> <span class="n">rtpssrcdemux</span> <span class="o">!</span> <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">rtp</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="mi">96</span><span class="p">,</span> <span class="n">clock</span><span class="o">-</span><span class="n">rate</span><span class="o">=</span><span class="mi">90000</span><span class="p">,</span> <span class="n">media</span><span class="o">=</span><span class="n">video</span><span class="p">,</span> <span class="n">encoding</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">H264</span> <span class="o">!</span> <span class="n">rtpjitterbuffer</span> <span class="k">do</span><span class="o">-</span><span class="n">lost</span><span class="o">=</span><span class="mi">1</span> <span class="n">latency</span><span class="o">=</span><span class="mi">200</span> <span class="o">!</span>  <span class="n">rtpulpfecdec</span> <span class="n">pt</span><span class="o">=</span><span class="mi">122</span> <span class="o">!</span> <span class="n">rtph264depay</span> <span class="o">!</span> <span class="n">avdec_h264</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">autovideosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -201,6 +201,7 @@ types of the RED packets.</p>
 <a name="GstRtpRedDec--pt"></a><h3>The <code class="literal">“pt”</code> property</h3>
 <pre class="programlisting">  “pt”                       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Payload type FEC packets.</p>
+<p>Owner: GstRtpRedDec</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [G_MAXULONG,127]</p>
 <p>Default value: -1</p>
@@ -210,12 +211,13 @@ types of the RED packets.</p>
 <a name="GstRtpRedDec--received"></a><h3>The <code class="literal">“received”</code> property</h3>
 <pre class="programlisting">  “received”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Count of received packets.</p>
+<p>Owner: GstRtpRedDec</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>speexenc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-speexdec.html" title="speexdec">
 <link rel="next" href="gst-plugins-good-plugins-splitfilesrc.html" title="splitfilesrc">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -101,8 +101,8 @@
 <a name="gst-plugins-good-plugins-speexenc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -139,7 +139,7 @@ Foundation</a>.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> speexenc <span class="gtkdoc opt">!</span> oggmux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>beep<span class="gtkdoc opt">.</span>ogg</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> <span class="n">speexenc</span> <span class="o">!</span> <span class="n">oggmux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">beep</span><span class="p">.</span><span class="n">ogg</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -248,6 +248,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--abr"></a><h3>The <code class="literal">“abr”</code> property</h3>
 <pre class="programlisting">  “abr”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Enable average bit-rate (0 = disabled).</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -257,6 +258,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--bitrate"></a><h3>The <code class="literal">“bitrate”</code> property</h3>
 <pre class="programlisting">  “bitrate”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Specify an encoding bit-rate (in bps). (0 = automatic).</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -266,6 +268,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--complexity"></a><h3>The <code class="literal">“complexity”</code> property</h3>
 <pre class="programlisting">  “complexity”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Set encoding complexity.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 3</p>
@@ -275,6 +278,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--dtx"></a><h3>The <code class="literal">“dtx”</code> property</h3>
 <pre class="programlisting">  “dtx”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable discontinuous transmission.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -283,6 +287,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--last-message"></a><h3>The <code class="literal">“last-message”</code> property</h3>
 <pre class="programlisting">  “last-message”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The last status message.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read</p>
 <p>Default value: NULL</p>
 </div>
@@ -291,6 +296,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--nframes"></a><h3>The <code class="literal">“nframes”</code> property</h3>
 <pre class="programlisting">  “nframes”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Number of frames per buffer.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 1</p>
@@ -300,6 +306,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--quality"></a><h3>The <code class="literal">“quality”</code> property</h3>
 <pre class="programlisting">  “quality”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Encoding quality.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [0,10]</p>
 <p>Default value: 8</p>
@@ -309,6 +316,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--vad"></a><h3>The <code class="literal">“vad”</code> property</h3>
 <pre class="programlisting">  “vad”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable voice activity detection.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -317,6 +325,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--vbr"></a><h3>The <code class="literal">“vbr”</code> property</h3>
 <pre class="programlisting">  “vbr”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable variable bit-rate.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -325,6 +334,7 @@ Foundation</a>.</p>
 <a name="GstSpeexEnc--mode"></a><h3>The <code class="literal">“mode”</code> property</h3>
 <pre class="programlisting">  “mode”                     <span class="type">GstSpeexEncMode</span></pre>
 <p>The encoding mode.</p>
+<p>Owner: GstSpeexEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: Auto</p>
 </div>
@@ -335,6 +345,6 @@ Foundation</a>.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

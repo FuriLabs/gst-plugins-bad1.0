@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>souphttpsrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-souphttpclientsink.html" title="souphttpclientsink">
 <link rel="next" href="gst-plugins-good-plugins-spectrum.html" title="spectrum">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -177,8 +177,8 @@
 <a name="gst-plugins-good-plugins-souphttpsrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -228,8 +228,8 @@ metadata and to determine the underlying media type.</p>
       <tr>
         <td class="listing_lines" align="right"><pre>1
 2</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v souphttpsrc location<span class="gtkdoc opt">=</span>https<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//some.server.org/index.html</span>
-    <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=/</span>home<span class="gtkdoc opt">/</span>joe<span class="gtkdoc opt">/</span>server<span class="gtkdoc opt">.</span>html</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">souphttpsrc</span> <span class="n">location</span><span class="o">=</span><span class="nl">https</span><span class="p">:</span><span class="c1">//some.server.org/index.html</span>
+    <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">joe</span><span class="o">/</span><span class="n">server</span><span class="p">.</span><span class="n">html</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -244,10 +244,10 @@ and writes it to a local file.
 2
 3
 4</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v souphttpsrc user<span class="gtkdoc opt">-</span>agent<span class="gtkdoc opt">=</span><span class="string">&quot;FooPlayer 0.99 beta&quot;</span>
-    automatic<span class="gtkdoc opt">-</span>redirect<span class="gtkdoc opt">=</span><span class="keyword">false</span> proxy<span class="gtkdoc opt">=</span>http<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//proxy.intranet.local:8080</span>
-    location<span class="gtkdoc opt">=</span>http<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//music.foobar.com/demo.mp3 ! mpgaudioparse</span>
-    <span class="gtkdoc opt">!</span> mpg123audiodec <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> autoaudiosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">souphttpsrc</span> <span class="n">user</span><span class="o">-</span><span class="n">agent</span><span class="o">=</span><span class="s">&quot;FooPlayer 0.99 beta&quot;</span>
+    <span class="n">automatic</span><span class="o">-</span><span class="n">redirect</span><span class="o">=</span><span class="nb">false</span> <span class="n">proxy</span><span class="o">=</span><span class="nl">http</span><span class="p">:</span><span class="c1">//proxy.intranet.local:8080</span>
+    <span class="n">location</span><span class="o">=</span><span class="nl">http</span><span class="p">:</span><span class="c1">//music.foobar.com/demo.mp3 ! mpgaudioparse</span>
+    <span class="o">!</span> <span class="n">mpg123audiodec</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">autoaudiosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -265,10 +265,10 @@ is set to a custom string instead of "GStreamer souphttpsrc."
 2
 3
 4</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v souphttpsrc location<span class="gtkdoc opt">=</span>http<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//10.11.12.13/mjpeg</span>
-    <span class="keyword">do</span><span class="gtkdoc opt">-</span>timestamp<span class="gtkdoc opt">=</span><span class="keyword">true</span> <span class="gtkdoc opt">!</span> multipartdemux
-    <span class="gtkdoc opt">!</span> image<span class="gtkdoc opt">/</span>jpeg<span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">640</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">480</span> <span class="gtkdoc opt">!</span> matroskamux
-    <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>mjpeg<span class="gtkdoc opt">.</span>mkv</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">souphttpsrc</span> <span class="n">location</span><span class="o">=</span><span class="nl">http</span><span class="p">:</span><span class="c1">//10.11.12.13/mjpeg</span>
+    <span class="k">do</span><span class="o">-</span><span class="n">timestamp</span><span class="o">=</span><span class="nb">true</span> <span class="o">!</span> <span class="n">multipartdemux</span>
+    <span class="o">!</span> <span class="n">image</span><span class="o">/</span><span class="n">jpeg</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">640</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">480</span> <span class="o">!</span> <span class="n">matroskamux</span>
+    <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">mjpeg</span><span class="p">.</span><span class="n">mkv</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -357,6 +357,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--automatic-redirect"></a><h3>The <code class="literal">“automatic-redirect”</code> property</h3>
 <pre class="programlisting">  “automatic-redirect”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Automatically follow HTTP redirects (HTTP Status Code 3xx).</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -365,6 +366,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--cookies"></a><h3>The <code class="literal">“cookies”</code> property</h3>
 <pre class="programlisting">  “cookies”                  <a href="/usr/share/gtk-doc/html/glib/glib-String-Utility-Functions.html#GStrv"><span class="type">GStrv</span></a></pre>
 <p>HTTP request cookies.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -372,6 +374,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--iradio-mode"></a><h3>The <code class="literal">“iradio-mode”</code> property</h3>
 <pre class="programlisting">  “iradio-mode”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable internet radio mode (ask server to send shoutcast/icecast metadata interleaved with the actual stream data).</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -380,6 +383,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--location"></a><h3>The <code class="literal">“location”</code> property</h3>
 <pre class="programlisting">  “location”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Location to read from.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -388,6 +392,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--proxy"></a><h3>The <code class="literal">“proxy”</code> property</h3>
 <pre class="programlisting">  “proxy”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>HTTP proxy server URI.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -396,14 +401,16 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--user-agent"></a><h3>The <code class="literal">“user-agent”</code> property</h3>
 <pre class="programlisting">  “user-agent”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Value of the User-Agent HTTP request header field.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
-<p>Default value: "GStreamer souphttpsrc 1.16.2 "</p>
+<p>Default value: "GStreamer souphttpsrc 1.16.3 "</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GstSoupHTTPSrc--is-live"></a><h3>The <code class="literal">“is-live”</code> property</h3>
 <pre class="programlisting">  “is-live”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Act like a live source.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -412,6 +419,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--proxy-id"></a><h3>The <code class="literal">“proxy-id”</code> property</h3>
 <pre class="programlisting">  “proxy-id”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>HTTP proxy URI user id for authentication.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -420,6 +428,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--proxy-pw"></a><h3>The <code class="literal">“proxy-pw”</code> property</h3>
 <pre class="programlisting">  “proxy-pw”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>HTTP proxy URI user password for authentication.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -428,6 +437,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--user-id"></a><h3>The <code class="literal">“user-id”</code> property</h3>
 <pre class="programlisting">  “user-id”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>HTTP location URI user id for authentication.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -436,6 +446,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--user-pw"></a><h3>The <code class="literal">“user-pw”</code> property</h3>
 <pre class="programlisting">  “user-pw”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>HTTP location URI user password for authentication.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 </div>
@@ -444,6 +455,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--extra-headers"></a><h3>The <code class="literal">“extra-headers”</code> property</h3>
 <pre class="programlisting">  “extra-headers”            <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#GstStructure-struct"><span class="type">GstStructure</span></a> *</pre>
 <p>Extra headers to append to the HTTP request.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -451,6 +463,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--timeout"></a><h3>The <code class="literal">“timeout”</code> property</h3>
 <pre class="programlisting">  “timeout”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Value in seconds to timeout a blocking I/O (0 = No timeout).</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 3600</p>
 <p>Default value: 15</p>
@@ -460,6 +473,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--compress"></a><h3>The <code class="literal">“compress”</code> property</h3>
 <pre class="programlisting">  “compress”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Allow compressed content encodings.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -468,6 +482,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--http-log-level"></a><h3>The <code class="literal">“http-log-level”</code> property</h3>
 <pre class="programlisting">  “http-log-level”           <a href="/usr/share/gtk-doc/html/libsoup-2.4/SoupLogger.html#SoupLoggerLogLevel"><span class="type">SoupLoggerLogLevel</span></a></pre>
 <p>Set log level for soup's HTTP session log.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: SOUP_LOGGER_LOG_HEADERS</p>
 </div>
@@ -476,6 +491,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--keep-alive"></a><h3>The <code class="literal">“keep-alive”</code> property</h3>
 <pre class="programlisting">  “keep-alive”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Use HTTP persistent connections.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -484,6 +500,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--retries"></a><h3>The <code class="literal">“retries”</code> property</h3>
 <pre class="programlisting">  “retries”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Maximum number of retries until giving up (-1=infinite).</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: 3</p>
@@ -493,6 +510,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--ssl-ca-file"></a><h3>The <code class="literal">“ssl-ca-file”</code> property</h3>
 <pre class="programlisting">  “ssl-ca-file”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Location of a SSL anchor CA file to use.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -501,6 +519,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--ssl-strict"></a><h3>The <code class="literal">“ssl-strict”</code> property</h3>
 <pre class="programlisting">  “ssl-strict”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Strict SSL certificate checking.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -509,6 +528,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--ssl-use-system-ca-file"></a><h3>The <code class="literal">“ssl-use-system-ca-file”</code> property</h3>
 <pre class="programlisting">  “ssl-use-system-ca-file”   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Use system CA file.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -517,6 +537,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--tls-database"></a><h3>The <code class="literal">“tls-database”</code> property</h3>
 <pre class="programlisting">  “tls-database”             <a href="/usr/share/gtk-doc/html/gio/GTlsDatabase.html#GTlsDatabase-struct"><span class="type">GTlsDatabase</span></a> *</pre>
 <p>TLS database with anchor certificate authorities used to validate the server certificate.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -524,6 +545,7 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--method"></a><h3>The <code class="literal">“method”</code> property</h3>
 <pre class="programlisting">  “method”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The HTTP method to use (GET, HEAD, OPTIONS, etc).</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -532,11 +554,12 @@ multiplexer to timestamp the frames in the resulting file.
 <a name="GstSoupHTTPSrc--tls-interaction"></a><h3>The <code class="literal">“tls-interaction”</code> property</h3>
 <pre class="programlisting">  “tls-interaction”          <a href="/usr/share/gtk-doc/html/gio/GTlsInteraction.html#GTlsInteraction-struct"><span class="type">GTlsInteraction</span></a> *</pre>
 <p>A GTlsInteraction object to be used when the connection or certificate database need to interact with the user.</p>
+<p>Owner: GstSoupHTTPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

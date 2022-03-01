@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtpdtmfsrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpdtmfmux.html" title="rtpdtmfmux">
 <link rel="next" href="gst-plugins-good-plugins-rtpdvdepay.html" title="rtpdvdepay">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -89,8 +89,8 @@
 <a name="gst-plugins-good-plugins-rtpdtmfsrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -277,6 +277,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--clock-rate"></a><h3>The <code class="literal">“clock-rate”</code> property</h3>
 <pre class="programlisting">  “clock-rate”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The clock-rate at which to generate the dtmf packets.</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 8000</p>
 </div>
@@ -285,6 +286,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--packet-redundancy"></a><h3>The <code class="literal">“packet-redundancy”</code> property</h3>
 <pre class="programlisting">  “packet-redundancy”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Number of packets to send to indicate start and stop dtmf events.</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,5]</p>
 <p>Default value: 1</p>
@@ -294,6 +296,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--pt"></a><h3>The <code class="literal">“pt”</code> property</h3>
 <pre class="programlisting">  “pt”                       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The payload type of the packets.</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 128</p>
 <p>Default value: 96</p>
@@ -303,6 +306,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--seqnum"></a><h3>The <code class="literal">“seqnum”</code> property</h3>
 <pre class="programlisting">  “seqnum”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The RTP sequence number of the last processed packet.</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -311,6 +315,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--seqnum-offset"></a><h3>The <code class="literal">“seqnum-offset”</code> property</h3>
 <pre class="programlisting">  “seqnum-offset”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Offset to add to all outgoing seqnum (-1 = random).</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -320,6 +325,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--ssrc"></a><h3>The <code class="literal">“ssrc”</code> property</h3>
 <pre class="programlisting">  “ssrc”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The SSRC of the packets (-1 == random).</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 4294967295</p>
 </div>
@@ -328,6 +334,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--timestamp"></a><h3>The <code class="literal">“timestamp”</code> property</h3>
 <pre class="programlisting">  “timestamp”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The RTP timestamp of the last processed packet.</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -336,6 +343,7 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 <a name="GstRTPDTMFSrc--timestamp-offset"></a><h3>The <code class="literal">“timestamp-offset”</code> property</h3>
 <pre class="programlisting">  “timestamp-offset”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Offset to add to all outgoing timestamps (-1 = random).</p>
+<p>Owner: GstRTPDTMFSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -347,6 +355,6 @@ READY state, then a "dtmf-event-dropped" message is posted on the
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

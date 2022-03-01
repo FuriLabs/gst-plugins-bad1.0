@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>flacenc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-flacdec.html" title="flacdec">
 <link rel="next" href="gst-plugins-good-plugins-flacparse.html" title="flacparse">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -125,8 +125,8 @@
 <a name="gst-plugins-good-plugins-flacenc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -162,7 +162,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> flacenc <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>beep<span class="gtkdoc opt">.</span>flac</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> <span class="n">flacenc</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">beep</span><span class="p">.</span><span class="n">flac</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -173,7 +173,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> cdparanoiasrc mode<span class="gtkdoc opt">=</span>continuous <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> flacenc <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>cd<span class="gtkdoc opt">.</span>flac</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">cdparanoiasrc</span> <span class="n">mode</span><span class="o">=</span><span class="n">continuous</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">flacenc</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">cd</span><span class="p">.</span><span class="n">flac</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -184,7 +184,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> cdparanoiasrc track<span class="gtkdoc opt">=</span><span class="number">5</span> <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> flacenc <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>track5<span class="gtkdoc opt">.</span>flac</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">cdparanoiasrc</span> <span class="n">track</span><span class="o">=</span><span class="mi">5</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">flacenc</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">track5</span><span class="p">.</span><span class="n">flac</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -317,6 +317,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--blocksize"></a><h3>The <code class="literal">“blocksize”</code> property</h3>
 <pre class="programlisting">  “blocksize”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Blocksize in samples.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: [16,65535]</p>
 <p>Default value: 4608</p>
@@ -326,6 +327,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--escape-coding"></a><h3>The <code class="literal">“escape-coding”</code> property</h3>
 <pre class="programlisting">  “escape-coding”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>search for escape codes in the entropy coding stage for slightly better compression.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -334,6 +336,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--exhaustive-model-search"></a><h3>The <code class="literal">“exhaustive-model-search”</code> property</h3>
 <pre class="programlisting">  “exhaustive-model-search”  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>do exhaustive search of LP coefficient quantization (expensive!).</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -342,6 +345,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--loose-mid-side-stereo"></a><h3>The <code class="literal">“loose-mid-side-stereo”</code> property</h3>
 <pre class="programlisting">  “loose-mid-side-stereo”    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Loose mid side stereo.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -350,6 +354,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--max-lpc-order"></a><h3>The <code class="literal">“max-lpc-order”</code> property</h3>
 <pre class="programlisting">  “max-lpc-order”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Max LPC order; 0 =&gt; use only fixed predictors.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 32</p>
 <p>Default value: 8</p>
@@ -359,6 +364,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--max-residual-partition-order"></a><h3>The <code class="literal">“max-residual-partition-order”</code> property</h3>
 <pre class="programlisting">  “max-residual-partition-order” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Max residual partition order (above 4 doesn't usually help much).</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 16</p>
 <p>Default value: 3</p>
@@ -368,6 +374,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--mid-side-stereo"></a><h3>The <code class="literal">“mid-side-stereo”</code> property</h3>
 <pre class="programlisting">  “mid-side-stereo”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Do mid side stereo (only for stereo input).</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
@@ -376,6 +383,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--min-residual-partition-order"></a><h3>The <code class="literal">“min-residual-partition-order”</code> property</h3>
 <pre class="programlisting">  “min-residual-partition-order” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Min residual partition order (above 4 doesn't usually help much).</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 16</p>
 <p>Default value: 3</p>
@@ -385,6 +393,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--qlp-coeff-prec-search"></a><h3>The <code class="literal">“qlp-coeff-prec-search”</code> property</h3>
 <pre class="programlisting">  “qlp-coeff-prec-search”    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>false = use qlp_coeff_precision, true = search around qlp_coeff_precision, take best.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -393,6 +402,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--qlp-coeff-precision"></a><h3>The <code class="literal">“qlp-coeff-precision”</code> property</h3>
 <pre class="programlisting">  “qlp-coeff-precision”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Precision in bits of quantized linear-predictor coefficients; 0 = automatic.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 32</p>
 <p>Default value: 0</p>
@@ -402,6 +412,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--quality"></a><h3>The <code class="literal">“quality”</code> property</h3>
 <pre class="programlisting">  “quality”                  <span class="type">GstFlacEncQuality</span></pre>
 <p>Speed versus compression tradeoff.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: 5 - Default</p>
 </div>
@@ -410,6 +421,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--rice-parameter-search-dist"></a><h3>The <code class="literal">“rice-parameter-search-dist”</code> property</h3>
 <pre class="programlisting">  “rice-parameter-search-dist” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>0 = try only calc'd parameter k; else try all [k-dist..k+dist] parameters, use best.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 15</p>
 <p>Default value: 0</p>
@@ -419,6 +431,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--streamable-subset"></a><h3>The <code class="literal">“streamable-subset”</code> property</h3>
 <pre class="programlisting">  “streamable-subset”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>true to limit encoder to generating a Subset stream, else false.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
@@ -427,6 +440,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--padding"></a><h3>The <code class="literal">“padding”</code> property</h3>
 <pre class="programlisting">  “padding”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Write a PADDING block with this length in bytes.</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: 0</p>
 </div>
@@ -435,6 +449,7 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 <a name="GstFlacEnc--seekpoints"></a><h3>The <code class="literal">“seekpoints”</code> property</h3>
 <pre class="programlisting">  “seekpoints”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Add SEEKTABLE metadata (if &gt; 0, number of entries, if &lt; 0, interval in sec).</p>
+<p>Owner: GstFlacEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &gt;= -2147483647</p>
 <p>Default value: -10</p>
@@ -446,6 +461,6 @@ a file, or embedded into containers such as oggmux or matroskamux.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

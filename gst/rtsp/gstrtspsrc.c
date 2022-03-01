@@ -2947,7 +2947,7 @@ gst_rtspsrc_handle_internal_src_query (GstPad * pad, GstObject * parent,
     GstQuery * query)
 {
   GstRTSPSrc *src;
-  gboolean res = TRUE;
+  gboolean res = FALSE;
 
   src = GST_RTSPSRC_CAST (gst_pad_get_element_private (pad));
 
@@ -2969,9 +2969,9 @@ gst_rtspsrc_handle_internal_src_query (GstPad * pad, GstObject * parent,
       switch (format) {
         case GST_FORMAT_TIME:
           gst_query_set_duration (query, format, src->segment.duration);
+          res = TRUE;
           break;
         default:
-          res = FALSE;
           break;
       }
       break;
@@ -2981,6 +2981,7 @@ gst_rtspsrc_handle_internal_src_query (GstPad * pad, GstObject * parent,
       /* we are live with a min latency of 0 and unlimited max latency, this
        * result will be updated by the session manager if there is any. */
       gst_query_set_latency (query, TRUE, 0, -1);
+      res = TRUE;
       break;
     }
     default:
@@ -6246,8 +6247,11 @@ gst_rtsp_src_receive_response (GstRTSPSrc * src, GstRTSPConnInfo * conninfo,
 {
   GstRTSPStatusCode thecode;
   gchar *content_base = NULL;
-  GstRTSPResult res = gst_rtspsrc_connection_receive (src, conninfo,
-      response, src->ptcp_timeout);
+  GstRTSPResult res;
+
+next:
+  res = gst_rtspsrc_connection_receive (src, conninfo, response,
+      src->ptcp_timeout);
 
   if (res < 0)
     goto receive_error;
@@ -6263,7 +6267,7 @@ gst_rtsp_src_receive_response (GstRTSPSrc * src, GstRTSPConnInfo * conninfo,
         goto handle_request_failed;
 
       /* Not a response, receive next message */
-      return gst_rtsp_src_receive_response (src, conninfo, response, code);
+      goto next;
     case GST_RTSP_MESSAGE_RESPONSE:
       /* ok, a response is good */
       GST_DEBUG_OBJECT (src, "received response message");
@@ -6274,13 +6278,13 @@ gst_rtsp_src_receive_response (GstRTSPSrc * src, GstRTSPConnInfo * conninfo,
       gst_rtspsrc_handle_data (src, response);
 
       /* Not a response, receive next message */
-      return gst_rtsp_src_receive_response (src, conninfo, response, code);
+      goto next;
     default:
       GST_WARNING_OBJECT (src, "ignoring unknown message type %d",
           response->type);
 
       /* Not a response, receive next message */
-      return gst_rtsp_src_receive_response (src, conninfo, response, code);
+      goto next;
   }
 
   thecode = response->type_data.response.code;
@@ -6387,6 +6391,10 @@ again:
         goto again;
     }
   }
+
+  if (res < 0)
+    goto receive_error;
+
   gst_rtsp_ext_list_after_send (src->extensions, request, response);
 
   return res;
@@ -6400,6 +6408,20 @@ send_error:
           ("Could not send message. (%s)", str));
     } else {
       GST_WARNING_OBJECT (src, "send interrupted");
+    }
+    g_free (str);
+    return res;
+  }
+
+receive_error:
+  {
+    gchar *str = gst_rtsp_strresult (res);
+
+    if (res != GST_RTSP_EINTR) {
+      GST_ELEMENT_ERROR (src, RESOURCE, READ, (NULL),
+          ("Could not receive message. (%s)", str));
+    } else {
+      GST_WARNING_OBJECT (src, "receive interrupted");
     }
     g_free (str);
     return res;
@@ -8750,7 +8772,9 @@ gst_rtspsrc_thread (GstRTSPSrc * src)
       src->pending_cmd = CMD_LOOP;
     } else {
       ParameterRequest *next_req;
-      req = g_queue_pop_head (&src->set_get_param_q);
+      if (cmd == CMD_GET_PARAMETER || cmd == CMD_SET_PARAMETER) {
+        req = g_queue_pop_head (&src->set_get_param_q);
+      }
       next_req = g_queue_peek_head (&src->set_get_param_q);
       src->pending_cmd = next_req ? next_req->cmd : CMD_LOOP;
     }
@@ -9123,6 +9147,8 @@ gst_rtspsrc_get_parameter (GstRTSPSrc * src, ParameterRequest * req)
 
   GST_DEBUG_OBJECT (src, "creating server get_parameter");
 
+  g_assert (req);
+
   if ((res = gst_rtspsrc_ensure_open (src, FALSE)) < 0)
     goto open_failed;
 
@@ -9239,6 +9265,8 @@ gst_rtspsrc_set_parameter (GstRTSPSrc * src, ParameterRequest * req)
   const gchar *control;
 
   GST_DEBUG_OBJECT (src, "creating server set_parameter");
+
+  g_assert (req);
 
   if ((res = gst_rtspsrc_ensure_open (src, FALSE)) < 0)
     goto open_failed;

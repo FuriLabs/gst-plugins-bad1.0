@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>deinterlace: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-dcaparse.html" title="dcaparse">
 <link rel="next" href="gst-plugins-good-plugins-deinterleave.html" title="deinterleave">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -85,8 +85,8 @@
 <a name="gst-plugins-good-plugins-deinterlace.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -138,7 +138,7 @@ For this different algorithms can be selected which will be described later.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v filesrc location<span class="gtkdoc opt">=/</span>path<span class="gtkdoc opt">/</span>to<span class="gtkdoc opt">/</span>file <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> deinterlace <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> autovideosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">file</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">deinterlace</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">autovideosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -421,6 +421,7 @@ For this different algorithms can be selected which will be described later.</p>
 <pre class="programlisting">  “fields”                   <a class="link" href="gst-plugins-good-plugins-deinterlace.html#GstDeinterlaceFields" title="enum GstDeinterlaceFields"><span class="type">GstDeinterlaceFields</span></a></pre>
 <p>This selects which fields should be output. If "all" is selected
 the output framerate will be double.</p>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: All fields</p>
 </div>
@@ -476,6 +477,7 @@ weavebff
 Progressive: Bottom Field First.  Bad quality, do not use.
 </p></li>
 </ul></div>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Linear</p>
 </div>
@@ -486,6 +488,7 @@ Progressive: Bottom Field First.  Bad quality, do not use.
 <p>This selects whether the deinterlacing methods should
 always be applied or if they should only be applied
 on content that has the "interlaced" flag on the caps.</p>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Auto detection (best effort)</p>
 </div>
@@ -494,6 +497,7 @@ on content that has the "interlaced" flag on the caps.</p>
 <a name="GstDeinterlace--tff"></a><h3>The <code class="literal">“tff”</code> property</h3>
 <pre class="programlisting">  “tff”                      <a class="link" href="gst-plugins-good-plugins-deinterlace.html#GstDeinterlaceFieldLayout" title="enum GstDeinterlaceFieldLayout"><span class="type">GstDeinterlaceFieldLayout</span></a></pre>
 <p>Deinterlace top field first.</p>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Auto detection</p>
 </div>
@@ -503,6 +507,7 @@ on content that has the "interlaced" flag on the caps.</p>
 <pre class="programlisting">  “drop-orphans”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>This selects whether to drop orphan fields at the beginning of telecine
 patterns in active locking mode.</p>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -512,6 +517,7 @@ patterns in active locking mode.</p>
 <pre class="programlisting">  “ignore-obscure”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>This selects whether to ignore obscure/rare telecine patterns.
 NTSC 2:3 pulldown variants are the only really common patterns.</p>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -522,12 +528,13 @@ NTSC 2:3 pulldown variants are the only really common patterns.</p>
 <p>This selects which approach to pattern locking is used which affects
 processing latency and accuracy of timestamp adjustment for telecine
 streams.</p>
+<p>Owner: GstDeinterlace</p>
 <p>Flags: Read / Write</p>
 <p>Default value: No pattern locking</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

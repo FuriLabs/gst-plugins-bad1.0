@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtpredenc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpreddec.html" title="rtpreddec">
 <link rel="next" href="gst-plugins-good-plugins-rtprtxqueue.html" title="rtprtxqueue">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -69,8 +69,8 @@
 <a name="gst-plugins-good-plugins-rtpredenc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -107,7 +107,7 @@ protection packets' payload types.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videotestsrc <span class="gtkdoc opt">!</span> x264enc <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>h264<span class="gtkdoc opt">,</span> profile<span class="gtkdoc opt">=</span>baseline <span class="gtkdoc opt">!</span> rtph264pay pt<span class="gtkdoc opt">=</span><span class="number">96</span> <span class="gtkdoc opt">!</span> rtpulpfecenc percentage<span class="gtkdoc opt">=</span><span class="number">100</span> pt<span class="gtkdoc opt">=</span><span class="number">122</span> <span class="gtkdoc opt">!</span> rtpredenc pt<span class="gtkdoc opt">=</span><span class="number">122</span> distance<span class="gtkdoc opt">=</span><span class="number">2</span> <span class="gtkdoc opt">!</span> identity drop<span class="gtkdoc opt">-</span>probability<span class="gtkdoc opt">=</span><span class="number">0.05</span> <span class="gtkdoc opt">!</span> udpsink port<span class="gtkdoc opt">=</span><span class="number">8888</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videotestsrc</span> <span class="o">!</span> <span class="n">x264enc</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">h264</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">baseline</span> <span class="o">!</span> <span class="n">rtph264pay</span> <span class="n">pt</span><span class="o">=</span><span class="mi">96</span> <span class="o">!</span> <span class="n">rtpulpfecenc</span> <span class="n">percentage</span><span class="o">=</span><span class="mi">100</span> <span class="n">pt</span><span class="o">=</span><span class="mi">122</span> <span class="o">!</span> <span class="n">rtpredenc</span> <span class="n">pt</span><span class="o">=</span><span class="mi">122</span> <span class="n">distance</span><span class="o">=</span><span class="mi">2</span> <span class="o">!</span> <span class="n">identity</span> <span class="n">drop</span><span class="o">-</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.05</span> <span class="o">!</span> <span class="n">udpsink</span> <span class="n">port</span><span class="o">=</span><span class="mi">8888</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -213,6 +213,7 @@ protection packets' payload types.</p>
 <a name="GstRtpRedEnc--allow-no-red-blocks"></a><h3>The <code class="literal">“allow-no-red-blocks”</code> property</h3>
 <pre class="programlisting">  “allow-no-red-blocks”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>true - can produce RED packets even without redundant blocks (distance==0) false - RED packets will be produced only if distance&gt;0.</p>
+<p>Owner: GstRtpRedEnc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -221,6 +222,7 @@ protection packets' payload types.</p>
 <a name="GstRtpRedEnc--distance"></a><h3>The <code class="literal">“distance”</code> property</h3>
 <pre class="programlisting">  “distance”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Tells which media packet to use as a redundant block (0 - no redundant blocks, 1 to use previous packet, 2 to use the packet before previous, etc.).</p>
+<p>Owner: GstRtpRedEnc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -229,6 +231,7 @@ protection packets' payload types.</p>
 <a name="GstRtpRedEnc--pt"></a><h3>The <code class="literal">“pt”</code> property</h3>
 <pre class="programlisting">  “pt”                       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Payload type FEC packets (-1 disable).</p>
+<p>Owner: GstRtpRedEnc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,127]</p>
 <p>Default value: 0</p>
@@ -238,12 +241,13 @@ protection packets' payload types.</p>
 <a name="GstRtpRedEnc--sent"></a><h3>The <code class="literal">“sent”</code> property</h3>
 <pre class="programlisting">  “sent”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Count of sent packets.</p>
+<p>Owner: GstRtpRedEnc</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

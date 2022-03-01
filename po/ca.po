@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 0.10.28.2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2012-01-01 14:19+0100\n"
 "Last-Translator: Gil Forcada <gforcada@gnome.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -23,6 +23,10 @@ msgid "Jack server not found"
 msgstr ""
 
 msgid "Failed to decode JPEG image"
+msgstr "Ha fallat en descodificar la imatge JPEG"
+
+#, fuzzy
+msgid "Failed to read memory"
 msgstr "Ha fallat en descodificar la imatge JPEG"
 
 msgid ""
@@ -186,6 +190,10 @@ msgid "The driver of device '%s' does not support any known IO method."
 msgstr ""
 "El controlador del dispositiu «%s» no és compatible amb cap mètode de "
 "captura conegut."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "La mida de l'àtom no és vàlida."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

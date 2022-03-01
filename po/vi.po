@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.12.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2017-05-05 06:52+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
@@ -27,6 +27,10 @@ msgstr "Không tìm thấy máy phục vụ Jack"
 
 msgid "Failed to decode JPEG image"
 msgstr "Gặp lỗi khi giải mã ảnh JPEG"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "Gặp lỗi khi cấp phát bộ nhớ theo yêu cầu."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -185,6 +189,10 @@ msgstr "Trình điều khiển của thiết bị “%s” không hỗ trợ ph�
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr ""
 "Trình điều khiển của thiết bị “%s” không hỗ trợ phương pháp VR đã biết nào."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Kích thước nguyên tử (atom) không hợp lệ."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

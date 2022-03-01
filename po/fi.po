@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 0.10.25.3\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2010-11-17 23:03+0200\n"
 "Last-Translator: Tommi Vainikainen <Tommi.Vainikainen@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -25,6 +25,10 @@ msgid "Jack server not found"
 msgstr ""
 
 msgid "Failed to decode JPEG image"
+msgstr "JPEG-kuvan purku epäonnistui"
+
+#, fuzzy
+msgid "Failed to read memory"
 msgstr "JPEG-kuvan purku epäonnistui"
 
 msgid ""
@@ -184,6 +188,9 @@ msgstr "Laitteen ”%s” ajuri ei tue mitään tunnettua kaappaustapaa."
 #, fuzzy, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Laitteen ”%s” ajuri ei tue mitään tunnettua kaappaustapaa."
+
+msgid "Invalid caps"
+msgstr ""
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

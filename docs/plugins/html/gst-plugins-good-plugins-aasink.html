@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>aasink: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-aacparse.html" title="aacparse">
 <link rel="next" href="gst-plugins-good-plugins-ac3parse.html" title="ac3parse">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -104,8 +104,8 @@
 <a name="gst-plugins-good-plugins-aasink.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -134,7 +134,7 @@
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>avi <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> aasink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">avi</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">aasink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -145,7 +145,7 @@
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>avi <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> aasink driver<span class="gtkdoc opt">=</span>curses</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">avi</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">aasink</span> <span class="n">driver</span><span class="o">=</span><span class="n">curses</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -226,6 +226,7 @@
 <a name="GstAASink--brightness"></a><h3>The <code class="literal">“brightness”</code> property</h3>
 <pre class="programlisting">  “brightness”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>brightness.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -234,6 +235,7 @@
 <a name="GstAASink--contrast"></a><h3>The <code class="literal">“contrast”</code> property</h3>
 <pre class="programlisting">  “contrast”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>contrast.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -242,6 +244,7 @@
 <a name="GstAASink--dither"></a><h3>The <code class="literal">“dither”</code> property</h3>
 <pre class="programlisting">  “dither”                   <span class="type">GstAASinkDitherers</span></pre>
 <p>dither.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: no dithering</p>
 </div>
@@ -250,6 +253,7 @@
 <a name="GstAASink--driver"></a><h3>The <code class="literal">“driver”</code> property</h3>
 <pre class="programlisting">  “driver”                   <span class="type">GstAASinkDrivers</span></pre>
 <p>driver.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: X11 driver 1.1</p>
 </div>
@@ -258,6 +262,7 @@
 <a name="GstAASink--frame-time"></a><h3>The <code class="literal">“frame-time”</code> property</h3>
 <pre class="programlisting">  “frame-time”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>frame time.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -266,6 +271,7 @@
 <a name="GstAASink--frames-displayed"></a><h3>The <code class="literal">“frames-displayed”</code> property</h3>
 <pre class="programlisting">  “frames-displayed”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>frames displayed.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -274,6 +280,7 @@
 <a name="GstAASink--gamma"></a><h3>The <code class="literal">“gamma”</code> property</h3>
 <pre class="programlisting">  “gamma”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>gamma.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,5]</p>
 <p>Default value: 1</p>
@@ -283,6 +290,7 @@
 <a name="GstAASink--height"></a><h3>The <code class="literal">“height”</code> property</h3>
 <pre class="programlisting">  “height”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>height.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -291,6 +299,7 @@
 <a name="GstAASink--inversion"></a><h3>The <code class="literal">“inversion”</code> property</h3>
 <pre class="programlisting">  “inversion”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>inversion.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -299,6 +308,7 @@
 <a name="GstAASink--randomval"></a><h3>The <code class="literal">“randomval”</code> property</h3>
 <pre class="programlisting">  “randomval”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>randomval.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -307,6 +317,7 @@
 <a name="GstAASink--width"></a><h3>The <code class="literal">“width”</code> property</h3>
 <pre class="programlisting">  “width”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>width.</p>
+<p>Owner: GstAASink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -317,6 +328,6 @@
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

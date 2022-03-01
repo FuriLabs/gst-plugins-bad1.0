@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>interleave: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-imagefreeze.html" title="imagefreeze">
 <link rel="next" href="gst-plugins-good-plugins-ismlmux.html" title="ismlmux">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -60,8 +60,8 @@
 <a name="gst-plugins-good-plugins-interleave.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -95,7 +95,7 @@ caps is _not_ supported yet.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span>file<span class="gtkdoc opt">.</span>mp3 <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> <span class="string">&quot;audio/x-raw,channels=2&quot;</span> <span class="gtkdoc opt">!</span> deinterleave name<span class="gtkdoc opt">=</span>d  interleave name<span class="gtkdoc opt">=</span>i <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> wavenc <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>wav    d<span class="gtkdoc opt">.</span>src_0 <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> i<span class="gtkdoc opt">.</span>sink_1    d<span class="gtkdoc opt">.</span>src_1 <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> i<span class="gtkdoc opt">.</span>sink_0</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">file</span><span class="p">.</span><span class="n">mp3</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="s">&quot;audio/x-raw,channels=2&quot;</span> <span class="o">!</span> <span class="n">deinterleave</span> <span class="n">name</span><span class="o">=</span><span class="n">d</span>  <span class="n">interleave</span> <span class="n">name</span><span class="o">=</span><span class="n">i</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">wavenc</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">wav</span>    <span class="n">d</span><span class="p">.</span><span class="n">src_0</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">i</span><span class="p">.</span><span class="n">sink_1</span>    <span class="n">d</span><span class="p">.</span><span class="n">src_1</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">i</span><span class="p">.</span><span class="n">sink_0</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -108,7 +108,7 @@ exchanged.
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> interleave name<span class="gtkdoc opt">=</span>i <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> wavenc <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>file<span class="gtkdoc opt">.</span>wav  filesrc location<span class="gtkdoc opt">=</span>file1<span class="gtkdoc opt">.</span>wav <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> <span class="string">&quot;audio/x-raw,channels=1,channel-mask=(bitmask)0x1&quot;</span> <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> i<span class="gtkdoc opt">.</span>sink_0   filesrc location<span class="gtkdoc opt">=</span>file2<span class="gtkdoc opt">.</span>wav <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> <span class="string">&quot;audio/x-raw,channels=1,channel-mask=(bitmask)0x2&quot;</span> <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> i<span class="gtkdoc opt">.</span>sink_1</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">interleave</span> <span class="n">name</span><span class="o">=</span><span class="n">i</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">wavenc</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">file</span><span class="p">.</span><span class="n">wav</span>  <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">file1</span><span class="p">.</span><span class="n">wav</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="s">&quot;audio/x-raw,channels=1,channel-mask=(bitmask)0x1&quot;</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">i</span><span class="p">.</span><span class="n">sink_0</span>   <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">file2</span><span class="p">.</span><span class="n">wav</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="s">&quot;audio/x-raw,channels=1,channel-mask=(bitmask)0x2&quot;</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">i</span><span class="p">.</span><span class="n">sink_1</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -223,6 +223,7 @@ is the position of the n-th sink pad.</p>
 <p>These channel positions will only be used if they're valid and the
 number of elements is the same as the number of channels. If this
 is not given a NONE layout will be used.</p>
+<p>Owner: GstInterleave</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -233,6 +234,7 @@ is not given a NONE layout will be used.</p>
 positions will be taken from the input caps if valid channel positions for
 the output can be constructed from them. If this is set to <a href="/usr/share/gtk-doc/html/glib/glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> setting the
 channel-positions property overwrites this property again.</p>
+<p>Owner: GstInterleave</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -243,6 +245,6 @@ channel-positions property overwrites this property again.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

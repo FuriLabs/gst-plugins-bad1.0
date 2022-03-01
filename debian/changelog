@@ -1,4 +1,4 @@
-gst-plugins-good1.0 (1.16.3-0ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-good1.0 (1.16.3-0ubuntu1) focal; urgency=medium
 
   * New upstream stable release (LP: #1962135)
 

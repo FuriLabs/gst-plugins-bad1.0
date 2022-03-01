@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>scaletempo: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-sbcparse.html" title="sbcparse">
 <link rel="next" href="gst-plugins-good-plugins-shagadelictv.html" title="shagadelictv">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -69,8 +69,8 @@
 <a name="gst-plugins-good-plugins-scaletempo.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -105,9 +105,9 @@ Inspired by SoundTouch library by Olli Parviainen</p>
         <td class="listing_lines" align="right"><pre>1
 2
 3</pre></td>
-        <td class="listing_code"><pre class="programlisting">filesrc location<span class="gtkdoc opt">=</span>media<span class="gtkdoc opt">.</span>ext <span class="gtkdoc opt">!</span> decodebin name<span class="gtkdoc opt">=</span>d \
-    d<span class="gtkdoc opt">. !</span> queue <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> scaletempo <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> autoaudiosink \
-    d<span class="gtkdoc opt">. !</span> queue <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> autovideosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">media</span><span class="p">.</span><span class="n">ext</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="n">name</span><span class="o">=</span><span class="n">d</span> \
+    <span class="n">d</span><span class="p">.</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">scaletempo</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">autoaudiosink</span> \
+    <span class="n">d</span><span class="p">.</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">autovideosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -121,7 +121,7 @@ OR
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">playbin uri<span class="gtkdoc opt">=...</span> audio_sink<span class="gtkdoc opt">=</span><span class="string">&quot;scaletempo ! audioconvert ! audioresample ! autoaudiosink&quot;</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">playbin</span> <span class="n">uri</span><span class="o">=</span><span class="p">...</span> <span class="n">audio_sink</span><span class="o">=</span><span class="s">&quot;scaletempo ! audioconvert ! audioresample ! autoaudiosink&quot;</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -259,6 +259,7 @@ the algoritm looks.
 <a name="GstScaletempo--overlap"></a><h3>The <code class="literal">“overlap”</code> property</h3>
 <pre class="programlisting">  “overlap”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Percentage of stride to overlap.</p>
+<p>Owner: GstScaletempo</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 0.2</p>
@@ -268,6 +269,7 @@ the algoritm looks.
 <a name="GstScaletempo--rate"></a><h3>The <code class="literal">“rate”</code> property</h3>
 <pre class="programlisting">  “rate”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Current playback rate.</p>
+<p>Owner: GstScaletempo</p>
 <p>Flags: Read</p>
 <p>Allowed values: [-2.14748e+09,2.14748e+09]</p>
 <p>Default value: 1</p>
@@ -277,6 +279,7 @@ the algoritm looks.
 <a name="GstScaletempo--search"></a><h3>The <code class="literal">“search”</code> property</h3>
 <pre class="programlisting">  “search”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Length in milliseconds to search for best overlap position.</p>
+<p>Owner: GstScaletempo</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 500</p>
 <p>Default value: 14</p>
@@ -286,6 +289,7 @@ the algoritm looks.
 <a name="GstScaletempo--stride"></a><h3>The <code class="literal">“stride”</code> property</h3>
 <pre class="programlisting">  “stride”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Length in milliseconds to output each stride.</p>
+<p>Owner: GstScaletempo</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,5000]</p>
 <p>Default value: 30</p>
@@ -293,6 +297,6 @@ the algoritm looks.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.15.1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2019-11-23 22:07+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs@fsf.hu>\n"
 "Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -28,6 +28,10 @@ msgstr "Jack kiszolgáló nem található"
 
 msgid "Failed to decode JPEG image"
 msgstr "A JPEG kép visszafejtése meghiúsult"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "Nem sikerült lefoglalni a szükséges memóriát."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -193,6 +197,10 @@ msgstr "A(z) „%s” eszköz illesztőprogramja nem támogatja a(z) %d. IO mód
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr ""
 "A(z) „%s” eszköz illesztőprogramja nem támogat egyetlen ismert IO módot sem."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Érvénytelen atom méret."
 
 #, c-format
 msgid "Device '%s' has no supported format"

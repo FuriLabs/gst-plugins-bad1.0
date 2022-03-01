@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>flvmux: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-flvdemux.html" title="flvdemux">
 <link rel="next" href="gst-plugins-good-plugins-flxdec.html" title="flxdec">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -67,8 +67,8 @@
 <a name="gst-plugins-good-plugins-flvmux.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -102,7 +102,7 @@ GstFlvMux implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v flvmux name<span class="gtkdoc opt">=</span>mux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>flv  audiotestsrc samplesperbuffer<span class="gtkdoc opt">=</span><span class="number">44100</span> num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">10</span> <span class="gtkdoc opt">!</span> faac <span class="gtkdoc opt">!</span> mux<span class="gtkdoc opt">.</span>  videotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">250</span> <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>framerate<span class="gtkdoc opt">=</span><span class="number">25</span><span class="gtkdoc opt">/</span><span class="number">1</span> <span class="gtkdoc opt">!</span> x264enc <span class="gtkdoc opt">!</span> mux<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">flvmux</span> <span class="n">name</span><span class="o">=</span><span class="n">mux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">flv</span>  <span class="n">audiotestsrc</span> <span class="n">samplesperbuffer</span><span class="o">=</span><span class="mi">44100</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">10</span> <span class="o">!</span> <span class="n">faac</span> <span class="o">!</span> <span class="n">mux</span><span class="p">.</span>  <span class="n">videotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">250</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">framerate</span><span class="o">=</span><span class="mi">25</span><span class="o">/</span><span class="mi">1</span> <span class="o">!</span> <span class="n">x264enc</span> <span class="o">!</span> <span class="n">mux</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -276,6 +276,7 @@ GstFlvMux implements
 <pre class="programlisting">  “streamable”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>If True, the output will be streaming friendly. (ie without indexes and
 duration)</p>
+<p>Owner: GstFlvMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -284,6 +285,7 @@ duration)</p>
 <a name="GstFlvMux--metadatacreator"></a><h3>The <code class="literal">“metadatacreator”</code> property</h3>
 <pre class="programlisting">  “metadatacreator”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The value of metadatacreator in the meta packet.</p>
+<p>Owner: GstFlvMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -292,12 +294,13 @@ duration)</p>
 <a name="GstFlvMux--encoder"></a><h3>The <code class="literal">“encoder”</code> property</h3>
 <pre class="programlisting">  “encoder”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The value of encoder in the meta packet.</p>
+<p>Owner: GstFlvMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

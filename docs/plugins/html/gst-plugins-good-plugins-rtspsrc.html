@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtspsrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpxqtdepay.html" title="rtpxqtdepay">
 <link rel="next" href="gst-plugins-good-plugins-sbcparse.html" title="sbcparse">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -268,9 +268,9 @@
 <a name="gst-plugins-good-plugins-rtspsrc.signals"></a><h2>Signals</h2>
 <div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody>
 <tr>
@@ -336,8 +336,8 @@
 <a name="gst-plugins-good-plugins-rtspsrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -395,7 +395,7 @@ triggered by RTCP.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> rtspsrc location<span class="gtkdoc opt">=</span>rtsp<span class="gtkdoc opt">:</span><span class="gtkdoc slc">//some.server/url ! fakesink</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">rtspsrc</span> <span class="n">location</span><span class="o">=</span><span class="nl">rtsp</span><span class="p">:</span><span class="c1">//some.server/url ! fakesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -482,6 +482,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--debug"></a><h3>The <code class="literal">“debug”</code> property</h3>
 <pre class="programlisting">  “debug”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Dump request and response messages to stdout(DEPRECATED: Printed all RTSP message to gstreamer log as 'log' level).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -490,6 +491,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--location"></a><h3>The <code class="literal">“location”</code> property</h3>
 <pre class="programlisting">  “location”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Location of the RTSP url to read.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -498,6 +500,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--protocols"></a><h3>The <code class="literal">“protocols”</code> property</h3>
 <pre class="programlisting">  “protocols”                <a href="/usr/share/gtk-doc/html/gst-plugins-base-libs-1.0/gst-plugins-base-libs-GstRTSPRange.html#GstRTSPLowerTrans"><span class="type">GstRTSPLowerTrans</span></a></pre>
 <p>Allowed lower transport protocols.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: GST_RTSP_LOWER_TRANS_UDP|GST_RTSP_LOWER_TRANS_UDP_MCAST|GST_RTSP_LOWER_TRANS_TCP</p>
 </div>
@@ -506,6 +509,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--retry"></a><h3>The <code class="literal">“retry”</code> property</h3>
 <pre class="programlisting">  “retry”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Max number of retries when allocating RTP ports.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 65535</p>
 <p>Default value: 20</p>
@@ -515,6 +519,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--timeout"></a><h3>The <code class="literal">“timeout”</code> property</h3>
 <pre class="programlisting">  “timeout”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Retry TCP transport after UDP timeout microseconds (0 = disabled).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 5000000</p>
 </div>
@@ -523,6 +528,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--latency"></a><h3>The <code class="literal">“latency”</code> property</h3>
 <pre class="programlisting">  “latency”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Amount of ms to buffer.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 2000</p>
 </div>
@@ -531,6 +537,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--tcp-timeout"></a><h3>The <code class="literal">“tcp-timeout”</code> property</h3>
 <pre class="programlisting">  “tcp-timeout”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Fail after timeout microseconds on TCP connections (0 = disabled).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 20000000</p>
 </div>
@@ -539,6 +546,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--connection-speed"></a><h3>The <code class="literal">“connection-speed”</code> property</h3>
 <pre class="programlisting">  “connection-speed”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Network connection speed in kbps (0 = unknown).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 18446744073709551</p>
 <p>Default value: 0</p>
@@ -548,6 +556,7 @@ fakesink.</p>
 <a name="GstRTSPSrc--nat-method"></a><h3>The <code class="literal">“nat-method”</code> property</h3>
 <pre class="programlisting">  “nat-method”               <span class="type">GstRTSPNatMethod</span></pre>
 <p>Method to use for traversing firewalls and NAT.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Send Dummy packets</p>
 </div>
@@ -557,6 +566,7 @@ fakesink.</p>
 <pre class="programlisting">  “do-rtcp”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable RTCP support. Some old server don't like RTCP and then this property
 needs to be set to FALSE.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -566,6 +576,7 @@ needs to be set to FALSE.</p>
 <pre class="programlisting">  “proxy”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Set the proxy parameters. This has to be a string of the format
 http://host[:port].</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -574,6 +585,7 @@ http://host[:port].</p>
 <a name="GstRTSPSrc--rtp-blocksize"></a><h3>The <code class="literal">“rtp-blocksize”</code> property</h3>
 <pre class="programlisting">  “rtp-blocksize”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>RTP package size to suggest to server.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 65536</p>
 <p>Default value: 0</p>
@@ -583,6 +595,7 @@ http://host[:port].</p>
 <a name="GstRTSPSrc--user-id"></a><h3>The <code class="literal">“user-id”</code> property</h3>
 <pre class="programlisting">  “user-id”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>RTSP location URI user id for authentication.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -591,6 +604,7 @@ http://host[:port].</p>
 <a name="GstRTSPSrc--user-pw"></a><h3>The <code class="literal">“user-pw”</code> property</h3>
 <pre class="programlisting">  “user-pw”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>RTSP location URI user password for authentication.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -599,6 +613,7 @@ http://host[:port].</p>
 <a name="GstRTSPSrc--buffer-mode"></a><h3>The <code class="literal">“buffer-mode”</code> property</h3>
 <pre class="programlisting">  “buffer-mode”              <span class="type">GstRTSPSrcBufferMode</span></pre>
 <p>Control the buffering and timestamping mode used by the jitterbuffer.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Choose mode depending on stream live</p>
 </div>
@@ -608,6 +623,7 @@ http://host[:port].</p>
 <pre class="programlisting">  “port-range”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Configure the client port numbers that can be used to receive RTP and
 RTCP.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -616,6 +632,7 @@ RTCP.</p>
 <a name="GstRTSPSrc--udp-buffer-size"></a><h3>The <code class="literal">“udp-buffer-size”</code> property</h3>
 <pre class="programlisting">  “udp-buffer-size”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Size of the kernel UDP receive buffer in bytes.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 524288</p>
@@ -625,6 +642,7 @@ RTCP.</p>
 <a name="GstRTSPSrc--short-header"></a><h3>The <code class="literal">“short-header”</code> property</h3>
 <pre class="programlisting">  “short-header”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Only send the basic RTSP headers for broken encoders.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -634,6 +652,7 @@ RTCP.</p>
 <pre class="programlisting">  “do-rtsp-keep-alive”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable RTSP keep alive support. Some old server don't like RTSP
 keep alive and then this property needs to be set to FALSE.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -642,6 +661,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--drop-on-latency"></a><h3>The <code class="literal">“drop-on-latency”</code> property</h3>
 <pre class="programlisting">  “drop-on-latency”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Tells the jitterbuffer to never exceed the given latency in size.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -650,6 +670,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--probation"></a><h3>The <code class="literal">“probation”</code> property</h3>
 <pre class="programlisting">  “probation”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Consecutive packet sequence numbers to accept the source.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 2</p>
 </div>
@@ -658,6 +679,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--udp-reconnect"></a><h3>The <code class="literal">“udp-reconnect”</code> property</h3>
 <pre class="programlisting">  “udp-reconnect”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Reconnect to the server if RTSP connection is closed when doing UDP.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -667,6 +689,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <pre class="programlisting">  “proxy-id”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Sets the proxy URI user id for authentication. If the URI set via the
 "proxy" property contains a user-id already, that will take precedence.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 <p class="since">Since: 1.2</p>
@@ -677,6 +700,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <pre class="programlisting">  “proxy-pw”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Sets the proxy URI password for authentication. If the URI set via the
 "proxy" property contains a password already, that will take precedence.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
 <p class="since">Since: 1.2</p>
@@ -686,6 +710,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--multicast-iface"></a><h3>The <code class="literal">“multicast-iface”</code> property</h3>
 <pre class="programlisting">  “multicast-iface”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The network interface on which to join the multicast group.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -694,6 +719,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--ntp-sync"></a><h3>The <code class="literal">“ntp-sync”</code> property</h3>
 <pre class="programlisting">  “ntp-sync”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Synchronize received streams to the NTP clock.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -702,6 +728,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--use-pipeline-clock"></a><h3>The <code class="literal">“use-pipeline-clock”</code> property</h3>
 <pre class="programlisting">  “use-pipeline-clock”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Use the pipeline running-time to set the NTP time in the RTCP SR messages(DEPRECATED: Use ntp-time-source property).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -710,6 +737,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--sdes"></a><h3>The <code class="literal">“sdes”</code> property</h3>
 <pre class="programlisting">  “sdes”                     <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#GstStructure-struct"><span class="type">GstStructure</span></a> *</pre>
 <p>The SDES items of this session.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -717,6 +745,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--tls-database"></a><h3>The <code class="literal">“tls-database”</code> property</h3>
 <pre class="programlisting">  “tls-database”             <a href="/usr/share/gtk-doc/html/gio/GTlsDatabase.html#GTlsDatabase-struct"><span class="type">GTlsDatabase</span></a> *</pre>
 <p>TLS database with anchor certificate authorities used to validate the server certificate.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -724,6 +753,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--tls-validation-flags"></a><h3>The <code class="literal">“tls-validation-flags”</code> property</h3>
 <pre class="programlisting">  “tls-validation-flags”     <a href="/usr/share/gtk-doc/html/gio/gio-TLS-Overview.html#GTlsCertificateFlags"><span class="type">GTlsCertificateFlags</span></a></pre>
 <p>TLS certificate validation flags used to validate the server certificate.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: G_TLS_CERTIFICATE_UNKNOWN_CA|G_TLS_CERTIFICATE_BAD_IDENTITY|G_TLS_CERTIFICATE_NOT_ACTIVATED|G_TLS_CERTIFICATE_EXPIRED|G_TLS_CERTIFICATE_REVOKED|G_TLS_CERTIFICATE_INSECURE|G_TLS_CERTIFICATE_GENERIC_ERROR</p>
 </div>
@@ -732,6 +762,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--do-retransmission"></a><h3>The <code class="literal">“do-retransmission”</code> property</h3>
 <pre class="programlisting">  “do-retransmission”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Ask the server to retransmit lost packets.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -740,6 +771,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--tls-interaction"></a><h3>The <code class="literal">“tls-interaction”</code> property</h3>
 <pre class="programlisting">  “tls-interaction”          <a href="/usr/share/gtk-doc/html/gio/GTlsInteraction.html#GTlsInteraction-struct"><span class="type">GTlsInteraction</span></a> *</pre>
 <p>A GTlsInteraction object to promt the user for password or certificate.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -747,6 +779,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--ntp-time-source"></a><h3>The <code class="literal">“ntp-time-source”</code> property</h3>
 <pre class="programlisting">  “ntp-time-source”          <span class="type">GstRTSPSrcNtpTimeSource</span></pre>
 <p>NTP time source for RTCP packets.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NTP time based on realtime clock</p>
 </div>
@@ -755,14 +788,16 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--user-agent"></a><h3>The <code class="literal">“user-agent”</code> property</h3>
 <pre class="programlisting">  “user-agent”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The User-Agent string to send to the server.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
-<p>Default value: "GStreamer/1.16.2"</p>
+<p>Default value: "GStreamer/1.16.3"</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GstRTSPSrc--max-rtcp-rtp-time-diff"></a><h3>The <code class="literal">“max-rtcp-rtp-time-diff”</code> property</h3>
 <pre class="programlisting">  “max-rtcp-rtp-time-diff”   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Maximum amount of time in ms that the RTP time in RTCP SRs is allowed to be ahead (-1 disabled).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: 1000</p>
@@ -772,6 +807,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--rfc7273-sync"></a><h3>The <code class="literal">“rfc7273-sync”</code> property</h3>
 <pre class="programlisting">  “rfc7273-sync”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Synchronize received streams to the RFC7273 clock (requires clock and offset to be provided).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -780,6 +816,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <a name="GstRTSPSrc--default-rtsp-version"></a><h3>The <code class="literal">“default-rtsp-version”</code> property</h3>
 <pre class="programlisting">  “default-rtsp-version”     <a href="/usr/share/gtk-doc/html/gst-plugins-base-libs-1.0/gst-plugins-base-libs-GstRtspdefs.html#GstRTSPVersion"><span class="type">GstRTSPVersion</span></a></pre>
 <p>The preferred RTSP version to use while negotiating the version with the server.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: GST_RTSP_VERSION_1_0</p>
 <p class="since">Since: 1.14</p>
@@ -791,6 +828,7 @@ keep alive and then this property needs to be set to FALSE.</p>
 <p>Used to set an upper limit of how large a time offset may be. This
 is used to protect against unrealistic values as a result of either
 client,server or clock issues.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 3000000000</p>
@@ -803,6 +841,7 @@ client,server or clock issues.</p>
 specifies the maximum number of nanoseconds per frame that this time offset
 may be adjusted with. This is used to avoid sudden large changes to time
 stamps.</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -812,6 +851,7 @@ stamps.</p>
 <pre class="programlisting">  “backchannel”              <span class="type">GstRTSPBackchannel</span></pre>
 <p>Select a type of backchannel to setup with the RTSP server.
 Default value is "none". Allowed values are "none" and "onvif".</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: No backchannel</p>
 <p class="since">Since: 1.14</p>
@@ -821,6 +861,7 @@ Default value is "none". Allowed values are "none" and "onvif".</p>
 <a name="GstRTSPSrc--teardown-timeout"></a><h3>The <code class="literal">“teardown-timeout”</code> property</h3>
 <pre class="programlisting">  “teardown-timeout”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>When transitioning PAUSED-READY, allow up to timeout (in nanoseconds) delay in order to send teardown (0 = disabled).</p>
+<p>Owner: GstRTSPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 100000000</p>
 </div>
@@ -1287,6 +1328,6 @@ user_function (<a class="link" href="gst-plugins-good-plugins-rtspsrc.html#GstRT
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

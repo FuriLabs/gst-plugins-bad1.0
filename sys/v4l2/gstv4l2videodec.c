@@ -610,8 +610,11 @@ gst_v4l2_video_dec_handle_frame (GstVideoDecoder * decoder,
     /* Ensure input internal pool is active */
     if (!gst_buffer_pool_is_active (pool)) {
       GstStructure *config = gst_buffer_pool_get_config (pool);
+      guint min = MAX (self->v4l2output->min_buffers, GST_V4L2_MIN_BUFFERS);
+      guint max = VIDEO_MAX_FRAME;
+
       gst_buffer_pool_config_set_params (config, self->input_state->caps,
-          self->v4l2output->info.size, 2, 2);
+          self->v4l2output->info.size, min, max);
 
       /* There is no reason to refuse this config */
       if (!gst_buffer_pool_set_config (pool, config))
@@ -1036,7 +1039,7 @@ gst_v4l2_video_dec_subclass_init (gpointer g_class, gpointer data)
       gst_pad_template_new ("src", GST_PAD_SRC, GST_PAD_ALWAYS,
           cdata->src_caps));
 
-  gst_element_class_set_static_metadata (element_class, cdata->longname,
+  gst_element_class_set_metadata (element_class, cdata->longname,
       "Codec/Decoder/Video/Hardware", cdata->description,
       "Nicolas Dufresne <nicolas.dufresne@collabora.com>");
 

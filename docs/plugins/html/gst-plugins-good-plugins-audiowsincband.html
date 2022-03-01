@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>audiowsincband: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-audiopanorama.html" title="audiopanorama">
 <link rel="next" href="gst-plugins-good-plugins-audiowsinclimit.html" title="audiowsinclimit">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -74,8 +74,8 @@
 <a name="gst-plugins-good-plugins-audiowsincband.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -113,9 +113,9 @@ disadvantage is the much slower execution time with larger kernels.</p>
         <td class="listing_lines" align="right"><pre>1
 2
 3</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc freq<span class="gtkdoc opt">=</span><span class="number">1500</span> <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audiowsincband mode<span class="gtkdoc opt">=</span>band<span class="gtkdoc opt">-</span>pass lower<span class="gtkdoc opt">-</span>frequency<span class="gtkdoc opt">=</span><span class="number">3000</span> upper<span class="gtkdoc opt">-</span>frequency<span class="gtkdoc opt">=</span><span class="number">10000</span> length<span class="gtkdoc opt">=</span><span class="number">501</span> window<span class="gtkdoc opt">=</span>blackman <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> alsasink
-gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span><span class="string">&quot;melo1.ogg&quot;</span> <span class="gtkdoc opt">!</span> oggdemux <span class="gtkdoc opt">!</span> vorbisdec <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audiowsincband mode<span class="gtkdoc opt">=</span>band<span class="gtkdoc opt">-</span>reject lower<span class="gtkdoc opt">-</span>frequency<span class="gtkdoc opt">=</span><span class="number">59</span> upper<span class="gtkdoc opt">-</span>frequency<span class="gtkdoc opt">=</span><span class="number">61</span> length<span class="gtkdoc opt">=</span><span class="number">10001</span> window<span class="gtkdoc opt">=</span>hamming <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> alsasink
-gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> audiotestsrc wave<span class="gtkdoc opt">=</span>white<span class="gtkdoc opt">-</span>noise <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audiowsincband mode<span class="gtkdoc opt">=</span>band<span class="gtkdoc opt">-</span>pass lower<span class="gtkdoc opt">-</span>frequency<span class="gtkdoc opt">=</span><span class="number">1000</span> upper<span class="gtkdoc opt">-</span>frequency<span class="gtkdoc opt">=</span><span class="number">2000</span> length<span class="gtkdoc opt">=</span><span class="number">31</span> <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> alsasink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">freq</span><span class="o">=</span><span class="mi">1500</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audiowsincband</span> <span class="n">mode</span><span class="o">=</span><span class="n">band</span><span class="o">-</span><span class="n">pass</span> <span class="n">lower</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">3000</span> <span class="n">upper</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">10000</span> <span class="n">length</span><span class="o">=</span><span class="mi">501</span> <span class="n">window</span><span class="o">=</span><span class="n">blackman</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">alsasink</span>
+<span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="s">&quot;melo1.ogg&quot;</span> <span class="o">!</span> <span class="n">oggdemux</span> <span class="o">!</span> <span class="n">vorbisdec</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audiowsincband</span> <span class="n">mode</span><span class="o">=</span><span class="n">band</span><span class="o">-</span><span class="n">reject</span> <span class="n">lower</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">59</span> <span class="n">upper</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">61</span> <span class="n">length</span><span class="o">=</span><span class="mi">10001</span> <span class="n">window</span><span class="o">=</span><span class="n">hamming</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">alsasink</span>
+<span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">audiotestsrc</span> <span class="n">wave</span><span class="o">=</span><span class="n">white</span><span class="o">-</span><span class="n">noise</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audiowsincband</span> <span class="n">mode</span><span class="o">=</span><span class="n">band</span><span class="o">-</span><span class="n">pass</span> <span class="n">lower</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">1000</span> <span class="n">upper</span><span class="o">-</span><span class="n">frequency</span><span class="o">=</span><span class="mi">2000</span> <span class="n">length</span><span class="o">=</span><span class="mi">31</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">alsasink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -221,6 +221,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioWSincBand--lower-frequency"></a><h3>The <code class="literal">“lower-frequency”</code> property</h3>
 <pre class="programlisting">  “lower-frequency”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Cut-off lower frequency (Hz).</p>
+<p>Owner: GstAudioWSincBand</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,100000]</p>
 <p>Default value: 0</p>
@@ -230,6 +231,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioWSincBand--upper-frequency"></a><h3>The <code class="literal">“upper-frequency”</code> property</h3>
 <pre class="programlisting">  “upper-frequency”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Cut-off upper frequency (Hz).</p>
+<p>Owner: GstAudioWSincBand</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,100000]</p>
 <p>Default value: 0</p>
@@ -239,6 +241,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioWSincBand--mode"></a><h3>The <code class="literal">“mode”</code> property</h3>
 <pre class="programlisting">  “mode”                     <span class="type">GstAudioWSincBandMode</span></pre>
 <p>Band pass or band reject mode.</p>
+<p>Owner: GstAudioWSincBand</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Band pass (default)</p>
 </div>
@@ -247,6 +250,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioWSincBand--window"></a><h3>The <code class="literal">“window”</code> property</h3>
 <pre class="programlisting">  “window”                   <span class="type">GstAudioWSincBandWindow</span></pre>
 <p>Window function to use.</p>
+<p>Owner: GstAudioWSincBand</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Hamming window (default)</p>
 </div>
@@ -255,6 +259,7 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 <a name="GstAudioWSincBand--length"></a><h3>The <code class="literal">“length”</code> property</h3>
 <pre class="programlisting">  “length”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Filter kernel length, will be rounded to the next odd number.</p>
+<p>Owner: GstAudioWSincBand</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [3,256000]</p>
 <p>Default value: 101</p>
@@ -262,6 +267,6 @@ gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

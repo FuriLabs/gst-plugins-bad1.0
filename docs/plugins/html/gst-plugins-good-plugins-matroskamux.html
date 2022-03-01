@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>matroskamux: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-matroskademux.html" title="matroskademux">
 <link rel="next" href="gst-plugins-good-plugins-matroskaparse.html" title="matroskaparse">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -86,8 +86,8 @@
 <a name="gst-plugins-good-plugins-matroskamux.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -121,7 +121,7 @@ GstMatroskaMux implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v filesrc location<span class="gtkdoc opt">=/</span>path<span class="gtkdoc opt">/</span>to<span class="gtkdoc opt">/</span>mp3 <span class="gtkdoc opt">!</span> mpegaudioparse <span class="gtkdoc opt">!</span> matroskamux name<span class="gtkdoc opt">=</span>mux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>mkv  filesrc location<span class="gtkdoc opt">=/</span>path<span class="gtkdoc opt">/</span>to<span class="gtkdoc opt">/</span>theora<span class="gtkdoc opt">.</span>ogg <span class="gtkdoc opt">!</span> oggdemux <span class="gtkdoc opt">!</span> theoraparse <span class="gtkdoc opt">!</span> mux<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">mp3</span> <span class="o">!</span> <span class="n">mpegaudioparse</span> <span class="o">!</span> <span class="n">matroskamux</span> <span class="n">name</span><span class="o">=</span><span class="n">mux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">mkv</span>  <span class="n">filesrc</span> <span class="n">location</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">theora</span><span class="p">.</span><span class="n">ogg</span> <span class="o">!</span> <span class="n">oggdemux</span> <span class="o">!</span> <span class="n">theoraparse</span> <span class="o">!</span> <span class="n">mux</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -132,7 +132,7 @@ GstMatroskaMux implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v audiotestsrc num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> vorbisenc <span class="gtkdoc opt">!</span> matroskamux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>test<span class="gtkdoc opt">.</span>mka</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">audiotestsrc</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">vorbisenc</span> <span class="o">!</span> <span class="n">matroskamux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">test</span><span class="p">.</span><span class="n">mka</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -453,6 +453,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--writing-app"></a><h3>The <code class="literal">“writing-app”</code> property</h3>
 <pre class="programlisting">  “writing-app”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The name the application that creates the matroska file.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -461,6 +462,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--version"></a><h3>The <code class="literal">“version”</code> property</h3>
 <pre class="programlisting">  “version”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>This parameter determines what Matroska features can be used.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,2]</p>
 <p>Default value: 2</p>
@@ -470,6 +472,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--min-index-interval"></a><h3>The <code class="literal">“min-index-interval”</code> property</h3>
 <pre class="programlisting">  “min-index-interval”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>An index entry is created every so many nanoseconds.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -479,6 +482,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--streamable"></a><h3>The <code class="literal">“streamable”</code> property</h3>
 <pre class="programlisting">  “streamable”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>If set to true, the output should be as if it is to be streamed and hence no indexes written or duration written.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -487,6 +491,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--timecodescale"></a><h3>The <code class="literal">“timecodescale”</code> property</h3>
 <pre class="programlisting">  “timecodescale”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>TimecodeScale used to calculate the Raw Timecode of a Block.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [1,1000000000]</p>
 <p>Default value: 1000000</p>
@@ -496,6 +501,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--max-cluster-duration"></a><h3>The <code class="literal">“max-cluster-duration”</code> property</h3>
 <pre class="programlisting">  “max-cluster-duration”     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>A new cluster will be created if its duration exceeds this value. 0 means no maximum duration.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 65535000000</p>
@@ -505,6 +511,7 @@ GstMatroskaMux implements
 <a name="GstMatroskaMux--min-cluster-duration"></a><h3>The <code class="literal">“min-cluster-duration”</code> property</h3>
 <pre class="programlisting">  “min-cluster-duration”     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>Desidered cluster duration as nanoseconds. A new cluster will be created irrespective of this property if a force key unit event is received. 0 means create a new cluster for each video keyframe or for each audio buffer in audio only streams.</p>
+<p>Owner: GstMatroskaMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 500000000</p>
@@ -512,6 +519,6 @@ GstMatroskaMux implements
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

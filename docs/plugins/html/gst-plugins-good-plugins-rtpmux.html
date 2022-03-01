@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtpmux: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpmpvpay.html" title="rtpmpvpay">
 <link rel="next" href="gst-plugins-good-plugins-rtpopusdepay.html" title="rtpopusdepay">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -69,8 +69,8 @@
 <a name="gst-plugins-good-plugins-rtpmux.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -104,12 +104,12 @@ muxes into a single stream with a single SSRC.</p>
 4
 5
 6</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> rtpmux name<span class="gtkdoc opt">=</span>mux <span class="gtkdoc opt">!</span> udpsink host<span class="gtkdoc opt">=</span><span class="number">127.0.0.1</span> port<span class="gtkdoc opt">=</span><span class="number">8888</span>        \
-             alsasrc <span class="gtkdoc opt">!</span> alawenc <span class="gtkdoc opt">!</span> rtppcmapay <span class="gtkdoc opt">!</span>                        \
-             application<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>rtp<span class="gtkdoc opt">,</span> payload<span class="gtkdoc opt">=</span><span class="number">8</span><span class="gtkdoc opt">,</span> rate<span class="gtkdoc opt">=</span><span class="number">8000</span> <span class="gtkdoc opt">!</span> mux<span class="gtkdoc opt">.</span>sink_0    \
-             audiotestsrc is<span class="gtkdoc opt">-</span>live<span class="gtkdoc opt">=</span><span class="number">1</span> <span class="gtkdoc opt">!</span>                                \
-             mulawenc <span class="gtkdoc opt">!</span> rtppcmupay <span class="gtkdoc opt">!</span>                                 \
-             application<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>rtp<span class="gtkdoc opt">,</span> payload<span class="gtkdoc opt">=</span><span class="number">0</span><span class="gtkdoc opt">,</span> rate<span class="gtkdoc opt">=</span><span class="number">8000</span> <span class="gtkdoc opt">!</span> mux<span class="gtkdoc opt">.</span>sink_1</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">rtpmux</span> <span class="n">name</span><span class="o">=</span><span class="n">mux</span> <span class="o">!</span> <span class="n">udpsink</span> <span class="n">host</span><span class="o">=</span><span class="mf">127.0.0.1</span> <span class="n">port</span><span class="o">=</span><span class="mi">8888</span>        \
+             <span class="n">alsasrc</span> <span class="o">!</span> <span class="n">alawenc</span> <span class="o">!</span> <span class="n">rtppcmapay</span> <span class="o">!</span>                        \
+             <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">rtp</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">8000</span> <span class="o">!</span> <span class="n">mux</span><span class="p">.</span><span class="n">sink_0</span>    \
+             <span class="n">audiotestsrc</span> <span class="n">is</span><span class="o">-</span><span class="n">live</span><span class="o">=</span><span class="mi">1</span> <span class="o">!</span>                                \
+             <span class="n">mulawenc</span> <span class="o">!</span> <span class="n">rtppcmupay</span> <span class="o">!</span>                                 \
+             <span class="n">application</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">rtp</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">8000</span> <span class="o">!</span> <span class="n">mux</span><span class="p">.</span><span class="n">sink_1</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -218,6 +218,7 @@ so they can be sent on the same port.
 <a name="GstRTPMux--seqnum"></a><h3>The <code class="literal">“seqnum”</code> property</h3>
 <pre class="programlisting">  “seqnum”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The RTP sequence number of the last processed packet.</p>
+<p>Owner: GstRTPMux</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -226,6 +227,7 @@ so they can be sent on the same port.
 <a name="GstRTPMux--seqnum-offset"></a><h3>The <code class="literal">“seqnum-offset”</code> property</h3>
 <pre class="programlisting">  “seqnum-offset”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Offset to add to all outgoing seqnum (-1 = random).</p>
+<p>Owner: GstRTPMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -235,6 +237,7 @@ so they can be sent on the same port.
 <a name="GstRTPMux--ssrc"></a><h3>The <code class="literal">“ssrc”</code> property</h3>
 <pre class="programlisting">  “ssrc”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The SSRC of the packets (default == random).</p>
+<p>Owner: GstRTPMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 4294967295</p>
 </div>
@@ -243,6 +246,7 @@ so they can be sent on the same port.
 <a name="GstRTPMux--timestamp-offset"></a><h3>The <code class="literal">“timestamp-offset”</code> property</h3>
 <pre class="programlisting">  “timestamp-offset”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Offset to add to all outgoing timestamps (-1 = random).</p>
+<p>Owner: GstRTPMux</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -254,6 +258,6 @@ so they can be sent on the same port.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

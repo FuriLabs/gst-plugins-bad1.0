@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>multiudpsink: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-multipartmux.html" title="multipartmux">
 <link rel="next" href="gst-plugins-good-plugins-navigationtest.html" title="navigationtest">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -152,9 +152,9 @@
 <a name="gst-plugins-good-plugins-multiudpsink.signals"></a><h2>Signals</h2>
 <div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody>
 <tr>
@@ -195,8 +195,8 @@
 <a name="gst-plugins-good-plugins-multiudpsink.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -294,6 +294,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--bytes-served"></a><h3>The <code class="literal">“bytes-served”</code> property</h3>
 <pre class="programlisting">  “bytes-served”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Total number of bytes sent to all clients.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -302,6 +303,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--bytes-to-serve"></a><h3>The <code class="literal">“bytes-to-serve”</code> property</h3>
 <pre class="programlisting">  “bytes-to-serve”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Number of bytes received to serve to clients.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -310,6 +312,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--clients"></a><h3>The <code class="literal">“clients”</code> property</h3>
 <pre class="programlisting">  “clients”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>A comma separated list of host:port pairs with destinations.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -318,6 +321,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--auto-multicast"></a><h3>The <code class="literal">“auto-multicast”</code> property</h3>
 <pre class="programlisting">  “auto-multicast”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Automatically join/leave the multicast groups, FALSE means user has to do it himself.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -326,6 +330,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--loop"></a><h3>The <code class="literal">“loop”</code> property</h3>
 <pre class="programlisting">  “loop”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Used for setting the multicast loop parameter. TRUE = enable, FALSE = disable.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -334,6 +339,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--qos-dscp"></a><h3>The <code class="literal">“qos-dscp”</code> property</h3>
 <pre class="programlisting">  “qos-dscp”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Quality of Service, differentiated services code point (-1 default).</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [G_MAXULONG,63]</p>
 <p>Default value: -1</p>
@@ -343,6 +349,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--ttl"></a><h3>The <code class="literal">“ttl”</code> property</h3>
 <pre class="programlisting">  “ttl”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Used for setting the unicast TTL parameter.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,255]</p>
 <p>Default value: 64</p>
@@ -352,6 +359,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--ttl-mc"></a><h3>The <code class="literal">“ttl-mc”</code> property</h3>
 <pre class="programlisting">  “ttl-mc”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Used for setting the multicast TTL parameter.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,255]</p>
 <p>Default value: 1</p>
@@ -361,6 +369,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--send-duplicates"></a><h3>The <code class="literal">“send-duplicates”</code> property</h3>
 <pre class="programlisting">  “send-duplicates”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>When a distination/port pair is added multiple times, send packets multiple times as well.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -369,6 +378,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--buffer-size"></a><h3>The <code class="literal">“buffer-size”</code> property</h3>
 <pre class="programlisting">  “buffer-size”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Size of the kernel send buffer in bytes, 0=default.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -378,6 +388,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--close-socket"></a><h3>The <code class="literal">“close-socket”</code> property</h3>
 <pre class="programlisting">  “close-socket”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Close socket if passed as property on state change.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -386,6 +397,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--socket"></a><h3>The <code class="literal">“socket”</code> property</h3>
 <pre class="programlisting">  “socket”                   <a href="/usr/share/gtk-doc/html/gio/GSocket.html#GSocket-struct"><span class="type">GSocket</span></a> *</pre>
 <p>Socket to use for UDP sending. (NULL == allocate).</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -393,6 +405,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--used-socket"></a><h3>The <code class="literal">“used-socket”</code> property</h3>
 <pre class="programlisting">  “used-socket”              <a href="/usr/share/gtk-doc/html/gio/GSocket.html#GSocket-struct"><span class="type">GSocket</span></a> *</pre>
 <p>Socket currently in use for UDP sending. (NULL == no socket).</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read</p>
 </div>
 <hr>
@@ -400,6 +413,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--force-ipv4"></a><h3>The <code class="literal">“force-ipv4”</code> property</h3>
 <pre class="programlisting">  “force-ipv4”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Forcing the use of an IPv4 socket (DEPRECATED, has no effect anymore).</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -408,6 +422,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--multicast-iface"></a><h3>The <code class="literal">“multicast-iface”</code> property</h3>
 <pre class="programlisting">  “multicast-iface”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The network interface on which to join the multicast group.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -416,6 +431,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--bind-address"></a><h3>The <code class="literal">“bind-address”</code> property</h3>
 <pre class="programlisting">  “bind-address”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Address to bind the socket to.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -424,6 +440,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--bind-port"></a><h3>The <code class="literal">“bind-port”</code> property</h3>
 <pre class="programlisting">  “bind-port”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Port to bind the socket to.</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,65535]</p>
 <p>Default value: 0</p>
@@ -433,6 +450,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--socket-v6"></a><h3>The <code class="literal">“socket-v6”</code> property</h3>
 <pre class="programlisting">  “socket-v6”                <a href="/usr/share/gtk-doc/html/gio/GSocket.html#GSocket-struct"><span class="type">GSocket</span></a> *</pre>
 <p>Socket to use for UDPv6 sending. (NULL == allocate).</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -440,6 +458,7 @@ It can be combined with rtp payload encoders to implement RTP streaming.</p>
 <a name="GstMultiUDPSink--used-socket-v6"></a><h3>The <code class="literal">“used-socket-v6”</code> property</h3>
 <pre class="programlisting">  “used-socket-v6”           <a href="/usr/share/gtk-doc/html/gio/GSocket.html#GSocket-struct"><span class="type">GSocket</span></a> *</pre>
 <p>Socket currently in use for UDPv6 sending. (NULL == no socket).</p>
+<p>Owner: GstMultiUDPSink</p>
 <p>Flags: Read</p>
 </div>
 </div>
@@ -717,6 +736,6 @@ clients.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

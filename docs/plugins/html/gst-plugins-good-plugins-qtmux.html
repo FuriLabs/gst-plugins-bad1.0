@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>qtmux: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-qtmoovrecover.html" title="qtmoovrecover">
 <link rel="next" href="gst-plugins-good-plugins-quarktv.html" title="quarktv">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -142,8 +142,8 @@
 <a name="gst-plugins-good-plugins-qtmux.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -226,7 +226,7 @@ have reordered samples.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> v4l2src num<span class="gtkdoc opt">-</span>buffers<span class="gtkdoc opt">=</span><span class="number">500</span> <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">320</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">240</span> <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> qtmux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>video<span class="gtkdoc opt">.</span>mov</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">v4l2src</span> <span class="n">num</span><span class="o">-</span><span class="n">buffers</span><span class="o">=</span><span class="mi">500</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">240</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">qtmux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">video</span><span class="p">.</span><span class="n">mov</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -520,6 +520,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--dts-method"></a><h3>The <code class="literal">“dts-method”</code> property</h3>
 <pre class="programlisting">  “dts-method”               <span class="type">GstQTMuxDtsMethods</span></pre>
 <p>Method to determine DTS time (DEPRECATED).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: reorder</p>
 </div>
@@ -528,6 +529,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--faststart"></a><h3>The <code class="literal">“faststart”</code> property</h3>
 <pre class="programlisting">  “faststart”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>If the file should be formatted for faststart (headers first).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -536,6 +538,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--faststart-file"></a><h3>The <code class="literal">“faststart-file”</code> property</h3>
 <pre class="programlisting">  “faststart-file”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>File that will be used temporarily to store data from the stream when creating a faststart file. If null a filepath will be created automatically.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: NULL</p>
 </div>
@@ -544,6 +547,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--fragment-duration"></a><h3>The <code class="literal">“fragment-duration”</code> property</h3>
 <pre class="programlisting">  “fragment-duration”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Fragment durations in ms (produce a fragmented file if &gt; 0).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: 0</p>
 </div>
@@ -552,6 +556,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--moov-recovery-file"></a><h3>The <code class="literal">“moov-recovery-file”</code> property</h3>
 <pre class="programlisting">  “moov-recovery-file”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>File to be used to store data for moov atom making movie file recovery possible in case of a crash during muxing. Null for disabled. (Experimental).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: NULL</p>
 </div>
@@ -560,6 +565,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--movie-timescale"></a><h3>The <code class="literal">“movie-timescale”</code> property</h3>
 <pre class="programlisting">  “movie-timescale”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Timescale to use in the movie (units per second, 0 == default).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: 0</p>
 </div>
@@ -568,6 +574,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--presentation-time"></a><h3>The <code class="literal">“presentation-time”</code> property</h3>
 <pre class="programlisting">  “presentation-time”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Calculate and include presentation/composition time (in addition to decoding time).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
@@ -576,6 +583,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--streamable"></a><h3>The <code class="literal">“streamable”</code> property</h3>
 <pre class="programlisting">  “streamable”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>If set to true, the output should be as if it is to be streamed and hence no indexes written or duration written. (DEPRECATED, only valid for fragmented MP4).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -584,6 +592,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--trak-timescale"></a><h3>The <code class="literal">“trak-timescale”</code> property</h3>
 <pre class="programlisting">  “trak-timescale”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Timescale to use for the tracks (units per second, 0 is automatic).</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: 0</p>
 </div>
@@ -592,6 +601,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--reserved-bytes-per-sec"></a><h3>The <code class="literal">“reserved-bytes-per-sec”</code> property</h3>
 <pre class="programlisting">  “reserved-bytes-per-sec”   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Multiplier for converting reserved-max-duration into bytes of header to reserve, per second, per track.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 10000</p>
 <p>Default value: 550</p>
@@ -601,6 +611,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--reserved-duration-remaining"></a><h3>The <code class="literal">“reserved-duration-remaining”</code> property</h3>
 <pre class="programlisting">  “reserved-duration-remaining” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Reports the approximate amount of remaining moov header space reserved using reserved-max-duration.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -609,6 +620,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--reserved-max-duration"></a><h3>The <code class="literal">“reserved-max-duration”</code> property</h3>
 <pre class="programlisting">  “reserved-max-duration”    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>When set to a value &gt; 0, reserves space for index tables at the beginning of the file.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 18446744073709551615</p>
 </div>
@@ -617,6 +629,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--reserved-moov-update-period"></a><h3>The <code class="literal">“reserved-moov-update-period”</code> property</h3>
 <pre class="programlisting">  “reserved-moov-update-period” <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>When used with reserved-max-duration, periodically updates the index tables with information muxed so far.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 18446744073709551615</p>
 </div>
@@ -625,6 +638,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--interleave-bytes"></a><h3>The <code class="literal">“interleave-bytes”</code> property</h3>
 <pre class="programlisting">  “interleave-bytes”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Interleave between streams in bytes.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -633,6 +647,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--interleave-time"></a><h3>The <code class="literal">“interleave-time”</code> property</h3>
 <pre class="programlisting">  “interleave-time”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Interleave between streams in nanoseconds.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 250000000</p>
 </div>
@@ -641,6 +656,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--max-raw-audio-drift"></a><h3>The <code class="literal">“max-raw-audio-drift”</code> property</h3>
 <pre class="programlisting">  “max-raw-audio-drift”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Maximum allowed drift of raw audio samples vs. timestamps in nanoseconds.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 40000000</p>
 </div>
@@ -649,6 +665,7 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--reserved-prefill"></a><h3>The <code class="literal">“reserved-prefill”</code> property</h3>
 <pre class="programlisting">  “reserved-prefill”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Prefill samples table of reserved duration.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -657,12 +674,13 @@ Records a video stream captured from a v4l2 device and muxes it into a qt file.
 <a name="GstQTMux--start-gap-threshold"></a><h3>The <code class="literal">“start-gap-threshold”</code> property</h3>
 <pre class="programlisting">  “start-gap-threshold”      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Threshold for creating an edit list for gaps at the start in nanoseconds.</p>
+<p>Owner: GstQTMux</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

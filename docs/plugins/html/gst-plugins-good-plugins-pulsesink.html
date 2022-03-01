@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>pulsesink: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-progressreport.html" title="progressreport">
 <link rel="next" href="gst-plugins-good-plugins-pulsesrc.html" title="pulsesrc">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -96,8 +96,8 @@
 <a name="gst-plugins-good-plugins-pulsesink.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -133,7 +133,7 @@ GstPulseSink implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v filesrc location<span class="gtkdoc opt">=</span>sine<span class="gtkdoc opt">.</span>ogg <span class="gtkdoc opt">!</span> oggdemux <span class="gtkdoc opt">!</span> vorbisdec <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> pulsesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">sine</span><span class="p">.</span><span class="n">ogg</span> <span class="o">!</span> <span class="n">oggdemux</span> <span class="o">!</span> <span class="n">vorbisdec</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">pulsesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -144,7 +144,7 @@ GstPulseSink implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v audiotestsrc <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> volume volume<span class="gtkdoc opt">=</span><span class="number">0.4</span> <span class="gtkdoc opt">!</span> pulsesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">audiotestsrc</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">volume</span> <span class="n">volume</span><span class="o">=</span><span class="mf">0.4</span> <span class="o">!</span> <span class="n">pulsesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -155,7 +155,7 @@ GstPulseSink implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v audiotestsrc <span class="gtkdoc opt">!</span> pulsesink stream<span class="gtkdoc opt">-</span>properties<span class="gtkdoc opt">=</span><span class="string">&quot;props,media.title=test&quot;</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">audiotestsrc</span> <span class="o">!</span> <span class="n">pulsesink</span> <span class="n">stream</span><span class="o">-</span><span class="n">properties</span><span class="o">=</span><span class="s">&quot;props,media.title=test&quot;</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -265,6 +265,7 @@ with "pactl list".
 <a name="GstPulseSink--device"></a><h3>The <code class="literal">“device”</code> property</h3>
 <pre class="programlisting">  “device”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The PulseAudio sink device to connect to.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -273,6 +274,7 @@ with "pactl list".
 <a name="GstPulseSink--server"></a><h3>The <code class="literal">“server”</code> property</h3>
 <pre class="programlisting">  “server”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The PulseAudio server to connect to.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -281,6 +283,7 @@ with "pactl list".
 <a name="GstPulseSink--device-name"></a><h3>The <code class="literal">“device-name”</code> property</h3>
 <pre class="programlisting">  “device-name”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Human-readable name of the sound device.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read</p>
 <p>Default value: NULL</p>
 </div>
@@ -289,6 +292,7 @@ with "pactl list".
 <a name="GstPulseSink--volume"></a><h3>The <code class="literal">“volume”</code> property</h3>
 <pre class="programlisting">  “volume”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Linear volume of this stream, 1.0=100%.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,10]</p>
 <p>Default value: 1</p>
@@ -298,6 +302,7 @@ with "pactl list".
 <a name="GstPulseSink--mute"></a><h3>The <code class="literal">“mute”</code> property</h3>
 <pre class="programlisting">  “mute”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Mute state of this stream.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -317,17 +322,18 @@ found in the <a class="ulink" href="http://0pointer.de/lennart/projects/pulseaud
 3
 4
 5</pre></td>
-        <td class="listing_code"><pre class="programlisting">GstStructure <span class="gtkdoc opt">*</span>props<span class="gtkdoc opt">;</span>
+        <td class="listing_code"><pre class="programlisting"><span class="n">GstStructure</span> <span class="o">*</span><span class="n">props</span><span class="p">;</span>
 
-props <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#gst-structure-from-string">gst_structure_from_string</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;props,media.role=music&quot;</span><span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
-<span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object-set">g_object_set</a></span> <span class="gtkdoc opt">(</span>pulse<span class="gtkdoc opt">,</span> <span class="string">&quot;stream-properties&quot;</span><span class="gtkdoc opt">,</span> props<span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
-gst_structure_free</pre></td>
+<span class="n">props</span> <span class="o">=</span> <span class="n">gst_structure_from_string</span> <span class="p">(</span><span class="s">&quot;props,media.role=music&quot;</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="n">g_object_set</span> <span class="p">(</span><span class="n">pulse</span><span class="p">,</span> <span class="s">&quot;stream-properties&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="n">gst_structure_free</span></pre></td>
       </tr>
     </tbody>
   </table>
 </div>
 
 <p></p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -335,6 +341,7 @@ gst_structure_free</pre></td>
 <a name="GstPulseSink--client-name"></a><h3>The <code class="literal">“client-name”</code> property</h3>
 <pre class="programlisting">  “client-name”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The PulseAudio client name to use.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "gst-plugins-good-plugins-scan"</p>
 </div>
@@ -343,6 +350,7 @@ gst_structure_free</pre></td>
 <a name="GstPulseSink--current-device"></a><h3>The <code class="literal">“current-device”</code> property</h3>
 <pre class="programlisting">  “current-device”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The current PulseAudio sink device.</p>
+<p>Owner: GstPulseSink</p>
 <p>Flags: Read</p>
 <p>Default value: NULL</p>
 </div>
@@ -353,6 +361,6 @@ gst_structure_free</pre></td>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

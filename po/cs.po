@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good-1.12.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2017-09-13 15:00+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
@@ -27,6 +27,10 @@ msgstr "Server Jack nebyl nalezen"
 
 msgid "Failed to decode JPEG image"
 msgstr "Selhalo dekódování obrázku JPEG"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "Selhalo přidělení požadované paměti."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -184,6 +188,10 @@ msgstr "Ovladač zařízení „%s“ nepodporuje V/V metodu %d"
 #, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Ovladač zařízení „%s“ nepodporuje žádnou známou V/V metodu."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Neplatná atomická velikost."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

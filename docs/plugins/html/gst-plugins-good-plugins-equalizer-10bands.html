@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>equalizer-10bands: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-edgetv.html" title="edgetv">
 <link rel="next" href="gst-plugins-good-plugins-equalizer-3bands.html" title="equalizer-3bands">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -100,8 +100,8 @@
 <a name="gst-plugins-good-plugins-equalizer-10bands.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -138,7 +138,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span>song<span class="gtkdoc opt">.</span>ogg <span class="gtkdoc opt">!</span> oggdemux <span class="gtkdoc opt">!</span> vorbisdec <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> equalizer<span class="gtkdoc opt">-</span><span class="number">10</span>bands band2<span class="gtkdoc opt">=</span><span class="number">3.0</span> <span class="gtkdoc opt">!</span> alsasink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">song</span><span class="p">.</span><span class="n">ogg</span> <span class="o">!</span> <span class="n">oggdemux</span> <span class="o">!</span> <span class="n">vorbisdec</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">equalizer</span><span class="mi">-10</span><span class="n">bands</span> <span class="n">band2</span><span class="o">=</span><span class="mf">3.0</span> <span class="o">!</span> <span class="n">alsasink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -243,6 +243,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band0"></a><h3>The <code class="literal">“band0”</code> property</h3>
 <pre class="programlisting">  “band0”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 29 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -252,6 +253,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band1"></a><h3>The <code class="literal">“band1”</code> property</h3>
 <pre class="programlisting">  “band1”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 59 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -261,6 +263,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band2"></a><h3>The <code class="literal">“band2”</code> property</h3>
 <pre class="programlisting">  “band2”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 119 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -270,6 +273,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band3"></a><h3>The <code class="literal">“band3”</code> property</h3>
 <pre class="programlisting">  “band3”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 237 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -279,6 +283,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band4"></a><h3>The <code class="literal">“band4”</code> property</h3>
 <pre class="programlisting">  “band4”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 474 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -288,6 +293,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band5"></a><h3>The <code class="literal">“band5”</code> property</h3>
 <pre class="programlisting">  “band5”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 947 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -297,6 +303,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band6"></a><h3>The <code class="literal">“band6”</code> property</h3>
 <pre class="programlisting">  “band6”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 1889 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -306,6 +313,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band7"></a><h3>The <code class="literal">“band7”</code> property</h3>
 <pre class="programlisting">  “band7”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 3770 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -315,6 +323,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band8"></a><h3>The <code class="literal">“band8”</code> property</h3>
 <pre class="programlisting">  “band8”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 7523 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -324,6 +333,7 @@ frequency bands between 30 Hz and 15 kHz.</p>
 <a name="GstIirEqualizer10Bands--band9"></a><h3>The <code class="literal">“band9”</code> property</h3>
 <pre class="programlisting">  “band9”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>gain for the frequency band 15011 Hz, ranging from -24 dB to +12 dB.</p>
+<p>Owner: GstIirEqualizer10Bands</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-24,12]</p>
 <p>Default value: 0</p>
@@ -331,6 +341,6 @@ frequency bands between 30 Hz and 15 kHz.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

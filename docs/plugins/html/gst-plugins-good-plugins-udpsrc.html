@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>udpsrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-udpsink.html" title="udpsink">
 <link rel="next" href="gst-plugins-good-plugins-v4l2radio.html" title="v4l2radio">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -142,8 +142,8 @@
 <a name="gst-plugins-good-plugins-udpsrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -222,7 +222,7 @@ application is responsible for closing the file descriptor.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v udpsrc <span class="gtkdoc opt">!</span> fakesink dump<span class="gtkdoc opt">=</span><span class="number">1</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">udpsrc</span> <span class="o">!</span> <span class="n">fakesink</span> <span class="n">dump</span><span class="o">=</span><span class="mi">1</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -236,7 +236,7 @@ above mentioned pipeline should dump data packets to the console.
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v audiotestsrc <span class="gtkdoc opt">!</span> udpsink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">audiotestsrc</span> <span class="o">!</span> <span class="n">udpsink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -247,7 +247,7 @@ above mentioned pipeline should dump data packets to the console.
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>v udpsrc port<span class="gtkdoc opt">=</span><span class="number">0</span> <span class="gtkdoc opt">!</span> fakesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">v</span> <span class="n">udpsrc</span> <span class="n">port</span><span class="o">=</span><span class="mi">0</span> <span class="o">!</span> <span class="n">fakesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -328,6 +328,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--caps"></a><h3>The <code class="literal">“caps”</code> property</h3>
 <pre class="programlisting">  “caps”                     <a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstCaps.html#GstCaps-struct"><span class="type">GstCaps</span></a> *</pre>
 <p>The caps of the source pad.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -335,6 +336,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--multicast-group"></a><h3>The <code class="literal">“multicast-group”</code> property</h3>
 <pre class="programlisting">  “multicast-group”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The Address of multicast group to join. (DEPRECATED: Use address property instead).</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "0.0.0.0"</p>
 </div>
@@ -343,6 +345,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--port"></a><h3>The <code class="literal">“port”</code> property</h3>
 <pre class="programlisting">  “port”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>The port to receive the packets from, 0=allocate.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,65535]</p>
 <p>Default value: 5004</p>
@@ -352,6 +355,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--uri"></a><h3>The <code class="literal">“uri”</code> property</h3>
 <pre class="programlisting">  “uri”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>URI in the form of udp://multicast_group:port.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "udp://0.0.0.0:5004"</p>
 </div>
@@ -360,6 +364,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--buffer-size"></a><h3>The <code class="literal">“buffer-size”</code> property</h3>
 <pre class="programlisting">  “buffer-size”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Size of the kernel receive buffer in bytes, 0=default.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -369,6 +374,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--timeout"></a><h3>The <code class="literal">“timeout”</code> property</h3>
 <pre class="programlisting">  “timeout”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Post a message after timeout nanoseconds (0 = disabled).</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -377,6 +383,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--skip-first-bytes"></a><h3>The <code class="literal">“skip-first-bytes”</code> property</h3>
 <pre class="programlisting">  “skip-first-bytes”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>number of bytes to skip for each udp packet.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -386,6 +393,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--auto-multicast"></a><h3>The <code class="literal">“auto-multicast”</code> property</h3>
 <pre class="programlisting">  “auto-multicast”           <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Automatically join/leave multicast groups.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -394,6 +402,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--multicast-iface"></a><h3>The <code class="literal">“multicast-iface”</code> property</h3>
 <pre class="programlisting">  “multicast-iface”          <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The network interface on which to join the multicast group.This allows multiple interfaces seperated by comma. ("eth0,eth1").</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -402,6 +411,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--reuse"></a><h3>The <code class="literal">“reuse”</code> property</h3>
 <pre class="programlisting">  “reuse”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Enable reuse of the port.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -410,6 +420,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--close-socket"></a><h3>The <code class="literal">“close-socket”</code> property</h3>
 <pre class="programlisting">  “close-socket”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Close socket if passed as property on state change.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -418,6 +429,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--socket"></a><h3>The <code class="literal">“socket”</code> property</h3>
 <pre class="programlisting">  “socket”                   <a href="/usr/share/gtk-doc/html/gio/GSocket.html#GSocket-struct"><span class="type">GSocket</span></a> *</pre>
 <p>Socket to use for UDP reception. (NULL == allocate).</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 </div>
 <hr>
@@ -425,6 +437,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--used-socket"></a><h3>The <code class="literal">“used-socket”</code> property</h3>
 <pre class="programlisting">  “used-socket”              <a href="/usr/share/gtk-doc/html/gio/GSocket.html#GSocket-struct"><span class="type">GSocket</span></a> *</pre>
 <p>Socket currently in use for UDP reception. (NULL = no socket).</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read</p>
 </div>
 <hr>
@@ -432,6 +445,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--address"></a><h3>The <code class="literal">“address”</code> property</h3>
 <pre class="programlisting">  “address”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Address to receive packets for. This is equivalent to the multicast-group property for now.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "0.0.0.0"</p>
 </div>
@@ -440,6 +454,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--loop"></a><h3>The <code class="literal">“loop”</code> property</h3>
 <pre class="programlisting">  “loop”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Used for setting the multicast loop parameter. TRUE = enable, FALSE = disable.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -448,6 +463,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--retrieve-sender-address"></a><h3>The <code class="literal">“retrieve-sender-address”</code> property</h3>
 <pre class="programlisting">  “retrieve-sender-address”  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Whether to retrieve the sender address and add it to buffers as meta. Disabling this might result in minor performance improvements in certain scenarios.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -456,6 +472,7 @@ above mentioned pipeline should dump data packets to the console.
 <a name="GstUDPSrc--mtu"></a><h3>The <code class="literal">“mtu”</code> property</h3>
 <pre class="programlisting">  “mtu”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Maximum expected packet size. This directly defines the allocationsize of the receive buffer pool.</p>
+<p>Owner: GstUDPSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= G_MAXINT</p>
 <p>Default value: 1492</p>
@@ -467,6 +484,6 @@ above mentioned pipeline should dump data packets to the console.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

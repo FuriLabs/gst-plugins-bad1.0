@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtpulpfecenc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpulpfecdec.html" title="rtpulpfecdec">
 <link rel="next" href="gst-plugins-good-plugins-rtpvorbisdepay.html" title="rtpvorbisdepay">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -84,8 +84,8 @@
 <a name="gst-plugins-good-plugins-rtpulpfecenc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -147,7 +147,7 @@ rate on the receiving side.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videotestsrc <span class="gtkdoc opt">!</span> x264enc <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>h264<span class="gtkdoc opt">,</span> profile<span class="gtkdoc opt">=</span>baseline <span class="gtkdoc opt">!</span> rtph264pay pt<span class="gtkdoc opt">=</span><span class="number">96</span> <span class="gtkdoc opt">!</span> rtpulpfecenc percentage<span class="gtkdoc opt">=</span><span class="number">100</span> pt<span class="gtkdoc opt">=</span><span class="number">122</span> <span class="gtkdoc opt">!</span> udpsink port<span class="gtkdoc opt">=</span><span class="number">8888</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videotestsrc</span> <span class="o">!</span> <span class="n">x264enc</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">h264</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">baseline</span> <span class="o">!</span> <span class="n">rtph264pay</span> <span class="n">pt</span><span class="o">=</span><span class="mi">96</span> <span class="o">!</span> <span class="n">rtpulpfecenc</span> <span class="n">percentage</span><span class="o">=</span><span class="mi">100</span> <span class="n">pt</span><span class="o">=</span><span class="mi">122</span> <span class="o">!</span> <span class="n">udpsink</span> <span class="n">port</span><span class="o">=</span><span class="mi">8888</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -258,6 +258,7 @@ and
 <a name="GstRtpUlpFecEnc--multipacket"></a><h3>The <code class="literal">“multipacket”</code> property</h3>
 <pre class="programlisting">  “multipacket”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Apply FEC on multiple packets.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: TRUE</p>
 </div>
@@ -266,6 +267,7 @@ and
 <a name="GstRtpUlpFecEnc--mux-seq"></a><h3>The <code class="literal">“mux-seq”</code> property</h3>
 <pre class="programlisting">  “mux-seq”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Mux seqnum for media and fec packets in same seqnum space.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: FALSE</p>
 </div>
@@ -274,6 +276,7 @@ and
 <a name="GstRtpUlpFecEnc--percentage"></a><h3>The <code class="literal">“percentage”</code> property</h3>
 <pre class="programlisting">  “percentage”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>FEC overhead percentage for the whole stream.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 100</p>
 <p>Default value: 0</p>
@@ -283,6 +286,7 @@ and
 <a name="GstRtpUlpFecEnc--percentage-important"></a><h3>The <code class="literal">“percentage-important”</code> property</h3>
 <pre class="programlisting">  “percentage-important”     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>FEC overhead percentage for important packets.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 100</p>
 <p>Default value: 0</p>
@@ -292,6 +296,7 @@ and
 <a name="GstRtpUlpFecEnc--protected"></a><h3>The <code class="literal">“protected”</code> property</h3>
 <pre class="programlisting">  “protected”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Count of protected packets.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -300,6 +305,7 @@ and
 <a name="GstRtpUlpFecEnc--pt"></a><h3>The <code class="literal">“pt”</code> property</h3>
 <pre class="programlisting">  “pt”                       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The payload type of FEC packets.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Allowed values: &lt;= 255</p>
 <p>Default value: 255</p>
@@ -309,12 +315,13 @@ and
 <a name="GstRtpUlpFecEnc--ssrc"></a><h3>The <code class="literal">“ssrc”</code> property</h3>
 <pre class="programlisting">  “ssrc”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The SSRC to use on FEC'd packets.</p>
+<p>Owner: GstRtpUlpFecEnc</p>
 <p>Flags: Read / Write / Construct</p>
 <p>Default value: 0</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

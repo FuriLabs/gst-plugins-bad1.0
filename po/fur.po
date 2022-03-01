@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.10.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2017-02-17 10:54+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <f.t.public@gmail.com>\n"
@@ -23,6 +23,10 @@ msgstr "Servidôr Jack no cjatât"
 
 msgid "Failed to decode JPEG image"
 msgstr "No si è rivâts a decodificâ la imagjin JPEG"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "No si è rivâts a assegnâ la memorie domandade."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -183,6 +187,10 @@ msgstr "Il driver dal dispositîf '%s' nol supuarte il metodi IO %d"
 #, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Il driver dal dispositîf '%s' nol supuarte nissun metodi IO cognossût."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Dimension atom no valide."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

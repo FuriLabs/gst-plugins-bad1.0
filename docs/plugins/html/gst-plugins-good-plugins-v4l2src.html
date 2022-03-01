@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>v4l2src: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-v4l2sink.html" title="v4l2sink">
 <link rel="next" href="gst-plugins-good-plugins-vertigotv.html" title="vertigotv">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -120,9 +120,9 @@
 <a name="gst-plugins-good-plugins-v4l2src.signals"></a><h2>Signals</h2>
 <div class="informaltable"><table class="informaltable" border="0">
 <colgroup>
-<col width="150px" class="signals_return">
-<col width="300px" class="signals_name">
-<col width="200px" class="signals_flags">
+<col width="150px" class="signal_proto_type">
+<col width="300px" class="signal_proto_name">
+<col width="200px" class="signal_proto_flags">
 </colgroup>
 <tbody><tr>
 <td class="signal_type"><span class="returnvalue">void</span></td>
@@ -135,8 +135,8 @@
 <a name="gst-plugins-good-plugins-v4l2src.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -172,7 +172,7 @@ cards.</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> v4l2src <span class="gtkdoc opt">!</span> xvimagesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">v4l2src</span> <span class="o">!</span> <span class="n">xvimagesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -184,7 +184,7 @@ webcams.
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> v4l2src <span class="gtkdoc opt">!</span> jpegdec <span class="gtkdoc opt">!</span> xvimagesink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">v4l2src</span> <span class="o">!</span> <span class="n">jpegdec</span> <span class="o">!</span> <span class="n">xvimagesink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -334,6 +334,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--device"></a><h3>The <code class="literal">“device”</code> property</h3>
 <pre class="programlisting">  “device”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Device location.</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "/dev/video0"</p>
 </div>
@@ -342,6 +343,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--device-name"></a><h3>The <code class="literal">“device-name”</code> property</h3>
 <pre class="programlisting">  “device-name”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Name of the device.</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read</p>
 <p>Default value: NULL</p>
 </div>
@@ -350,6 +352,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--flags"></a><h3>The <code class="literal">“flags”</code> property</h3>
 <pre class="programlisting">  “flags”                    <span class="type">GstV4l2DeviceTypeFlags</span></pre>
 <p>Device type flags.</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read</p>
 </div>
 <hr>
@@ -357,6 +360,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--device-fd"></a><h3>The <code class="literal">“device-fd”</code> property</h3>
 <pre class="programlisting">  “device-fd”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>File descriptor of the device.</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read</p>
 <p>Allowed values: &gt;= G_MAXULONG</p>
 <p>Default value: -1</p>
@@ -366,6 +370,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--brightness"></a><h3>The <code class="literal">“brightness”</code> property</h3>
 <pre class="programlisting">  “brightness”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Picture brightness, or more precisely, the black level</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -374,6 +379,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--contrast"></a><h3>The <code class="literal">“contrast”</code> property</h3>
 <pre class="programlisting">  “contrast”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Picture contrast or luma gain</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -382,6 +388,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--hue"></a><h3>The <code class="literal">“hue”</code> property</h3>
 <pre class="programlisting">  “hue”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Hue or color balance</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -390,6 +397,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--saturation"></a><h3>The <code class="literal">“saturation”</code> property</h3>
 <pre class="programlisting">  “saturation”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Picture color saturation or chroma gain</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -398,6 +406,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--norm"></a><h3>The <code class="literal">“norm”</code> property</h3>
 <pre class="programlisting">  “norm”                     <span class="type">V4L2_TV_norms</span></pre>
 <p>TV norm</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: none</p>
 </div>
@@ -406,6 +415,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <a name="GstV4l2Src--io-mode"></a><h3>The <code class="literal">“io-mode”</code> property</h3>
 <pre class="programlisting">  “io-mode”                  <span class="type">GstV4l2IOMode</span></pre>
 <p>IO Mode</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: GST_V4L2_IO_AUTO</p>
 </div>
@@ -416,6 +426,7 @@ variable GST_V4L2_USE_LIBV4L2=1.</p>
 <p>Additional v4l2 controls for the device. The controls are identified
 by the control name (lowercase with '_' for any non-alphanumeric
 characters).</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p class="since">Since: 1.2</p>
 </div>
@@ -425,6 +436,7 @@ characters).</p>
 <pre class="programlisting">  “force-aspect-ratio”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>When enabled, the pixel aspect ratio queried from the device or set
 with the pixel-aspect-ratio property will be enforced.</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 <p class="since">Since: 1.2</p>
@@ -435,6 +447,7 @@ with the pixel-aspect-ratio property will be enforced.</p>
 <pre class="programlisting">  “pixel-aspect-ratio”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The pixel aspect ratio of the device. This overwrites the pixel aspect
 ratio queried from the device.</p>
+<p>Owner: GstV4l2Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: "1/1"</p>
 <p class="since">Since: 1.2</p>
@@ -491,6 +504,6 @@ Probe &amp; Commit to happen prior to the normal Probe &amp; Commit.</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

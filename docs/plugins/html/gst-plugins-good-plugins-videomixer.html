@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>videomixer: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-videomedian.html" title="videomedian">
 <link rel="next" href="gst-plugins-good-plugins-vp8dec.html" title="vp8dec">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -53,8 +53,8 @@
 <a name="gst-plugins-good-plugins-videomixer.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -106,14 +106,14 @@ biggest incoming video stream and the framerate of the fastest incoming one.</p>
 6
 7
 8</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> \
-  videotestsrc pattern<span class="gtkdoc opt">=</span><span class="number">1</span> <span class="gtkdoc opt">!</span> \
-  video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>format<span class="gtkdoc opt">=</span>AYUV<span class="gtkdoc opt">,</span>framerate<span class="gtkdoc opt">=</span>\<span class="gtkdoc opt">(</span>fraction\<span class="gtkdoc opt">)</span><span class="number">10</span><span class="gtkdoc opt">/</span><span class="number">1</span><span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">100</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> \
-  videobox border<span class="gtkdoc opt">-</span>alpha<span class="gtkdoc opt">=</span><span class="number">0</span> top<span class="gtkdoc opt">=-</span><span class="number">70</span> bottom<span class="gtkdoc opt">=-</span><span class="number">70</span> right<span class="gtkdoc opt">=-</span><span class="number">220</span> <span class="gtkdoc opt">!</span> \
-  videomixer name<span class="gtkdoc opt">=</span>mix <span class="gtkdoc kwc">sink_0</span><span class="gtkdoc opt">::</span>alpha<span class="gtkdoc opt">=</span><span class="number">0.7</span> <span class="gtkdoc kwc">sink_1</span><span class="gtkdoc opt">::</span>alpha<span class="gtkdoc opt">=</span><span class="number">0.5</span> <span class="gtkdoc opt">!</span> \
-  videoconvert <span class="gtkdoc opt">!</span> xvimagesink \
-  videotestsrc <span class="gtkdoc opt">!</span> \
-  video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>format<span class="gtkdoc opt">=</span>AYUV<span class="gtkdoc opt">,</span>framerate<span class="gtkdoc opt">=</span>\<span class="gtkdoc opt">(</span>fraction\<span class="gtkdoc opt">)</span><span class="number">5</span><span class="gtkdoc opt">/</span><span class="number">1</span><span class="gtkdoc opt">,</span>width<span class="gtkdoc opt">=</span><span class="number">320</span><span class="gtkdoc opt">,</span>height<span class="gtkdoc opt">=</span><span class="number">240</span> <span class="gtkdoc opt">!</span> mix<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> \
+  <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="mi">1</span> <span class="o">!</span> \
+  <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="n">AYUV</span><span class="p">,</span><span class="n">framerate</span><span class="o">=</span><span class="err">\</span><span class="p">(</span><span class="n">fraction</span><span class="err">\</span><span class="p">)</span><span class="mi">10</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> \
+  <span class="n">videobox</span> <span class="n">border</span><span class="o">-</span><span class="n">alpha</span><span class="o">=</span><span class="mi">0</span> <span class="n">top</span><span class="o">=</span><span class="mi">-70</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">-70</span> <span class="n">right</span><span class="o">=</span><span class="mi">-220</span> <span class="o">!</span> \
+  <span class="n">videomixer</span> <span class="n">name</span><span class="o">=</span><span class="n">mix</span> <span class="n">sink_0</span><span class="o">::</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span> <span class="n">sink_1</span><span class="o">::</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">!</span> \
+  <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">xvimagesink</span> \
+  <span class="n">videotestsrc</span> <span class="o">!</span> \
+  <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="n">AYUV</span><span class="p">,</span><span class="n">framerate</span><span class="o">=</span><span class="err">\</span><span class="p">(</span><span class="n">fraction</span><span class="err">\</span><span class="p">)</span><span class="mi">5</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">240</span> <span class="o">!</span> <span class="n">mix</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -134,11 +134,11 @@ framerate of the output video is 10 frames per second.
 3
 4
 5</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videotestsrc pattern<span class="gtkdoc opt">=</span><span class="number">1</span> <span class="gtkdoc opt">!</span> \
-  video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span> framerate<span class="gtkdoc opt">=</span>\<span class="gtkdoc opt">(</span>fraction\<span class="gtkdoc opt">)</span><span class="number">10</span><span class="gtkdoc opt">/</span><span class="number">1</span><span class="gtkdoc opt">,</span> width<span class="gtkdoc opt">=</span><span class="number">100</span><span class="gtkdoc opt">,</span> height<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> \
-  videomixer name<span class="gtkdoc opt">=</span>mix <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> ximagesink \
-  videotestsrc <span class="gtkdoc opt">!</span>  \
-  video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span> framerate<span class="gtkdoc opt">=</span>\<span class="gtkdoc opt">(</span>fraction\<span class="gtkdoc opt">)</span><span class="number">5</span><span class="gtkdoc opt">/</span><span class="number">1</span><span class="gtkdoc opt">,</span> width<span class="gtkdoc opt">=</span><span class="number">320</span><span class="gtkdoc opt">,</span> height<span class="gtkdoc opt">=</span><span class="number">240</span> <span class="gtkdoc opt">!</span> mix<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="mi">1</span> <span class="o">!</span> \
+  <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="err">\</span><span class="p">(</span><span class="n">fraction</span><span class="err">\</span><span class="p">)</span><span class="mi">10</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> \
+  <span class="n">videomixer</span> <span class="n">name</span><span class="o">=</span><span class="n">mix</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">ximagesink</span> \
+  <span class="n">videotestsrc</span> <span class="o">!</span>  \
+  <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="err">\</span><span class="p">(</span><span class="n">fraction</span><span class="err">\</span><span class="p">)</span><span class="mi">5</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">240</span> <span class="o">!</span> <span class="n">mix</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -153,11 +153,11 @@ framerate of the output video is 10 frames per second.
 3
 4
 5</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videotestsrc pattern<span class="gtkdoc opt">=</span><span class="number">1</span> <span class="gtkdoc opt">!</span> \
-  video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>format <span class="gtkdoc opt">=</span>I420<span class="gtkdoc opt">,</span> framerate<span class="gtkdoc opt">=</span>\<span class="gtkdoc opt">(</span>fraction\<span class="gtkdoc opt">)</span><span class="number">10</span><span class="gtkdoc opt">/</span><span class="number">1</span><span class="gtkdoc opt">,</span> width<span class="gtkdoc opt">=</span><span class="number">100</span><span class="gtkdoc opt">,</span> height<span class="gtkdoc opt">=</span><span class="number">100</span> <span class="gtkdoc opt">!</span> \
-  videomixer name<span class="gtkdoc opt">=</span>mix <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> ximagesink \
-  videotestsrc <span class="gtkdoc opt">!</span> \
-  video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>format<span class="gtkdoc opt">=</span>I420<span class="gtkdoc opt">,</span> framerate<span class="gtkdoc opt">=</span>\<span class="gtkdoc opt">(</span>fraction\<span class="gtkdoc opt">)</span><span class="number">5</span><span class="gtkdoc opt">/</span><span class="number">1</span><span class="gtkdoc opt">,</span> width<span class="gtkdoc opt">=</span><span class="number">320</span><span class="gtkdoc opt">,</span> height<span class="gtkdoc opt">=</span><span class="number">240</span> <span class="gtkdoc opt">!</span> mix<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="mi">1</span> <span class="o">!</span> \
+  <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">format</span> <span class="o">=</span><span class="n">I420</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="err">\</span><span class="p">(</span><span class="n">fraction</span><span class="err">\</span><span class="p">)</span><span class="mi">10</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">100</span> <span class="o">!</span> \
+  <span class="n">videomixer</span> <span class="n">name</span><span class="o">=</span><span class="n">mix</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">ximagesink</span> \
+  <span class="n">videotestsrc</span> <span class="o">!</span> \
+  <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">format</span><span class="o">=</span><span class="n">I420</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="err">\</span><span class="p">(</span><span class="n">fraction</span><span class="err">\</span><span class="p">)</span><span class="mi">5</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">320</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">240</span> <span class="o">!</span> <span class="n">mix</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -175,14 +175,14 @@ framerate of the output video is 10 frames per second.
 6
 7
 8</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videomixer name<span class="gtkdoc opt">=</span>mixer <span class="gtkdoc kwc">sink_1</span><span class="gtkdoc opt">::</span>alpha<span class="gtkdoc opt">=</span><span class="number">0.5</span> <span class="gtkdoc kwc">sink_1</span><span class="gtkdoc opt">::</span>xpos<span class="gtkdoc opt">=</span><span class="number">50</span> <span class="gtkdoc kwc">sink_1</span><span class="gtkdoc opt">::</span>ypos<span class="gtkdoc opt">=</span><span class="number">50</span> <span class="gtkdoc opt">!</span> \
-  videoconvert <span class="gtkdoc opt">!</span> ximagesink \
-  videotestsrc pattern<span class="gtkdoc opt">=</span>snow timestamp<span class="gtkdoc opt">-</span>offset<span class="gtkdoc opt">=</span><span class="number">3000000000</span> <span class="gtkdoc opt">!</span> \
-  <span class="string">&quot;video/x-raw,format=AYUV,width=640,height=480,framerate=(fraction)30/1&quot;</span> <span class="gtkdoc opt">!</span> \
-  timeoverlay <span class="gtkdoc opt">!</span> queue2 <span class="gtkdoc opt">!</span> mixer<span class="gtkdoc opt">.</span> \
-  videotestsrc pattern<span class="gtkdoc opt">=</span>smpte <span class="gtkdoc opt">!</span> \
-  <span class="string">&quot;video/x-raw,format=AYUV,width=800,height=600,framerate=(fraction)10/1&quot;</span> <span class="gtkdoc opt">!</span> \
-  timeoverlay <span class="gtkdoc opt">!</span> queue2 <span class="gtkdoc opt">!</span> mixer<span class="gtkdoc opt">.</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videomixer</span> <span class="n">name</span><span class="o">=</span><span class="n">mixer</span> <span class="n">sink_1</span><span class="o">::</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span> <span class="n">sink_1</span><span class="o">::</span><span class="n">xpos</span><span class="o">=</span><span class="mi">50</span> <span class="n">sink_1</span><span class="o">::</span><span class="n">ypos</span><span class="o">=</span><span class="mi">50</span> <span class="o">!</span> \
+  <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">ximagesink</span> \
+  <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="n">snow</span> <span class="n">timestamp</span><span class="o">-</span><span class="n">offset</span><span class="o">=</span><span class="mi">3000000000</span> <span class="o">!</span> \
+  <span class="s">&quot;video/x-raw,format=AYUV,width=640,height=480,framerate=(fraction)30/1&quot;</span> <span class="o">!</span> \
+  <span class="n">timeoverlay</span> <span class="o">!</span> <span class="n">queue2</span> <span class="o">!</span> <span class="n">mixer</span><span class="p">.</span> \
+  <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="n">smpte</span> <span class="o">!</span> \
+  <span class="s">&quot;video/x-raw,format=AYUV,width=800,height=600,framerate=(fraction)10/1&quot;</span> <span class="o">!</span> \
+  <span class="n">timeoverlay</span> <span class="o">!</span> <span class="n">queue2</span> <span class="o">!</span> <span class="n">mixer</span><span class="p">.</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -333,12 +333,13 @@ framerate of the output video is 10 frames per second.
 <a name="GstVideoMixer2--background"></a><h3>The <code class="literal">“background”</code> property</h3>
 <pre class="programlisting">  “background”               <a class="link" href="gst-plugins-good-plugins-videomixer.html#GstVideoMixer2Background" title="enum GstVideoMixer2Background"><span class="type">GstVideoMixer2Background</span></a></pre>
 <p>Background type.</p>
+<p>Owner: GstVideoMixer2</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Checker pattern</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

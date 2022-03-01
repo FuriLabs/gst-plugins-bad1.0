@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>cutter: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-cpureport.html" title="cpureport">
 <link rel="next" href="gst-plugins-good-plugins-dcaparse.html" title="dcaparse">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -74,8 +74,8 @@
 <a name="gst-plugins-good-plugins-cutter.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -117,7 +117,7 @@ silence is signalled by bus messages named</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>m filesrc location<span class="gtkdoc opt">=</span>foo<span class="gtkdoc opt">.</span>ogg <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> cutter <span class="gtkdoc opt">!</span> autoaudiosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">m</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">foo</span><span class="p">.</span><span class="n">ogg</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">cutter</span> <span class="o">!</span> <span class="n">autoaudiosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -222,6 +222,7 @@ silence is signalled by bus messages named</p>
 <a name="GstCutter--leaky"></a><h3>The <code class="literal">“leaky”</code> property</h3>
 <pre class="programlisting">  “leaky”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>do we leak buffers when below threshold ?.</p>
+<p>Owner: GstCutter</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -230,6 +231,7 @@ silence is signalled by bus messages named</p>
 <a name="GstCutter--pre-length"></a><h3>The <code class="literal">“pre-length”</code> property</h3>
 <pre class="programlisting">  “pre-length”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Length of pre-recording buffer (in nanoseconds).</p>
+<p>Owner: GstCutter</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -238,6 +240,7 @@ silence is signalled by bus messages named</p>
 <a name="GstCutter--run-length"></a><h3>The <code class="literal">“run-length”</code> property</h3>
 <pre class="programlisting">  “run-length”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Length of drop below threshold before cut_stop (in nanoseconds).</p>
+<p>Owner: GstCutter</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -246,6 +249,7 @@ silence is signalled by bus messages named</p>
 <a name="GstCutter--threshold"></a><h3>The <code class="literal">“threshold”</code> property</h3>
 <pre class="programlisting">  “threshold”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Volume threshold before trigger.</p>
+<p>Owner: GstCutter</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -254,12 +258,13 @@ silence is signalled by bus messages named</p>
 <a name="GstCutter--threshold-dB"></a><h3>The <code class="literal">“threshold-dB”</code> property</h3>
 <pre class="programlisting">  “threshold-dB”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Volume threshold before trigger (in dB).</p>
+<p>Owner: GstCutter</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

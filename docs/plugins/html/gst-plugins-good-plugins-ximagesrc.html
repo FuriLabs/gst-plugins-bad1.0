@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ximagesrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-webmmux.html" title="webmmux">
 <link rel="next" href="gst-plugins-good-plugins-y4menc.html" title="y4menc">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -101,8 +101,8 @@
 <a name="gst-plugins-good-plugins-ximagesrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -135,7 +135,7 @@ available to also capture your mouse pointer.  By default it will fixate to
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> ximagesrc <span class="gtkdoc opt">!</span> video<span class="gtkdoc opt">/</span>x<span class="gtkdoc opt">-</span>raw<span class="gtkdoc opt">,</span>framerate<span class="gtkdoc opt">=</span><span class="number">5</span><span class="gtkdoc opt">/</span><span class="number">1</span> <span class="gtkdoc opt">!</span> videoconvert <span class="gtkdoc opt">!</span> theoraenc <span class="gtkdoc opt">!</span> oggmux <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>desktop<span class="gtkdoc opt">.</span>ogg</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">ximagesrc</span> <span class="o">!</span> <span class="n">video</span><span class="o">/</span><span class="n">x</span><span class="o">-</span><span class="n">raw</span><span class="p">,</span><span class="n">framerate</span><span class="o">=</span><span class="mi">5</span><span class="o">/</span><span class="mi">1</span> <span class="o">!</span> <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">theoraenc</span> <span class="o">!</span> <span class="n">oggmux</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">desktop</span><span class="p">.</span><span class="n">ogg</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -216,6 +216,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <a name="GstXImageSrc--display-name"></a><h3>The <code class="literal">“display-name”</code> property</h3>
 <pre class="programlisting">  “display-name”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>X Display Name.</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -224,6 +225,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <a name="GstXImageSrc--show-pointer"></a><h3>The <code class="literal">“show-pointer”</code> property</h3>
 <pre class="programlisting">  “show-pointer”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Show mouse pointer (if XFixes extension enabled).</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -233,6 +235,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <pre class="programlisting">  “endx”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>X coordinate of bottom right corner of area to be recorded
 (0 for bottom right of screen)</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= G_MAXINT</p>
 <p>Default value: 0</p>
@@ -243,6 +246,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <pre class="programlisting">  “endy”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Y coordinate of bottom right corner of area to be recorded
 (0 for bottom right of screen)</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= G_MAXINT</p>
 <p>Default value: 0</p>
@@ -253,6 +257,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <pre class="programlisting">  “startx”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>X coordinate of top left corner of area to be recorded
 (0 for top left of screen)</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= G_MAXINT</p>
 <p>Default value: 0</p>
@@ -263,6 +268,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <pre class="programlisting">  “starty”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Y coordinate of top left corner of area to be recorded
 (0 for top left of screen)</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= G_MAXINT</p>
 <p>Default value: 0</p>
@@ -272,6 +278,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <a name="GstXImageSrc--use-damage"></a><h3>The <code class="literal">“use-damage”</code> property</h3>
 <pre class="programlisting">  “use-damage”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Use XDamage (if the XDamage extension is enabled)</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -281,6 +288,7 @@ available to also capture your mouse pointer.  By default it will fixate to
 <pre class="programlisting">  “remote”                   <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Whether the X display is remote. The element will try to use alternate calls
 known to work better with remote displays.</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -289,6 +297,7 @@ known to work better with remote displays.</p>
 <a name="GstXImageSrc--xid"></a><h3>The <code class="literal">“xid”</code> property</h3>
 <pre class="programlisting">  “xid”                      <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>The XID of the window to capture. 0 for the root window (default).</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -297,12 +306,13 @@ known to work better with remote displays.</p>
 <a name="GstXImageSrc--xname"></a><h3>The <code class="literal">“xname”</code> property</h3>
 <pre class="programlisting">  “xname”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>The name of the window to capture, if any.</p>
+<p>Owner: GstXImageSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>hdv1394src: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-gtksink.html" title="gtksink">
 <link rel="next" href="gst-plugins-good-plugins-icydemux.html" title="icydemux">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -76,8 +76,8 @@
 <a name="gst-plugins-good-plugins-hdv1394src.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -112,7 +112,7 @@ GstHDV1394Src implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> hdv1394src <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> decodebin name<span class="gtkdoc opt">=</span>d <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> xvimagesink d<span class="gtkdoc opt">. !</span> queue <span class="gtkdoc opt">!</span> alsasink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">hdv1394src</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="n">name</span><span class="o">=</span><span class="n">d</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">xvimagesink</span> <span class="n">d</span><span class="p">.</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">alsasink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -123,7 +123,7 @@ GstHDV1394Src implements
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> hdv1394src <span class="gtkdoc opt">!</span> queue <span class="gtkdoc opt">!</span> filesink location<span class="gtkdoc opt">=</span>mydump<span class="gtkdoc opt">.</span>ts</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">hdv1394src</span> <span class="o">!</span> <span class="n">queue</span> <span class="o">!</span> <span class="n">filesink</span> <span class="n">location</span><span class="o">=</span><span class="n">mydump</span><span class="p">.</span><span class="n">ts</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -204,6 +204,7 @@ GstHDV1394Src implements
 <a name="GstHDV1394Src--channel"></a><h3>The <code class="literal">“channel”</code> property</h3>
 <pre class="programlisting">  “channel”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Channel number for listening.</p>
+<p>Owner: GstHDV1394Src</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,64]</p>
 <p>Default value: 63</p>
@@ -213,6 +214,7 @@ GstHDV1394Src implements
 <a name="GstHDV1394Src--device-name"></a><h3>The <code class="literal">“device-name”</code> property</h3>
 <pre class="programlisting">  “device-name”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Descriptive name of the currently opened device</p>
+<p>Owner: GstHDV1394Src</p>
 <p>Flags: Read</p>
 <p>Default value: "Default"</p>
 </div>
@@ -221,6 +223,7 @@ GstHDV1394Src implements
 <a name="GstHDV1394Src--guid"></a><h3>The <code class="literal">“guid”</code> property</h3>
 <pre class="programlisting">  “guid”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>select one of multiple DV devices by its GUID. use a hexadecimal like 0xhhhhhhhhhhhhhhhh. (0 = no guid).</p>
+<p>Owner: GstHDV1394Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -229,6 +232,7 @@ GstHDV1394Src implements
 <a name="GstHDV1394Src--port"></a><h3>The <code class="literal">“port”</code> property</h3>
 <pre class="programlisting">  “port”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>Port number (-1 automatic).</p>
+<p>Owner: GstHDV1394Src</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [G_MAXULONG,16]</p>
 <p>Default value: -1</p>
@@ -238,12 +242,13 @@ GstHDV1394Src implements
 <a name="GstHDV1394Src--use-avc"></a><h3>The <code class="literal">“use-avc”</code> property</h3>
 <pre class="programlisting">  “use-avc”                  <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Use AV/C VTR control.</p>
+<p>Owner: GstHDV1394Src</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

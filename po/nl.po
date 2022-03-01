@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.12.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2017-10-23 23:59+0100\n"
 "Last-Translator: Freek de Kruijf <f.de.kruijf@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -23,6 +23,10 @@ msgstr "Jack-server niet gevonden"
 
 msgid "Failed to decode JPEG image"
 msgstr "Kan de JPEG-afbeelding niet decoderen"
+
+#, fuzzy
+msgid "Failed to read memory"
+msgstr "Vereist geheugen toekennen is mislukt."
 
 msgid ""
 "Failed to configure LAME mp3 audio encoder. Check your encoding parameters."
@@ -181,6 +185,10 @@ msgstr "Het stuurprogramma van apparaat '%s' ondersteunt de IO-methode %d niet"
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr ""
 "Het stuurprogramma van apparaat '%s' ondersteunt geen bekende IO-methode."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Ongeldige \"atom\"-grootte."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

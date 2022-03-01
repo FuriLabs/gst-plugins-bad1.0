@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good 1.2.1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2014-04-20 16:38+0300\n"
 "Last-Translator: Rihards Prieditis <rprieditis@gmail.com>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
@@ -25,6 +25,10 @@ msgid "Jack server not found"
 msgstr "Nav atrasts Jack serveris"
 
 msgid "Failed to decode JPEG image"
+msgstr "Neizdevās atkodēt JPEG attēlu"
+
+#, fuzzy
+msgid "Failed to read memory"
 msgstr "Neizdevās atkodēt JPEG attēlu"
 
 msgid ""
@@ -181,6 +185,10 @@ msgstr "Ierīces \"%s\" draiveris neatbalsta IO metodi %d"
 #, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Ierīces “%s” draiveris neatbalsta nevienu zināmo ierakstīšanas metodi."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Nederīgs atoma izmērs."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

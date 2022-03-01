@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>pushfilesrc: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-pulsesrc.html" title="pulsesrc">
 <link rel="next" href="gst-plugins-good-plugins-qmlglsink.html" title="qmlglsink">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -86,8 +86,8 @@
 <a name="gst-plugins-good-plugins-pushfilesrc.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -126,7 +126,7 @@ URI passed).</p>
     <tbody>
       <tr>
         <td class="listing_lines" align="right"><pre>1</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> <span class="gtkdoc opt">-</span>m playbin uri<span class="gtkdoc opt">=</span>pushfile<span class="gtkdoc opt">:</span><span class="gtkdoc slc">///home/you/some/file.ogg</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="o">-</span><span class="n">m</span> <span class="n">playbin</span> <span class="n">uri</span><span class="o">=</span><span class="nl">pushfile</span><span class="p">:</span><span class="c1">///home/you/some/file.ogg</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -208,6 +208,7 @@ push-based.
 <a name="GstPushFileSrc--applied-rate"></a><h3>The <code class="literal">“applied-rate”</code> property</h3>
 <pre class="programlisting">  “applied-rate”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Applied rate to use in TIME SEGMENT.</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MINDOUBLE</p>
 <p>Default value: 1</p>
@@ -217,6 +218,7 @@ push-based.
 <a name="GstPushFileSrc--initial-timestamp"></a><h3>The <code class="literal">“initial-timestamp”</code> property</h3>
 <pre class="programlisting">  “initial-timestamp”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Initial Buffer Timestamp (if time-segment TRUE).</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 18446744073709551615</p>
 </div>
@@ -225,6 +227,7 @@ push-based.
 <a name="GstPushFileSrc--location"></a><h3>The <code class="literal">“location”</code> property</h3>
 <pre class="programlisting">  “location”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
 <p>Location of the file to read.</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: NULL</p>
 </div>
@@ -233,6 +236,7 @@ push-based.
 <a name="GstPushFileSrc--rate"></a><h3>The <code class="literal">“rate”</code> property</h3>
 <pre class="programlisting">  “rate”                     <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Rate to use in TIME SEGMENT.</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= G_MINDOUBLE</p>
 <p>Default value: 1</p>
@@ -242,6 +246,7 @@ push-based.
 <a name="GstPushFileSrc--start-time"></a><h3>The <code class="literal">“start-time”</code> property</h3>
 <pre class="programlisting">  “start-time”               <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>Initial Start Time (if time-segment TRUE).</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -251,6 +256,7 @@ push-based.
 <a name="GstPushFileSrc--stream-time"></a><h3>The <code class="literal">“stream-time”</code> property</h3>
 <pre class="programlisting">  “stream-time”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint64"><span class="type">gint64</span></a></pre>
 <p>Initial Stream Time (if time-segment TRUE).</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 0</p>
 <p>Default value: 0</p>
@@ -260,6 +266,7 @@ push-based.
 <a name="GstPushFileSrc--time-segment"></a><h3>The <code class="literal">“time-segment”</code> property</h3>
 <pre class="programlisting">  “time-segment”             <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Emit TIME SEGMENTS.</p>
+<p>Owner: GstPushFileSrc</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -270,6 +277,6 @@ push-based.
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>spectrum: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-souphttpsrc.html" title="souphttpsrc">
 <link rel="next" href="gst-plugins-good-plugins-speexdec.html" title="speexdec">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -84,8 +84,8 @@
 <a name="gst-plugins-good-plugins-spectrum.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -286,130 +286,130 @@ channels and the second dimension are the values.</p>
 122
 123
 124</pre></td>
-        <td class="listing_code"><pre class="programlisting"><span class="comment">/* GStreamer</span>
-<span class="comment"> * Copyright (C) 2006 Stefan Kost &lt;ensonic&#64;users.sf.net&gt;</span>
-<span class="comment"> * Copyright (C) 2008 Jan Schmidt &lt;jan.schmidt&#64;sun.com&gt;</span>
-<span class="comment"> *</span>
-<span class="comment"> * This library is free software; you can redistribute it and/or</span>
-<span class="comment"> * modify it under the terms of the GNU Library General Public</span>
-<span class="comment"> * License as published by the Free Software Foundation; either</span>
-<span class="comment"> * version 2 of the License, or (at your option) any later version.</span>
-<span class="comment"> *</span>
-<span class="comment"> * This library is distributed in the hope that it will be useful,</span>
-<span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
-<span class="comment"> * Library General Public License for more details.</span>
-<span class="comment"> *</span>
-<span class="comment"> * You should have received a copy of the GNU Library General Public</span>
-<span class="comment"> * License along with this library; if not, write to the</span>
-<span class="comment"> * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,</span>
-<span class="comment"> * Boston, MA 02110-1301, USA.</span>
-<span class="comment"> */</span>
+        <td class="listing_code"><pre class="programlisting"><span class="cm">/* GStreamer</span>
+<span class="cm"> * Copyright (C) 2006 Stefan Kost &lt;ensonic@users.sf.net&gt;</span>
+<span class="cm"> * Copyright (C) 2008 Jan Schmidt &lt;jan.schmidt@sun.com&gt;</span>
+<span class="cm"> *</span>
+<span class="cm"> * This library is free software; you can redistribute it and/or</span>
+<span class="cm"> * modify it under the terms of the GNU Library General Public</span>
+<span class="cm"> * License as published by the Free Software Foundation; either</span>
+<span class="cm"> * version 2 of the License, or (at your option) any later version.</span>
+<span class="cm"> *</span>
+<span class="cm"> * This library is distributed in the hope that it will be useful,</span>
+<span class="cm"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="cm"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<span class="cm"> * Library General Public License for more details.</span>
+<span class="cm"> *</span>
+<span class="cm"> * You should have received a copy of the GNU Library General Public</span>
+<span class="cm"> * License along with this library; if not, write to the</span>
+<span class="cm"> * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,</span>
+<span class="cm"> * Boston, MA 02110-1301, USA.</span>
+<span class="cm"> */</span>
 
-<span class="gtkdoc ppc">#include &lt;stdio.h&gt;</span>
-<span class="gtkdoc ppc">#include &lt;string.h&gt;</span>
-<span class="gtkdoc ppc">#include &lt;stdlib.h&gt;</span>
-<span class="gtkdoc ppc">#include &lt;gst/gst.h&gt;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;gst/gst.h&gt;</span><span class="cp"></span>
 
-<span class="gtkdoc kwb">static</span> guint spect_bands <span class="gtkdoc opt">=</span> <span class="number">20</span><span class="gtkdoc opt">;</span>
+<span class="k">static</span> <span class="n">guint</span> <span class="n">spect_bands</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
 
-<span class="gtkdoc ppc">#define AUDIOFREQ 32000</span>
+<span class="cp">#define AUDIOFREQ 32000</span>
 
-<span class="comment">/* receive spectral data from element message */</span>
-<span class="gtkdoc kwb">static</span> gboolean
-<span class="function">message_handler</span> <span class="gtkdoc opt">(</span>GstBus <span class="gtkdoc opt">*</span> bus<span class="gtkdoc opt">,</span> GstMessage <span class="gtkdoc opt">*</span> message<span class="gtkdoc opt">,</span> gpointer data<span class="gtkdoc opt">)</span>
-<span class="gtkdoc opt">{</span>
-  <span class="keyword">if</span> <span class="gtkdoc opt">(</span>message<span class="gtkdoc opt">-&gt;</span>type <span class="gtkdoc opt">==</span> GST_MESSAGE_ELEMENT<span class="gtkdoc opt">) {</span>
-    <span class="gtkdoc kwb">const</span> GstStructure <span class="gtkdoc opt">*</span>s <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstMessage.html#gst-message-get-structure">gst_message_get_structure</a></span> <span class="gtkdoc opt">(</span>message<span class="gtkdoc opt">);</span>
-    <span class="gtkdoc kwb">const</span> gchar <span class="gtkdoc opt">*</span>name <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#gst-structure-get-name">gst_structure_get_name</a></span> <span class="gtkdoc opt">(</span>s<span class="gtkdoc opt">);</span>
-    GstClockTime endtime<span class="gtkdoc opt">;</span>
+<span class="cm">/* receive spectral data from element message */</span>
+<span class="k">static</span> <span class="n">gboolean</span>
+<span class="n">message_handler</span> <span class="p">(</span><span class="n">GstBus</span> <span class="o">*</span> <span class="n">bus</span><span class="p">,</span> <span class="n">GstMessage</span> <span class="o">*</span> <span class="n">message</span><span class="p">,</span> <span class="n">gpointer</span> <span class="n">data</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">message</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">GST_MESSAGE_ELEMENT</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="n">GstStructure</span> <span class="o">*</span><span class="n">s</span> <span class="o">=</span> <span class="n">gst_message_get_structure</span> <span class="p">(</span><span class="n">message</span><span class="p">);</span>
+    <span class="k">const</span> <span class="n">gchar</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="n">gst_structure_get_name</span> <span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="n">GstClockTime</span> <span class="n">endtime</span><span class="p">;</span>
 
-    <span class="keyword">if</span> <span class="gtkdoc opt">(</span><span class="function">strcmp</span> <span class="gtkdoc opt">(</span>name<span class="gtkdoc opt">,</span> <span class="string">&quot;spectrum&quot;</span><span class="gtkdoc opt">) ==</span> <span class="number">0</span><span class="gtkdoc opt">) {</span>
-      <span class="gtkdoc kwb">const</span> GValue <span class="gtkdoc opt">*</span>magnitudes<span class="gtkdoc opt">;</span>
-      <span class="gtkdoc kwb">const</span> GValue <span class="gtkdoc opt">*</span>phases<span class="gtkdoc opt">;</span>
-      <span class="gtkdoc kwb">const</span> GValue <span class="gtkdoc opt">*</span>mag<span class="gtkdoc opt">, *</span>phase<span class="gtkdoc opt">;</span>
-      gdouble freq<span class="gtkdoc opt">;</span>
-      guint i<span class="gtkdoc opt">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;spectrum&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">const</span> <span class="n">GValue</span> <span class="o">*</span><span class="n">magnitudes</span><span class="p">;</span>
+      <span class="k">const</span> <span class="n">GValue</span> <span class="o">*</span><span class="n">phases</span><span class="p">;</span>
+      <span class="k">const</span> <span class="n">GValue</span> <span class="o">*</span><span class="n">mag</span><span class="p">,</span> <span class="o">*</span><span class="n">phase</span><span class="p">;</span>
+      <span class="n">gdouble</span> <span class="n">freq</span><span class="p">;</span>
+      <span class="n">guint</span> <span class="n">i</span><span class="p">;</span>
 
-      <span class="keyword">if</span> <span class="gtkdoc opt">(!</span><span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#gst-structure-get-clock-time">gst_structure_get_clock_time</a></span> <span class="gtkdoc opt">(</span>s<span class="gtkdoc opt">,</span> <span class="string">&quot;endtime&quot;</span><span class="gtkdoc opt">, &amp;</span>endtime<span class="gtkdoc opt">))</span>
-        endtime <span class="gtkdoc opt">=</span> GST_CLOCK_TIME_NONE<span class="gtkdoc opt">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">gst_structure_get_clock_time</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;endtime&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">endtime</span><span class="p">))</span>
+        <span class="n">endtime</span> <span class="o">=</span> <span class="n">GST_CLOCK_TIME_NONE</span><span class="p">;</span>
 
-      <span class="function"><a href="/usr/share/gtk-doc/html/glib/glib-Warnings-and-Assertions.html#g-print">g_print</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;New spectrum message, endtime %&quot;</span> GST_TIME_FORMAT <span class="string">&quot;</span><span class="gtkdoc esc">\n</span><span class="string">&quot;</span><span class="gtkdoc opt">,</span>
-          <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/gstreamer-GstInfo.html#GST-TIME-ARGS:CAPS">GST_TIME_ARGS</a></span> <span class="gtkdoc opt">(</span>endtime<span class="gtkdoc opt">));</span>
+      <span class="n">g_print</span> <span class="p">(</span><span class="s">&quot;New spectrum message, endtime %&quot;</span> <span class="n">GST_TIME_FORMAT</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+          <span class="n">GST_TIME_ARGS</span> <span class="p">(</span><span class="n">endtime</span><span class="p">));</span>
 
-      magnitudes <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#gst-structure-get-value">gst_structure_get_value</a></span> <span class="gtkdoc opt">(</span>s<span class="gtkdoc opt">,</span> <span class="string">&quot;magnitude&quot;</span><span class="gtkdoc opt">);</span>
-      phases <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstStructure.html#gst-structure-get-value">gst_structure_get_value</a></span> <span class="gtkdoc opt">(</span>s<span class="gtkdoc opt">,</span> <span class="string">&quot;phase&quot;</span><span class="gtkdoc opt">);</span>
+      <span class="n">magnitudes</span> <span class="o">=</span> <span class="n">gst_structure_get_value</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;magnitude&quot;</span><span class="p">);</span>
+      <span class="n">phases</span> <span class="o">=</span> <span class="n">gst_structure_get_value</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&quot;phase&quot;</span><span class="p">);</span>
 
-      <span class="keyword">for</span> <span class="gtkdoc opt">(</span>i <span class="gtkdoc opt">=</span> <span class="number">0</span><span class="gtkdoc opt">;</span> i <span class="gtkdoc opt">&lt;</span> spect_bands<span class="gtkdoc opt">; ++</span>i<span class="gtkdoc opt">) {</span>
-        freq <span class="gtkdoc opt">= (</span>gdouble<span class="gtkdoc opt">) ((</span>AUDIOFREQ <span class="gtkdoc opt">/</span> <span class="number">2</span><span class="gtkdoc opt">) *</span> i <span class="gtkdoc opt">+</span> AUDIOFREQ <span class="gtkdoc opt">/</span> <span class="number">4</span><span class="gtkdoc opt">) /</span> spect_bands<span class="gtkdoc opt">;</span>
-        mag <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/gstreamer-GstValue.html#gst-value-list-get-value">gst_value_list_get_value</a></span> <span class="gtkdoc opt">(</span>magnitudes<span class="gtkdoc opt">,</span> i<span class="gtkdoc opt">);</span>
-        phase <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/gstreamer-GstValue.html#gst-value-list-get-value">gst_value_list_get_value</a></span> <span class="gtkdoc opt">(</span>phases<span class="gtkdoc opt">,</span> i<span class="gtkdoc opt">);</span>
+      <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">spect_bands</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdouble</span><span class="p">)</span> <span class="p">((</span><span class="n">AUDIOFREQ</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">AUDIOFREQ</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="n">spect_bands</span><span class="p">;</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="n">gst_value_list_get_value</span> <span class="p">(</span><span class="n">magnitudes</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="n">phase</span> <span class="o">=</span> <span class="n">gst_value_list_get_value</span> <span class="p">(</span><span class="n">phases</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
 
-        <span class="keyword">if</span> <span class="gtkdoc opt">(</span>mag <span class="gtkdoc opt">!=</span> NULL <span class="gtkdoc opt">&amp;&amp;</span> phase <span class="gtkdoc opt">!=</span> NULL<span class="gtkdoc opt">) {</span>
-          <span class="function"><a href="/usr/share/gtk-doc/html/glib/glib-Warnings-and-Assertions.html#g-print">g_print</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;band %d (freq %g): magnitude %f dB phase %f</span><span class="gtkdoc esc">\n</span><span class="string">&quot;</span><span class="gtkdoc opt">,</span> i<span class="gtkdoc opt">,</span> freq<span class="gtkdoc opt">,</span>
-              <span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-Standard-Parameter-and-Value-Types.html#g-value-get-float">g_value_get_float</a></span> <span class="gtkdoc opt">(</span>mag<span class="gtkdoc opt">),</span> <span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-Standard-Parameter-and-Value-Types.html#g-value-get-float">g_value_get_float</a></span> <span class="gtkdoc opt">(</span>phase<span class="gtkdoc opt">));</span>
-        <span class="gtkdoc opt">}</span>
-      <span class="gtkdoc opt">}</span>
-      <span class="function"><a href="/usr/share/gtk-doc/html/glib/glib-Warnings-and-Assertions.html#g-print">g_print</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;</span><span class="gtkdoc esc">\n</span><span class="string">&quot;</span><span class="gtkdoc opt">);</span>
-    <span class="gtkdoc opt">}</span>
-  <span class="gtkdoc opt">}</span>
-  <span class="keyword">return</span> TRUE<span class="gtkdoc opt">;</span>
-<span class="gtkdoc opt">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mag</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="n">phase</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">g_print</span> <span class="p">(</span><span class="s">&quot;band %d (freq %g): magnitude %f dB phase %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span>
+              <span class="n">g_value_get_float</span> <span class="p">(</span><span class="n">mag</span><span class="p">),</span> <span class="n">g_value_get_float</span> <span class="p">(</span><span class="n">phase</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">g_print</span> <span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="gtkdoc kwb">int</span>
-<span class="function">main</span> <span class="gtkdoc opt">(</span><span class="gtkdoc kwb">int</span> argc<span class="gtkdoc opt">,</span> <span class="gtkdoc kwb">char</span> <span class="gtkdoc opt">*</span>argv<span class="gtkdoc opt">[])</span>
-<span class="gtkdoc opt">{</span>
-  GstElement <span class="gtkdoc opt">*</span>bin<span class="gtkdoc opt">;</span>
-  GstElement <span class="gtkdoc opt">*</span>src<span class="gtkdoc opt">, *</span>audioconvert<span class="gtkdoc opt">, *</span>spectrum<span class="gtkdoc opt">, *</span>sink<span class="gtkdoc opt">;</span>
-  GstBus <span class="gtkdoc opt">*</span>bus<span class="gtkdoc opt">;</span>
-  GstCaps <span class="gtkdoc opt">*</span>caps<span class="gtkdoc opt">;</span>
-  GMainLoop <span class="gtkdoc opt">*</span>loop<span class="gtkdoc opt">;</span>
+<span class="kt">int</span>
+<span class="n">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+  <span class="n">GstElement</span> <span class="o">*</span><span class="n">bin</span><span class="p">;</span>
+  <span class="n">GstElement</span> <span class="o">*</span><span class="n">src</span><span class="p">,</span> <span class="o">*</span><span class="n">audioconvert</span><span class="p">,</span> <span class="o">*</span><span class="n">spectrum</span><span class="p">,</span> <span class="o">*</span><span class="n">sink</span><span class="p">;</span>
+  <span class="n">GstBus</span> <span class="o">*</span><span class="n">bus</span><span class="p">;</span>
+  <span class="n">GstCaps</span> <span class="o">*</span><span class="n">caps</span><span class="p">;</span>
+  <span class="n">GMainLoop</span> <span class="o">*</span><span class="n">loop</span><span class="p">;</span>
 
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/gstreamer-Gst.html#gst-init">gst_init</a></span> <span class="gtkdoc opt">(&amp;</span>argc<span class="gtkdoc opt">, &amp;</span>argv<span class="gtkdoc opt">);</span>
+  <span class="n">gst_init</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
 
-  bin <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstPipeline.html#gst-pipeline-new">gst_pipeline_new</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;bin&quot;</span><span class="gtkdoc opt">);</span>
+  <span class="n">bin</span> <span class="o">=</span> <span class="n">gst_pipeline_new</span> <span class="p">(</span><span class="s">&quot;bin&quot;</span><span class="p">);</span>
 
-  src <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElementFactory.html#gst-element-factory-make">gst_element_factory_make</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;audiotestsrc&quot;</span><span class="gtkdoc opt">,</span> <span class="string">&quot;src&quot;</span><span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object-set">g_object_set</a></span> <span class="gtkdoc opt">(</span><span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#G-OBJECT:CAPS">G_OBJECT</a></span> <span class="gtkdoc opt">(</span>src<span class="gtkdoc opt">),</span> <span class="string">&quot;wave&quot;</span><span class="gtkdoc opt">,</span> <span class="number">0</span><span class="gtkdoc opt">,</span> <span class="string">&quot;freq&quot;</span><span class="gtkdoc opt">,</span> <span class="number">6000.0</span><span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
-  audioconvert <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElementFactory.html#gst-element-factory-make">gst_element_factory_make</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;audioconvert&quot;</span><span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/glib/glib-Testing.html#g-assert">g_assert</a></span> <span class="gtkdoc opt">(</span>audioconvert<span class="gtkdoc opt">);</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="n">gst_element_factory_make</span> <span class="p">(</span><span class="s">&quot;audiotestsrc&quot;</span><span class="p">,</span> <span class="s">&quot;src&quot;</span><span class="p">);</span>
+  <span class="n">g_object_set</span> <span class="p">(</span><span class="n">G_OBJECT</span> <span class="p">(</span><span class="n">src</span><span class="p">),</span> <span class="s">&quot;wave&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;freq&quot;</span><span class="p">,</span> <span class="mf">6000.0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="n">audioconvert</span> <span class="o">=</span> <span class="n">gst_element_factory_make</span> <span class="p">(</span><span class="s">&quot;audioconvert&quot;</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="n">g_assert</span> <span class="p">(</span><span class="n">audioconvert</span><span class="p">);</span>
 
-  spectrum <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElementFactory.html#gst-element-factory-make">gst_element_factory_make</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;spectrum&quot;</span><span class="gtkdoc opt">,</span> <span class="string">&quot;spectrum&quot;</span><span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object-set">g_object_set</a></span> <span class="gtkdoc opt">(</span><span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#G-OBJECT:CAPS">G_OBJECT</a></span> <span class="gtkdoc opt">(</span>spectrum<span class="gtkdoc opt">),</span> <span class="string">&quot;bands&quot;</span><span class="gtkdoc opt">,</span> spect_bands<span class="gtkdoc opt">,</span> <span class="string">&quot;threshold&quot;</span><span class="gtkdoc opt">, -</span><span class="number">80</span><span class="gtkdoc opt">,</span>
-      <span class="string">&quot;post-messages&quot;</span><span class="gtkdoc opt">,</span> TRUE<span class="gtkdoc opt">,</span> <span class="string">&quot;message-phase&quot;</span><span class="gtkdoc opt">,</span> TRUE<span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
+  <span class="n">spectrum</span> <span class="o">=</span> <span class="n">gst_element_factory_make</span> <span class="p">(</span><span class="s">&quot;spectrum&quot;</span><span class="p">,</span> <span class="s">&quot;spectrum&quot;</span><span class="p">);</span>
+  <span class="n">g_object_set</span> <span class="p">(</span><span class="n">G_OBJECT</span> <span class="p">(</span><span class="n">spectrum</span><span class="p">),</span> <span class="s">&quot;bands&quot;</span><span class="p">,</span> <span class="n">spect_bands</span><span class="p">,</span> <span class="s">&quot;threshold&quot;</span><span class="p">,</span> <span class="mi">-80</span><span class="p">,</span>
+      <span class="s">&quot;post-messages&quot;</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="s">&quot;message-phase&quot;</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 
-  sink <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElementFactory.html#gst-element-factory-make">gst_element_factory_make</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;fakesink&quot;</span><span class="gtkdoc opt">,</span> <span class="string">&quot;sink&quot;</span><span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#g-object-set">g_object_set</a></span> <span class="gtkdoc opt">(</span><span class="function"><a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#G-OBJECT:CAPS">G_OBJECT</a></span> <span class="gtkdoc opt">(</span>sink<span class="gtkdoc opt">),</span> <span class="string">&quot;sync&quot;</span><span class="gtkdoc opt">,</span> TRUE<span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
+  <span class="n">sink</span> <span class="o">=</span> <span class="n">gst_element_factory_make</span> <span class="p">(</span><span class="s">&quot;fakesink&quot;</span><span class="p">,</span> <span class="s">&quot;sink&quot;</span><span class="p">);</span>
+  <span class="n">g_object_set</span> <span class="p">(</span><span class="n">G_OBJECT</span> <span class="p">(</span><span class="n">sink</span><span class="p">),</span> <span class="s">&quot;sync&quot;</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstBin.html#gst-bin-add-many">gst_bin_add_many</a></span> <span class="gtkdoc opt">(</span><span class="function">GST_BIN</span> <span class="gtkdoc opt">(</span>bin<span class="gtkdoc opt">),</span> src<span class="gtkdoc opt">,</span> audioconvert<span class="gtkdoc opt">,</span> spectrum<span class="gtkdoc opt">,</span> sink<span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
+  <span class="n">gst_bin_add_many</span> <span class="p">(</span><span class="n">GST_BIN</span> <span class="p">(</span><span class="n">bin</span><span class="p">),</span> <span class="n">src</span><span class="p">,</span> <span class="n">audioconvert</span><span class="p">,</span> <span class="n">spectrum</span><span class="p">,</span> <span class="n">sink</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 
-  caps <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstCaps.html#gst-caps-new-simple">gst_caps_new_simple</a></span> <span class="gtkdoc opt">(</span><span class="string">&quot;audio/x-raw&quot;</span><span class="gtkdoc opt">,</span>
-      <span class="string">&quot;rate&quot;</span><span class="gtkdoc opt">,</span> G_TYPE_INT<span class="gtkdoc opt">,</span> AUDIOFREQ<span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
+  <span class="n">caps</span> <span class="o">=</span> <span class="n">gst_caps_new_simple</span> <span class="p">(</span><span class="s">&quot;audio/x-raw&quot;</span><span class="p">,</span>
+      <span class="s">&quot;rate&quot;</span><span class="p">,</span> <span class="n">G_TYPE_INT</span><span class="p">,</span> <span class="n">AUDIOFREQ</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 
-  <span class="keyword">if</span> <span class="gtkdoc opt">(!</span><span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-link">gst_element_link</a></span> <span class="gtkdoc opt">(</span>src<span class="gtkdoc opt">,</span> audioconvert<span class="gtkdoc opt">) ||</span>
-      <span class="gtkdoc opt">!</span><span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-link-filtered">gst_element_link_filtered</a></span> <span class="gtkdoc opt">(</span>audioconvert<span class="gtkdoc opt">,</span> spectrum<span class="gtkdoc opt">,</span> caps<span class="gtkdoc opt">) ||</span>
-      <span class="gtkdoc opt">!</span><span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-link">gst_element_link</a></span> <span class="gtkdoc opt">(</span>spectrum<span class="gtkdoc opt">,</span> sink<span class="gtkdoc opt">)) {</span>
-    <span class="function">fprintf</span> <span class="gtkdoc opt">(</span>stderr<span class="gtkdoc opt">,</span> <span class="string">&quot;can&apos;t link elements</span><span class="gtkdoc esc">\n</span><span class="string">&quot;</span><span class="gtkdoc opt">);</span>
-    <span class="function">exit</span> <span class="gtkdoc opt">(</span><span class="number">1</span><span class="gtkdoc opt">);</span>
-  <span class="gtkdoc opt">}</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstCaps.html#gst-caps-unref">gst_caps_unref</a></span> <span class="gtkdoc opt">(</span>caps<span class="gtkdoc opt">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">gst_element_link</span> <span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">audioconvert</span><span class="p">)</span> <span class="o">||</span>
+      <span class="o">!</span><span class="n">gst_element_link_filtered</span> <span class="p">(</span><span class="n">audioconvert</span><span class="p">,</span> <span class="n">spectrum</span><span class="p">,</span> <span class="n">caps</span><span class="p">)</span> <span class="o">||</span>
+      <span class="o">!</span><span class="n">gst_element_link</span> <span class="p">(</span><span class="n">spectrum</span><span class="p">,</span> <span class="n">sink</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">fprintf</span> <span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;can&#39;t link elements</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="n">exit</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">gst_caps_unref</span> <span class="p">(</span><span class="n">caps</span><span class="p">);</span>
 
-  bus <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-get-bus">gst_element_get_bus</a></span> <span class="gtkdoc opt">(</span>bin<span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstBus.html#gst-bus-add-watch">gst_bus_add_watch</a></span> <span class="gtkdoc opt">(</span>bus<span class="gtkdoc opt">,</span> message_handler<span class="gtkdoc opt">,</span> NULL<span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstObject.html#gst-object-unref">gst_object_unref</a></span> <span class="gtkdoc opt">(</span>bus<span class="gtkdoc opt">);</span>
+  <span class="n">bus</span> <span class="o">=</span> <span class="n">gst_element_get_bus</span> <span class="p">(</span><span class="n">bin</span><span class="p">);</span>
+  <span class="n">gst_bus_add_watch</span> <span class="p">(</span><span class="n">bus</span><span class="p">,</span> <span class="n">message_handler</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+  <span class="n">gst_object_unref</span> <span class="p">(</span><span class="n">bus</span><span class="p">);</span>
 
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-set-state">gst_element_set_state</a></span> <span class="gtkdoc opt">(</span>bin<span class="gtkdoc opt">,</span> GST_STATE_PLAYING<span class="gtkdoc opt">);</span>
+  <span class="n">gst_element_set_state</span> <span class="p">(</span><span class="n">bin</span><span class="p">,</span> <span class="n">GST_STATE_PLAYING</span><span class="p">);</span>
 
-  <span class="comment">/* we need to run a GLib main loop to get the messages */</span>
-  loop <span class="gtkdoc opt">=</span> <span class="function"><a href="/usr/share/gtk-doc/html/glib/glib-The-Main-Event-Loop.html#g-main-loop-new">g_main_loop_new</a></span> <span class="gtkdoc opt">(</span>NULL<span class="gtkdoc opt">,</span> FALSE<span class="gtkdoc opt">);</span>
-  <span class="function"><a href="/usr/share/gtk-doc/html/glib/glib-The-Main-Event-Loop.html#g-main-loop-run">g_main_loop_run</a></span> <span class="gtkdoc opt">(</span>loop<span class="gtkdoc opt">);</span>
+  <span class="cm">/* we need to run a GLib main loop to get the messages */</span>
+  <span class="n">loop</span> <span class="o">=</span> <span class="n">g_main_loop_new</span> <span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">);</span>
+  <span class="n">g_main_loop_run</span> <span class="p">(</span><span class="n">loop</span><span class="p">);</span>
 
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstElement.html#gst-element-set-state">gst_element_set_state</a></span> <span class="gtkdoc opt">(</span>bin<span class="gtkdoc opt">,</span> GST_STATE_NULL<span class="gtkdoc opt">);</span>
+  <span class="n">gst_element_set_state</span> <span class="p">(</span><span class="n">bin</span><span class="p">,</span> <span class="n">GST_STATE_NULL</span><span class="p">);</span>
 
-  <span class="function"><a href="/usr/share/gtk-doc/html/gstreamer-1.0/GstObject.html#gst-object-unref">gst_object_unref</a></span> <span class="gtkdoc opt">(</span>bin<span class="gtkdoc opt">);</span>
+  <span class="n">gst_object_unref</span> <span class="p">(</span><span class="n">bin</span><span class="p">);</span>
 
-  <span class="keyword">return</span> <span class="number">0</span><span class="gtkdoc opt">;</span>
-<span class="gtkdoc opt">}</span></pre></td>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -514,6 +514,7 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--bands"></a><h3>The <code class="literal">“bands”</code> property</h3>
 <pre class="programlisting">  “bands”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Number of frequency bands.</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [2,1073741824]</p>
 <p>Default value: 128</p>
@@ -523,6 +524,7 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--interval"></a><h3>The <code class="literal">“interval”</code> property</h3>
 <pre class="programlisting">  “interval”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint64"><span class="type">guint64</span></a></pre>
 <p>Interval of time between message posts (in nanoseconds).</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &gt;= 1</p>
 <p>Default value: 100000000</p>
@@ -532,6 +534,7 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--threshold"></a><h3>The <code class="literal">“threshold”</code> property</h3>
 <pre class="programlisting">  “threshold”                <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a></pre>
 <p>dB threshold for result. All lower values will be set to this.</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 0</p>
 <p>Default value: -60</p>
@@ -541,6 +544,7 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--message-magnitude"></a><h3>The <code class="literal">“message-magnitude”</code> property</h3>
 <pre class="programlisting">  “message-magnitude”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Whether to add a 'magnitude' field to the structure of any 'spectrum' element messages posted on the bus.</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -549,6 +553,7 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--message-phase"></a><h3>The <code class="literal">“message-phase”</code> property</h3>
 <pre class="programlisting">  “message-phase”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Whether to add a 'phase' field to the structure of any 'spectrum' element messages posted on the bus.</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
@@ -557,6 +562,7 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--post-messages"></a><h3>The <code class="literal">“post-messages”</code> property</h3>
 <pre class="programlisting">  “post-messages”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Whether to post a 'spectrum' element message on the bus for each passed interval.</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -565,12 +571,13 @@ channels and the second dimension are the values.</p>
 <a name="GstSpectrum--multi-channel"></a><h3>The <code class="literal">“multi-channel”</code> property</h3>
 <pre class="programlisting">  “multi-channel”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Send separate results for each channel.</p>
+<p>Owner: GstSpectrum</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

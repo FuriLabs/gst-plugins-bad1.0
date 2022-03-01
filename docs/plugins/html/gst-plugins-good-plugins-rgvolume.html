@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rgvolume: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rglimiter.html" title="rglimiter">
 <link rel="next" href="gst-plugins-good-plugins-rippletv.html" title="rippletv">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -80,8 +80,8 @@
 <a name="gst-plugins-good-plugins-rgvolume.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -134,8 +134,8 @@ element applies -6 dB hard limiting as mentioned in the ReplayGain standard.</p>
       <tr>
         <td class="listing_lines" align="right"><pre>1
 2</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> filesrc location<span class="gtkdoc opt">=</span>filename<span class="gtkdoc opt">.</span>ext <span class="gtkdoc opt">!</span> decodebin <span class="gtkdoc opt">!</span> audioconvert \
-    <span class="gtkdoc opt">!</span> rgvolume <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> alsasink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">filesrc</span> <span class="n">location</span><span class="o">=</span><span class="n">filename</span><span class="p">.</span><span class="n">ext</span> <span class="o">!</span> <span class="n">decodebin</span> <span class="o">!</span> <span class="n">audioconvert</span> \
+    <span class="o">!</span> <span class="n">rgvolume</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">alsasink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -249,6 +249,7 @@ more extensive normalization.</p>
 <p>If album mode is enabled but the album gain tag is absent in the stream,
 the track gain is used instead.  If both gain tags are missing, the value
 of the <a class="link" href="gst-plugins-good-plugins-rgvolume.html#GstRgVolume--fallback-gain" title="The “fallback-gain” property"><span class="type">“fallback-gain”</span></a> property is used instead.</p>
+<p>Owner: GstRgVolume</p>
 <p>Flags: Read / Write</p>
 <p>Default value: TRUE</p>
 </div>
@@ -257,6 +258,7 @@ of the <a class="link" href="gst-plugins-good-plugins-rgvolume.html#GstRgVolume-
 <a name="GstRgVolume--fallback-gain"></a><h3>The <code class="literal">“fallback-gain”</code> property</h3>
 <pre class="programlisting">  “fallback-gain”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>Fallback gain [dB] for streams missing ReplayGain tags.</p>
+<p>Owner: GstRgVolume</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-60,60]</p>
 <p>Default value: 0</p>
@@ -276,6 +278,7 @@ digital full scale.  If extra headroom is used, make sure that the raw
 audio data format is floating point (F32).  Otherwise,
 clipping distortion might be introduced as part of the volume adjustment
 itself.</p>
+<p>Owner: GstRgVolume</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,60]</p>
 <p>Default value: 0</p>
@@ -293,6 +296,7 @@ was adjusted by +6 dB (from 83 to 89 dB).  At the time of this writing, the</p>
 <p>does not reflect this change however.  Where the original proposal states
 that a proper default pre-amp value is +6 dB, this translates to the used 0
 dB.</p>
+<p>Owner: GstRgVolume</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [-60,60]</p>
 <p>Default value: 0</p>
@@ -316,6 +320,7 @@ indicates a problem: What happens in this case is that most streams receive
 peak normalization instead of amplification by the ideal replay gain.  To
 prevent this, the <a class="link" href="gst-plugins-good-plugins-rgvolume.html#GstRgVolume--pre-amp" title="The “pre-amp” property"><span class="type">“pre-amp”</span></a> has to be lowered and/or a limiter
 has to be used which facilitates the use of <a class="link" href="gst-plugins-good-plugins-rgvolume.html#GstRgVolume--headroom" title="The “headroom” property"><span class="type">“headroom”</span></a>.</p>
+<p>Owner: GstRgVolume</p>
 <p>Flags: Read</p>
 <p>Allowed values: [-120,120]</p>
 <p>Default value: 0</p>
@@ -337,6 +342,7 @@ these simple formulas:</p>
 <a class="link" href="gst-plugins-good-plugins-rgvolume.html#GstRgVolume--pre-amp" title="The “pre-amp” property"><span class="type">“pre-amp”</span></a> + <a class="link" href="gst-plugins-good-plugins-rgvolume.html#GstRgVolume--fallback-gain" title="The “fallback-gain” property"><span class="type">“fallback-gain”</span></a>
 </li>
 </ul></div>
+<p>Owner: GstRgVolume</p>
 <p>Flags: Read</p>
 <p>Allowed values: [-120,120]</p>
 <p>Default value: 0</p>
@@ -348,6 +354,6 @@ these simple formulas:</p>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

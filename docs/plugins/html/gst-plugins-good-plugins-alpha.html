@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>alpha: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-alphacolor.html" title="alphacolor">
 <link rel="next" href="gst-plugins-good-plugins-amrparse.html" title="amrparse">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -99,8 +99,8 @@
 <a name="gst-plugins-good-plugins-alpha.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody>
 <tr>
@@ -140,10 +140,10 @@ the transparent color.</p>
 2
 3
 4</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> videotestsrc pattern<span class="gtkdoc opt">=</span>snow <span class="gtkdoc opt">!</span> mixer<span class="gtkdoc opt">.</span>sink_0 \
-  videotestsrc pattern<span class="gtkdoc opt">=</span>smpte75 <span class="gtkdoc opt">!</span> alpha method<span class="gtkdoc opt">=</span>green <span class="gtkdoc opt">!</span> mixer<span class="gtkdoc opt">.</span>sink_1 \
-  videomixer name<span class="gtkdoc opt">=</span>mixer <span class="gtkdoc kwc">sink_0</span><span class="gtkdoc opt">::</span>zorder<span class="gtkdoc opt">=</span><span class="number">0</span> <span class="gtkdoc kwc">sink_1</span><span class="gtkdoc opt">::</span>zorder<span class="gtkdoc opt">=</span><span class="number">1</span> <span class="gtkdoc opt">!</span> \
-  videoconvert <span class="gtkdoc opt">!</span> autovideosink</pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="n">snow</span> <span class="o">!</span> <span class="n">mixer</span><span class="p">.</span><span class="n">sink_0</span> \
+  <span class="n">videotestsrc</span> <span class="n">pattern</span><span class="o">=</span><span class="n">smpte75</span> <span class="o">!</span> <span class="n">alpha</span> <span class="n">method</span><span class="o">=</span><span class="n">green</span> <span class="o">!</span> <span class="n">mixer</span><span class="p">.</span><span class="n">sink_1</span> \
+  <span class="n">videomixer</span> <span class="n">name</span><span class="o">=</span><span class="n">mixer</span> <span class="n">sink_0</span><span class="o">::</span><span class="n">zorder</span><span class="o">=</span><span class="mi">0</span> <span class="n">sink_1</span><span class="o">::</span><span class="n">zorder</span><span class="o">=</span><span class="mi">1</span> <span class="o">!</span> \
+  <span class="n">videoconvert</span> <span class="o">!</span> <span class="n">autovideosink</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -296,6 +296,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--alpha"></a><h3>The <code class="literal">“alpha”</code> property</h3>
 <pre class="programlisting">  “alpha”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a></pre>
 <p>The value for the alpha channel.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,1]</p>
 <p>Default value: 1</p>
@@ -305,6 +306,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--angle"></a><h3>The <code class="literal">“angle”</code> property</h3>
 <pre class="programlisting">  “angle”                    <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Size of the colorcube to change.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,90]</p>
 <p>Default value: 20</p>
@@ -314,6 +316,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--method"></a><h3>The <code class="literal">“method”</code> property</h3>
 <pre class="programlisting">  “method”                   <a class="link" href="gst-plugins-good-plugins-alpha.html#GstAlphaMethod" title="enum GstAlphaMethod"><span class="type">GstAlphaMethod</span></a></pre>
 <p>How the alpha channels should be created.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Default value: Set/adjust alpha channel</p>
 </div>
@@ -322,6 +325,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--noise-level"></a><h3>The <code class="literal">“noise-level”</code> property</h3>
 <pre class="programlisting">  “noise-level”              <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a></pre>
 <p>Size of noise radius.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: [0,64]</p>
 <p>Default value: 2</p>
@@ -331,6 +335,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--target-b"></a><h3>The <code class="literal">“target-b”</code> property</h3>
 <pre class="programlisting">  “target-b”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The blue color value for custom RGB chroma keying.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 255</p>
 <p>Default value: 0</p>
@@ -340,6 +345,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--target-g"></a><h3>The <code class="literal">“target-g”</code> property</h3>
 <pre class="programlisting">  “target-g”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The green color value for custom RGB chroma keying.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 255</p>
 <p>Default value: 255</p>
@@ -349,6 +355,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--target-r"></a><h3>The <code class="literal">“target-r”</code> property</h3>
 <pre class="programlisting">  “target-r”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>The red color value for custom RGB chroma keying.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 255</p>
 <p>Default value: 0</p>
@@ -358,6 +365,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--black-sensitivity"></a><h3>The <code class="literal">“black-sensitivity”</code> property</h3>
 <pre class="programlisting">  “black-sensitivity”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Sensitivity to dark colors.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 128</p>
 <p>Default value: 100</p>
@@ -367,6 +375,7 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--white-sensitivity"></a><h3>The <code class="literal">“white-sensitivity”</code> property</h3>
 <pre class="programlisting">  “white-sensitivity”        <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Sensitivity to bright colors.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Allowed values: &lt;= 128</p>
 <p>Default value: 100</p>
@@ -376,12 +385,13 @@ Jan Schmidt &lt;thaytan@noraisin.net&gt;</td>
 <a name="GstAlpha--prefer-passthrough"></a><h3>The <code class="literal">“prefer-passthrough”</code> property</h3>
 <pre class="programlisting">  “prefer-passthrough”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
 <p>Don't do any processing for alpha=1.0 if possible.</p>
+<p>Owner: GstAlpha</p>
 <p>Flags: Read / Write</p>
 <p>Default value: FALSE</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

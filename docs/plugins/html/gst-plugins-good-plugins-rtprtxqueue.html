@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>rtprtxqueue: GStreamer Good Plugins 1.0 Plugins Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
 <link rel="home" href="index.html" title="GStreamer Good Plugins 1.0 Plugins Reference Manual">
 <link rel="up" href="ch01.html" title="gst-plugins-good Elements">
 <link rel="prev" href="gst-plugins-good-plugins-rtpredenc.html" title="rtpredenc">
 <link rel="next" href="gst-plugins-good-plugins-rtprtxreceive.html" title="rtprtxreceive">
-<meta name="generator" content="GTK-Doc V1.28 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.0 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -69,8 +69,8 @@
 <a name="gst-plugins-good-plugins-rtprtxqueue.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table class="informaltable" width="100%" border="0">
 <colgroup>
-<col width="150px" class="name">
-<col class="description">
+<col width="150px" class="other_proto_type">
+<col class="other_proto_name">
 </colgroup>
 <tbody><tr>
 <td class="datatype_keyword">struct</td>
@@ -120,11 +120,11 @@ rtpbin using gst-launch.</p></li>
 3
 4
 5</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> rtpbin name<span class="gtkdoc opt">=</span>b rtp<span class="gtkdoc opt">-</span>profile<span class="gtkdoc opt">=</span>avpf \
-   audiotestsrc is<span class="gtkdoc opt">-</span>live<span class="gtkdoc opt">=</span><span class="keyword">true</span> <span class="gtkdoc opt">!</span> opusenc <span class="gtkdoc opt">!</span> rtpopuspay pt<span class="gtkdoc opt">=</span><span class="number">96</span> <span class="gtkdoc opt">!</span> rtprtxqueue <span class="gtkdoc opt">!</span> b<span class="gtkdoc opt">.</span>send_rtp_sink_0 \
-   b<span class="gtkdoc opt">.</span>send_rtp_src_0 <span class="gtkdoc opt">!</span> identity drop<span class="gtkdoc opt">-</span>probability<span class="gtkdoc opt">=</span><span class="number">0.01</span> <span class="gtkdoc opt">!</span> udpsink host<span class="gtkdoc opt">=</span><span class="string">&quot;127.0.0.1&quot;</span> port<span class="gtkdoc opt">=</span><span class="number">5000</span> \
-   udpsrc port<span class="gtkdoc opt">=</span><span class="number">5001</span> <span class="gtkdoc opt">!</span> b<span class="gtkdoc opt">.</span>recv_rtcp_sink_0 \
-   b<span class="gtkdoc opt">.</span>send_rtcp_src_0 <span class="gtkdoc opt">!</span> udpsink host<span class="gtkdoc opt">=</span><span class="string">&quot;127.0.0.1&quot;</span> port<span class="gtkdoc opt">=</span><span class="number">5002</span> sync<span class="gtkdoc opt">=</span><span class="keyword">false</span> async<span class="gtkdoc opt">=</span><span class="keyword">false</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">rtpbin</span> <span class="n">name</span><span class="o">=</span><span class="n">b</span> <span class="n">rtp</span><span class="o">-</span><span class="n">profile</span><span class="o">=</span><span class="n">avpf</span> \
+   <span class="n">audiotestsrc</span> <span class="n">is</span><span class="o">-</span><span class="n">live</span><span class="o">=</span><span class="nb">true</span> <span class="o">!</span> <span class="n">opusenc</span> <span class="o">!</span> <span class="n">rtpopuspay</span> <span class="n">pt</span><span class="o">=</span><span class="mi">96</span> <span class="o">!</span> <span class="n">rtprtxqueue</span> <span class="o">!</span> <span class="n">b</span><span class="p">.</span><span class="n">send_rtp_sink_0</span> \
+   <span class="n">b</span><span class="p">.</span><span class="n">send_rtp_src_0</span> <span class="o">!</span> <span class="n">identity</span> <span class="n">drop</span><span class="o">-</span><span class="n">probability</span><span class="o">=</span><span class="mf">0.01</span> <span class="o">!</span> <span class="n">udpsink</span> <span class="n">host</span><span class="o">=</span><span class="s">&quot;127.0.0.1&quot;</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span> \
+   <span class="n">udpsrc</span> <span class="n">port</span><span class="o">=</span><span class="mi">5001</span> <span class="o">!</span> <span class="n">b</span><span class="p">.</span><span class="n">recv_rtcp_sink_0</span> \
+   <span class="n">b</span><span class="p">.</span><span class="n">send_rtcp_src_0</span> <span class="o">!</span> <span class="n">udpsink</span> <span class="n">host</span><span class="o">=</span><span class="s">&quot;127.0.0.1&quot;</span> <span class="n">port</span><span class="o">=</span><span class="mi">5002</span> <span class="n">sync</span><span class="o">=</span><span class="nb">false</span> <span class="n">async</span><span class="o">=</span><span class="nb">false</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -141,12 +141,12 @@ rtpbin using gst-launch.</p></li>
 4
 5
 6</pre></td>
-        <td class="listing_code"><pre class="programlisting">gst<span class="gtkdoc opt">-</span>launch<span class="gtkdoc opt">-</span><span class="number">1.0</span> rtpbin name<span class="gtkdoc opt">=</span>b rtp<span class="gtkdoc opt">-</span>profile<span class="gtkdoc opt">=</span>avpf <span class="keyword">do</span><span class="gtkdoc opt">-</span>retransmission<span class="gtkdoc opt">=</span><span class="keyword">true</span> \
-   udpsrc port<span class="gtkdoc opt">=</span><span class="number">5000</span> caps<span class="gtkdoc opt">=</span><span class="string">&quot;application/x-rtp,media=(string)audio,clock-rate=(int)48000,encoding-name=(string)OPUS,payload=(int)96&quot;</span> <span class="gtkdoc opt">!</span> \
-       b<span class="gtkdoc opt">.</span>recv_rtp_sink_0 \
-   b<span class="gtkdoc opt">. !</span> rtpopusdepay <span class="gtkdoc opt">!</span> opusdec <span class="gtkdoc opt">!</span> audioconvert <span class="gtkdoc opt">!</span> audioresample <span class="gtkdoc opt">!</span> autoaudiosink \
-   udpsrc port<span class="gtkdoc opt">=</span><span class="number">5002</span> <span class="gtkdoc opt">!</span> b<span class="gtkdoc opt">.</span>recv_rtcp_sink_0 \
-   b<span class="gtkdoc opt">.</span>send_rtcp_src_0 <span class="gtkdoc opt">!</span> udpsink host<span class="gtkdoc opt">=</span><span class="string">&quot;127.0.0.1&quot;</span> port<span class="gtkdoc opt">=</span><span class="number">5001</span> sync<span class="gtkdoc opt">=</span><span class="keyword">false</span> async<span class="gtkdoc opt">=</span><span class="keyword">false</span></pre></td>
+        <td class="listing_code"><pre class="programlisting"><span class="n">gst</span><span class="o">-</span><span class="n">launch</span><span class="mf">-1.0</span> <span class="n">rtpbin</span> <span class="n">name</span><span class="o">=</span><span class="n">b</span> <span class="n">rtp</span><span class="o">-</span><span class="n">profile</span><span class="o">=</span><span class="n">avpf</span> <span class="k">do</span><span class="o">-</span><span class="n">retransmission</span><span class="o">=</span><span class="nb">true</span> \
+   <span class="n">udpsrc</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span> <span class="n">caps</span><span class="o">=</span><span class="s">&quot;application/x-rtp,media=(string)audio,clock-rate=(int)48000,encoding-name=(string)OPUS,payload=(int)96&quot;</span> <span class="o">!</span> \
+       <span class="n">b</span><span class="p">.</span><span class="n">recv_rtp_sink_0</span> \
+   <span class="n">b</span><span class="p">.</span> <span class="o">!</span> <span class="n">rtpopusdepay</span> <span class="o">!</span> <span class="n">opusdec</span> <span class="o">!</span> <span class="n">audioconvert</span> <span class="o">!</span> <span class="n">audioresample</span> <span class="o">!</span> <span class="n">autoaudiosink</span> \
+   <span class="n">udpsrc</span> <span class="n">port</span><span class="o">=</span><span class="mi">5002</span> <span class="o">!</span> <span class="n">b</span><span class="p">.</span><span class="n">recv_rtcp_sink_0</span> \
+   <span class="n">b</span><span class="p">.</span><span class="n">send_rtcp_src_0</span> <span class="o">!</span> <span class="n">udpsink</span> <span class="n">host</span><span class="o">=</span><span class="s">&quot;127.0.0.1&quot;</span> <span class="n">port</span><span class="o">=</span><span class="mi">5001</span> <span class="n">sync</span><span class="o">=</span><span class="nb">false</span> <span class="n">async</span><span class="o">=</span><span class="nb">false</span></pre></td>
       </tr>
     </tbody>
   </table>
@@ -253,6 +253,7 @@ rtpbin using gst-launch.</p></li>
 <a name="GstRTPRtxQueue--max-size-packets"></a><h3>The <code class="literal">“max-size-packets”</code> property</h3>
 <pre class="programlisting">  “max-size-packets”         <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Amount of packets to queue (0 = unlimited).</p>
+<p>Owner: GstRTPRtxQueue</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 100</p>
 </div>
@@ -261,6 +262,7 @@ rtpbin using gst-launch.</p></li>
 <a name="GstRTPRtxQueue--max-size-time"></a><h3>The <code class="literal">“max-size-time”</code> property</h3>
 <pre class="programlisting">  “max-size-time”            <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Amount of ms to queue (0 = unlimited).</p>
+<p>Owner: GstRTPRtxQueue</p>
 <p>Flags: Read / Write</p>
 <p>Default value: 0</p>
 </div>
@@ -269,6 +271,7 @@ rtpbin using gst-launch.</p></li>
 <a name="GstRTPRtxQueue--fulfilled-requests"></a><h3>The <code class="literal">“fulfilled-requests”</code> property</h3>
 <pre class="programlisting">  “fulfilled-requests”       <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Number of fulfilled retransmission requests.</p>
+<p>Owner: GstRTPRtxQueue</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
@@ -277,12 +280,13 @@ rtpbin using gst-launch.</p></li>
 <a name="GstRTPRtxQueue--requests"></a><h3>The <code class="literal">“requests”</code> property</h3>
 <pre class="programlisting">  “requests”                 <a href="/usr/share/gtk-doc/html/glib/glib-Basic-Types.html#guint"><span class="type">guint</span></a></pre>
 <p>Total number of retransmission requests.</p>
+<p>Owner: GstRTPRtxQueue</p>
 <p>Flags: Read</p>
 <p>Default value: 0</p>
 </div>
 </div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.28</div>
+<hr>Generated by GTK-Doc V1.33.0</div>
 </body>
 </html>

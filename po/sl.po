@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gst-plugins-good-1.2.1\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/\n"
-"POT-Creation-Date: 2019-12-03 11:06+0000\n"
+"POT-Creation-Date: 2020-10-21 14:49+0100\n"
 "PO-Revision-Date: 2014-04-09 22:52+0100\n"
 "Last-Translator: Klemen Košir <klemen913@gmail.com>\n"
 "Language-Team: Slovenian <translation-team-sl@lists.sourceforge.net>\n"
@@ -25,6 +25,10 @@ msgid "Jack server not found"
 msgstr "Strežnika JACK ni mogoče najti"
 
 msgid "Failed to decode JPEG image"
+msgstr "Napaka med dekodiranjem JPEG slike"
+
+#, fuzzy
+msgid "Failed to read memory"
 msgstr "Napaka med dekodiranjem JPEG slike"
 
 msgid ""
@@ -184,6 +188,10 @@ msgstr "Gonilnik naprave \"%s\" ne podpira nobenega načina I/O %d."
 #, c-format
 msgid "The driver of device '%s' does not support any known IO method."
 msgstr "Gonilnik naprave \"%s\" ne podpira nobenega znanega načina I/O."
+
+#, fuzzy
+msgid "Invalid caps"
+msgstr "Neveljavna velikost atoma."
 
 #, fuzzy, c-format
 msgid "Device '%s' has no supported format"

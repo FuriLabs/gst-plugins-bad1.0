@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.20.1-1ubuntu2) jammy; urgency=medium
+
+  * debian/gstreamer1.0-plugins-bad.install: Fix i386 build
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Tue, 15 Mar 2022 13:10:14 -0400
+
 gst-plugins-bad1.0 (1.20.1-1ubuntu1) jammy; urgency=medium
 
   * Merge from Debian unstable. Remaining changes:

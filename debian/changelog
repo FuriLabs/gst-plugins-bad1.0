@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.20.1-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.20.1-1ubuntu1) jammy; urgency=medium
 
   * Merge from Debian unstable. Remaining changes:
     - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
@@ -9,12 +9,12 @@ gst-plugins-bad1.0 (1.20.1-1ubuntu1) UNRELEASED; urgency=medium
     - Don't build the opencv binary packages on i386, avoiding a large tree
       of numeric-related dependencies for a binary package it's not required
       to support.
-  * d/rules, d/gstreamer1.0-plugins-bad.install, d/rules:
+  * d/rules, d/gstreamer1.0-plugins-bad.install:
     - Don't require these Build-Depends on i386:
       + libltc-dev, libfreeaptx-dev, libopenh264-dev, libqrencode-dev,
         libwpewebkit-1.0-dev, libzxingcore-dev
 
- -- Jeremy Bicha <jeremy.bicha@canonical.com>  Fri, 04 Feb 2022 16:40:20 -0500
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Tue, 15 Mar 2022 11:53:37 -0400
 
 gst-plugins-bad1.0 (1.20.1-1) unstable; urgency=medium
 

@@ -5,16 +5,16 @@ Subject: This is a copy of the jpegformat plugin from gst-plugins-good. It's
 
 ===================================================================
 ---
- gst/jpegformat/gstjifmux.c     | 757 ++++++++++++++++++++++++++++++++++
- gst/jpegformat/gstjifmux.h     |  66 +++
- gst/jpegformat/gstjpegformat.c |  47 +++
+ gst/jpegformat/gstjifmux.c     | 759 ++++++++++++++++++++++++++++++++++
+ gst/jpegformat/gstjifmux.h     |  68 ++++
+ gst/jpegformat/gstjpegformat.c |  45 ++
  gst/jpegformat/gstjpegformat.h |  92 +++++
- gst/jpegformat/gstjpegparse.c  | 899 +++++++++++++++++++++++++++++++++++++++++
- gst/jpegformat/gstjpegparse.h  |  92 +++++
+ gst/jpegformat/gstjpegparse.c  | 901 +++++++++++++++++++++++++++++++++++++++++
+ gst/jpegformat/gstjpegparse.h  |  94 +++++
  gst/jpegformat/meson.build     |  16 +
  gst/meson.build                |   2 +-
  meson_options.txt              |   2 +
- 9 files changed, 1972 insertions(+), 1 deletion(-)
+ 9 files changed, 1978 insertions(+), 1 deletion(-)
  create mode 100644 gst/jpegformat/gstjifmux.c
  create mode 100644 gst/jpegformat/gstjifmux.h
  create mode 100644 gst/jpegformat/gstjpegformat.c
@@ -25,10 +25,10 @@ Subject: This is a copy of the jpegformat plugin from gst-plugins-good. It's
 
 diff --git a/gst/jpegformat/gstjifmux.c b/gst/jpegformat/gstjifmux.c
 new file mode 100644
-index 0000000..e958f54
+index 0000000..79241bb
 --- /dev/null
 +++ b/gst/jpegformat/gstjifmux.c
-@@ -0,0 +1,757 @@
+@@ -0,0 +1,759 @@
 +/* GStreamer
 + *
 + * jifmux: JPEG interchange format muxer
@@ -141,6 +141,8 @@ index 0000000..e958f54
 +G_DEFINE_TYPE_WITH_CODE (GstJifMux, gst_jif_mux, GST_TYPE_ELEMENT,
 +    G_IMPLEMENT_INTERFACE (GST_TYPE_TAG_SETTER, NULL);
 +    G_IMPLEMENT_INTERFACE (GST_TYPE_TAG_XMP_WRITER, NULL));
++GST_ELEMENT_REGISTER_DEFINE (jifmux, "jifmux", GST_RANK_SECONDARY,
++    GST_TYPE_JIF_MUX);
 +
 +static void
 +gst_jif_mux_class_init (GstJifMuxClass * klass)
@@ -788,10 +790,10 @@ index 0000000..e958f54
 +}
 diff --git a/gst/jpegformat/gstjifmux.h b/gst/jpegformat/gstjifmux.h
 new file mode 100644
-index 0000000..400e64c
+index 0000000..96830bb
 --- /dev/null
 +++ b/gst/jpegformat/gstjifmux.h
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,68 @@
 +/* GStreamer
 + *
 + * jifmux: JPEG interchange format muxer
@@ -855,15 +857,17 @@ index 0000000..400e64c
 +
 +GType gst_jif_mux_get_type (void);
 +
++GST_ELEMENT_REGISTER_DECLARE (jifmux);
++
 +G_END_DECLS
 +
 +#endif /* __GST_JFIF_MUX_H__ */
 diff --git a/gst/jpegformat/gstjpegformat.c b/gst/jpegformat/gstjpegformat.c
 new file mode 100644
-index 0000000..b410466
+index 0000000..bc37045
 --- /dev/null
 +++ b/gst/jpegformat/gstjpegformat.c
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,45 @@
 +/* GStreamer
 + *
 + * jpegformat: a plugin for JPEG Interchange Format
@@ -896,14 +900,12 @@ index 0000000..b410466
 +static gboolean
 +plugin_init (GstPlugin * plugin)
 +{
-+  if (!gst_element_register (plugin, "jpegparse", GST_RANK_NONE,
-+          GST_TYPE_JPEG_PARSE))
-+    return FALSE;
-+  if (!gst_element_register (plugin, "jifmux", GST_RANK_SECONDARY,
-+          GST_TYPE_JIF_MUX))
-+    return FALSE;
++  gboolean ret = FALSE;
 +
-+  return TRUE;
++  ret |= GST_ELEMENT_REGISTER (jpegparse, plugin);
++  ret |= GST_ELEMENT_REGISTER (jifmux, plugin);
++
++  return ret;
 +}
 +
 +GST_PLUGIN_DEFINE (GST_VERSION_MAJOR,
@@ -1011,10 +1013,10 @@ index 0000000..be69268
 +#endif /* __GST_JPEG_FORMAT_H__ */
 diff --git a/gst/jpegformat/gstjpegparse.c b/gst/jpegformat/gstjpegparse.c
 new file mode 100644
-index 0000000..0378129
+index 0000000..5231879
 --- /dev/null
 +++ b/gst/jpegformat/gstjpegparse.c
-@@ -0,0 +1,899 @@
+@@ -0,0 +1,901 @@
 +/* GStreamer
 + *
 + * jpegparse: a parser for JPEG streams
@@ -1106,6 +1108,8 @@ index 0000000..0378129
 +
 +#define gst_jpeg_parse_parent_class parent_class
 +G_DEFINE_TYPE (GstJpegParse, gst_jpeg_parse, GST_TYPE_BASE_PARSE);
++GST_ELEMENT_REGISTER_DEFINE (jpegparse, "jpegparse", GST_RANK_NONE,
++    GST_TYPE_JPEG_PARSE);
 +
 +static void
 +gst_jpeg_parse_class_init (GstJpegParseClass * klass)
@@ -1916,10 +1920,10 @@ index 0000000..0378129
 +}
 diff --git a/gst/jpegformat/gstjpegparse.h b/gst/jpegformat/gstjpegparse.h
 new file mode 100644
-index 0000000..f809fa3
+index 0000000..e777421
 --- /dev/null
 +++ b/gst/jpegformat/gstjpegparse.h
-@@ -0,0 +1,92 @@
+@@ -0,0 +1,94 @@
 +/* GStreamer
 + *
 + * jpegparse: a parser for JPEG streams
@@ -2008,6 +2012,8 @@ index 0000000..f809fa3
 +};
 +
 +GType gst_jpeg_parse_get_type (void);
++
++GST_ELEMENT_REGISTER_DECLARE (jpegparse);
 +
 +G_END_DECLS
 +

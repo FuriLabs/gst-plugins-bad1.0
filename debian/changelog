@@ -1,3 +1,63 @@
+gst-plugins-bad1.0 (1.20.2-1ubuntu1) UNRELEASED; urgency=medium
+
+  * Merge from Debian unstable. Remaining changes:
+    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
+      moved to -good.
+    - Have gstreamer-plugins-bad-1.0.pc Require gstreamer-plugins-good-1.0 -
+      the package we've moved the referenced plugins to. This maintains
+      compatibility with upstream software and other distributions.
+    - Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+    - d/rules, d/gstreamer1.0-plugins-bad.install, d/rules:
+      + Don't require these Build-Depends on i386:
+        - libltc-dev, libfreeaptx-dev, libopenh264-dev, libqrencode-dev,
+          libzxingcore-dev
+
+ -- Jeremy Bicha <jeremy.bicha@canonical.com>  Fri, 04 Feb 2022 16:40:20 -0500
+
+gst-plugins-bad1.0 (1.20.2-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+
+ -- Sebastian Dröge <slomo@debian.org>  Tue, 03 May 2022 10:07:05 +0300
+
+gst-plugins-bad1.0 (1.20.1-2) unstable; urgency=medium
+
+  * debian/control:
+    + Switch to wpewebkit 1.1 (Closes: #1009721).
+
+ -- Sebastian Dröge <slomo@debian.org>  Wed, 27 Apr 2022 12:27:17 +0300
+
+gst-plugins-bad1.0 (1.20.1-1) unstable; urgency=medium
+
+  * debian/control,
+    debian/gstreamer1.0-plugins-bad.install:
+    + Ship openh264 plugin (Closes: #1005226).
+  * New upstream bugfix release.
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 14 Mar 2022 17:03:33 +0200
+
+gst-plugins-bad1.0 (1.20.0-4) unstable; urgency=medium
+
+  [ Laurent Bigonville ]
+  * debian/control,
+    debian/patches/03-openaptx-Support-libfreeaptx.patch:
+    + Use libfreeaptx instead of libopenaptx.
+
+ -- Sebastian Dröge <slomo@debian.org>  Wed, 16 Feb 2022 09:13:55 +0200
+
+gst-plugins-bad1.0 (1.20.0-3) unstable; urgency=medium
+
+  [ Laurent Bigonville ]
+  * Do not build ldac plugin on big-endian architectures
+    libldac is not building on these, see #980372.
+
+  [ Sebastian Dröge ]
+  * Upload to unstable.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 10 Feb 2022 15:32:48 +0200
+
 gst-plugins-bad1.0 (1.20.0-2ubuntu2) jammy; urgency=medium
 
   * d/rules, d/gstreamer1.0-plugins-bad.install, d/rules:

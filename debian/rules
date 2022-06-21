@@ -54,6 +54,7 @@ override_dh_auto_clean:
 	rm -rf $(CURDIR)/fake-home
 	dh_auto_clean
 
+# Only make the tests fail for key architectures
 override_dh_auto_test:
 ifneq (,$(filter $(DEB_HOST_ARCH), amd64 arm64))
 	xvfb-run dh_auto_test

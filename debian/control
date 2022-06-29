@@ -109,8 +109,10 @@ Build-Depends: debhelper,
                gir1.2-gstreamer-1.0
 Build-Conflicts: libopenaptx-dev
 Standards-Version: 4.5.0
-Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0.git
-Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0/
+Vcs-Git: https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad1.0 -b jammy
+Vcs-Browser: https://git.launchpad.net/~ubuntu-desktop/ubuntu/+source/gst-plugins-bad1.0?h=jammy
+XS-Debian-Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0.git
+XS-Debian-Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0/
 Homepage: https://gstreamer.freedesktop.org
 
 Package: gstreamer1.0-plugins-bad-apps

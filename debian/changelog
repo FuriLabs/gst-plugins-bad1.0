@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.20.3-1ubuntu2) kinetic; urgency=medium
+
+  * No-change rebuild against libsrt1.5-gnutls
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 07 Jul 2022 16:57:26 +0000
+
 gst-plugins-bad1.0 (1.20.3-1ubuntu1) kinetic; urgency=medium
 
   * Merge from Debian unstable. Remaining changes:

@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.20.3-1ubuntu6) kinetic; urgency=medium
+
+  * No-change rebuild against opencv
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 25 Aug 2022 10:50:42 -0400
+
 gst-plugins-bad1.0 (1.20.3-1ubuntu5) kinetic; urgency=medium
 
   * No-change rebuild against libopenexr3-1-30

@@ -30,7 +30,7 @@ GST_PACKAGE_ORIGIN="https://launchpad.net/distros/ubuntu/+source/gst-plugins-bad
 endif
 
 ifeq ($(shell dpkg-vendor --is Ubuntu && echo yes) $(DEB_HOST_ARCH), yes i386)
-NO_I386_ARGS = -Ngstreamer1.0-opencv -Nlibgstreamer-opencv1.0-0 -Ngstreamer1.0-wpe
+NO_I386_ARGS = -Ngstreamer1.0-opencv -Nlibgstreamer-opencv1.0-0
 
 override_dh_builddeb:
 	dh_builddeb $(NO_I386_ARGS)

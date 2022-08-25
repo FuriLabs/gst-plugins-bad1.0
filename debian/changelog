@@ -1,3 +1,11 @@
+gst-plugins-bad1.0 (1.20.3-1ubuntu4) kinetic; urgency=medium
+
+  * More changes to remove wpewebkit support
+    - debian/gstreamer1.0-wpe.install: removed.
+    - debian/rules: removed -Ngstreamer1.0-wpe from NO_I386_ARGS.
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Thu, 18 Aug 2022 08:47:25 -0400
+
 gst-plugins-bad1.0 (1.20.3-1ubuntu3) kinetic; urgency=medium
 
   * No longer build with wpewebkit (LP: #1981592)

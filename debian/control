@@ -7,6 +7,7 @@ Uploaders: Sebastian Dröge <slomo@debian.org>,
            Sjoerd Simons <sjoerd@debian.org>
 Build-Depends: debhelper,
                debhelper-compat (= 13),
+               dh-sequence-gir,
                dpkg-dev (>= 1.15.1),
                pkg-config (>= 0.11.0),
                meson (>= 0.59),
@@ -106,7 +107,7 @@ Build-Depends: debhelper,
                gir1.2-gst-plugins-base-1.0,
                gir1.2-gstreamer-1.0
 Build-Conflicts: libopenaptx-dev
-Standards-Version: 4.5.0
+Standards-Version: 4.6.1
 Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0.git
 Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0/
 Homepage: https://gstreamer.freedesktop.org
@@ -136,7 +137,6 @@ Description: GStreamer helper programs from the "bad" set
 Package: gstreamer1.0-plugins-bad
 Architecture: any
 Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
          gstreamer1.0-plugins-base (>= 1.20.0),
@@ -205,10 +205,7 @@ Description: GStreamer OpenCV plugins
 
 Package: libgstreamer-plugins-bad1.0-0
 Architecture: any
-Section: libs
-Priority: optional
 Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Conflicts: pitivi (<< 0.9999)
@@ -230,10 +227,7 @@ Description: GStreamer libraries from the "bad" set
 
 Package: libgstreamer-opencv1.0-0
 Architecture: amd64 arm64 armel armhf i386 mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64
-Section: libs
-Priority: optional
 Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Conflicts: libgstreamer-plugins-bad1.0-0 (<< 1.13.1)
@@ -257,7 +251,6 @@ Package: libgstreamer-plugins-bad1.0-dev
 Architecture: any
 Multi-Arch: same
 Section: libdevel
-Priority: optional
 Depends: ${misc:Depends},
          libgstreamer-plugins-bad1.0-0 (= ${binary:Version}),
          libgstreamer-opencv1.0-0 (= ${binary:Version}) [!i386],

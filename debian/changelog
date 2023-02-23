@@ -1,3 +1,35 @@
+gst-plugins-bad1.0 (1.22.0-3) unstable; urgency=medium
+
+  * The new Intel Quick Sync Video plugin is amd64-only
+    so only enable it there
+  * Bump minimum libzxingcore-dev to 1.4.0
+  * Enable wpe on all non-Linux architectures
+  * Release to unstable
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Sat, 28 Jan 2023 14:23:11 -0500
+
+gst-plugins-bad1.0 (1.22.0-2) experimental; urgency=medium
+
+  * Disable Intel Quick Sync Video plugin (there is a build issue with it)
+  * Adjust some other configure & install rules
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Sat, 28 Jan 2023 11:51:52 -0500
+
+gst-plugins-bad1.0 (1.22.0-1) experimental; urgency=medium
+
+  * Team upload
+  * New upstream release
+  * debian/rules: Set -Dauto_features=enabled
+    and explicitly disable several things that aren't buildable in Debian
+  * Build-Depend on glslc, gstreamer1.0-tools, libdirectfb-dev, liblrdf0-dev,
+    libneon27-dev, libvulkan-dev, & libxkbcommon-x11-dev
+  * debian/control: Bump minimum gstreamer, glib, libnice, and meson
+  * Update debian/libgstreamer-plugins-bad1.0-0.install
+  * Set Rules-Requires-Root: no
+  * Bump Standards-Version to 4.6.2
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Fri, 27 Jan 2023 17:50:14 -0500
+
 gst-plugins-bad1.0 (1.20.5-1ubuntu1) lunar; urgency=medium
 
   * Merge with Debian. Remaining changes:

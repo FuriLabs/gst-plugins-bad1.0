@@ -257,7 +257,7 @@ Multi-Arch: same
 Section: libdevel
 Depends: ${misc:Depends},
          libgstreamer-plugins-bad1.0-0 (= ${binary:Version}),
-         libgstreamer-opencv1.0-0 (= ${binary:Version}) [amd64 arm64 armel armhf i386 mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64],
+         libgstreamer-opencv1.0-0 (= ${binary:Version}) [amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64],
          libgstreamer1.0-dev,
          libgstreamer-plugins-base1.0-dev,
          libgstreamer-plugins-good1.0-dev,

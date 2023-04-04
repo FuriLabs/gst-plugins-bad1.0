@@ -50,7 +50,7 @@ conf_flags += -Damfcodec=disabled -Ddirectshow=disabled -Dwasapi=disabled -Dwasa
 conf_flags += -Dfdkaac=disabled
 
 ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64))
-conf_flags += -Dopencv=disabled
+conf_flags += -Dopencv=disabled -Dzxing=disabled
 endif
 
 ifneq ($(DEB_HOST_ARCH_ENDIAN),little)
@@ -64,6 +64,7 @@ endif
 ifneq ($(DEB_HOST_ARCH_OS),linux)
 conf_flags += -Dbluez=disabled -Ddc1394=disabled -Dfbdev=disabled -Dsbc=disabled
 conf_flags += -Dva=disabled -Dv4l2codecs=disabled -Dwpe=disabled -Duvch264=disabled
+conf_flags += -Dvulkan=disabled -Dwayland=disabled
 endif
 
 ifeq ($(DEB_HOST_ARCH_OS),hurd)
@@ -78,7 +79,7 @@ endif
 # Not available on Ubuntu i386 currently
 ifeq ($(DEB_HOST_ARCH),i386)
 conf_flags += -Ddirectfb=disabled -Dladspa=disabled -Dneon=disabled -Dopenaptx=disabled -Dopenh264=disabled \
-              -Dopenni2=disabled -Dqroverlay=disabled -Dzxing=disabled -Dvulkan=disabled
+              -Dopenni2=disabled -Dqroverlay=disabled -Dvulkan=disabled
 endif
 
 %:
@@ -136,7 +137,6 @@ ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstopenh264.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstopenni2.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstqroverlay.so
-	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstzxing.so
 endif
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstsctp.so
 ifeq ($(DEB_HOST_ARCH),amd64)
@@ -147,6 +147,10 @@ endif
 
 ifneq ($(DEB_HOST_ARCH_OS),hurd)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstresindvd.so
+endif
+
+ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64))
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstzxing.so
 endif
 
 ifeq ($(DEB_HOST_ARCH_ENDIAN),little)

@@ -1,3 +1,16 @@
+gst-plugins-bad1.0 (1.22.3-1) experimental; urgency=medium
+
+  * Team upload
+
+  [ Jeremy Bícha ]
+  * New upstream release
+  * debian/rules: Enable all hardening flags
+
+  [ Laurent Bigonville ]
+  * debian/rules: Disable dvb element on non-linux architectures
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sun, 21 May 2023 08:31:50 -0400
+
 gst-plugins-bad1.0 (1.22.1-1ubuntu1) lunar; urgency=medium
 
   * Merge with Debian (LP: #2015129). Remaining changes:

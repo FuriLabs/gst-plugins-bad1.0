@@ -70,6 +70,7 @@ usr/lib/*/gstreamer-1.0/libgstnetsim.so
 usr/lib/*/gstreamer-1.0/libgstnvcodec.so
 usr/lib/*/gstreamer-1.0/libgstopenal.so
 usr/lib/*/gstreamer-1.0/libgstopenexr.so
+usr/lib/*/gstreamer-1.0/libgstopenh264.so
 usr/lib/*/gstreamer-1.0/libgstopenjpeg.so
 usr/lib/*/gstreamer-1.0/libgstopenmpt.so
 usr/lib/*/gstreamer-1.0/libgstopusparse.so

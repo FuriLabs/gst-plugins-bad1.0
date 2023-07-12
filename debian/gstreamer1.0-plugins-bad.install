@@ -110,7 +110,7 @@ usr/lib/*/gstreamer-1.0/libgstvideosignal.so
 usr/lib/*/gstreamer-1.0/libgstvmnc.so
 usr/lib/*/gstreamer-1.0/libgstvoaacenc.so
 usr/lib/*/gstreamer-1.0/libgstvoamrwbenc.so
-usr/lib/*/gstreamer-1.0/libgstwebrtc.so
+#usr/lib/*/gstreamer-1.0/libgstwebrtc.so
 usr/lib/*/gstreamer-1.0/libgstwebrtcdsp.so
 usr/lib/*/gstreamer-1.0/libgstwebp.so
 usr/lib/*/gstreamer-1.0/libgstwildmidi.so

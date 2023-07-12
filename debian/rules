@@ -74,6 +74,8 @@ ifeq ($(DISTRO),"Ubuntu")
 conf_flags += -Dwpe=disabled
 # Ubuntu main doesn't have libnice
 conf_flags += -Dwebrtc=disabled
+# Ubuntu main doesn't have libva
+conf_flags += -Dmsdk=disabled -Dqsv=disabled -Dva=disabled
 endif
 
 # Not available on Ubuntu i386 currently
@@ -124,8 +126,8 @@ ifeq ($(DEB_HOST_ARCH_OS),linux)
 	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstwayland-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstkms.so
 	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstcuda-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstva.so
-	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstva-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
+#	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstva.so
+#	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstva-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstv4l2codecs.so
 ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstvulkan.so
@@ -139,8 +141,8 @@ ifneq ($(DEB_HOST_ARCH),i386)
 endif
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstsctp.so
 ifeq ($(DEB_HOST_ARCH),amd64)
-	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstmsdk.so
-	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstqsv.so
+#	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstmsdk.so
+#	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstqsv.so
 endif
 endif
 

@@ -69,11 +69,9 @@ ifeq ($(DEB_HOST_ARCH_OS),hurd)
 conf_flags += -Dresindvd=disabled
 endif
 
-ifeq ($(DISTRO),"Ubuntu")
 # Ubuntu doesn't have wpewebkit
+ifeq ($(DISTRO),"Ubuntu")
 conf_flags += -Dwpe=disabled
-# Ubuntu main doesn't have libnice
-conf_flags += -Dwebrtc=disabled
 endif
 
 # Not available on Ubuntu i386 currently

@@ -1,3 +1,29 @@
+gst-plugins-bad1.0 (1.22.4-1ubuntu1.1) mantic-security; urgency=medium
+
+  * SECURITY UPDATE: integer overflow in MXF file handling
+    - debian/patches/CVE-2023-40474.patch: fix integer overflow causing out
+      of bounds writes when handling invalid uncompressed video in
+      gst/mxf/mxfup.c.
+    - CVE-2023-40474
+  * SECURITY UPDATE: integer overflow in MXF file handling
+    - debian/patches/CVE-2023-40475.patch: check number of channels for
+      AES3 audio in gst/mxf/mxfd10.c.
+    - CVE-2023-40475
+  * SECURITY UPDATE: integer overflow in H.265 video parser
+    - debian/patches/CVE-2023-40476.patch: fix possible overflow using
+      max_sub_layers_minus1 in gst-libs/gst/codecparsers/gsth265parser.c.
+    - CVE-2023-40476
+  * SECURITY UPDATE: AV1 codec parser buffer overflow
+    - debian/patches/CVE-2023-44429.patch: clip max tile rows and cols
+      values in gst-libs/gst/codecparsers/gstav1parser.c.
+    - CVE-2023-44429
+  * SECURITY UPDATE: MXF demuxer use-after-free
+    - debian/patches/CVE-2023-44446.patch: store GstMXFDemuxEssenceTrack in
+      their own fixed allocation in gst/mxf/mxfdemux.*.
+    - CVE-2023-44446
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 28 Nov 2023 11:29:21 -0500
+
 gst-plugins-bad1.0 (1.22.4-1ubuntu1) mantic; urgency=medium
 
   * Merge with Debian. Remaining changes:

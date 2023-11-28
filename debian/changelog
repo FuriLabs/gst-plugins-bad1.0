@@ -1,3 +1,35 @@
+gst-plugins-bad1.0 (1.20.3-0ubuntu1.1) jammy-security; urgency=medium
+
+  * SECURITY UPDATE: heap overwrite in PGS subtitle overlay decoder
+    - debian/patches/CVE-2023-37329-1.patch: make sure enough data is
+      allocated for the available data in gst/dvdspu/gstspu-pgs.c.
+    - debian/patches/CVE-2023-37329-2.patch: avoid integer overflow when
+      checking if enough data is available in gst/dvdspu/gstspu-pgs.c.
+    - CVE-2023-37329
+  * SECURITY UPDATE: integer overflow in MXF file handling
+    - debian/patches/CVE-2023-40474.patch: fix integer overflow causing out
+      of bounds writes when handling invalid uncompressed video in
+      gst/mxf/mxfup.c.
+    - CVE-2023-40474
+  * SECURITY UPDATE: integer overflow in MXF file handling
+    - debian/patches/CVE-2023-40475.patch: check number of channels for
+      AES3 audio in gst/mxf/mxfd10.c.
+    - CVE-2023-40475
+  * SECURITY UPDATE: integer overflow in H.265 video parser
+    - debian/patches/CVE-2023-40476.patch: fix possible overflow using
+      max_sub_layers_minus1 in gst-libs/gst/codecparsers/gsth265parser.c.
+    - CVE-2023-40476
+  * SECURITY UPDATE: AV1 codec parser buffer overflow
+    - debian/patches/CVE-2023-44429.patch: clip max tile rows and cols
+      values in gst-libs/gst/codecparsers/gstav1parser.c.
+    - CVE-2023-44429
+  * SECURITY UPDATE: MXF demuxer use-after-free
+    - debian/patches/CVE-2023-44446.patch: store GstMXFDemuxEssenceTrack in
+      their own fixed allocation in gst/mxf/mxfdemux.*.
+    - CVE-2023-44446
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 28 Nov 2023 11:40:39 -0500
+
 gst-plugins-bad1.0 (1.20.3-0ubuntu1) jammy; urgency=medium
 
   * New upstream release (LP: #1980239)

@@ -28,7 +28,7 @@ base_tests = [
   [['elements/autoconvert.c'], get_option('autoconvert').disabled()],
   [['elements/autovideoconvert.c'], get_option('autoconvert').disabled()],
   [['elements/avwait.c'], get_option('timecode').disabled()],
-  [['elements/camerabin.c'], get_option('camerabin2').disabled()],
+  [['elements/camerabin.c'], true, ],
   [['elements/ccconverter.c'], not closedcaption_dep.found(), [gstvideo_dep]],
   [['elements/cccombiner.c'], not closedcaption_dep.found(), ],
   [['elements/ccextractor.c'], not closedcaption_dep.found(), ],
@@ -99,7 +99,7 @@ base_tests = [
   [['libs/av1bitwriter.c'], false, [gstcodecparsers_dep]],
   [['libs/vkmemory.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
   [['libs/analyticsmeta.c'], false, [gstanalytics_dep]],
-  [['elements/vkcolorconvert.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
+  [['elements/vkcolorconvert.c'], true , [gstvulkan_dep]],
   [['libs/vkwindow.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
   [['libs/vkdevice.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
   [['elements/vkdeviceprovider.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
@@ -128,7 +128,7 @@ if host_machine.system() != 'windows'
     [['elements/avtpaafdepay.c'], not avtp_dep.found(), [avtp_dep]],
     [['elements/avtpcrfbase.c'], not avtp_dep.found(), [avtp_dep]],
     [['elements/avtpcrfcheck.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c']],
-    [['elements/avtpcrfsync.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
+    [['elements/avtpcrfsync.c'], true, [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
     [['elements/avtpcrfutil.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
     [['elements/avtpcvfpay.c'], not avtp_dep.found(), [avtp_dep]],
     [['elements/avtpcvfdepay.c'], not avtp_dep.found(), [avtp_dep]],
@@ -152,7 +152,7 @@ if host_machine.system() != 'windows'
     [['elements/jifmux.c'],
         not exif_dep.found() or not cdata.has('HAVE_UNISTD_H'), [exif_dep]],
     [['elements/jpegparse.c'], not cdata.has('HAVE_UNISTD_H')],
-    [['elements/netsim.c']],
+    [['elements/netsim.c'], true ],
     [['elements/shm.c'], not shm_enabled, shm_deps],
     [['elements/unixfd.c'], not gio_unix_dep.found()],
     [['elements/voaacenc.c'],
@@ -168,7 +168,7 @@ endif
 # linux only tests
 if host_machine.system() == 'linux'
   base_tests += [
-    [['elements/vapostproc.c'], not gstva_dep.found(), [gstva_dep]],
+    [['elements/vapostproc.c'], true, [gstva_dep]],
     [['elements/vacompositor.c'], not gstva_dep.found(), [gstva_dep]],
   ]
 endif

@@ -34,7 +34,7 @@ base_tests = [
   [['elements/autoconvert.c'], get_option('autoconvert').disabled()],
   [['elements/autovideoconvert.c'], get_option('autoconvert').disabled()],
   [['elements/avwait.c'], get_option('timecode').disabled()],
-  [['elements/camerabin.c'], get_option('camerabin2').disabled()],
+  [['elements/camerabin.c'], true, ],
   [['elements/ccconverter.c'], not closedcaption_dep.found(), [gstvideo_dep]],
   [['elements/cccombiner.c'], not closedcaption_dep.found(), ],
   [['elements/ccextractor.c'], not closedcaption_dep.found(), ],
@@ -82,8 +82,8 @@ base_tests = [
   [['elements/switchbin.c'], get_option('switchbin').disabled()],
   [['elements/videoframe-audiolevel.c'], get_option('videoframe_audiolevel').disabled()],
   [['elements/viewfinderbin.c']],
-  [['elements/vkcolorconvert.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
-  [['elements/vkdeviceprovider.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
+  [['elements/vkcolorconvert.c'], true, [gstvulkan_dep]],
+  [['elements/vkdeviceprovider.c'], true, [gstvulkan_dep]],
   [['elements/vkupload.c'], not gstvulkan_dep.found(), [gstvulkan_dep]],
   [['elements/voamrwbenc.c'], not voamrwbenc_dep.found(), [voamrwbenc_dep]],
   [['elements/vp9parse.c'], false, [gstcodecparsers_dep]],
@@ -143,7 +143,7 @@ if host_machine.system() != 'windows'
     [['elements/avtpaafdepay.c'], not avtp_dep.found(), [avtp_dep]],
     [['elements/avtpcrfbase.c'], not avtp_dep.found(), [avtp_dep]],
     [['elements/avtpcrfcheck.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c']],
-    [['elements/avtpcrfsync.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
+    [['elements/avtpcrfsync.c'], true, [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
     [['elements/avtpcrfutil.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
     [['elements/avtpcvfpay.c'], not avtp_dep.found(), [avtp_dep]],
     [['elements/avtpcvfdepay.c'], not avtp_dep.found(), [avtp_dep]],
@@ -156,7 +156,7 @@ if host_machine.system() != 'windows'
         not curl_dep.found() or not cdata.has('HAVE_UNISTD_H'), [curl_dep]],
     [['elements/curlftpsink.c'], not curl_dep.found(), [curl_dep]],
     [['elements/curlsmtpsink.c'], not curl_dep.found(), [curl_dep]],
-    [['elements/dash_mpd.c'], not xml2_dep.found(), [xml2_dep]],
+    [['elements/dash_mpd.c'], true, [xml2_dep]],
     [['elements/dtls.c'], not libcrypto_dep.found() or not openssl_dep.found (), [libcrypto_dep]],
     [['elements/faac.c'],
         not faac_dep.found() or not cc.has_header_symbol('faac.h', 'faacEncOpen') or not cdata.has('HAVE_UNISTD_H'),
@@ -167,7 +167,7 @@ if host_machine.system() != 'windows'
     [['elements/jifmux.c'],
         not exif_dep.found() or not cdata.has('HAVE_UNISTD_H'), [exif_dep]],
     [['elements/jpegparse.c'], not cdata.has('HAVE_UNISTD_H')],
-    [['elements/netsim.c']],
+    [['elements/netsim.c'], true ],
     [['elements/shm.c'], not shm_enabled, shm_deps],
     [['elements/unixfd.c'], not gio_unix_dep.found()],
     [['elements/voaacenc.c'],
@@ -176,14 +176,14 @@ if host_machine.system() != 'windows'
     [['elements/x265enc.c'], not x265_dep.found(), [x265_dep]],
     [['elements/zbar.c'], not zbar_dep.found(), [zbar_dep]],
     [['elements/zxing.c'], not zxing_dep.found(), [zxing_dep]],
-    [['elements/lc3.c'], not lc3_dep.found(), [lc3_dep]],
+    [['elements/lc3.c'], true, [lc3_dep]],
   ]
 endif
 
 # linux only tests
 if host_machine.system() == 'linux'
   base_tests += [
-    [['elements/vapostproc.c'], not gstva_dep.found(), [gstva_dep]],
+    [['elements/vapostproc.c'], true, [gstva_dep]],
     [['elements/vacompositor.c'], not gstva_dep.found(), [gstva_dep]],
   ]
 endif

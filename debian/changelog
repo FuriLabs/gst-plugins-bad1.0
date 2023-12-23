@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.22.4-1ubuntu4) noble; urgency=medium
+
+  * Update Skip-failing-tests.patch to version from Debian unstable.
+
+ -- Rik Mills <rikmills@kde.org>  Sat, 23 Dec 2023 13:02:44 +0000
+
 gst-plugins-bad1.0 (1.22.4-1ubuntu3) noble; urgency=medium
 
   * No-change rebuild against libzxing3.

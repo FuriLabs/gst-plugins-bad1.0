@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.22.4-1ubuntu3) noble; urgency=medium
+
+  * No-change rebuild against libzxing3.
+
+ -- Rik Mills <rikmills@kde.org>  Sat, 23 Dec 2023 12:11:26 +0000
+
 gst-plugins-bad1.0 (1.22.4-1ubuntu2) noble; urgency=medium
 
   * SECURITY UPDATE: integer overflow in MXF file handling

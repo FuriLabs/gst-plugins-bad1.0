@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.22.9-1ubuntu2) noble; urgency=medium
+
+  * Have libgstreamer-plugins-bad1.0-dev depend on -good1.0-dev
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 03 Feb 2024 07:51:37 -0500
+
 gst-plugins-bad1.0 (1.22.9-1ubuntu1) noble; urgency=medium
 
   * Merge with Debian. Remaining changes:

@@ -253,6 +253,7 @@ Depends: gir1.2-gst-plugins-bad-1.0 (= ${binary:Version}),
          libgstreamer-opencv1.0-0 (= ${binary:Version}) [amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64],
          libgstreamer-plugins-bad1.0-0 (= ${binary:Version}),
          libgstreamer-plugins-base1.0-dev,
+         libgstreamer-plugins-good1.0-dev,
          libgstreamer1.0-dev,
          libopencv-dev (>= 2.3.0) [amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64],
          ${misc:Depends}

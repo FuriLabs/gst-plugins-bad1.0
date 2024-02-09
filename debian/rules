@@ -59,7 +59,8 @@ ifeq ($(DEB_HOST_ARCH_OS),hurd)
 conf_flags += -Dresindvd=disabled -Dnvcodec=disabled
 endif
 
-conf_flags += -Daja=disabled
+# bookworm backport flags
+conf_flags += -Daja=disabled -Dqt6d3d11=disabled
 
 %:
 	dh $@

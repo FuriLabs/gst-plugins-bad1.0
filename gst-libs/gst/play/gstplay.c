@@ -28,6 +28,39 @@
  * @symbols:
  * - GstPlay
  *
+ * The goal of the GstPlay library is to ease the integration of multimedia
+ * playback features in applications. Thus, if you need to build a media player
+ * from the ground-up, GstPlay provides the features you will most likely need.
+ *
+ * An example player is available in gst-examples/playback/player/gst-play/.
+ *
+ * Internally the GstPlay makes use of the `playbin` element. `playbin3` can be
+ * selected if the `GST_PLAY_USE_PLAYBIN3=1` environment variable has been set.
+ *
+ * **Important note**: If your application relies on the GstBus to get
+ * notifications from GstPlay, you need to add some explicit clean-up code in
+ * order to prevent the GstPlay object from leaking. See below for the details.
+ * If you use the GstPlaySignalAdapter, no special clean-up is required.
+ *
+ * When the GstPlaySignalAdapter is not used, the GstBus owned by GstPlay should
+ * be set to flushing state before any attempt to drop the last reference of the
+ * GstPlay object. An example in C:
+ *
+ * ```c
+ * ...
+ * GstBus *bus = gst_play_get_message_bus (player);
+ * gst_bus_set_flushing (bus, TRUE);
+ * gst_object_unref (bus);
+ * gst_object_unref (player);
+ * ```
+ *
+ * The messages managed by the player contain a reference to itself, and if the
+ * bus watch is just removed together with dropping the player then the bus will
+ * simply keep them around forever (and the bus never goes away because the
+ * player has a strong reference to it, so there's a reference cycle as long as
+ * there are messages). Setting the bus to flushing state forces it to get rid
+ * of its queued messages, thus breaking any possible reference cycle.
+ *
  * Since: 1.20
  */
 
@@ -92,6 +125,7 @@ typedef enum
   CONFIG_QUARK_USER_AGENT = 0,
   CONFIG_QUARK_POSITION_INTERVAL_UPDATE,
   CONFIG_QUARK_ACCURATE_SEEK,
+  CONFIG_QUARK_PIPELINE_DUMP_IN_ERROR_DETAILS,
 
   CONFIG_QUARK_MAX
 } ConfigQuarkId;
@@ -100,6 +134,7 @@ static const gchar *_config_quark_strings[] = {
   "user-agent",
   "position-interval-update",
   "accurate-seek",
+  "pipeline-dump-in-error-details",
 };
 
 static GQuark _config_quark_table[CONFIG_QUARK_MAX];
@@ -283,6 +318,7 @@ gst_play_init (GstPlay * self)
   self->config = gst_structure_new_id (QUARK_CONFIG,
       CONFIG_QUARK (POSITION_INTERVAL_UPDATE), G_TYPE_UINT, DEFAULT_POSITION_UPDATE_INTERVAL_MS,
       CONFIG_QUARK (ACCURATE_SEEK), G_TYPE_BOOLEAN, FALSE,
+      CONFIG_QUARK (PIPELINE_DUMP_IN_ERROR_DETAILS), G_TYPE_BOOLEAN, FALSE,
       NULL);
   /* *INDENT-ON* */
 
@@ -935,12 +971,37 @@ remove_ready_timeout_source (GstPlay * self)
 static void
 on_error (GstPlay * self, GError * err, const GstStructure * details)
 {
+#ifndef GST_DISABLE_GST_DEBUG
+  GstStructure *extra_details = NULL;
+  gchar *dot_data = NULL;
+#endif
+
   GST_ERROR_OBJECT (self, "Error: %s (%s, %d)", err->message,
       g_quark_to_string (err->domain), err->code);
 
+#ifndef GST_DISABLE_GST_DEBUG
+  extra_details = gst_structure_copy (details);
+  if (gst_play_config_get_pipeline_dump_in_error_details (self->config)) {
+    dot_data = gst_debug_bin_to_dot_data (GST_BIN_CAST (self->playbin),
+        GST_DEBUG_GRAPH_SHOW_ALL);
+    gst_structure_set (extra_details, "pipeline-dump", G_TYPE_STRING, dot_data,
+        NULL);
+  }
+#endif
   api_bus_post_message (self, GST_PLAY_MESSAGE_ERROR,
       GST_PLAY_MESSAGE_DATA_ERROR, G_TYPE_ERROR, err,
-      GST_PLAY_MESSAGE_DATA_ERROR_DETAILS, GST_TYPE_STRUCTURE, details, NULL);
+      GST_PLAY_MESSAGE_DATA_ERROR_DETAILS, GST_TYPE_STRUCTURE,
+#ifndef GST_DISABLE_GST_DEBUG
+      extra_details
+#else
+      details
+#endif
+      , NULL);
+
+#ifndef GST_DISABLE_GST_DEBUG
+  g_free (dot_data);
+  gst_structure_free (extra_details);
+#endif
 
   g_error_free (err);
 
@@ -4460,6 +4521,51 @@ gst_play_config_get_seek_accurate (const GstStructure * config)
       CONFIG_QUARK (ACCURATE_SEEK), G_TYPE_BOOLEAN, &accurate, NULL);
 
   return accurate;
+}
+
+/**
+ * gst_play_config_set_pipeline_dump_in_error_details:
+ * @config: a #GstPlay configuration
+ * @value: Include pipeline dumps in error details, or not.
+ *
+ * When enabled, the error message emitted by #GstPlay will include a pipeline
+ * dump (in Graphviz DOT format) in the error details #GstStructure. The field
+ * name is `pipeline-dump`.
+ *
+ * This option is disabled by default.
+ *
+ * Since: 1.24
+ */
+void
+gst_play_config_set_pipeline_dump_in_error_details (GstStructure * config,
+    gboolean value)
+{
+  g_return_if_fail (config != NULL);
+
+  gst_structure_id_set (config, CONFIG_QUARK (PIPELINE_DUMP_IN_ERROR_DETAILS),
+      G_TYPE_BOOLEAN, value, NULL);
+}
+
+/**
+ * gst_play_config_get_pipeline_dump_in_error_details:
+ * @config: a #GstPlay configuration
+ *
+ * Returns: %TRUE if pipeline dumps are included in #GstPlay error message
+ * details.
+ *
+ * Since: 1.24
+ */
+gboolean
+gst_play_config_get_pipeline_dump_in_error_details (const GstStructure * config)
+{
+  gboolean value = FALSE;
+
+  g_return_val_if_fail (config != NULL, FALSE);
+
+  gst_structure_id_get (config, CONFIG_QUARK (PIPELINE_DUMP_IN_ERROR_DETAILS),
+      G_TYPE_BOOLEAN, &value, NULL);
+
+  return value;
 }
 
 /**

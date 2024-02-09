@@ -28,6 +28,8 @@
 G_BEGIN_DECLS
 
 #define GST_TYPE_WL_DISPLAY (gst_wl_display_get_type ())
+
+GST_WL_API
 G_DECLARE_FINAL_TYPE (GstWlDisplay, gst_wl_display, GST, WL_DISPLAY, GObject);
 
 struct _GstWlDisplay
@@ -55,11 +57,11 @@ gpointer gst_wl_display_lookup_buffer (GstWlDisplay * self, gpointer gstmem);
 
 GST_WL_API
 gboolean gst_wl_display_check_format_for_shm (GstWlDisplay * self,
-    GstVideoFormat format);
+    const GstVideoInfo *video_info);
 
 GST_WL_API
 gboolean gst_wl_display_check_format_for_dmabuf (GstWlDisplay * self,
-    GstVideoFormat format);
+    const GstVideoInfoDmaDrm *drm_info);
 
 GST_WL_API
 struct wl_display *gst_wl_display_get_display (GstWlDisplay * self);
@@ -92,7 +94,13 @@ GST_WL_API
 GArray *gst_wl_display_get_dmabuf_formats (GstWlDisplay * self);
 
 GST_WL_API
+GArray *gst_wl_display_get_dmabuf_modifiers (GstWlDisplay * self);
+
+GST_WL_API
 struct zwp_linux_dmabuf_v1 *gst_wl_display_get_dmabuf_v1 (GstWlDisplay * self);
+
+GST_WL_API
+struct wp_single_pixel_buffer_manager_v1 * gst_wl_display_get_single_pixel_buffer_manager_v1 (GstWlDisplay * self);
 
 GST_WL_API
 gboolean gst_wl_display_has_own_display (GstWlDisplay * self);

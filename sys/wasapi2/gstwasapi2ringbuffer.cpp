@@ -21,6 +21,8 @@
 #include <string.h>
 #include <mfapi.h>
 #include <wrl.h>
+#include <memory>
+#include <atomic>
 #include <vector>
 
 GST_DEBUG_CATEGORY_STATIC (gst_wasapi2_ring_buffer_debug);
@@ -33,22 +35,28 @@ gst_wasapi2_ring_buffer_loopback_callback (GstWasapi2RingBuffer * buf);
 /* *INDENT-OFF* */
 using namespace Microsoft::WRL;
 
+struct GstWasapi2RingBufferPtr
+{
+  GstWasapi2RingBufferPtr (GstWasapi2RingBuffer * ringbuffer)
+      : obj(ringbuffer)
+  {
+  }
+
+  /* Point to ringbuffer without holding ownership */
+  GstWasapi2RingBuffer *obj;
+};
+
 class GstWasapiAsyncCallback : public IMFAsyncCallback
 {
 public:
-  GstWasapiAsyncCallback(GstWasapi2RingBuffer *listener,
+  GstWasapiAsyncCallback(std::shared_ptr<GstWasapi2RingBufferPtr> listener,
                          DWORD queue_id,
                          gboolean loopback)
     : ref_count_(1)
     , queue_id_(queue_id)
+    , listener_(listener)
     , loopback_(loopback)
   {
-    g_weak_ref_init (&listener_, listener);
-  }
-
-  virtual ~GstWasapiAsyncCallback ()
-  {
-    g_weak_ref_set (&listener_, nullptr);
   }
 
   /* IUnknown */
@@ -109,20 +117,18 @@ public:
   STDMETHODIMP
   Invoke(IMFAsyncResult * pAsyncResult)
   {
-    GstWasapi2RingBuffer *ringbuffer;
     HRESULT hr;
+    auto ptr = listener_.lock ();
 
-    ringbuffer = (GstWasapi2RingBuffer *) g_weak_ref_get (&listener_);
-    if (!ringbuffer) {
+    if (!ptr) {
       GST_WARNING ("Listener was removed");
       return S_OK;
     }
 
     if (loopback_)
-      hr = gst_wasapi2_ring_buffer_loopback_callback (ringbuffer);
+      hr = gst_wasapi2_ring_buffer_loopback_callback (ptr->obj);
     else
-      hr = gst_wasapi2_ring_buffer_io_callback (ringbuffer);
-    gst_object_unref (ringbuffer);
+      hr = gst_wasapi2_ring_buffer_io_callback (ptr->obj);
 
     return hr;
   }
@@ -130,8 +136,14 @@ public:
 private:
   ULONG ref_count_;
   DWORD queue_id_;
-  GWeakRef listener_;
+  std::weak_ptr<GstWasapi2RingBufferPtr> listener_;
   gboolean loopback_;
+};
+
+struct GstWasapi2RingBufferPrivate
+{
+  std::shared_ptr<GstWasapi2RingBufferPtr> obj_ptr;
+  std::atomic<bool> monitor_device_mute;
 };
 /* *INDENT-ON* */
 
@@ -178,6 +190,8 @@ struct _GstWasapi2RingBuffer
   gboolean volume_changed;
 
   GstCaps *supported_caps;
+
+  GstWasapi2RingBufferPrivate *priv;
 };
 
 static void gst_wasapi2_ring_buffer_constructed (GObject * object);
@@ -238,6 +252,10 @@ gst_wasapi2_ring_buffer_init (GstWasapi2RingBuffer * self)
   self->event_handle = CreateEvent (nullptr, FALSE, FALSE, nullptr);
   self->loopback_event_handle = CreateEvent (nullptr, FALSE, FALSE, nullptr);
   g_mutex_init (&self->volume_lock);
+
+  self->priv = new GstWasapi2RingBufferPrivate ();
+  self->priv->obj_ptr = std::make_shared < GstWasapi2RingBufferPtr > (self);
+  self->priv->monitor_device_mute.store (false, std::memory_order_release);
 }
 
 static void
@@ -254,7 +272,8 @@ gst_wasapi2_ring_buffer_constructed (GObject * object)
     goto out;
   }
 
-  self->callback_object = new GstWasapiAsyncCallback (self, queue_id, FALSE);
+  self->callback_object = new GstWasapiAsyncCallback (self->priv->obj_ptr,
+      queue_id, FALSE);
   hr = MFCreateAsyncResult (nullptr, self->callback_object, nullptr,
       &self->callback_result);
   if (!gst_wasapi2_result (hr)) {
@@ -264,7 +283,7 @@ gst_wasapi2_ring_buffer_constructed (GObject * object)
 
   /* Create another callback object for loopback silence feed */
   self->loopback_callback_object =
-      new GstWasapiAsyncCallback (self, queue_id, TRUE);
+      new GstWasapiAsyncCallback (self->priv->obj_ptr, queue_id, TRUE);
   hr = MFCreateAsyncResult (nullptr, self->loopback_callback_object, nullptr,
       &self->loopback_callback_result);
   if (!gst_wasapi2_result (hr)) {
@@ -282,6 +301,8 @@ static void
 gst_wasapi2_ring_buffer_dispose (GObject * object)
 {
   GstWasapi2RingBuffer *self = GST_WASAPI2_RING_BUFFER (object);
+
+  self->priv->obj_ptr = nullptr;
 
   GST_WASAPI2_CLEAR_COM (self->render_client);
   GST_WASAPI2_CLEAR_COM (self->capture_client);
@@ -307,6 +328,8 @@ gst_wasapi2_ring_buffer_finalize (GObject * object)
   CloseHandle (self->event_handle);
   CloseHandle (self->loopback_event_handle);
   g_mutex_clear (&self->volume_lock);
+
+  delete self->priv;
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -461,6 +484,7 @@ gst_wasapi2_ring_buffer_read (GstWasapi2RingBuffer * self)
   gint segment;
   guint8 *readptr;
   gint len;
+  bool is_device_muted;
 
   if (!capture_client) {
     GST_ERROR_OBJECT (self, "IAudioCaptureClient is not available");
@@ -473,6 +497,10 @@ gst_wasapi2_ring_buffer_read (GstWasapi2RingBuffer * self)
     to_read = 0;
     goto out;
   }
+
+  is_device_muted =
+      self->priv->monitor_device_mute.load (std::memory_order_acquire) &&
+      gst_wasapi2_client_is_endpoint_muted (self->client);
 
   to_read_bytes = to_read * GST_AUDIO_INFO_BPF (info);
 
@@ -538,7 +566,8 @@ gst_wasapi2_ring_buffer_read (GstWasapi2RingBuffer * self)
     if (len > to_read_bytes)
       len = to_read_bytes;
 
-    if ((flags & AUDCLNT_BUFFERFLAGS_SILENT) == AUDCLNT_BUFFERFLAGS_SILENT) {
+    if (((flags & AUDCLNT_BUFFERFLAGS_SILENT) == AUDCLNT_BUFFERFLAGS_SILENT) ||
+        is_device_muted) {
       gst_audio_format_info_fill_silence (ringbuffer->spec.info.finfo,
           readptr + self->segoffset, len);
     } else {
@@ -1463,7 +1492,7 @@ gst_wasapi2_ring_buffer_get_mute (GstWasapi2RingBuffer * buf, gboolean * mute)
 HRESULT
 gst_wasapi2_ring_buffer_set_volume (GstWasapi2RingBuffer * buf, gfloat volume)
 {
-  HRESULT hr = S_OK;
+  HRESULT hr;
 
   g_return_val_if_fail (GST_IS_WASAPI2_RING_BUFFER (buf), E_INVALIDARG);
   g_return_val_if_fail (volume >= 0 && volume <= 1.0, E_INVALIDARG);
@@ -1492,4 +1521,13 @@ gst_wasapi2_ring_buffer_get_volume (GstWasapi2RingBuffer * buf, gfloat * volume)
   g_mutex_unlock (&buf->volume_lock);
 
   return S_OK;
+}
+
+void
+gst_wasapi2_ring_buffer_set_device_mute_monitoring (GstWasapi2RingBuffer * buf,
+    gboolean value)
+{
+  g_return_if_fail (GST_IS_WASAPI2_RING_BUFFER (buf));
+
+  buf->priv->monitor_device_mute.store (value, std::memory_order_release);
 }

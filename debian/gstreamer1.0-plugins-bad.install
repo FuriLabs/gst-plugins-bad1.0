@@ -56,7 +56,6 @@ usr/lib/*/gstreamer-1.0/libgstivfparse.so
 usr/lib/*/gstreamer-1.0/libgstivtc.so
 usr/lib/*/gstreamer-1.0/libgstjp2kdecimator.so
 usr/lib/*/gstreamer-1.0/libgstjpegformat.so
-usr/lib/*/gstreamer-1.0/libgstkate.so
 usr/lib/*/gstreamer-1.0/libgstladspa.so
 usr/lib/*/gstreamer-1.0/libgstlegacyrawparse.so
 usr/lib/*/gstreamer-1.0/libgstlv2.so

@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.23.2-1) experimental; urgency=medium
+
+  * New upstream version 1.23.2
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Fri, 16 Feb 2024 14:53:11 +0100
+
 gst-plugins-bad1.0 (1.23.1-1) experimental; urgency=medium
 
   * d/control: add Marc to Uploaders

@@ -1,3 +1,225 @@
+=== release 1.23.90 ===
+
+2024-02-23 18:20:11 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* NEWS:
+	* RELEASE:
+	* gst-plugins-bad.doap:
+	* meson.build:
+	  Release 1.23.90
+
+2024-02-23 21:54:17 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvabasedec.c:
+	  vabasedec: Fix a possible NULL pointer dereference
+	  The format in _get_preferred_format_and_caps_features() may be NULL.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6206>
+
+2024-02-22 22:11:36 +0100  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/va/gstvabasedec.c:
+	  vabasedec: disable derived images for i965 driver
+	  Since it has a very poor performance at reading derived images, which is the
+	  most common use case for decoders.
+	  Partially fixes: #3325
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6202>
+
+2024-02-21 18:14:36 +0100  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/va/gstvavpp.c:
+	  vapostproc: optimization for va memory to system memory only
+	  When the conversion is only caps feature from memory:VAMemory to system memory,
+	  it's possible to optimize by doing a pseudo pass-through since the va-backed
+	  buffers are the same for system memory buffers.
+	  This change will also mitigates #2940
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6174>
+
+2024-02-20 20:38:55 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/asio/gstasioobject.cpp:
+	* sys/asio/gstasiosink.cpp:
+	* sys/asio/gstasiosrc.cpp:
+	  asiosink: Fix channel selection
+	  Fixing copy paste mistake
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3321
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6170>
+
+2024-02-20 17:28:29 +0100  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/va/gstvabasedec.c:
+	* sys/va/gstvabasetransform.c:
+	* sys/va/gstvacompositor.c:
+	  vabase: fail decide allocation if dmabuf without videometa
+	  If the allocation query received from downstream doesn't handle GstVideoMeta but
+	  it requests memory:DMABuf caps feature, it's incomplete, so we rather reject the
+	  negotiation.
+	  Both in base decoder, base transform and compositor.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6155>
+
+2024-02-22 09:41:00 +0200  naglis <341855-naglis@users.noreply.gitlab.freedesktop.org>
+
+	* gst-libs/gst/play/gstplay.c:
+	  gstplay: Fix typos in documentation
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6177>
+
+2024-02-21 01:13:02 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/nvcodec/plugin.c:
+	  nvcodec: Add plugin status message
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6167>
+
+2024-02-21 00:57:32 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/amfcodec/plugin.cpp:
+	  amfcodec: Add plugin status message
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6167>
+
+2024-02-19 22:17:42 +0100  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/va/gstvabasedec.c:
+	  vabasedec: refactor format and capsfeature selection
+	  This is a simplification of the venerable
+	  gst_va_base_dec_get_preferred_format_and_caps_features() function, which
+	  predates since gstreamer-vaapi. It's used to select the format and the
+	  capsfeature to use when setting the output state. It was complex and hard to
+	  follow. This refactor simplifies a lot the algorithm.
+	  The first thing to remove _downstream_has_video_meta() since, most of the time
+	  it will be called before the caps negotiation, and allocation queries make sense
+	  only after caps negotiation. It might work during renegotiation but, in that
+	  case, caps feature change is uncommon. Better a simple and common approach.
+	  Also, for performance, instead of dealing with caps features as strings, GQuarks
+	  are used.
+	  The refactor works like this:
+	  1. If peer pad returns any caps, the returned caps feature is system memory and
+	  looks for a proper format in the allowed caps.
+	  2. The allowed caps are traversed at most 3 times: one per each valid caps
+	  feature. First VAMemory, later DMABuf, and last system memory. The first to
+	  match in allowed caps is picked, and the first format matching with the
+	  chroma is picked too.
+	  Notice that, right now, using playbin videoconvert never return any.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6154>
+
+2024-02-20 16:00:07 +0100  Edward Hervey <edward@centricular.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	* ext/ttml/gstttmlparse.c:
+	  subparsers: Give proper category to subtitle "decoders"
+	  Some subtitle "decoders" had a wrong category of "Parser", which `parsebin`
+	  relies on to identify elements which do not *decode* streams but *parse* them.
+	  This would cause such subtitle decoders to be plugged in within parsebin,
+	  preventing the original stream to be properly used by (more efficient)
+	  downstream decoders or subtitle renderers.
+	  Fixes #1757
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6153>
+
+2024-02-19 12:50:53 +0800  Mengkejiergeli Ba <mengkejiergeli.ba@intel.com>
+
+	* sys/msdk/gstmsdkallocator_libva.c:
+	* sys/msdk/gstmsdkvpp.c:
+	  msdk: Fix possible memory leaks
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6161>
+
+2024-02-21 21:50:20 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/wasapi/gstwasapiutil.c:
+	  wasapi: Fix alloc/free function mismatch
+	  ... and fix leak in wasapi device provider
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3326
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6169>
+
+2024-02-21 21:46:49 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/wasapi2/gstwasapi2ringbuffer.cpp:
+	  wasapi2: Fix task memory leak
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6169>
+
+2024-02-01 14:49:21 +0900  ekwange <ekwange@gmail.com>
+
+	* gst-libs/gst/mse/gstmediasourcesamplemap.c:
+	  mse: Add logging init for mediasource sample map
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6033>
+
+2024-02-17 13:19:15 -0800  Kamal Mostafa <kamal@whence.com>
+
+	* tests/check/elements/cudafilter.c:
+	  tests: cudafilter: actually check for cudascale
+	  Actually check for availability of 'cudascale' instead of accidentally
+	  checking for 'cudadownload' twice.
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3327
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6158>
+
+2024-02-19 14:24:51 +0100  Stéphane Cerveau <scerveau@igalia.com>
+
+	* tests/check/libs/vkimagebufferpool.c:
+	  test: vkimagebufferpool: fix queue leak
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6143>
+
+2023-01-28 02:15:24 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* sys/qsv/plugin.cpp:
+	  qsv: use new plugin status message API
+	  Minimal example.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/3832>
+
+2024-02-19 20:57:26 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/wasapi2/gstwasapi2ringbuffer.cpp:
+	  wasapi2: Respect ringbuffer buffer/latency time
+	  Decide buffer size based on configured buffer/latency time
+	  if low-latency is disabled, so that ringbuffer can buffer more
+	  than minimum required size.
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/2870
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6141>
+
+2024-02-20 08:47:21 +0100  Edward Hervey <edward@centricular.com>
+
+	* gst-libs/gst/mpegts/gst-mpegtspesmetadatameta.h:
+	  mpegst: Fix ownership of return value
+	  This inherits from the same rule as gst_buffer_add_meta
+	  ```
+	  gst-mpegtspesmetadatameta.h:98: Warning: GstMpegts:
+	  gst_buffer_add_mpegts_pes_metadata_meta: return value: Invalid non-constant
+	  return of bare structure or union; register as boxed type or (skip)
+	  ```
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6146>
+
+2024-02-16 17:06:52 +0100  Guillaume Desmottes <guillaume.desmottes@onestream.live>
+
+	* docs/plugins/gst_plugins_cache.json:
+	  docs: initialize values when GST_PLUGIN_API_FLAG_IGNORE_ENUM_MEMBERS is set
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/5491>
+
+2024-02-17 00:11:32 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/wasapi2/gstwasapi2ringbuffer.cpp:
+	  wasapi2: Fix choppy rendering
+	  This reverts questionable commit 009bc15f3397252e9e3954ae4af15ffcdbdeac69
+	  which looks completely wrong.
+	  The GstWasapi2RingBuffer:buffer_size variable is used to
+	  calculate available buffer size we can write
+	  (i.e., available size = buffer_size - padding_size).
+	  But the commit makes the size to be exactly same as buffer period.
+	  Then, it can confuse this element as if the endpoint buffer is full on
+	  I/O event callback (if padding size is equal to buffer period)
+	  but it's not true.
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/2870
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6132>
+
+2024-02-14 22:11:51 +0100  Robert Mader <robert.mader@collabora.com>
+
+	* sys/v4l2codecs/gstv4l2codech264dec.c:
+	  v4l2codecs: h264: Fix a memory leak on renegotiation
+	  We only use this anchor when streaming, in which case output_state is
+	  set and needs to get unreffed.
+	  This is in line with how it is handled for all other codecs.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6127>
+
+2024-02-15 16:38:53 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* meson.build:
+	  Back to development
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6126>
+
 === release 1.23.2 ===
 
 2024-02-15 15:37:17 +0000  Tim-Philipp Müller <tim@centricular.com>

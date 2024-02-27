@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.23.90-1) experimental; urgency=medium
+
+  * New upstream version 1.23.90
+  * d/control: update dependencies to >= 1.23.90
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 27 Feb 2024 11:47:22 +0100
+
 gst-plugins-bad1.0 (1.23.2-1) experimental; urgency=medium
 
   * New upstream version 1.23.2

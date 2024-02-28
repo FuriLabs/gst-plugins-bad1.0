@@ -26,10 +26,12 @@
 
 #include "fullscreen-shell-unstable-v1-client-protocol.h"
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
+#include "single-pixel-buffer-v1-client-protocol.h"
 #include "viewporter-client-protocol.h"
 #include "xdg-shell-client-protocol.h"
 
 #include <errno.h>
+#include <drm_fourcc.h>
 
 #define GST_CAT_DEFAULT gst_wl_display_debug
 GST_DEBUG_CATEGORY_STATIC (GST_CAT_DEFAULT);
@@ -47,11 +49,13 @@ typedef struct _GstWlDisplayPrivate
   struct wl_subcompositor *subcompositor;
   struct xdg_wm_base *xdg_wm_base;
   struct zwp_fullscreen_shell_v1 *fullscreen_shell;
+  struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
   struct wl_shm *shm;
   struct wp_viewporter *viewporter;
   struct zwp_linux_dmabuf_v1 *dmabuf;
   GArray *shm_formats;
   GArray *dmabuf_formats;
+  GArray *dmabuf_modifiers;
 
   /* private */
   gboolean own_display;
@@ -85,12 +89,13 @@ gst_wl_display_init (GstWlDisplay * self)
 
   priv->shm_formats = g_array_new (FALSE, FALSE, sizeof (uint32_t));
   priv->dmabuf_formats = g_array_new (FALSE, FALSE, sizeof (uint32_t));
+  priv->dmabuf_modifiers = g_array_new (FALSE, FALSE, sizeof (guint64));
   priv->wl_fd_poll = gst_poll_new (TRUE);
   priv->buffers = g_hash_table_new (g_direct_hash, g_direct_equal);
   g_mutex_init (&priv->buffers_mutex);
 
   gst_wl_linux_dmabuf_init_once ();
-  gst_wl_shm_allocator_init_once ();
+  gst_shm_allocator_init_once ();
   gst_wl_videoformat_init_once ();
 }
 
@@ -123,6 +128,7 @@ gst_wl_display_finalize (GObject * gobject)
 
   g_array_unref (priv->shm_formats);
   g_array_unref (priv->dmabuf_formats);
+  g_array_unref (priv->dmabuf_modifiers);
   gst_poll_free (priv->wl_fd_poll);
   g_hash_table_unref (priv->buffers);
   g_mutex_clear (&priv->buffers_mutex);
@@ -141,6 +147,9 @@ gst_wl_display_finalize (GObject * gobject)
 
   if (priv->fullscreen_shell)
     zwp_fullscreen_shell_v1_release (priv->fullscreen_shell);
+
+  if (priv->single_pixel_buffer)
+    wp_single_pixel_buffer_manager_v1_destroy (priv->single_pixel_buffer);
 
   if (priv->compositor)
     wl_compositor_destroy (priv->compositor);
@@ -182,21 +191,59 @@ static void
 dmabuf_format (void *data, struct zwp_linux_dmabuf_v1 *zwp_linux_dmabuf,
     uint32_t format)
 {
+}
+
+static void
+dmabuf_modifier (void *data, struct zwp_linux_dmabuf_v1 *zwp_linux_dmabuf,
+    uint32_t format, uint32_t modifier_hi, uint32_t modifier_lo)
+{
   GstWlDisplay *self = data;
+  guint64 modifier = (guint64) modifier_hi << 32 | modifier_lo;
+  static gboolean table_header = TRUE;
+
   GstWlDisplayPrivate *priv = gst_wl_display_get_instance_private (self);
 
-  if (gst_wl_dmabuf_format_to_video_format (format) != GST_VIDEO_FORMAT_UNKNOWN)
+  if (gst_wl_dmabuf_format_to_video_format (format) != GST_VIDEO_FORMAT_UNKNOWN) {
+    GstVideoFormat gst_format = gst_wl_dmabuf_format_to_video_format (format);
+    const guint32 fourcc = gst_video_dma_drm_fourcc_from_format (gst_format);
+
+    /*
+     * Ignore unsupported formats along with implicit modifiers. Implicit
+     * modifiers have been source of garbled output for many many years and it
+     * was decided that we prefer disabling zero-copy over risking a bad output.
+     */
+    if (fourcc == DRM_FORMAT_INVALID || modifier == DRM_FORMAT_MOD_INVALID)
+      return;
+
+    if (table_header == TRUE) {
+      GST_INFO ("===== All DMA Formats With Modifiers =====");
+      GST_INFO ("| Gst Format   | DRM Format              |");
+      table_header = FALSE;
+    }
+
+    if (modifier == 0)
+      GST_INFO ("|-----------------------------------------");
+
+    GST_INFO ("| %-12s | %-23s |",
+        (modifier == 0) ? gst_video_format_to_string (gst_format) : "",
+        gst_video_dma_drm_fourcc_to_string (fourcc, modifier));
+
     g_array_append_val (priv->dmabuf_formats, format);
+    g_array_append_val (priv->dmabuf_modifiers, modifier);
+  }
 }
 
 static const struct zwp_linux_dmabuf_v1_listener dmabuf_listener = {
   dmabuf_format,
+  dmabuf_modifier,
 };
 
 gboolean
-gst_wl_display_check_format_for_shm (GstWlDisplay * self, GstVideoFormat format)
+gst_wl_display_check_format_for_shm (GstWlDisplay * self,
+    const GstVideoInfo * video_info)
 {
   GstWlDisplayPrivate *priv = gst_wl_display_get_instance_private (self);
+  GstVideoFormat format = GST_VIDEO_INFO_FORMAT (video_info);
   enum wl_shm_format shm_fmt;
   GArray *formats;
   guint i;
@@ -216,23 +263,25 @@ gst_wl_display_check_format_for_shm (GstWlDisplay * self, GstVideoFormat format)
 
 gboolean
 gst_wl_display_check_format_for_dmabuf (GstWlDisplay * self,
-    GstVideoFormat format)
+    const GstVideoInfoDmaDrm * drm_info)
 {
   GstWlDisplayPrivate *priv = gst_wl_display_get_instance_private (self);
-  GArray *formats;
-  guint i, dmabuf_fmt;
+  guint64 modifier = drm_info->drm_modifier;
+  guint fourcc = drm_info->drm_fourcc;
+  GArray *formats, *modifiers;
+  guint i;
 
   if (!priv->dmabuf)
     return FALSE;
 
-  dmabuf_fmt = gst_video_format_to_wl_dmabuf_format (format);
-  if (dmabuf_fmt == (guint) - 1)
-    return FALSE;
-
   formats = priv->dmabuf_formats;
+  modifiers = priv->dmabuf_modifiers;
   for (i = 0; i < formats->len; i++) {
-    if (g_array_index (formats, uint32_t, i) == dmabuf_fmt)
-      return TRUE;
+    if (g_array_index (formats, uint32_t, i) == fourcc) {
+      if (g_array_index (modifiers, guint64, i) == modifier) {
+        return TRUE;
+      }
+    }
   }
 
   return FALSE;
@@ -277,8 +326,12 @@ registry_handle_global (void *data, struct wl_registry *registry,
         wl_registry_bind (registry, id, &wp_viewporter_interface, 1);
   } else if (g_strcmp0 (interface, "zwp_linux_dmabuf_v1") == 0) {
     priv->dmabuf =
-        wl_registry_bind (registry, id, &zwp_linux_dmabuf_v1_interface, 1);
+        wl_registry_bind (registry, id, &zwp_linux_dmabuf_v1_interface, 3);
     zwp_linux_dmabuf_v1_add_listener (priv->dmabuf, &dmabuf_listener, self);
+  } else if (g_strcmp0 (interface, "wp_single_pixel_buffer_manager_v1") == 0) {
+    priv->single_pixel_buffer =
+        wl_registry_bind (registry, id,
+        &wp_single_pixel_buffer_manager_v1_interface, 1);
   }
 }
 
@@ -349,7 +402,7 @@ gst_wl_display_new (const gchar * name, GError ** error)
 }
 
 GstWlDisplay *
-gst_wl_display_new_existing (struct wl_display * display,
+gst_wl_display_new_existing (struct wl_display *display,
     gboolean take_ownership, GError ** error)
 {
   GstWlDisplay *self;
@@ -551,11 +604,27 @@ gst_wl_display_get_dmabuf_v1 (GstWlDisplay * self)
 }
 
 GArray *
+gst_wl_display_get_dmabuf_modifiers (GstWlDisplay * self)
+{
+  GstWlDisplayPrivate *priv = gst_wl_display_get_instance_private (self);
+
+  return priv->dmabuf_modifiers;
+}
+
+GArray *
 gst_wl_display_get_dmabuf_formats (GstWlDisplay * self)
 {
   GstWlDisplayPrivate *priv = gst_wl_display_get_instance_private (self);
 
   return priv->dmabuf_formats;
+}
+
+struct wp_single_pixel_buffer_manager_v1 *
+gst_wl_display_get_single_pixel_buffer_manager_v1 (GstWlDisplay * self)
+{
+  GstWlDisplayPrivate *priv = gst_wl_display_get_instance_private (self);
+
+  return priv->single_pixel_buffer;
 }
 
 gboolean

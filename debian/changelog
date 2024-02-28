@@ -1,3 +1,36 @@
+gst-plugins-bad1.0 (1.23.90-1) experimental; urgency=medium
+
+  * New upstream version 1.23.90
+  * d/control: update dependencies to >= 1.23.90
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 27 Feb 2024 11:47:22 +0100
+
+gst-plugins-bad1.0 (1.23.2-1) experimental; urgency=medium
+
+  * New upstream version 1.23.2
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Fri, 16 Feb 2024 14:53:11 +0100
+
+gst-plugins-bad1.0 (1.23.1-1) experimental; urgency=medium
+
+  * d/control: add Marc to Uploaders
+  * New upstream version 1.23.1
+  * d/patches: neon 0.33 not needed
+  * d/patches: refresh Skip-failing-tests.patch
+  * d/control: depend on liblc3-dev
+  * d/control: Build-Depends add libsvtav1enc-dev
+  * d/install: install new libraries
+  * d/control: bump gst dependency to 1.23.1
+  * d/rules: disable aja
+  * d/rules: qt6d3d11 disabled
+  * d/rules: webrtcdsp disabled
+  * d/control: libwebrtc-audio-processing-dev removed
+  * d/install: remove libweebrtcdsp
+  * d/install: remove gstkate.so
+  * d/patches: disable vapostproc, avtpcrfcsync and vlcolorconvert tests
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Mon, 12 Feb 2024 16:55:23 +0100
+
 gst-plugins-bad1.0 (1.22.9-2ubuntu1) noble; urgency=medium
 
   * Merge with Debian. Remaining changes:

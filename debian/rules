@@ -80,6 +80,9 @@ conf_flags += -Ddirectfb=disabled -Dladspa=disabled -Dneon=disabled -Dopenaptx=d
               -Dopenni2=disabled -Dqroverlay=disabled -Dvulkan=disabled
 endif
 
+# bookworm backport flags
+conf_flags += -Daja=disabled -Dqt6d3d11=disabled -Dwebrtcdsp=disabled
+
 %:
 	dh $@
 

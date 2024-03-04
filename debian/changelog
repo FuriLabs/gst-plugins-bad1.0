@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.23.90-1ubuntu3) noble; urgency=medium
+
+  * No-change rebuild against libssl3t64
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Mon, 04 Mar 2024 18:09:50 +0000
+
 gst-plugins-bad1.0 (1.23.90-1ubuntu2) noble; urgency=medium
 
   * Merge with Debian. Remaining changes:

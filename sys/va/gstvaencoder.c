@@ -26,6 +26,7 @@
 #include "gstvaencoder.h"
 
 #include <gst/va/gstvavideoformat.h>
+#include <gst/va/vasurfaceimage.h>
 
 #include "gstvacaps.h"
 #include "gstvaprofile.h"
@@ -305,16 +306,16 @@ _create_reconstruct_pool (GstVaDisplay * display, GArray * surface_formats,
     guint max_buffers)
 {
   GstAllocator *allocator = NULL;
-  guint usage_hint = VA_SURFACE_ATTRIB_USAGE_HINT_ENCODER;
+  guint usage_hint;
   GstVideoInfo info;
   GstAllocationParams params = { 0, };
   GstBufferPool *pool;
-  guint size;
   GstCaps *caps = NULL;
 
   gst_video_info_set_format (&info, format, coded_width, coded_height);
 
-  size = GST_VIDEO_INFO_SIZE (&info);
+  usage_hint = va_get_surface_usage_hint (display,
+      VAEntrypointEncSlice, GST_PAD_SINK, FALSE);
 
   caps = gst_video_info_to_caps (&info);
   gst_caps_set_features_simple (caps,
@@ -322,9 +323,7 @@ _create_reconstruct_pool (GstVaDisplay * display, GArray * surface_formats,
 
   allocator = gst_va_allocator_new (display, surface_formats);
 
-  gst_allocation_params_init (&params);
-
-  pool = gst_va_pool_new_with_config (caps, size, 0, max_buffers, usage_hint,
+  pool = gst_va_pool_new_with_config (caps, 0, max_buffers, usage_hint,
       GST_VA_FEATURE_AUTO, allocator, &params);
 
   gst_clear_object (&allocator);
@@ -679,7 +678,6 @@ guint
 gst_va_encoder_get_prediction_direction (GstVaEncoder * self,
     VAProfile profile, VAEntrypoint entrypoint)
 {
-#if VA_CHECK_VERSION(1,9,0)
   VAStatus status;
   VADisplay dpy;
   VAConfigAttrib attrib = {.type = VAConfigAttribPredictionDirection };
@@ -708,9 +706,6 @@ gst_va_encoder_get_prediction_direction (GstVaEncoder * self,
 
   return attrib.value & (VA_PREDICTION_DIRECTION_PREVIOUS |
       VA_PREDICTION_DIRECTION_FUTURE | VA_PREDICTION_DIRECTION_BI_NOT_EMPTY);
-#else
-  return 0;
-#endif
 }
 
 guint32
@@ -1045,15 +1040,18 @@ gst_va_encoder_get_srcpad_caps (GstVaEncoder * self)
 static gboolean
 _destroy_all_buffers (GstVaEncodePicture * pic)
 {
+  GstVaDisplay *display;
   VABufferID buffer;
   guint i;
   gboolean ret = TRUE;
 
-  g_return_val_if_fail (GST_IS_VA_DISPLAY (pic->display), FALSE);
+  display = gst_va_buffer_peek_display (pic->raw_buffer);
+  if (!display)
+    return FALSE;
 
   for (i = 0; i < pic->params->len; i++) {
     buffer = g_array_index (pic->params, VABufferID, i);
-    ret &= _destroy_buffer (pic->display, buffer);
+    ret &= _destroy_buffer (display, buffer);
   }
   pic->params = g_array_set_size (pic->params, 0);
 
@@ -1201,10 +1199,9 @@ gst_va_encode_picture_new (GstVaEncoder * self, GstBuffer * raw_buffer)
     return NULL;
   }
 
-  pic = g_slice_new (GstVaEncodePicture);
+  pic = g_new (GstVaEncodePicture, 1);
   pic->raw_buffer = gst_buffer_ref (raw_buffer);
   pic->reconstruct_buffer = reconstruct_buffer;
-  pic->display = gst_object_ref (self->display);
   pic->coded_buffer = coded_buffer;
 
   pic->params = g_array_sized_new (FALSE, FALSE, sizeof (VABufferID), 8);
@@ -1215,20 +1212,25 @@ gst_va_encode_picture_new (GstVaEncoder * self, GstBuffer * raw_buffer)
 void
 gst_va_encode_picture_free (GstVaEncodePicture * pic)
 {
+  GstVaDisplay *display;
+
   g_return_if_fail (pic);
 
   _destroy_all_buffers (pic);
 
+  display = gst_va_buffer_peek_display (pic->raw_buffer);
+  if (!display)
+    return;
+
   if (pic->coded_buffer != VA_INVALID_ID)
-    _destroy_buffer (pic->display, pic->coded_buffer);
+    _destroy_buffer (display, pic->coded_buffer);
 
   gst_buffer_unref (pic->raw_buffer);
   gst_buffer_unref (pic->reconstruct_buffer);
 
   g_clear_pointer (&pic->params, g_array_unref);
-  gst_clear_object (&pic->display);
 
-  g_slice_free (GstVaEncodePicture, pic);
+  g_free (pic);
 }
 
 /* currently supported rate controls */

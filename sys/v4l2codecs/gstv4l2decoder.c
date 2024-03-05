@@ -564,7 +564,7 @@ gst_v4l2_decoder_export_buffer (GstV4l2Decoder * self,
   gint i, ret;
   struct v4l2_plane planes[GST_VIDEO_MAX_PLANES] = { {0} };
   struct v4l2_buffer v4l2_buf = {
-    .index = 0,
+    .index = index,
     .type = direction_to_buffer_type (self, direction),
   };
 
@@ -757,7 +757,7 @@ gst_v4l2_decoder_dequeue_src (GstV4l2Decoder * self, guint32 * out_frame_num)
 
 gboolean
 gst_v4l2_decoder_set_controls (GstV4l2Decoder * self, GstV4l2Request * request,
-    struct v4l2_ext_control * control, guint count)
+    struct v4l2_ext_control *control, guint count)
 {
   gint ret;
   struct v4l2_ext_controls controls = {
@@ -779,7 +779,7 @@ gst_v4l2_decoder_set_controls (GstV4l2Decoder * self, GstV4l2Request * request,
 
 gboolean
 gst_v4l2_decoder_get_controls (GstV4l2Decoder * self,
-    struct v4l2_ext_control * control, guint count)
+    struct v4l2_ext_control *control, guint count)
 {
   gint ret;
   struct v4l2_ext_controls controls = {

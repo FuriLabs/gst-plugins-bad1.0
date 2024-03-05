@@ -1,3 +1,22 @@
+gst-plugins-bad1.0 (1.24.0-1) unstable; urgency=medium
+
+  * Revert "d/watch: pin master releases on 1.22.x"
+  * New upstream version 1.24.0
+  * d/patches: refresh Skip-failing-tests.patch
+  * d/control: depend on liblc3-dev
+  * d/control: Build-Depends add libsvtav1enc-dev
+  * d/install: install new libraries
+  * d/rules: disable aja
+  * d/rules: qt6d3d11 disabled
+  * d/rules: webrtcdsp disabled
+  * d/control: libwebrtc-audio-processing-dev removed
+  * d/install: remove libweebrtcdsp
+  * d/install: remove gstkate.so
+  * d/patches: disable vapostproc, avtpcrfcsync and vlcolorconvert tests
+  * d/control: bump gstreamer dependencies to 1.24.0
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 05 Mar 2024 14:37:25 +0100
+
 gst-plugins-bad1.0 (1.22.10-1) unstable; urgency=medium
 
   * d/control: add Marc to Uploaders

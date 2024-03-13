@@ -1,3 +1,148 @@
+=== release 1.24.0 ===
+
+2024-03-04 23:51:42 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* NEWS:
+	* README.md:
+	* RELEASE:
+	* gst-plugins-bad.doap:
+	* meson.build:
+	  Release 1.24.0
+
+2024-03-04 18:01:50 +0100  Mathieu Duponchelle <mathieu@centricular.com>
+
+	* gst-libs/gst/analytics/gstanalyticsclassificationmtd.c:
+	* gst-libs/gst/analytics/gstanalyticsmeta.c:
+	* gst-libs/gst/analytics/gstanalyticsmeta.h:
+	* gst-libs/gst/analytics/gstanalyticsobjectdetectionmtd.c:
+	* gst-libs/gst/analytics/gstanalyticsobjecttrackingmtd.c:
+	  analytics: whitespace matters for gtk-doc syntax
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6253>
+
+2024-03-03 18:35:09 -0500  Olivier Crête <olivier.crete@collabora.com>
+
+	* docs/libs/analytics/index.md:
+	* docs/libs/analytics/sitemap.txt:
+	* docs/meson.build:
+	* gst-libs/gst/analytics/analytics-meta-prelude.h:
+	* gst-libs/gst/analytics/meson.build:
+	  analytics: Add documentation to hotdoc build
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6253>
+
+2024-03-03 18:34:41 -0500  Olivier Crête <olivier.crete@collabora.com>
+
+	* gst-libs/gst/analytics/gstanalyticsclassificationmtd.c:
+	* gst-libs/gst/analytics/gstanalyticsmeta.c:
+	* gst-libs/gst/analytics/gstanalyticsmeta.h:
+	* gst-libs/gst/analytics/gstanalyticsobjectdetectionmtd.c:
+	* gst-libs/gst/analytics/gstanalyticsobjecttrackingmtd.c:
+	  analytics: Add missing documentation
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6253>
+
+2024-03-03 18:33:48 -0500  Olivier Crête <olivier.crete@collabora.com>
+
+	* gst-libs/gst/analytics/gstanalyticsclassificationmtd.c:
+	* gst-libs/gst/analytics/gstanalyticsmeta.c:
+	* gst-libs/gst/analytics/gstanalyticsmeta.h:
+	* gst-libs/gst/analytics/gstanalyticsobjectdetectionmtd.c:
+	* gst-libs/gst/analytics/gstanalyticsobjecttrackingmtd.c:
+	  analytics: Fix various typos in the documentation
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6253>
+
+2024-02-29 02:41:42 +0900  Seungha Yang <seungha@centricular.com>
+
+	* gst-libs/gst/d3d11/gstd3d11bufferpool.cpp:
+	* gst-libs/gst/d3d11/gstd3d11memory.cpp:
+	* sys/d3d12/gstd3d12memory.cpp:
+	  d3d11memory, d3d12memory: Fix outstanding memory count tracing
+	  Gets being released memory back to queue even if allocator is flushing
+	  in order to count the number of outstanding memory objects.
+	  Also, clear queue if there's no outstanding memory object and
+	  allocator is flushing
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6240>
+
+2024-02-29 02:30:38 +0900  Seungha Yang <seungha@centricular.com>
+
+	* tests/check/libs/d3d11memory.c:
+	  tests: d3d11: Add buffer pool test
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6240>
+
+2024-02-29 02:06:43 +0900  Seungha Yang <seungha@centricular.com>
+
+	* gst-libs/gst/cuda/gstcudamemory.cpp:
+	  cudamemory: Fix outstanding memory count tracing
+	  Gets being released memory back to queue even if allocator is flushing
+	  in order to count the number of outstanding memory objects.
+	  And fixing double count increment
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6240>
+
+2024-02-29 02:06:25 +0900  Seungha Yang <seungha@centricular.com>
+
+	* tests/check/libs/cudamemory.c:
+	  tests: cuda: Add buffer pool test
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6240>
+
+2024-02-15 16:41:54 -0500  Damian Hobson-Garcia <dhobsong@igel.co.jp>
+
+	* ext/gtk/gstgtkwaylandsink.c:
+	* ext/wayland/gstwaylandsink.c:
+	* ext/wayland/gstwaylandsink.h:
+	* gst-libs/gst/wayland/gstwlwindow.c:
+	* gst-libs/gst/wayland/gstwlwindow.h:
+	  waylandsink: Move buffer commits to the display thread
+	  Syncrhonizing buffer commits to the streaming thread can lead to
+	  dropped frames when frame callbacks are not processed before the
+	  next frame is ready for rendering.  Depending on the drift between
+	  the wayland compositor and buffer source timings, this can lead to
+	  periods of significant frame drop, especially when the media frame
+	  rate is close to the display frame rate.
+	  Cache buffers in the streaming thread and peform commits on the
+	  display thread to eliminate the buffer commit racing.
+	  The implementation is the same for both waylandsink and gtkwaylandsink,
+	  so move it to the common wayland library under gst-lib.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6133>
+
+2024-02-15 16:41:52 -0500  Damian Hobson-Garcia <dhobsong@igel.co.jp>
+
+	* gst-libs/gst/wayland/gstwlbuffer.c:
+	* gst-libs/gst/wayland/gstwlbuffer.h:
+	  wayland: Add API to ref/unref current GstBuffer inside a GstWlBuffer
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6133>
+
+2024-02-15 16:42:13 -0500  Damian Hobson-Garcia <dhobsong@igel.co.jp>
+
+	* gst-libs/gst/wayland/gstwldisplay.c:
+	* gst-libs/gst/wayland/gstwldisplay.h:
+	  wayland: Add synchronized requests to WlDisplay
+	  Add synchonized versions of wl_display_sync() and wl_callback_destroy()
+	  that will ensure that to callbacks can be managed in a thread safe way
+	  on the display queue even when they are dispatched from a separate
+	  thread.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6133>
+
+2024-02-26 09:27:40 +0100  Edward Hervey <edward@centricular.com>
+
+	* README.md:
+	* RELEASE:
+	* ext/dtls/README:
+	  docs: Use Discourse and Matrix as prefered communication channels
+	  Part of: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6220
+
+2024-02-22 15:41:16 +0100  Alexander Slobodeniuk <aslobodeniuk@fluendo.com>
+
+	* sys/d3d11/gstd3d11window_win32.cpp:
+	  d3d11window_win32: fix crash on RC unprepare() vs window_proc()
+	  Unprepare method posts WM_GST_D3D11_DESTROY_INTERNAL_WINDOW
+	  command to the window queue, and from that moment considers
+	  internal_hwnd to be released, and so it sets it to null.
+	  The problem is that it's possible that right at that moment
+	  the window thread might be already processing some other
+	  command, or just another command might be already in the queue.
+	  On practice we met a crash when WM_PAINT got processed in between
+	  (unprepare already finished and WM_GST_D3D11_DESTROY_INTERNAL_WINDOW
+	  was not handled yet)
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6187>
+
 === release 1.23.90 ===
 
 2024-02-23 18:20:11 +0000  Tim-Philipp Müller <tim@centricular.com>

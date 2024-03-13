@@ -1,3 +1,22 @@
+gst-plugins-bad1.0 (1.24.0-1) unstable; urgency=medium
+
+  * Revert "d/watch: pin master releases on 1.22.x"
+  * New upstream version 1.24.0
+  * d/patches: refresh Skip-failing-tests.patch
+  * d/control: depend on liblc3-dev
+  * d/control: Build-Depends add libsvtav1enc-dev
+  * d/install: install new libraries
+  * d/rules: disable aja
+  * d/rules: qt6d3d11 disabled
+  * d/rules: webrtcdsp disabled
+  * d/control: libwebrtc-audio-processing-dev removed
+  * d/install: remove libweebrtcdsp
+  * d/install: remove gstkate.so
+  * d/patches: disable vapostproc, avtpcrfcsync and vlcolorconvert tests
+  * d/control: bump gstreamer dependencies to 1.24.0
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 05 Mar 2024 14:37:25 +0100
+
 gst-plugins-bad1.0 (1.23.90-1ubuntu3) noble; urgency=medium
 
   * No-change rebuild against libssl3t64
@@ -55,6 +74,15 @@ gst-plugins-bad1.0 (1.23.1-1) experimental; urgency=medium
   * d/patches: disable vapostproc, avtpcrfcsync and vlcolorconvert tests
 
  -- Marc Leeman <marc.leeman@gmail.com>  Mon, 12 Feb 2024 16:55:23 +0100
+
+gst-plugins-bad1.0 (1.22.10-1) unstable; urgency=medium
+
+  * d/control: add Marc to Uploaders
+  * d/watch: pin master releases on 1.22.x
+  * New upstream version 1.22.10
+  * d/patches: neon 0.33 not needed
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 14 Feb 2024 13:13:01 +0100
 
 gst-plugins-bad1.0 (1.22.9-2ubuntu1) noble; urgency=medium
 

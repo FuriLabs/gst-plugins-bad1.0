@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.24.0-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.24.0-1ubuntu1) noble; urgency=medium
 
   * Merge with Debian. Remaining changes:
     - Don't build wpewebkit plugins

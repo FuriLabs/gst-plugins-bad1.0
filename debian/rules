@@ -27,16 +27,6 @@ GST_PACKAGE_NAME := "GStreamer Bad Plugins (Ubuntu)"
 GST_PACKAGE_ORIGIN="https://launchpad.net/ubuntu/+source/gst-plugins-bad1.0"
 endif
 
-ifeq ($(shell dpkg-vendor --is Ubuntu && echo yes) $(DEB_HOST_ARCH), yes i386)
-NO_I386_ARGS = -Ngstreamer1.0-opencv -Nlibgstreamer-opencv1.0-0
-
-override_dh_builddeb:
-	dh_builddeb $(NO_I386_ARGS)
-
-override_dh_gencontrol:
-	dh_gencontrol $(NO_I386_ARGS)
-endif
-
 conf_flags = -Dpackage-name=$(GST_PACKAGE_NAME) -Dpackage-origin=$(GST_PACKAGE_ORIGIN)
 conf_flags += -Dauto_features=enabled -Ddoc=disabled -Dgpl=enabled
 # Not available in Debian yet
@@ -47,8 +37,17 @@ conf_flags += -Damfcodec=disabled -Ddirectshow=disabled -Dwasapi=disabled -Dwasa
 # In non-free currently
 conf_flags += -Dfdkaac=disabled
 
-ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64))
-conf_flags += -Dopencv=disabled -Dzxing=disabled
+ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf i386 mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64))
+conf_flags += -Dzxing=disabled
+endif
+
+ifeq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
+conf_flags += -Dopencv=disabled
+endif
+
+# Ubuntu doesn't have wpewebkit
+ifeq ($(DISTRO),"Ubuntu")
+conf_flags += -Dwpe=disabled
 endif
 
 ifneq ($(DEB_HOST_ARCH_ENDIAN),little)
@@ -67,11 +66,6 @@ endif
 
 ifeq ($(DEB_HOST_ARCH_OS),hurd)
 conf_flags += -Dresindvd=disabled -Dnvcodec=disabled
-endif
-
-# Ubuntu doesn't have wpewebkit
-ifeq ($(DISTRO),"Ubuntu")
-conf_flags += -Dwpe=disabled
 endif
 
 # Not available on Ubuntu i386 currently
@@ -112,7 +106,7 @@ override_dh_install:
 		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstjpegformat.so \
 		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstcamerabin.so
 
-	dh_install $(NO_I386_ARGS)
+	dh_install
 ifeq ($(DEB_HOST_ARCH_OS),linux)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstdvb.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstfbdevsink.so

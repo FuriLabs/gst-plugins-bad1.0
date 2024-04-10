@@ -41,7 +41,7 @@ ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf i386 mips64el ppc64el r
 conf_flags += -Dzxing=disabled
 endif
 
-ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 i386 mips64el ppc64el riscv64 s390x alpha ppc64 sparc64))
+ifeq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
 conf_flags += -Dopencv=disabled
 endif
 

@@ -59,7 +59,7 @@ Build-Depends: debhelper-compat (= 13),
                libneon27-dev,
                libnice-dev (>= 0.1.20),
                libopenal-dev (>= 1:1.14),
-               libopencv-dev (>= 3.0.0) [amd64 arm64 i386 mips64el ppc64el riscv64 s390x alpha ppc64 sparc64],
+               libopencv-dev (>= 3.0.0) [amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha powerpc ppc64 sparc64],
                libopenexr-dev,
                libopenh264-dev (>= 1.3.0),
                libopenjp2-7-dev (>= 2.2),
@@ -102,7 +102,7 @@ Build-Depends: debhelper-compat (= 13),
                libzxing-dev (>= 1.4.0) [amd64 arm64 armel armhf i386 mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64],
                meson,
                nettle-dev (>= 3),
-               opencv-data [amd64 arm64 i386 mips64el ppc64el riscv64 s390x alpha ppc64 sparc64],
+               opencv-data [amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha powerpc ppc64 sparc64],
                wayland-protocols (>= 1.4) [linux-any],
                xauth,
                xvfb
@@ -175,7 +175,7 @@ Description: GStreamer plugins from the "bad" set
  real live maintainer, or some actual wide use.
 
 Package: gstreamer1.0-opencv
-Architecture: amd64 arm64 i386 mips64el ppc64el riscv64 s390x alpha ppc64 sparc64
+Architecture: amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha powerpc ppc64 sparc64
 Multi-Arch: same
 Depends: gstreamer1.0-plugins-base,
          libgstreamer-opencv1.0-0 (= ${binary:Version}),
@@ -253,7 +253,7 @@ Description: GStreamer libraries from the "bad" set
  is not guaranteed to be stable.
 
 Package: libgstreamer-opencv1.0-0
-Architecture: amd64 arm64 i386 mips64el ppc64el riscv64 s390x alpha ppc64 sparc64
+Architecture: amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha powerpc ppc64 sparc64
 Multi-Arch: same
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Conflicts: libgstreamer-plugins-bad1.0-0 (<< 1.13.1)

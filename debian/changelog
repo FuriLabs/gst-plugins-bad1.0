@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.24.2-1ubuntu2) noble; urgency=medium
+gst-plugins-bad1.0 (1.24.2-1ubuntu3) noble; urgency=medium
 
   * Fix logic error in enabling opencv feature
 

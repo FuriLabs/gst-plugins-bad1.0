@@ -1,3 +1,12 @@
+gst-plugins-bad1.0 (1.24.2-2) unstable; urgency=medium
+
+  * Team upload
+  * Build with wpewebkit 2.0 (Closes: #1037139)
+  * Update architectures where opencv is available
+  * Stop building opencv plugin on i386
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 12 Apr 2024 11:18:03 -0400
+
 gst-plugins-bad1.0 (1.24.2-1) unstable; urgency=medium
 
   * New upstream version 1.24.2

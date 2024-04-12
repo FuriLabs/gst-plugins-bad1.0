@@ -45,7 +45,7 @@ ifneq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
 conf_flags += -Dopencv=disabled
 endif
 
-ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 i386 mips64el ppc64el riscv64 s390x ia64 loong64 ppc64 sparc64 x32))
+ifneq ($(filter gstreamer1.0-wpe,$(built_binaries)),)
 conf_flags += -Dwpe=disabled
 endif
 

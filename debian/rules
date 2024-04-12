@@ -11,6 +11,8 @@ version=$(shell dpkg-parsechangelog | grep ^Version: | cut -d ' ' -f 2)
 # upstream version
 gst_version=$(shell echo $(version) | cut -d '-' -f 1)
 
+built_binaries := $(shell dh_listpackages)
+
 # Let's decide the package name and url depending on the distribution
 DISTRO = "$(shell dpkg-vendor --query vendor)"
 
@@ -41,7 +43,7 @@ ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf i386 mips64el ppc64el r
 conf_flags += -Dzxing=disabled
 endif
 
-ifneq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
+ifeq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
 conf_flags += -Dopencv=disabled
 endif
 

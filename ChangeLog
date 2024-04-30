@@ -1,3 +1,400 @@
+=== release 1.24.3 ===
+
+2024-04-30 00:15:23 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* NEWS:
+	* RELEASE:
+	* gst-plugins-bad.doap:
+	* meson.build:
+	  Release 1.24.3
+
+2024-04-29 18:24:36 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* tests/check/elements/unixfd.c:
+	  unixfd: disable flaky test_unixfd_segment for now
+	  It's a problem with the test, and a proper fix might
+	  require new API, so just disable it for now.
+
+2024-04-22 15:03:56 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvah265enc.c:
+	  vah265enc: Set the correct buffer flag for output
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6764>
+
+2024-04-22 14:44:53 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvah264enc.c:
+	  vah264enc: Set the correct buffer flag for output
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6764>
+
+2024-04-21 14:55:31 +0800  Seungha Yang <seungha@centricular.com>
+
+	* sys/va/gstvabaseenc.c:
+	  vabaseenc: Fix frame leak on error path
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6764>
+
+2024-04-21 14:48:02 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvah265enc.c:
+	  vah265enc: Do not touch the PTS of output frame
+	  1. The PTS of all frames should not be changed.
+	  2. Just update the DTS based on the PTS. For the frame which is not
+	  reordered, the DTS is equal to PTS. For frame which is reordered,
+	  the DTS is equal to previous DTS. For example:
+	  Input: F0[D0, P0] -- F1[D1, P1] -- F2[D2, P2] -- F3[D3, P3]
+	  Output: F0[I, D0, P0] -- F3[P, D0, P3] -- F1[B, D1, P1] -- F2[B, D2, P2]
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6764>
+
+2024-04-21 12:51:31 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvah264enc.c:
+	  vah264enc: Do not touch the PTS of output frame
+	  1. The PTS of all frames should not be changed.
+	  2. Just update the DTS based on the PTS. For the frame which is not
+	  reordered, the DTS is equal to PTS. For frame which is reordered,
+	  the DTS is equal to previous DTS. For example:
+	  Input: F0[D0, P0] -- F1[D1, P1] -- F2[D2, P2] -- F3[D3, P3]
+	  Output: F0[I, D0, P0] -- F3[P, D0, P3] -- F1[B, D1, P1] -- F2[B, D2, P2]
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6764>
+
+2024-04-28 23:37:55 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12decoder.cpp:
+	  d3d12decoder: Fix d3d12 resource copy
+	  It was copying to self resource
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6755>
+
+2024-04-19 00:30:47 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvabaseenc.c:
+	  vabaseenc: No need to call _finish_subframe()
+	  After vaav1enc is aligned to TU, there is no case that generates
+	  multi output for one input.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6751>
+
+2024-04-19 00:22:50 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvaav1enc.c:
+	  vaav1enc: Set the correct buffer flag for output
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6751>
+
+2024-04-19 00:14:15 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvaav1enc.c:
+	  vaav1enc: Do not change the PTS/DTS of output frames
+	  The AV1 encoder does not reorder the frames, so there is no need
+	  to change the timestamp related meta data of output frames, just
+	  inheriting it from the input frames.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6751>
+
+2024-04-18 22:30:20 +0800  He Junyan <junyan.he@intel.com>
+
+	* sys/va/gstvaav1enc.c:
+	  vaav1enc: Change the alignment of output to "tu"
+	  The current output alignment is "frame", which may cause some issues
+	  for PTS and DTS calculation. We now change the alignment to "tu",
+	  and this is also the alignment mode for av1enc and svtav1enc.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6751>
+
+2024-04-15 09:51:53 -0400  Xavier Claessens <xavier.claessens@collabora.com>
+
+	* gst/unixfd/gstunixfdsrc.c:
+	  unixfd: Close file descriptors on error
+	  After calling g_unix_fd_list_steal_fds() and before calling
+	  gst_fd_allocator_alloc(), we are responsible for closing those fds.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6747>
+
+2024-04-03 10:28:28 -0400  Xavier Claessens <xavier.claessens@collabora.com>
+
+	* gst/unixfd/gstunixfdsink.c:
+	* gst/unixfd/gstunixfdsrc.c:
+	* tests/check/elements/unixfd.c:
+	  unixfdsink: Take segment into account when converting timestamps
+	  Also rename `calculate_timestamp()` to `to_monotonic()` and
+	  `from_monotonic()` which better describe what it does.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6747>
+
+2024-04-03 13:17:01 -0400  Xavier Claessens <xavier.claessens@collabora.com>
+
+	* gst/unixfd/gstunixfdsrc.c:
+	  unixfd: Allow sending buffers with no memories
+	  There is no reason to not allow it, and it is useful for simple unit
+	  test.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6747>
+
+2024-04-24 15:44:41 +0200  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* gst-libs/gst/va/gstvaallocator.c:
+	  vaallocator: disable derived all together for Mesa <23.3
+	  First it derived mapping was disabled for P010 formats, but also there's an
+	  issue with interlaced frames.
+	  It would be possible to disable derived mapping only for interlaced (H.264
+	  decoder and vadeinterlace) but it would spread the hacks along the code. It's
+	  simpler and contained to disable derived completely for Mesa <23.3
+	  Fixes: #3450
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6746>
+
+2024-04-25 11:50:03 +0200  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* gst-libs/gst/va/gstvavideoformat.c:
+	  va: videoformat: use video library to get DRM fourcc
+	  Instead of duplicating the GStreamer format to DRM fourcc mapping, this patch
+	  uses the GstVideo library helpers. This duplicates the big O of looking for,
+	  since the two lists are traversed, but it's less error prone.
+	  Partially reverts commit 547f3e8622a39ce971c272f2c31eab8f1fdfbb45.
+	  Fixes: #3354
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6744>
+
+2024-04-17 18:37:30 +0900  Hou Qi <qi.hou@nxp.com>
+
+	* gst-libs/gst/wayland/gstwlwindow.c:
+	  wlwindow: free staged buffer when do gst_wl_window_finalize
+	  If waylandsink received buffer rate is high which causes frame
+	  drop, the cached staged buffer will be replaced when next buffer
+	  needs to be rendered and be freed after redraw. But there is
+	  chance to get memory leak if ended without redraw. So need to
+	  free staged buffer when do gst_wl_window_finalize().
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6735>
+
+2024-04-24 01:02:15 +0900  Haihua Hu <jared.hu@nxp.com>
+
+	* gst-libs/gst/wayland/gstwlwindow.c:
+	  wlwindow: clear configure mutex and cond when finalize
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6724>
+
+2024-04-23 10:53:54 +0200  Edward Hervey <edward@centricular.com>
+
+	* gst/mpegtsdemux/mpegtsbase.c:
+	  mpegtsbase: Fix Program equality check
+	  There was an issue with this equality check, which was to figure out what to do
+	  with PCR pids (whether they were part of the streams present or not) and whether
+	  we ignore PCR or not.
+	  Turns out ... we already took care of that further up in the function.
+	  The length check can be simplified by just checking whether the length of
+	  the *original* PMT and the new PMT are identical. Since we don't store "magic"
+	  PCR streams in those, we can just use them as-is.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6719>
+
+2024-04-23 01:40:44 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12decoder.cpp:
+	  d3d12decoder: Lock DPB while building command
+	  Since DPB resource can be modified in output thread, protect
+	  it when building command list.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6717>
+
+2024-04-22 19:32:22 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12decoder.cpp:
+	  d3d12decoder: Hold reference pictures in fence data
+	  Keep reference pictures alive during executing decoding commands
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6717>
+
+2024-04-22 21:52:53 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12decoder.cpp:
+	* sys/d3d12/gstd3d12decoder.h:
+	* sys/d3d12/gstd3d12vp9dec.cpp:
+	  d3d12vp9dec: Disallow resolution change to larger size on non-keyframe
+	  Intel GPU seems to be crashing if the case happens.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6717>
+
+2024-04-21 22:38:50 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12decoder.cpp:
+	  d3d12decoder: Fix potential use after free
+	  A DPB buffer held by codec picture object may not be writable
+	  at the moment, then gst_buffer_make_writable() will unref passed buffer.
+	  Specifically, the use after free or double free can happen if:
+	  * Crop meta of buffer copy is required because of non-zero
+	  top-left crop position
+	  * zero-copy is possible with crop meta
+	  * A picture was duplicated, interlaced h264 stream for example
+	  Interlaced h264 stream with non-zero top-left crop position
+	  is not very common but it's possible configuration in theory.
+	  Thus gst_buffer_make_writable() should be called with
+	  GstVideoCodecFrame.output_buffer directly.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6710>
+
+2024-04-21 22:07:36 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d11/gstd3d11decoder.cpp:
+	  d3d11decoder: Fix potential use after free
+	  A DPB buffer held by codec picture object may not be writable
+	  at the moment, then gst_buffer_make_writable() will unref passed buffer.
+	  Specifically, the use after free or double free can happen if:
+	  * Crop meta of buffer copy is required because of non-zero
+	  top-left crop position
+	  * zero-copy is possible with crop meta
+	  * A picture was duplicated, interlaced h264 stream for example
+	  Interlaced h264 stream with non-zero top-left crop position
+	  is not very common but it's possible configuration in theory.
+	  Thus gst_buffer_make_writable() should be called with
+	  GstVideoCodecFrame.output_buffer directly.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6710>
+
+2024-04-16 09:50:52 +0200  Edward Hervey <edward@centricular.com>
+
+	* gst/mpegtsdemux/mpegtsbase.c:
+	  tsdemux: Disable smart program update
+	  The goal of this code was, for programs which were updates (i.e. adding/removing
+	  streams but not completely changing) to allow dynamic addition/removal of
+	  streams without completely removing everything.
+	  But this wasn't 100% tested and there are a bunch of issues which make it fail
+	  in plenty of ways.
+	  For now disable that feature and force the legacy "add all pads again and then
+	  remove old ones" behaviour to make it switch.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6708>
+
+2024-04-21 19:17:53 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/mediafoundation/gstmfsourceobject.cpp:
+	  mediafoundation: Fix infinite loop in device provider
+	  Initialize source state with GST_MF_DEVICE_NOT_FOUND to terminate
+	  loop immediately if no available capture device is available
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3492
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6707>
+
+2024-04-19 20:44:44 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12videosink.cpp:
+	  d3d12videosink: Disconnect window's signal on dispose
+	  Same as the commit of 7b69d1758f77331c2801746cd91b1b6b0db9ecfb
+	  but for d3d12videosink.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6700>
+
+2024-04-19 21:17:17 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12window.cpp:
+	  d3d12videosink: Handle external HWND's mouse/keyboard events
+	  OS will not propagate the event to child HWND if it's handled by
+	  the parent. Thus, navigation event should be handled by parent HWND's
+	  event handler.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6700>
+
+2024-04-18 10:18:05 +0200  Alexander Slobodeniuk <aslobodeniuk@fluendo.com>
+
+	* gst-libs/gst/d3d11/gstd3d11device.cpp:
+	* tests/check/libs/d3d11device.cpp:
+	  d3d11device: protect device_lock vs device_new
+	  It seems that when D3D11CreateDevice collides in time
+	  with other D3D11 calls, in particular the proccess of
+	  creating a shader, it can corrupt the memory in the driver.
+	  D3D11 spec doesn't seem to require any thread safety from
+	  D3D11CreateDevice. Following MSDN, it is supposed to be called
+	  in the beginning of the proccess, while GStreamer calls it with each
+	  new pipeline.
+	  Such crashes in the driver were frequently reproducing on the
+	  Intel UHD 630 machine.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6702>
+
+2024-04-16 23:08:51 +0200  Alexander Slobodeniuk <aslobodeniuk@fluendo.com>
+
+	* tests/check/libs/d3d11device.cpp:
+	* tests/check/meson.build:
+	  tests/d3d11: add concurrency test for gstd3d11device
+	  We suspect that it's not thread safe to just create and
+	  destroy the device from any thread, particularly because
+	  of D3D11CreateDevice, that is not documented as thread-safe.
+	  While D3D11CreateDevice is usually protected from outside
+	  by the gst_d3d11_ensure_element_data, it still can cross
+	  with the Release() method of another device.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6702>
+
+2024-04-19 17:17:08 +0900  Elliot Chen <elliot.chen@nxp.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  gstplay: query duration again if previous query failed
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6701>
+
+2024-04-17 10:58:00 +0900  Hou Qi <qi.hou@nxp.com>
+
+	* ext/wayland/gstwaylandsink.c:
+	  waylandsink: config buffer pool with query size when propose_allocation
+	  If propose_allocation comes before set_caps, self->video_info
+	  has not been extracted from caps and self->video_info.size is 0.
+	  It causes buffer pool fail to set config . So need to use info
+	  size got from query instead when propose_allocation.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6687>
+
+2024-04-17 16:55:31 -0400  Nicolas Dufresne <nicolas.dufresne@collabora.com>
+
+	* sys/v4l2codecs/gstv4l2codecav1dec.c:
+	* sys/v4l2codecs/gstv4l2codech264dec.c:
+	* sys/v4l2codecs/gstv4l2codech265dec.c:
+	* sys/v4l2codecs/gstv4l2codecmpeg2dec.c:
+	* sys/v4l2codecs/gstv4l2codecvp8dec.c:
+	* sys/v4l2codecs/gstv4l2codecvp9dec.c:
+	  v4l2codecs: Don't unref allocation query caps
+	  The caps obtained from parsing the allocation query is borrowed and
+	  should not be unreffed. This fixes criticals assertion introduced in
+	  1.24.1.
+	  (gst-launch-1.0:242): GStreamer-CRITICAL **: 19:48:02.667:
+	  gst_mini_object_unref: assertion 'GST_MINI_OBJECT_REFCOUNT_VALUE (mini_object) > 0' failed
+	  Fixes: 5189e8b95630 ("v4l2codecs: decoders: Add DMA_DRM caps support")
+	  Closes #3462
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6682>
+
+2024-04-16 22:29:15 +1000  Jan Schmidt <jan@centricular.com>
+
+	* gst/dvbsubenc/gstdvbsubenc.c:
+	  dvbsubenc: fixed some memory leaks and a crash
+	  Fix leaks of internal GstBuffers, and a crash if subtitle segments end
+	  up empty.
+	  Based on a patch by Jurijs Satcs <jurijs.satcs@veset.tv>
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6672>
+
+2024-04-10 20:57:16 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/mediafoundation/gstmfcapturedshow.cpp:
+	* sys/mediafoundation/gstmfcapturedshow.h:
+	* sys/mediafoundation/gstmfcapturewinrt.cpp:
+	* sys/mediafoundation/gstmfcapturewinrt.h:
+	* sys/mediafoundation/gstmfdevice.cpp:
+	* sys/mediafoundation/gstmfsourceobject.cpp:
+	* sys/mediafoundation/gstmfsourceobject.h:
+	* sys/mediafoundation/gstmfsourcereader.cpp:
+	* sys/mediafoundation/gstmfsourcereader.h:
+	  mediafoundation: Fix device enumeration
+	  Do not stop device enumerate even if a device could not be opened.
+	  Otherwise the other devices listed after the failed device will not be
+	  reported by device provider
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3460
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6647>
+
+2024-04-13 23:53:00 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d12/gstd3d12encoder.cpp:
+	  d3d12encoder: Fix buffer pool leak
+	  Add missing buffer pool release
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6637>
+
+2024-04-10 22:01:18 +0900  Seungha Yang <seungha@centricular.com>
+
+	* sys/d3d11/gstd3d11videosink.cpp:
+	* sys/d3d11/gstd3d11window.h:
+	* sys/d3d11/gstd3d11window_dummy.cpp:
+	  d3d11videosink: Fix rendering on keyed mutex enabled handle
+	  As of the commit 69b2e1565c5d0e8b2313d52042d73c721fed7edb,
+	  keyed mutex will be handled by the memory object.
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3468
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6635>
+
+2024-04-15 10:51:03 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* tests/check/meson.build:
+	  tests: fix possible libscpp build failure in gst-plugins-bad
+	  ../subprojects/gst-plugins-bad/tests/check/libs/gstlibscpp.cc:41:
+	  fatal error: gst/mpegts/gstmpegts-enumtypes.h: No such file or directory
+	  Could only pass the needed deps to the libscpp test, but gets
+	  messier to maintain, so let's at it for consistency.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6644>
+
+2024-04-10 00:04:02 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* meson.build:
+	  Back to development after 1.24.2
+
 === release 1.24.2 ===
 
 2024-04-09 21:48:55 +0100  Tim-Philipp Müller <tim@centricular.com>

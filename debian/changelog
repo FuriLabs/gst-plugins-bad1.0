@@ -1,3 +1,31 @@
+gst-plugins-bad1.0 (1.24.3-1) unstable; urgency=medium
+
+  * New upstream version 1.24.3
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 30 Apr 2024 11:21:05 +0200
+
+gst-plugins-bad1.0 (1.24.2-4) unstable; urgency=high
+
+  * Fix opencv dependency architectures (Closes: #1069953)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 29 Apr 2024 21:09:14 -0400
+
+gst-plugins-bad1.0 (1.24.2-3) unstable; urgency=medium
+
+  * Team upload
+  * Fix logic error in enabling opencv feature
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 12 Apr 2024 12:36:08 -0400
+
+gst-plugins-bad1.0 (1.24.2-2) unstable; urgency=medium
+
+  * Team upload
+  * Build with wpewebkit 2.0 (Closes: #1037139)
+  * Update architectures where opencv is available
+  * Stop building opencv plugin on i386
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 12 Apr 2024 11:18:03 -0400
+
 gst-plugins-bad1.0 (1.24.2-1ubuntu4) noble; urgency=medium
 
   * Don't try to build zxing on i386

@@ -47,8 +47,7 @@ ifeq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
 conf_flags += -Dopencv=disabled
 endif
 
-# Ubuntu doesn't have wpewebkit
-ifeq ($(DISTRO),"Ubuntu")
+ifeq ($(filter gstreamer1.0-wpe,$(built_binaries)),)
 conf_flags += -Dwpe=disabled
 endif
 
@@ -146,7 +145,7 @@ ifneq ($(DEB_HOST_ARCH_OS),hurd)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstnvcodec.so
 endif
 
-ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el mipsel ppc64el s390x alpha hppa hurd-i386 m68k powerpc ppc64 riscv64))
+ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64))
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstzxing.so
 endif
 

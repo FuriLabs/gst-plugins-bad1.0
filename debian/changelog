@@ -1,3 +1,28 @@
+gst-plugins-bad1.0 (1.24.4-2ubuntu1) oracular; urgency=medium
+
+  * Merge with Debian. Remaining changes:
+    - Don't build wpewebkit plugins
+    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
+      moved to -good.
+    - Have gstreamer-plugins-bad-1.0.pc Require gstreamer-plugins-good-1.0 -
+      the package we've moved the referenced plugins to. This maintains
+      compatibility with upstream software and other distributions.
+    - Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+    - d/control, d/gstreamer1.0-plugins-bad.install, d/rules:
+      + Don't require these Build-Depends on i386:
+        - libltc-dev, libfreeaptx-dev, libqrencode-dev, libzxing-dev, glslc,
+          libdirectfb-dev, liblrdf0-dev, libneon27-dev
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Tue, 11 Jun 2024 13:30:12 +0200
+
+gst-plugins-bad1.0 (1.24.4-2) unstable; urgency=medium
+
+  * d/patches: disable lc3 and dash_mpd tests
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 11 Jun 2024 11:33:12 +0200
+
 gst-plugins-bad1.0 (1.24.4-1ubuntu1) oracular; urgency=medium
 
   * Merge with Debian. Remaining changes:

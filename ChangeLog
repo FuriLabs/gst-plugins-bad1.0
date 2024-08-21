@@ -1,3 +1,101 @@
+=== release 1.24.7 ===
+
+2024-08-21 12:25:15 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* NEWS:
+	* RELEASE:
+	* gst-plugins-bad.doap:
+	* meson.build:
+	  Release 1.24.7
+
+2024-08-19 12:39:21 +0200  Guillaume Desmottes <guillaume.desmottes@onestream.live>
+
+	* ext/wpe/gstwpethreadedview.cpp:
+	  wpe: initialize threading.ready before reading it
+	  Fixes Valgrind warning.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7385>
+
+2024-08-19 14:34:28 +0200  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/va/gstvabasedec.c:
+	* sys/va/gstvabaseenc.c:
+	* sys/va/gstvabasetransform.c:
+	* sys/va/gstvacompositor.c:
+	  va: don't use GST_ELEMENT_WARNING in set_context() vmethod
+	  Since bins can set the context of their children elements, the set_context()
+	  vmethod shouldn't call bus messages post methods, since it locks the parent
+	  object, the bin, which might be already locked, leading to a deadlock.
+	  Fixes: #3706
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7379>
+
+2024-07-22 21:29:38 +0800  Qian Hu (胡骞) <qian.hu@mediatek.com>
+
+	* gst-libs/gst/codecparsers/gsth264parser.c:
+	* gst-libs/gst/codecparsers/gsth265parser.c:
+	* tests/check/libs/h264parser.c:
+	  h26xparse: bypass check for length_size_minus_one
+	  fix playback fail, when some file with length_size_minus_one == 2
+	  According to the spec 2 cannot be a valid value, so that stream has a
+	  bad config record. but breaking the decoding because of that, perhaps is too much.
+	  and ffmpeg seem not check this
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7358>
+
+2024-08-13 10:42:31 +0200  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/msdk/gstmsdkav1enc.c:
+	* sys/msdk/gstmsdkcontext.c:
+	* sys/msdk/gstmsdkh264enc.c:
+	* sys/msdk/gstmsdkh265enc.c:
+	* sys/msdk/gstmsdkmpeg2enc.c:
+	* sys/msdk/gstmsdkvc1dec.c:
+	* sys/msdk/gstmsdkvp9enc.c:
+	  msdk: replace strcmp with g_strcmp0
+	  Because strcmp doesn't handle NULL.
+	  Fixes: #3721
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7349>
+
+2024-08-07 19:14:26 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	* ext/aom/gstav1enc.c:
+	  aom: av1enc: restrict allowed input width and height
+	  Restrict allowed input resolution to something sensible
+	  in light of libaom CVE-2024-5171.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7328>
+
+2024-08-06 22:48:16 +1000  Jan Schmidt <jan@centricular.com>
+
+	* gst-libs/gst/webrtc/webrtc_fwd.h:
+	  webrtc: Add missing G_BEGIN/END_DECLS in header
+	  Fix using webrtc.h from C++ by adding the GLib begin/end
+	  decls markers around the header contents in webrtc_fwd.h
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7313>
+
+2024-07-03 07:58:58 -0600  Jordan Yelloz <jordan.yelloz@collabora.com>
+
+	* gst/videoparsers/gsth265parse.c:
+	  h265parse: Reject FD received before SPS
+	  A previous fix, a275e1e029e9b5d88be26b8304c9a162e4567346, is correct but was too
+	  permissive since it treats all un-matched NAL units the same as AU delimiters
+	  even though some other NAL unit types can be encountered in the processing loop.
+	  The problem this can cause is that some hardware decoders experience bad
+	  performance when handling FD units that precede the SPS.
+	  This change restores the original behavior for FDs so that they're ignored until
+	  the SPS is received and it preserves the codec conformance test gains that the
+	  fix has achieved.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7296>
+
+2024-07-26 17:13:10 +0200  Guillaume Desmottes <guillaume.desmottes@onestream.live>
+
+	* ext/rsvg/gstrsvgoverlay.c:
+	  rsvgoverlay: add debug category
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7281>
+
+2024-07-29 16:48:02 +0100  Tim-Philipp Müller <tim@centricular.com>
+
+	* meson.build:
+	  Back to development after 1.24.6
+
 === release 1.24.6 ===
 
 2024-07-29 16:41:37 +0100  Tim-Philipp Müller <tim@centricular.com>

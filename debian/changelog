@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.24.7-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.24.7-1ubuntu1) oracular; urgency=medium
 
   * Merge with Debian. Remaining changes:
     - Build webrtc support
@@ -15,8 +15,9 @@ gst-plugins-bad1.0 (1.24.7-1ubuntu1) UNRELEASED; urgency=medium
       + Don't require these Build-Depends on i386:
         - libltc-dev, libfreeaptx-dev, libqrencode-dev, libzxing-dev, glslc,
           libdirectfb-dev, liblrdf0-dev, libneon27-dev
+  * Remove unused Build-Depends: libiptcdata0-dev
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 28 Aug 2024 17:06:44 -0400
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 28 Aug 2024 17:19:06 -0400
 
 gst-plugins-bad1.0 (1.24.7-1) unstable; urgency=medium
 

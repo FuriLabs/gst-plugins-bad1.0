@@ -32,16 +32,22 @@ conf_flags = -Dpackage-name=$(GST_PACKAGE_NAME) -Dpackage-origin=$(GST_PACKAGE_O
 conf_flags += -Dauto_features=enabled -Ddoc=disabled -Dgpl=enabled
 # Not available in Debian yet
 conf_flags += -Dfaac=disabled -Dgs=disabled -Diqa=disabled -Disac=disabled -Dmagicleap=disabled
-conf_flags += -Dmicrodns=disabled -Donnx=disabled -Dopensles=disabled -Dsvthevcenc=disabled -Dtinyalsa=disabled
+conf_flags += -Dmicrodns=disabled -Dopensles=disabled -Dsvthevcenc=disabled -Dtinyalsa=disabled
 # Unmaintained library
 conf_flags += -Dmsdk=disabled
 # Only available on Windows
 conf_flags += -Damfcodec=disabled -Ddirectshow=disabled -Dwasapi=disabled -Dwasapi2=disabled
 # In non-free currently
 conf_flags += -Dfdkaac=disabled
+# DirectFB is orphaned since 2018 (see #1083040)
+conf_flags += -Ddirectfb=disabled
 
 ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf i386 mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64))
 conf_flags += -Dzxing=disabled
+endif
+
+ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armhf riscv64))
+conf_flags += -Donnx=disabled
 endif
 
 ifeq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
@@ -132,6 +138,10 @@ endif
 
 ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf i386 mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64))
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstzxing.so
+endif
+
+ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armhf riscv64))
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstonnx.so
 endif
 
 ifeq ($(DEB_HOST_ARCH_ENDIAN),little)

@@ -61,17 +61,11 @@ GST_STATIC_PAD_TEMPLATE (GST_VIDEO_DECODER_SINK_NAME,
 static GstStaticCaps static_src_caps = GST_STATIC_CAPS (SRC_CAPS);
 static GstStaticCaps static_src_caps_no_drm = GST_STATIC_CAPS (SRC_CAPS_NO_DRM);
 
-static GstStaticPadTemplate src_template =
-GST_STATIC_PAD_TEMPLATE (GST_VIDEO_DECODER_SRC_NAME,
-    GST_PAD_SRC, GST_PAD_ALWAYS,
-    GST_STATIC_CAPS (SRC_CAPS));
-
 struct _GstV4l2CodecH265Dec
 {
   GstH265Decoder parent;
   GstV4l2Decoder *decoder;
   GstVideoCodecState *output_state;
-  GstVideoInfo vinfo;
   GstVideoInfoDmaDrm vinfo_drm;
   gint display_width;
   gint display_height;
@@ -409,12 +403,14 @@ gst_v4l2_codec_h265_dec_negotiate (GstVideoDecoder * decoder)
   gst_caps_unref (filter);
   GST_DEBUG_OBJECT (self, "Peer supported formats: %" GST_PTR_FORMAT, caps);
 
-  if (!gst_v4l2_decoder_select_src_format (self->decoder, caps, &self->vinfo,
+  if (!gst_v4l2_decoder_select_src_format (self->decoder, caps,
           &self->vinfo_drm)) {
     GST_ELEMENT_ERROR (self, CORE, NEGOTIATION,
-        ("Unsupported bitdepth/chroma format"),
-        ("No support for %ux%u %ubit chroma IDC %i", self->coded_width,
-            self->coded_height, self->bitdepth, self->chroma_format_idc));
+        ("Unsupported pixel format"),
+        ("No support for %ux%u format %s", self->display_width,
+            self->display_height,
+            gst_video_format_to_string (GST_VIDEO_INFO_FORMAT (&self->
+                    vinfo_drm.vinfo))));
     gst_caps_unref (caps);
     return FALSE;
   }
@@ -425,7 +421,7 @@ done:
     gst_video_codec_state_unref (self->output_state);
 
   self->output_state =
-      gst_v4l2_decoder_set_output_state (GST_VIDEO_DECODER (self), &self->vinfo,
+      gst_v4l2_decoder_set_output_state (GST_VIDEO_DECODER (self),
       &self->vinfo_drm, self->display_width, self->display_height,
       h265dec->input_state);
 
@@ -509,7 +505,8 @@ gst_v4l2_codec_h265_dec_decide_allocation (GstVideoDecoder * decoder,
     return FALSE;
   }
 
-  self->src_pool = gst_v4l2_codec_pool_new (self->src_allocator, &self->vinfo);
+  self->src_pool =
+      gst_v4l2_codec_pool_new (self->src_allocator, &self->vinfo_drm);
 
 no_internal_changes:
   /* Our buffer pool is internal, we will let the base class create a video
@@ -907,7 +904,7 @@ gst_v4l2_codec_h265_dec_new_sequence (GstH265Decoder * decoder,
   gint crop_height = sps->height;
   gboolean negotiation_needed = FALSE;
 
-  if (self->vinfo.finfo->format == GST_VIDEO_FORMAT_UNKNOWN)
+  if (self->vinfo_drm.vinfo.finfo->format == GST_VIDEO_FORMAT_UNKNOWN)
     negotiation_needed = TRUE;
 
   /* TODO check if CREATE_BUFS is supported, and simply grow the pool */
@@ -974,12 +971,13 @@ gst_v4l2_codec_h265_dec_new_sequence (GstH265Decoder * decoder,
     GstVideoInfo ref_vinfo;
     gint i;
 
-    gst_video_info_set_format (&ref_vinfo, GST_VIDEO_INFO_FORMAT (&self->vinfo),
-        self->display_width, self->display_height);
+    gst_video_info_set_format (&ref_vinfo,
+        GST_VIDEO_INFO_FORMAT (&self->vinfo_drm.vinfo), self->display_width,
+        self->display_height);
 
-    for (i = 0; i < GST_VIDEO_INFO_N_PLANES (&self->vinfo); i++) {
-      if (self->vinfo.stride[i] != ref_vinfo.stride[i] ||
-          self->vinfo.offset[i] != ref_vinfo.offset[i]) {
+    for (i = 0; i < GST_VIDEO_INFO_N_PLANES (&self->vinfo_drm.vinfo); i++) {
+      if (self->vinfo_drm.vinfo.stride[i] != ref_vinfo.stride[i] ||
+          self->vinfo_drm.vinfo.offset[i] != ref_vinfo.offset[i]) {
         GST_WARNING_OBJECT (self,
             "GstVideoMeta support required, copying frames.");
         self->copy_frames = TRUE;
@@ -1181,14 +1179,15 @@ gst_v4l2_codec_h265_dec_copy_output_buffer (GstV4l2CodecH265Dec * self,
   GstVideoInfo dest_vinfo;
   GstBuffer *buffer;
 
-  gst_video_info_set_format (&dest_vinfo, GST_VIDEO_INFO_FORMAT (&self->vinfo),
-      self->display_width, self->display_height);
+  gst_video_info_set_format (&dest_vinfo,
+      GST_VIDEO_INFO_FORMAT (&self->vinfo_drm.vinfo), self->display_width,
+      self->display_height);
 
   buffer = gst_video_decoder_allocate_output_buffer (GST_VIDEO_DECODER (self));
   if (!buffer)
     goto fail;
 
-  if (!gst_video_frame_map (&src_frame, &self->vinfo,
+  if (!gst_video_frame_map (&src_frame, &self->vinfo_drm.vinfo,
           codec_frame->output_buffer, GST_MAP_READ))
     goto fail;
 
@@ -1641,7 +1640,6 @@ gst_v4l2_codec_h265_dec_subinit (GstV4l2CodecH265Dec * self,
     GstV4l2CodecH265DecClass * klass)
 {
   self->decoder = gst_v4l2_decoder_new (klass->device);
-  gst_video_info_init (&self->vinfo);
   gst_video_info_dma_drm_init (&self->vinfo_drm);
   self->slice_params = g_array_sized_new (FALSE, TRUE,
       sizeof (struct v4l2_ctrl_hevc_slice_params), 4);
@@ -1687,7 +1685,10 @@ gst_v4l2_codec_h265_dec_subclass_init (GstV4l2CodecH265DecClass * klass,
       "Nicolas Dufresne <nicolas.dufresne@collabora.com>");
 
   gst_element_class_add_static_pad_template (element_class, &sink_template);
-  gst_element_class_add_static_pad_template (element_class, &src_template);
+  gst_element_class_add_pad_template (element_class,
+      gst_pad_template_new ("src", GST_PAD_SRC, GST_PAD_ALWAYS,
+          device->src_caps));
+
   element_class->change_state =
       GST_DEBUG_FUNCPTR (gst_v4l2_codec_h265_dec_change_state);
 
@@ -1732,6 +1733,8 @@ gst_v4l2_codec_h265_dec_register (GstPlugin * plugin, GstV4l2Decoder * decoder,
   if (!gst_v4l2_decoder_set_sink_fmt (decoder, V4L2_PIX_FMT_HEVC_SLICE,
           320, 240, 8))
     return;
+
+  /* Make sure that decoder support stateless H265 */
   src_caps = gst_v4l2_decoder_enum_src_formats (decoder, &static_src_caps);
 
   if (gst_caps_is_empty (src_caps)) {
@@ -1739,6 +1742,10 @@ gst_v4l2_codec_h265_dec_register (GstPlugin * plugin, GstV4l2Decoder * decoder,
         "supported format");
     goto done;
   }
+
+  /* Get all supported pixel formats for H265 */
+  device->src_caps =
+      gst_v4l2_decoder_enum_all_src_formats (decoder, &static_src_caps);
 
   version = gst_v4l2_decoder_get_version (decoder);
   if (version < V4L2_MIN_KERNEL_VERSION)

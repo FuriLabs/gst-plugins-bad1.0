@@ -42,9 +42,29 @@ G_BEGIN_DECLS
 typedef struct _GstCCCombiner GstCCCombiner;
 typedef struct _GstCCCombinerClass GstCCCombinerClass;
 
+/**
+ * GstCCCombinerInputProcessing:
+ * @CCCOMBINER_INPUT_PROCESSING_APPEND: append aggregated CC to existing metas on video buffers
+ * @CCCOMBINER_INPUT_PROCESSING_DROP: drop existing CC metas on input video buffers
+ * @CCCOMBINER_INPUT_PROCESSING_FAVOR: discard aggregated CC when input video buffers hold CC metas already
+ * @CCCOMBINER_INPUT_PROCESSING_FORCE: discard aggregated CC even when input video buffers do not hold CC meta
+ *
+ * Possible processing types for the input-meta-processing property.
+ *
+ * Since: 1.26
+ */
+typedef enum {
+  CCCOMBINER_INPUT_PROCESSING_APPEND = 0,
+  CCCOMBINER_INPUT_PROCESSING_DROP,
+  CCCOMBINER_INPUT_PROCESSING_FAVOR,
+  CCCOMBINER_INPUT_PROCESSING_FORCE,
+} GstCCCombinerInputProcessing;
+
 struct _GstCCCombiner
 {
   GstAggregator parent;
+
+  GstAggregatorPad *video_pad, *caption_pad;
 
   gint video_fps_n, video_fps_d;
   gboolean progressive;
@@ -59,11 +79,16 @@ struct _GstCCCombiner
   gboolean prop_schedule;
   guint prop_max_scheduled;
   gboolean prop_output_padding;
+  CCBufferCea608PaddingStrategy prop_cea608_padding_strategy;
+  GstClockTime prop_cea608_valid_padding_timeout;
+  GstClockTime prop_schedule_timeout;
+  GstCCCombinerInputProcessing prop_input_meta_processing;
 
   gboolean schedule;
   guint max_scheduled;
   gboolean output_padding;
   guint current_scheduled;
+  GstClockTime last_caption_ts;
 
   CCBuffer *cc_buffer;
   guint16 cdp_hdr_sequence_cntr;

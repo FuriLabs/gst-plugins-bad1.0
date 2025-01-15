@@ -26,12 +26,12 @@ if not build_gir
     message('Introspection not built, won\'t build documentation requiring it')
 endif
 
-required_hotdoc_extensions = ['gi-extension', 'c-extension', 'gst-extension']
 if gst_dep.type_name() == 'internal'
     gst_proj = subproject('gstreamer')
     plugins_cache_generator = gst_proj.get_variable('plugins_cache_generator')
 else
-    plugins_cache_generator = find_program(join_paths(gst_dep.get_variable('libexecdir'), 'gstreamer-' + api_version, 'gst-plugins-doc-cache-generator'),
+    plugins_cache_generator = find_program('gst-plugins-doc-cache-generator',
+        dirs: [join_paths(gst_dep.get_variable('libexecdir', default_value: ''), 'gstreamer-' + api_version)],
         required: false)
 endif
 
@@ -49,6 +49,11 @@ elif plugins_cache_generator.found()
 else
     warning('GStreamer plugin inspector for documentation not found, can\'t update the cache')
 endif
+
+if get_option('doc').disabled()
+  subdir_done()
+endif
+
 
 hotdoc_p = find_program('hotdoc', required: get_option('doc'))
 if not hotdoc_p.found()
@@ -68,6 +73,7 @@ if not hotdoc_version.version_compare(hotdoc_req)
 endif
 
 hotdoc = import('hotdoc')
+required_hotdoc_extensions = ['gi-extension', 'c-extension', 'gst-extension']
 foreach extension: required_hotdoc_extensions
     if not hotdoc.has_extensions(extension)
         if get_option('doc').enabled()
@@ -132,11 +138,14 @@ if build_gir
         {'name': 'audio', 'gir': audio_gir, 'lib': gstbadaudio_dep, 'prefix': 'bad-'},
         {'name': 'transcoder', 'gir': transcoder_gir, 'lib': gst_transcoder_dep},
         {'name': 'codecs', 'gir': codecs_gir, 'lib': gstcodecs_dep},
-        {'name': 'cuda', 'gir': gst_cuda_gir, 'lib': gstcuda_dep, 'c_source_patterns': ['*.h', '*.cpp']},
         {'name': 'dxva', 'gir': dxva_gir, 'lib': gstdxva_dep, 'c_source_patterns': ['*.h', '*.cpp']},
         {'name': 'mse', 'gir': mse_gir, 'lib': gstmse_dep, 'suffix': 'lib'},
         {'name': 'analytics', 'gir': analytics_gir, 'lib': gstanalytics_dep},
     ]
+
+    if get_variable('gst_cuda_gir', []).length() > 0
+        libs += [{'name': 'cuda', 'gir': gst_cuda_gir, 'lib': gstcuda_dep, 'c_source_patterns': ['*.h', '*.cpp']}]
+    endif
 
     if gstopencv_dep.found()
         libs += [
@@ -235,13 +244,28 @@ foreach lib_def: libs
     endif
 endforeach
 
+doc_source_file = configure_file(output: 'doc_sources.json', configuration: plugin_sources, output_format: 'json')
+
+plugin_libraries = {}
+
+foreach plugin: plugins
+  if plugin.name().startswith('gst')
+    plugin_name = plugin.name().substring(3)
+  else
+    plugin_name = plugin.name()
+  endif
+
+  plugin_libraries += {
+    plugin_name: plugin.full_path()
+  }
+endforeach
+
+doc_plugin_libs_file = configure_file(output: 'doc_plugin_libs.json', configuration: plugin_libraries, output_format: 'json')
+
 cdir = meson.current_source_dir()
-if host_machine.system() == 'windows'
-  pathsep = ';'
-else
-  pathsep = ':'
-endif
-gst_plugins_doc = run_command(
+plugin_hotdoc_configs = custom_target(
+  'build-hotdoc-configs',
+  command: [
     plugins_cache_generator,
     'hotdoc-config',
     '--builddir', meson.current_build_dir(),
@@ -250,20 +274,13 @@ gst_plugins_doc = run_command(
     '--index', cdir / 'plugins/index.md',
     '--c_flags', '\-DGST_USE_UNSTABLE_API',
     '--gst_index', 'plugins/index.md',
-    '--gst_c_sources',
-        cdir / '../sys/*/*.[cmh]',
-        cdir / '../sys/*/*.cpp',
-        cdir / '../sys/*/*.cc',
-        cdir / '../sys/*/*.mm',
-        cdir / '../sys/*/*.hh',
-        cdir / '../ext/*/*.[ch]',
-        cdir / '../ext/*/*.cpp',
-        cdir / '../ext/*/*.cc',
-        cdir / '../ext/*/*.hh',
-        cdir / '../gst/*/*.[ch]',
-        cdir / '../gst/rtmp2/*/*.[ch]',
-    '--gst_cache_file', plugins_cache,
     '--gst_c_source_filters', excludes,
-    '--include_paths', join_paths(meson.current_source_dir(), '..'),
-    check: true,
-).stdout().split(pathsep)
+    '--gst_cache_file', '@INPUT@',
+    '--include_paths', cdir / '..',
+    '--output', '@OUTPUT@',
+    '--gst_c_source_file', doc_source_file,
+    '--gst_plugin_libraries_file', doc_plugin_libs_file,
+  ],
+  input: plugins_cache,
+  output: 'hotdoc-configs.json',
+)

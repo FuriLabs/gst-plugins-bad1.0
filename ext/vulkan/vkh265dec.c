@@ -25,12 +25,52 @@
 
 #include <gst/video/video.h>
 #include <gst/vulkan/vulkan.h>
+#include "gst/vulkan/gstvkdecoder-private.h"
 
 #include "gstvulkanelements.h"
 
 typedef struct _GstVulkanH265Decoder GstVulkanH265Decoder;
 typedef struct _GstVulkanH265Picture GstVulkanH265Picture;
+typedef struct _VPS VPS;
+typedef struct _SPS SPS;
+typedef struct _PPS PPS;
 
+
+struct _SPS
+{
+  StdVideoH265SequenceParameterSet sps;
+  StdVideoH265ScalingLists scaling;
+  StdVideoH265HrdParameters vui_header;
+  StdVideoH265SequenceParameterSetVui vui;
+  StdVideoH265ProfileTierLevel ptl;
+  StdVideoH265DecPicBufMgr dpbm;
+  StdVideoH265PredictorPaletteEntries pal;
+  StdVideoH265SubLayerHrdParameters nal_hrd[GST_H265_MAX_SUB_LAYERS];
+  StdVideoH265SubLayerHrdParameters vcl_hrd[GST_H265_MAX_SUB_LAYERS];
+  /* 7.4.3.2.1: num_short_term_ref_pic_sets is in [0, 64]. */
+  StdVideoH265ShortTermRefPicSet str[64];
+  StdVideoH265LongTermRefPicsSps ltr;
+};
+
+struct _PPS
+{
+  StdVideoH265PictureParameterSet pps;
+  StdVideoH265ScalingLists scaling;
+  StdVideoH265PredictorPaletteEntries pal;
+};
+
+struct _VPS
+{
+  StdVideoH265VideoParameterSet vps;
+  StdVideoH265ProfileTierLevel ptl;
+  StdVideoH265DecPicBufMgr dpbm;
+  /* FIXME: a VPS can have multiple header params, each with its own nal and vlc
+     headers sets. Sadly, that's not currently supported by the GStreamer H265
+     parser, which only supports one header params per VPS. */
+  StdVideoH265HrdParameters hrd;
+  StdVideoH265SubLayerHrdParameters nal_hdr[GST_H265_MAX_SUB_LAYERS];
+  StdVideoH265SubLayerHrdParameters vcl_hdr[GST_H265_MAX_SUB_LAYERS];
+};
 struct _GstVulkanH265Picture
 {
   GstVulkanDecoderPicture base;
@@ -72,6 +112,9 @@ struct _GstVulkanH265Decoder
   VkChromaLocation xloc, yloc;
 
   GstVideoCodecState *output_state;
+  VPS std_vps;
+  SPS std_sps;
+  PPS std_pps;
 };
 
 static GstStaticPadTemplate gst_vulkan_h265dec_sink_template =
@@ -192,18 +235,9 @@ gst_vulkan_h265_decoder_open (GstVideoDecoder * decoder)
     return FALSE;
   }
 
-  if (!gst_vulkan_device_run_context_query (GST_ELEMENT (decoder),
-          &self->device)) {
-    GError *error = NULL;
-    GST_DEBUG_OBJECT (self, "No device retrieved from peer elements");
-    self->device = gst_vulkan_instance_create_device (self->instance, &error);
-    if (!self->device) {
-      GST_ELEMENT_ERROR (self, RESOURCE, NOT_FOUND,
-          ("Failed to create vulkan device"),
-          ("%s", error ? error->message : ""));
-      g_clear_error (&error);
-      return FALSE;
-    }
+  if (!gst_vulkan_ensure_element_device (GST_ELEMENT (decoder), self->instance,
+          &self->device, 0)) {
+    return FALSE;
   }
 
   if (!gst_vulkan_queue_run_context_query (GST_ELEMENT (self),
@@ -219,7 +253,7 @@ gst_vulkan_h265_decoder_open (GstVideoDecoder * decoder)
     return FALSE;
   }
 
-  self->decoder = gst_vulkan_queue_create_decoder (self->decode_queue,
+  self->decoder = gst_vulkan_decoder_new_from_queue (self->decode_queue,
       VK_VIDEO_CODEC_OPERATION_DECODE_H265_BIT_KHR);
   if (!self->decoder) {
     GST_ELEMENT_ERROR (self, RESOURCE, NOT_FOUND,
@@ -285,7 +319,8 @@ gst_vulkan_h265_decoder_negotiate (GstVideoDecoder * decoder)
 
   self->output_state->caps = gst_video_info_to_caps (&self->output_state->info);
   gst_caps_set_features_simple (self->output_state->caps,
-      gst_caps_features_new (GST_CAPS_FEATURE_MEMORY_VULKAN_IMAGE, NULL));
+      gst_caps_features_new_static_str (GST_CAPS_FEATURE_MEMORY_VULKAN_IMAGE,
+          NULL));
 
   GST_INFO_OBJECT (self, "Negotiated caps %" GST_PTR_FORMAT,
       self->output_state->caps);
@@ -566,20 +601,6 @@ gst_vulkan_h265_decoder_new_sequence (GstH265Decoder * decoder,
   return GST_FLOW_OK;
 }
 
-/* set a common pipeline stage valid for any queue to avoid Vulkan Validation
- * errors */
-static void
-reset_pipeline_stage_mask (GstBuffer * buf)
-{
-  guint i, n = gst_buffer_n_memory (buf);
-
-  for (i = 0; i < n; i++) {
-    GstVulkanImageMemory *vk_mem =
-        (GstVulkanImageMemory *) gst_buffer_peek_memory (buf, i);
-    vk_mem->barrier.parent.pipeline_stages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
-  }
-}
-
 static GstVulkanH265Picture *
 gst_vulkan_h265_picture_new (GstVulkanH265Decoder * self, GstBuffer * out)
 {
@@ -587,7 +608,6 @@ gst_vulkan_h265_picture_new (GstVulkanH265Decoder * self, GstBuffer * out)
 
   pic = g_new0 (GstVulkanH265Picture, 1);
   gst_vulkan_decoder_picture_init (self->decoder, &pic->base, out);
-  reset_pipeline_stage_mask (out);
 
   return pic;
 }
@@ -636,41 +656,7 @@ allocation_failed:
   }
 }
 
-struct SPS
-{
-  StdVideoH265SequenceParameterSet sps;
-  StdVideoH265ScalingLists scaling;
-  StdVideoH265HrdParameters vui_header;
-  StdVideoH265SequenceParameterSetVui vui;
-  StdVideoH265ProfileTierLevel ptl;
-  StdVideoH265DecPicBufMgr dpbm;
-  StdVideoH265PredictorPaletteEntries pal;
-  StdVideoH265SubLayerHrdParameters nal_hrd[GST_H265_MAX_SUB_LAYERS];
-  StdVideoH265SubLayerHrdParameters vcl_hrd[GST_H265_MAX_SUB_LAYERS];
-  /* 7.4.3.2.1: num_short_term_ref_pic_sets is in [0, 64]. */
-  StdVideoH265ShortTermRefPicSet str[64];
-  StdVideoH265LongTermRefPicsSps ltr;
-};
 
-struct PPS
-{
-  StdVideoH265PictureParameterSet pps;
-  StdVideoH265ScalingLists scaling;
-  StdVideoH265PredictorPaletteEntries pal;
-};
-
-struct VPS
-{
-  StdVideoH265VideoParameterSet vps;
-  StdVideoH265ProfileTierLevel ptl;
-  StdVideoH265DecPicBufMgr dpbm;
-  /* FIXME: a VPS can have multiple header params, each with its own nal and vlc
-     headers sets. Sadly, that's not currently supported by the GStreamer H265
-     parser, which only supports one header params per VPS. */
-  StdVideoH265HrdParameters hrd;
-  StdVideoH265SubLayerHrdParameters nal_hdr[GST_H265_MAX_SUB_LAYERS];
-  StdVideoH265SubLayerHrdParameters vcl_hdr[GST_H265_MAX_SUB_LAYERS];
-};
 
 static void
 _copy_scaling_list (const GstH265ScalingList * scaling_list,
@@ -803,7 +789,7 @@ _copy_profile_tier_level (const GstH265ProfileTierLevel * ptl,
 }
 
 static void
-_fill_sps (const GstH265SPS * sps, struct SPS *std_sps)
+_fill_sps (const GstH265SPS * sps, SPS * std_sps)
 {
   int i;
   const GstH265VUIParams *vui_params = &sps->vui_params;
@@ -1077,7 +1063,7 @@ _fill_sps (const GstH265SPS * sps, struct SPS *std_sps)
 }
 
 static void
-_fill_pps (const GstH265PPS * pps, const GstH265SPS * sps, struct PPS *std_pps)
+_fill_pps (const GstH265PPS * pps, PPS * std_pps)
 {
   int i, j;
 
@@ -1135,7 +1121,7 @@ _fill_pps (const GstH265PPS * pps, const GstH265SPS * sps, struct PPS *std_pps)
     },
     .pps_pic_parameter_set_id = pps->id,
     .pps_seq_parameter_set_id = pps->sps_id,
-    .sps_video_parameter_set_id = sps->vps_id,
+    .sps_video_parameter_set_id = pps->sps->vps_id,
     .num_extra_slice_header_bits = pps->num_extra_slice_header_bits,
     .num_ref_idx_l0_default_active_minus1 =
         pps->num_ref_idx_l0_default_active_minus1,
@@ -1199,7 +1185,7 @@ _fill_pps (const GstH265PPS * pps, const GstH265SPS * sps, struct PPS *std_pps)
 }
 
 static void
-_fill_vps (const GstH265VPS * vps, struct VPS * std_vps)
+_fill_vps (const GstH265VPS * vps, VPS * std_vps)
 {
   const GstH265HRDParams *hrd = &vps->hrd_params;
 
@@ -1283,22 +1269,20 @@ _fill_vps (const GstH265VPS * vps, struct VPS * std_vps)
 }
 
 static GstFlowReturn
-_update_parameters (GstVulkanH265Decoder * self, const GstH265PPS * pps)
+_update_parameters (GstVulkanH265Decoder * self, const GstH265VPS * vps,
+    const GstH265SPS * sps, const GstH265PPS * pps)
 {
-  GstH265SPS *sps = pps->sps;
-  GstH265VPS *vps = sps->vps;
-  struct SPS std_sps;
-  struct PPS std_pps;
-  struct VPS std_vps;
+
+  gboolean update = FALSE;
   VkVideoDecodeH265SessionParametersAddInfoKHR params = {
     .sType =
         VK_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_ADD_INFO_KHR,
     .stdSPSCount = 1,
-    .pStdSPSs = &std_sps.sps,
+    .pStdSPSs = &self->std_sps.sps,
     .stdPPSCount = 1,
-    .pStdPPSs = &std_pps.pps,
+    .pStdPPSs = &self->std_pps.pps,
     .stdVPSCount = 1,
-    .pStdVPSs = &std_vps.vps,
+    .pStdVPSs = &self->std_vps.vps,
   };
   /* *INDENT-OFF* */
   GstVulkanDecoderParameters dec_params = {
@@ -1313,10 +1297,21 @@ _update_parameters (GstVulkanH265Decoder * self, const GstH265PPS * pps)
   };
   /* *INDENT-ON* */
   GError *error = NULL;
+  if (vps) {
+    _fill_vps (vps, &self->std_vps);
+    update = TRUE;
+  }
+  if (sps) {
+    _fill_sps (sps, &self->std_sps);
+    update = TRUE;
+  }
+  if (pps) {
+    _fill_pps (pps, &self->std_pps);
+    update = TRUE;
+  }
 
-  _fill_sps (sps, &std_sps);
-  _fill_pps (pps, sps, &std_pps);
-  _fill_vps (vps, &std_vps);
+  if (!update)
+    return GST_FLOW_OK;
 
   if (!gst_vulkan_decoder_update_video_session_parameters (self->decoder,
           &dec_params, &error)) {
@@ -1389,7 +1384,7 @@ _fill_ref_slot (GstVulkanH265Decoder * self, GstH265Picture * picture,
     .sType = VK_STRUCTURE_TYPE_VIDEO_PICTURE_RESOURCE_INFO_KHR,
     .codedOffset = { self->x, self->y },
     .codedExtent = { self->coded_width, self->coded_height },
-    .baseArrayLayer = self->decoder->layered_dpb ? pic->slot_idx : 0,
+    .baseArrayLayer = (self->decoder->layered_dpb && self->decoder->dedicated_dpb) ? pic->slot_idx : 0,
     .imageViewBinding = pic->base.img_view_ref->view,
   };
 
@@ -1405,8 +1400,8 @@ _fill_ref_slot (GstVulkanH265Decoder * self, GstH265Picture * picture,
     *ref = &pic->base;
 
 
-  GST_TRACE_OBJECT (self, "0x%lx slotIndex: %d", res->imageViewBinding,
-      slot->slotIndex);
+  GST_TRACE_OBJECT (self, "0x%" G_GUINT64_FORMAT "x slotIndex: %d",
+      res->imageViewBinding, slot->slotIndex);
 }
 
 static GstFlowReturn
@@ -1415,6 +1410,8 @@ gst_vulkan_h265_decoder_start_picture (GstH265Decoder * decoder,
 {
   GstVulkanH265Decoder *self = GST_VULKAN_H265_DECODER (decoder);
   GstH265PPS *pps = slice->header.pps;
+  GstH265SPS *sps = pps->sps;
+  GstH265VPS *vps = sps->vps;
   GstFlowReturn ret;
   GstVulkanH265Picture *pic;
   GArray *refs;
@@ -1422,10 +1419,14 @@ gst_vulkan_h265_decoder_start_picture (GstH265Decoder * decoder,
 
   GST_TRACE_OBJECT (self, "Start picture");
 
+
+  ret =
+      _update_parameters (self, self->need_params_update ? vps : NULL,
+      self->need_params_update ? sps : NULL, pps);
+  if (ret != GST_FLOW_OK)
+    return ret;
+
   if (self->need_params_update) {
-    ret = _update_parameters (self, pps);
-    if (ret != GST_FLOW_OK)
-      return ret;
     self->need_params_update = FALSE;
   }
 
@@ -1439,7 +1440,7 @@ gst_vulkan_h265_decoder_start_picture (GstH265Decoder * decoder,
     .flags = {
       .IrapPicFlag = GST_H265_IS_NAL_TYPE_IRAP (slice->nalu.type),
       .IdrPicFlag = GST_H265_IS_NAL_TYPE_IDR (slice->nalu.type),
-      .IsReference = picture->ref,
+      .IsReference = picture->RapPicFlag ? 1 : slice->nalu.type & 1,
       .short_term_ref_pic_set_sps_flag =
          slice->header.short_term_ref_pic_set_sps_flag,
     },
@@ -1628,8 +1629,6 @@ gst_vulkan_h265_decoder_output_picture (GstH265Decoder * decoder,
   }
 
   gst_h265_picture_unref (picture);
-
-  reset_pipeline_stage_mask (frame->output_buffer);
 
   return gst_video_decoder_finish_frame (vdec, frame);
 }

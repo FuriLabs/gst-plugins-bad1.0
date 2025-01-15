@@ -1,3 +1,19 @@
+gst-plugins-bad1.0 (1.25.1-1) experimental; urgency=medium
+
+  * d/gbp.conf: adjust for experimental
+  * New upstream version 1.25.1
+  * d/patches: remove 0001-fix-build-without-wayland.patch
+  * d/patches: refresh Skip-failing-tests.patch
+  * d/rules: cuda-nvmm not available in debian yet
+  * d/rules: disable android media
+  * d/rules: cevc not in debian yet
+  * d/rules: nvcomp not in debian yet
+  * d/rules: nvdswrapper not in debian yet
+  * d/rules: svtjpegxs not in debian yet
+  * d/install: install libgsttensordecoders.so
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 15 Jan 2025 14:30:20 +0100
+
 gst-plugins-bad1.0 (1.24.11-3) unstable; urgency=medium
 
   * d/rules: remove modules that break hurd-any (Closes: #1091759)

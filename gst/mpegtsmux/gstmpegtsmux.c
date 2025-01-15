@@ -103,6 +103,7 @@ static GstStaticPadTemplate gst_mpeg_ts_mux_sink_factory =
         "systemstream = (boolean) false; "
         "video/x-dirac;"
         "image/x-jpc, alignment = (string) frame;"
+        "video/x-av1,stream-format=(string)obu-stream,alignment=(string)frame;"
         "video/x-h264,stream-format=(string)byte-stream,"
         "alignment=(string){au, nal}; "
         "video/x-h265,stream-format=(string)byte-stream,"
@@ -124,8 +125,14 @@ static GstStaticPadTemplate gst_mpeg_ts_mux_sink_factory =
         "audio/x-dts, framed = (boolean) TRUE;"
         "audio/x-opus, "
         "channels = (int) [1, 255];"
+        "audio/x-smpte-302m;"
         "subpicture/x-dvb; application/x-teletext; meta/x-klv, parsed=true;"
-        "image/x-jpc, alignment = (string) frame, profile = (int)[0, 49151];"));
+        "meta/x-id3, parsed=true;"
+        "meta/x-st-2038, alignment = (string) line;"
+        "video/x-vp9;"
+        "image/x-jpc, alignment = (string) frame, profile = (int)[0, 49151];"
+        "image/x-jxsc, alignment = (string) frame, sampling = { YCbCr-4:2:2, YCbCr-4:4:4 }, interlace-mode = progressive; "
+        "image/x-jxsc, alignment = (string) frame, sampling = { YCbCr-4:2:2, YCbCr-4:4:4 }, interlace-mode = fields, field-order = { top-field-first, bottom-field-first };"));
 
 static GstStaticPadTemplate gst_mpeg_ts_mux_src_factory =
 GST_STATIC_PAD_TEMPLATE ("src",

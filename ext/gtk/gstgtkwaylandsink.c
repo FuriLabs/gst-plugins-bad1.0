@@ -1038,11 +1038,10 @@ gst_gtk_wayland_sink_propose_allocation (GstBaseSink * bsink, GstQuery * query)
   GstCaps *caps;
   GstBufferPool *pool = NULL;
   gboolean need_pool;
-  GstAllocator *alloc;
 
   gst_query_parse_allocation (query, &caps, &need_pool);
 
-  if (need_pool) {
+  if (need_pool && !gst_video_is_dma_drm_caps (caps)) {
     GstStructure *config;
     pool = gst_wl_video_buffer_pool_new ();
     config = gst_buffer_pool_get_config (pool);
@@ -1057,10 +1056,13 @@ gst_gtk_wayland_sink_propose_allocation (GstBaseSink * bsink, GstQuery * query)
   if (pool)
     g_object_unref (pool);
 
-  alloc = gst_shm_allocator_get ();
-  gst_query_add_allocation_param (query, alloc, NULL);
+  if (!gst_video_is_dma_drm_caps (caps)) {
+    GstAllocator *alloc = gst_shm_allocator_get ();
+    gst_query_add_allocation_param (query, alloc, NULL);
+    g_object_unref (alloc);
+  }
+
   gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, NULL);
-  g_object_unref (alloc);
 
   return TRUE;
 }
@@ -1287,25 +1289,29 @@ no_window_size:
   }
 no_buffer:
   {
-    GST_WARNING_OBJECT (self, "could not create buffer");
+    GST_ELEMENT_ERROR (self, RESOURCE, FAILED,
+        ("could not create buffer"), (NULL));
+    ret = GST_FLOW_ERROR;
     goto done;
   }
 no_wl_buffer_shm:
   {
-    GST_ERROR_OBJECT (self, "could not create wl_buffer out of wl_shm memory");
+    GST_ELEMENT_ERROR (self, RESOURCE, FAILED,
+        ("could not create wl_buffer out of wl_shm memory"), (NULL));
     ret = GST_FLOW_ERROR;
     goto done;
   }
 no_wl_buffer:
   {
-    GST_ERROR_OBJECT (self,
-        "buffer %" GST_PTR_FORMAT " cannot have a wl_buffer", buffer);
+    GST_ELEMENT_ERROR (self, RESOURCE, FAILED,
+        ("buffer %" GST_PTR_FORMAT " cannot have a wl_buffer", buffer), (NULL));
     ret = GST_FLOW_ERROR;
     goto done;
   }
 activate_failed:
   {
-    GST_ERROR_OBJECT (self, "failed to activate bufferpool.");
+    GST_ELEMENT_ERROR (self, RESOURCE, FAILED,
+        ("failed to activate bufferpool."), (NULL));
     ret = GST_FLOW_ERROR;
     goto done;
   }

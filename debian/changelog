@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.25.1-2) experimental; urgency=medium
+
+  * d/control: bump GStreamer version dependency
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 21 Jan 2025 12:51:15 +0100
+
 gst-plugins-bad1.0 (1.25.1-1) experimental; urgency=medium
 
   * d/gbp.conf: adjust for experimental

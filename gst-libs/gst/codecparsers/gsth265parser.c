@@ -926,6 +926,7 @@ gst_h265_slice_parse_ref_pic_list_modification (GstH265SliceHdr * slice,
 
   if (rpl_mod->ref_pic_list_modification_flag_l0) {
     for (i = 0; i <= slice->num_ref_idx_l0_active_minus1; i++) {
+      /* 7.4.7.2 list_entry_l0 */
       READ_UINT32 (nr, rpl_mod->list_entry_l0[i], n);
       CHECK_ALLOWED_MAX (rpl_mod->list_entry_l0[i], (NumPocTotalCurr - 1));
     }
@@ -1264,12 +1265,6 @@ gst_h265_parser_parse_user_data_unregistered (GstH265Parser * parser,
   data = g_malloc0 (payload_size);
   for (i = 0; i < payload_size; ++i) {
     READ_UINT8 (nr, data[i], 8);
-  }
-
-  if (payload_size < 1) {
-    GST_WARNING ("No more remaining payload data to store");
-    g_clear_pointer (&data, g_free);
-    return GST_H265_PARSER_BROKEN_DATA;
   }
 
   urud->data = data;
@@ -2801,7 +2796,7 @@ gst_h265_parser_parse_slice_hdr (GstH265Parser * parser,
 
     if (pps->dependent_slice_segments_enabled_flag)
       READ_UINT8 (&nr, slice->dependent_slice_segment_flag, 1);
-    /* sice_segment_address parsing */
+    /* 7.4.7.1 slice_segment_address parsing */
     READ_UINT32 (&nr, slice->segment_address, n);
   }
 
@@ -2835,6 +2830,7 @@ gst_h265_parser_parse_slice_hdr (GstH265Parser * parser,
             (nal_reader_get_pos (&nr) - pos) -
             (8 * (nal_reader_get_epb_count (&nr) - epb_pos));
       } else if (sps->num_short_term_ref_pic_sets > 1) {
+        /*  7.4.7.1 short_term_ref_pic_set_idx */
         const guint n = gst_util_ceil_log2 (sps->num_short_term_ref_pic_sets);
         READ_UINT8 (&nr, slice->short_term_ref_pic_set_idx, n);
         CHECK_ALLOWED_MAX (slice->short_term_ref_pic_set_idx,
@@ -2855,6 +2851,7 @@ gst_h265_parser_parse_slice_hdr (GstH265Parser * parser,
         for (i = 0; i < limit; i++) {
           if (i < slice->num_long_term_sps) {
             if (sps->num_long_term_ref_pics_sps > 1) {
+              /* 7.4.7.1 lt_idx_sps */
               const guint n =
                   gst_util_ceil_log2 (sps->num_long_term_ref_pics_sps);
               READ_UINT8 (&nr, slice->lt_idx_sps[i], n);
@@ -3176,6 +3173,7 @@ gst_h265_parser_parse_sei_message (GstH265Parser * parser,
 
 error:
   GST_WARNING ("error parsing \"Sei message\"");
+  gst_h265_sei_free (sei);
   return GST_H265_PARSER_ERROR;
 }
 

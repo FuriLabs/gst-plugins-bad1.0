@@ -32,16 +32,22 @@ conf_flags = -Dpackage-name=$(GST_PACKAGE_NAME) -Dpackage-origin=$(GST_PACKAGE_O
 conf_flags += -Dauto_features=enabled -Ddoc=disabled -Dgpl=enabled
 # Not available in Debian yet
 conf_flags += -Dfaac=disabled -Dgs=disabled -Diqa=disabled -Disac=disabled -Dmagicleap=disabled
-conf_flags += -Dmicrodns=disabled -Donnx=disabled -Dopensles=disabled -Dsvthevcenc=disabled -Dtinyalsa=disabled
+conf_flags += -Dmicrodns=disabled -Dopensles=disabled -Dsvthevcenc=disabled -Dtinyalsa=disabled
 # Unmaintained library
 conf_flags += -Dmsdk=disabled
 # Only available on Windows
 conf_flags += -Damfcodec=disabled -Ddirectshow=disabled -Dwasapi=disabled -Dwasapi2=disabled
 # In non-free currently
 conf_flags += -Dfdkaac=disabled
+# DirectFB is orphaned since 2018 (see #1083040)
+conf_flags += -Ddirectfb=disabled
 
 ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64))
 conf_flags += -Dzxing=disabled
+endif
+
+ifeq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armhf riscv64))
+conf_flags += -Donnx=disabled
 endif
 
 ifeq ($(filter gstreamer1.0-opencv,$(built_binaries)),)
@@ -64,15 +70,17 @@ ifneq ($(DEB_HOST_ARCH_OS),linux)
 conf_flags += -Dbluez=disabled -Ddc1394=disabled -Dfbdev=disabled -Dsbc=disabled
 conf_flags += -Dva=disabled -Dv4l2codecs=disabled -Dwpe=disabled -Duvch264=disabled
 conf_flags += -Dvulkan=disabled -Dwayland=disabled -Ddvb=disabled
+conf_flags += -Dopenni2=disabled -Dsctp=disabled -Dwebrtc=disabled
 endif
 
 ifeq ($(DEB_HOST_ARCH_OS),hurd)
-conf_flags += -Dresindvd=disabled -Dnvcodec=disabled
+conf_flags += -Dresindvd=disabled -Dnvcodec=disabled -Dgl=disabled -Dudev=disabled
+conf_flags += -Duvcgadget=disabled -Davtp=disabled
 endif
 
 # Not available on Ubuntu i386 currently
 ifeq ($(DEB_HOST_ARCH),i386)
-conf_flags += -Ddirectfb=disabled -Dladspa=disabled -Dneon=disabled -Dopenaptx=disabled \
+conf_flags += -Dladspa=disabled -Dneon=disabled -Dopenaptx=disabled \
               -Dopenni2=disabled -Dqroverlay=disabled -Dvulkan=disabled
 endif
 
@@ -127,7 +135,6 @@ ifeq ($(DEB_HOST_ARCH_OS),linux)
 ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstvulkan.so
 	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstvulkan-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstdirectfb.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstladspa.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstneonhttpsrc.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstopenaptx.so
@@ -135,6 +142,8 @@ ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstqroverlay.so
 endif
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstsctp.so
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstwebrtc.so
+	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstwebrtcnice-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
 ifeq ($(DEB_HOST_ARCH),amd64)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstqsv.so
 endif
@@ -143,10 +152,17 @@ endif
 ifneq ($(DEB_HOST_ARCH_OS),hurd)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstresindvd.so
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstnvcodec.so
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstavtp.so
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstgtkwayland.so
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstuvcgadget.so
 endif
 
 ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha hppa hurd-i386 m68k powerpc ppc64 sparc64))
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstzxing.so
+endif
+
+ifneq (,$(filter $(DEB_HOST_ARCH),amd64 arm64 armhf riscv64))
+	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstonnx.so
 endif
 
 ifeq ($(DEB_HOST_ARCH_ENDIAN),little)

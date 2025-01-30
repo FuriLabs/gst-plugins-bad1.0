@@ -2577,6 +2577,12 @@ _on_data_channel_ready_state (WebRTCDataChannel * channel,
     gboolean found_pending;
     gboolean found;
 
+    /* Change state on bins outside dc_lock to avoid deadlocks */
+    gst_element_set_locked_state (channel->src_bin, TRUE);
+    gst_element_set_state (channel->src_bin, GST_STATE_NULL);
+    gst_element_set_locked_state (channel->sink_bin, TRUE);
+    gst_element_set_state (channel->sink_bin, GST_STATE_NULL);
+
     DC_LOCK (webrtc);
     found_pending =
         g_ptr_array_remove (webrtc->priv->pending_data_channels, channel);
@@ -2586,12 +2592,7 @@ _on_data_channel_ready_state (WebRTCDataChannel * channel,
     if (found == FALSE) {
       GST_FIXME_OBJECT (webrtc, "Received close for unknown data channel");
     } else {
-      gst_element_set_locked_state (channel->src_bin, TRUE);
-      gst_element_set_state (channel->src_bin, GST_STATE_NULL);
       gst_bin_remove (GST_BIN (webrtc), channel->src_bin);
-
-      gst_element_set_locked_state (channel->sink_bin, TRUE);
-      gst_element_set_state (channel->sink_bin, GST_STATE_NULL);
       gst_bin_remove (GST_BIN (webrtc), channel->sink_bin);
 
       if (found_pending == FALSE) {
@@ -3559,6 +3560,7 @@ sdp_media_from_transceiver (GstWebRTCBin * webrtc, GstSDPMedia * media,
   for (i = 0; i < gst_caps_get_size (caps); i++) {
     GstCaps *format = gst_caps_new_empty ();
     GstStructure *s = gst_structure_copy (gst_caps_get_structure (caps, i));
+    gint media_pt;
 
     if (i == 0) {
       gst_structure_foreach (extmap, (GstStructureForeachFunc) _copy_field, s);
@@ -3581,6 +3583,9 @@ sdp_media_from_transceiver (GstWebRTCBin * webrtc, GstSDPMedia * media,
       return FALSE;
     }
 
+    if (gst_structure_get_int (s, "payload", &media_pt))
+      find_or_create_payload_map_for_media_pt (media_mapping, media_pt);
+
     gst_caps_unref (format);
   }
 
@@ -3593,10 +3598,7 @@ sdp_media_from_transceiver (GstWebRTCBin * webrtc, GstSDPMedia * media,
     guint rtx_target_ssrc = -1;
     gint media_pt;
 
-    if (gst_structure_get_int (s, "payload", &media_pt) &&
-        webrtc->bundle_policy == GST_WEBRTC_BUNDLE_POLICY_NONE)
-      find_or_create_payload_map_for_media_pt (media_mapping, media_pt);
-
+    gst_structure_get_int (s, "payload", &media_pt);
     rtx_target_pt = media_pt;
 
     if (!gst_structure_get_int (s, "clock-rate", &clockrate))
@@ -6097,15 +6099,19 @@ _find_compatible_unassociated_transceiver (GstWebRTCRTPTransceiver * p1,
   return TRUE;
 }
 
-static void
-_connect_rtpfunnel (GstWebRTCBin * webrtc, guint session_id)
+static gboolean
+_connect_rtpfunnel (GstWebRTCBin * webrtc, guint session_id, GError ** error)
 {
   gchar *pad_name;
   GstPad *srcpad;
   GstPad *rtp_sink;
   TransportStream *stream = _find_transport_for_session (webrtc, session_id);
 
-  g_assert (stream);
+  if (!stream) {
+    g_set_error (error, GST_WEBRTC_ERROR, GST_WEBRTC_ERROR_SDP_SYNTAX_ERROR,
+        "Invalid bundle id %u, no session found", session_id);
+    return FALSE;
+  }
 
   if (webrtc->rtpfunnel)
     goto done;
@@ -6131,7 +6137,7 @@ _connect_rtpfunnel (GstWebRTCBin * webrtc, guint session_id)
   g_free (pad_name);
 
 done:
-  return;
+  return TRUE;
 }
 
 static gboolean
@@ -6173,7 +6179,9 @@ _update_transceivers_from_sdp (GstWebRTCBin * webrtc, SDPSource source,
     }
     ensure_rtx_hdr_ext (bundle_stream);
 
-    _connect_rtpfunnel (webrtc, bundle_idx);
+    if (!_connect_rtpfunnel (webrtc, bundle_idx, error)) {
+      goto done;
+    }
   }
 
   for (i = 0; i < gst_sdp_message_medias_len (sdp->sdp); i++) {

@@ -86,8 +86,7 @@ struct _GstCCCombiner
 
   gboolean schedule;
   guint max_scheduled;
-  gboolean output_padding;
-  guint current_scheduled;
+  GstClockTime schedule_timeout;
   GstClockTime last_caption_ts;
 
   CCBuffer *cc_buffer;

@@ -17,10 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
+/**
+ * SECTION:element-v4l2slmpeg2dec
+ * @title: v4l2slmpeg2dec
+ * @short_description: V4L2 Stateless MPEG2 Video video decoder
+ *
+ * decodes MPEG2 Video bitstreams as DMABuf using Linux V4L2 Stateless API.
+ *
+ * ## Example launch line
+ * ```
+ * gst-launch-1.0 filesrc location=some.mov ! parsebin ! v4l2slmpeg2dec ! autovideosink
+ * ```
+ *
+ * Since: 1.20
+ */
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#define GST_USE_UNSTABLE_API
+#include <gst/codecs/gstmpeg2decoder.h>
 
 #include "gstv4l2codecallocator.h"
 #include "gstv4l2codecmpeg2dec.h"
@@ -39,6 +57,8 @@
 
 GST_DEBUG_CATEGORY_STATIC (v4l2_mpeg2dec_debug);
 #define GST_CAT_DEFAULT v4l2_mpeg2dec_debug
+
+#define GST_V4L2_CODEC_MPEG2_DEC(obj) ((GstV4l2CodecMpeg2Dec *) obj)
 
 enum
 {
@@ -62,6 +82,16 @@ GST_STATIC_PAD_TEMPLATE (GST_VIDEO_DECODER_SINK_NAME,
 
 static GstStaticCaps static_src_caps = GST_STATIC_CAPS (SRC_CAPS);
 static GstStaticCaps static_src_caps_no_drm = GST_STATIC_CAPS (SRC_CAPS_NO_DRM);
+
+typedef struct _GstV4l2CodecMpeg2Dec GstV4l2CodecMpeg2Dec;
+typedef struct _GstV4l2CodecMpeg2DecClass GstV4l2CodecMpeg2DecClass;
+
+struct _GstV4l2CodecMpeg2DecClass
+{
+  GstMpeg2DecoderClass parent_class;
+  GstV4l2CodecDevice *device;
+};
+
 
 struct _GstV4l2CodecMpeg2Dec
 {
@@ -98,10 +128,7 @@ struct _GstV4l2CodecMpeg2Dec
   gboolean copy_frames;
 };
 
-G_DEFINE_ABSTRACT_TYPE (GstV4l2CodecMpeg2Dec, gst_v4l2_codec_mpeg2_dec,
-    GST_TYPE_MPEG2_DECODER);
-
-#define parent_class gst_v4l2_codec_mpeg2_dec_parent_class
+static GstElementClass *parent_class = NULL;
 
 static guint
 gst_v4l2_codec_mpeg2_dec_get_preferred_output_delay (GstMpeg2Decoder * decoder,
@@ -1025,12 +1052,7 @@ gst_v4l2_codec_mpeg2_dec_get_property (GObject * object, guint prop_id,
 }
 
 static void
-gst_v4l2_codec_mpeg2_dec_init (GstV4l2CodecMpeg2Dec * self)
-{
-}
-
-static void
-gst_v4l2_codec_mpeg2_dec_subinit (GstV4l2CodecMpeg2Dec * self,
+gst_v4l2_codec_mpeg2_dec_init (GstV4l2CodecMpeg2Dec * self,
     GstV4l2CodecMpeg2DecClass * klass)
 {
   self->decoder = gst_v4l2_decoder_new (klass->device);
@@ -1048,12 +1070,7 @@ gst_v4l2_codec_mpeg2_dec_dispose (GObject * object)
 }
 
 static void
-gst_v4l2_codec_mpeg2_dec_class_init (GstV4l2CodecMpeg2DecClass * klass)
-{
-}
-
-static void
-gst_v4l2_codec_mpeg2_dec_subclass_init (GstV4l2CodecMpeg2DecClass * klass,
+gst_v4l2_codec_mpeg2_dec_class_init (GstV4l2CodecMpeg2DecClass * klass,
     GstV4l2CodecDevice * device)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1070,6 +1087,8 @@ gst_v4l2_codec_mpeg2_dec_subclass_init (GstV4l2CodecMpeg2DecClass * klass,
       "Codec/Decoder/Video/Hardware",
       "A V4L2 based Mpeg2 video decoder",
       "Daniel Almeida <daniel.almeida@collabora.com>");
+
+  parent_class = g_type_class_peek_parent (klass);
 
   gst_element_class_add_static_pad_template (element_class, &sink_template);
   gst_element_class_add_pad_template (element_class,
@@ -1111,10 +1130,22 @@ void
 gst_v4l2_codec_mpeg2_dec_register (GstPlugin * plugin, GstV4l2Decoder * decoder,
     GstV4l2CodecDevice * device, guint rank)
 {
-  GstCaps *src_caps;
+  GTypeInfo type_info = {
+    .class_size = sizeof (GstV4l2CodecMpeg2DecClass),
+    .class_init = (GClassInitFunc) gst_v4l2_codec_mpeg2_dec_class_init,
+    .class_data = gst_mini_object_ref (GST_MINI_OBJECT (device)),
+    .instance_size = sizeof (GstV4l2CodecMpeg2Dec),
+    .instance_init = (GInstanceInitFunc) gst_v4l2_codec_mpeg2_dec_init,
+  };
+  GstCaps *src_caps = NULL;
 
   GST_DEBUG_CATEGORY_INIT (v4l2_mpeg2dec_debug, "v4l2codecs-mpeg2dec", 0,
       "V4L2 stateless mpeg2 decoder");
+
+  if (gst_v4l2_decoder_in_doc_mode (decoder)) {
+    device->src_caps = gst_static_caps_get (&static_src_caps);
+    goto register_element;
+  }
 
   if (!gst_v4l2_decoder_set_sink_fmt (decoder, V4L2_PIX_FMT_MPEG2_SLICE,
           320, 240, 8))
@@ -1133,12 +1164,11 @@ gst_v4l2_codec_mpeg2_dec_register (GstPlugin * plugin, GstV4l2Decoder * decoder,
   device->src_caps =
       gst_v4l2_decoder_enum_all_src_formats (decoder, &static_src_caps);
 
-  gst_v4l2_decoder_register (plugin, GST_TYPE_V4L2_CODEC_MPEG2_DEC,
-      (GClassInitFunc) gst_v4l2_codec_mpeg2_dec_subclass_init,
-      gst_mini_object_ref (GST_MINI_OBJECT (device)),
-      (GInstanceInitFunc) gst_v4l2_codec_mpeg2_dec_subinit,
+register_element:
+  gst_v4l2_decoder_register (plugin, GST_TYPE_MPEG2_DECODER, &type_info,
       "v4l2sl%smpeg2dec", device, rank, NULL);
 
 done:
-  gst_caps_unref (src_caps);
+  if (src_caps)
+    gst_caps_unref (src_caps);
 }

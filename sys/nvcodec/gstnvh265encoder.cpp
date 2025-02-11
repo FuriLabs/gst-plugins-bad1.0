@@ -48,6 +48,32 @@
 GST_DEBUG_CATEGORY_STATIC (gst_nv_h265_encoder_debug);
 #define GST_CAT_DEFAULT gst_nv_h265_encoder_debug
 
+#define DOC_SINK_CAPS_COMM \
+    "format = (string) { NV12, P010_10LE, Y444, Y444_16LE, GBR, GBR_16LE, VUYA, RGBA, RGBx, BGRA, BGRx, RGB10A2_LE }, " \
+    "width = (int) [ 144, 8192 ], height = (int) [ 48, 8192 ], " \
+    "interlace-mode = (string) progressive"
+
+#define DOC_SINK_CAPS \
+    "video/x-raw(memory:CUDAMemory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw(memory:D3D12Memory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw(memory:GLMemory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw, " DOC_SINK_CAPS_COMM
+
+#define DOC_SINK_CAPS_D3D11 \
+    "video/x-raw(memory:D3D11Memory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw, " DOC_SINK_CAPS_COMM
+
+#define DOC_SINK_CAPS_AUTOGPU \
+    "video/x-raw(memory:CUDAMemory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw(memory:D3D11Memory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw(memory:GLMemory), " DOC_SINK_CAPS_COMM "; " \
+    "video/x-raw, " DOC_SINK_CAPS_COMM
+
+#define DOC_SRC_CAPS \
+    "video/x-h265, width = (int) [ 144, 8192 ], height = (int) [ 48, 8192 ], " \
+    "profile = (string) { main, main-10, main-444, main-444-10 }, " \
+    "stream-format = (string) { byte-stream, hvc1, hev1 }, alignment = (string) au"
+
 static GTypeClass *parent_class = NULL;
 
 enum
@@ -362,26 +388,61 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
           "Number of frames between intra frames (-1 = infinite)",
           -1, G_MAXINT, DEFAULT_GOP_SIZE, param_flags));
   if (dev_caps->max_bframes > 0) {
+    /**
+     * GstNvD3D11H265Enc:bframes:
+     *
+     * Since: 1.26
+     */
     g_object_class_install_property (object_class, PROP_B_FRAMES,
         g_param_spec_uint ("bframes", "B Frames",
             "Number of B-frames between I and P", 0, dev_caps->max_bframes,
             DEFAULT_B_FRAMES, conditional_param_flags));
   }
+
+  /**
+   * GstNvD3D11H265Enc:rc-mode:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_RATE_CONTROL,
       g_param_spec_enum ("rc-mode", "RC Mode", "Rate Control Mode",
           GST_TYPE_NV_ENCODER_RC_MODE, DEFAULT_RATE_CONTROL, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-const:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_CONST,
       g_param_spec_int ("qp-const", "QP Const",
           "DEPRECATED, use qp-const-{i,p,b} properties instead",
           -1, 51, DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-const-i:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_CONST_I,
       g_param_spec_int ("qp-const-i", "QP Const I",
           "Constant QP value for I frame (-1 = default)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-const-p:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_CONST_P,
       g_param_spec_int ("qp-const-p", "QP Cost P",
           "Constant QP value for P frame (-1 = default)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-const-b:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_CONST_B,
       g_param_spec_int ("qp-const-b", "QP Const B",
           "Constant QP value for B frame (-1 = default)", -1, 51,
@@ -426,6 +487,12 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
             "Temporal Adaptive Quantization", DEFAULT_TEMPORAL_AQ,
             conditional_param_flags));
   }
+
+  /**
+   * GstNvD3D11H265Enc:zerolatency:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_ZEROLATENCY,
       g_param_spec_boolean ("zerolatency", "Zerolatency",
           "Zero latency operation (no reordering delay)",
@@ -443,34 +510,82 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
           "Adaptive Quantization Strength when spatial-aq is enabled"
           " from 1 (low) to 15 (aggressive), (0 = autoselect)",
           0, 15, DEFAULT_AQ_STRENGTH, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-min:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MIN,
       g_param_spec_int ("qp-min", "QP Min",
           "DEPRECATED, Use qp-min-{i,p,b} properties instead", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-min-i:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MIN_I,
       g_param_spec_int ("qp-min-i", "QP Min I",
           "Minimum QP value for I frame, (-1 = automatic)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-min-p:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MIN_P,
       g_param_spec_int ("qp-min-p", "QP Min P",
           "Minimum QP value for P frame, (-1 = automatic)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-min-b:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MIN_B,
       g_param_spec_int ("qp-min-b", "QP Min B",
           "Minimum QP value for B frame, (-1 = automatic)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-max:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MAX,
       g_param_spec_int ("qp-max", "QP Max",
           "DEPRECATED, Use qp-max-{i,p,b} properties instead", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-max-i:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MAX_I,
       g_param_spec_int ("qp-max-i", "QP Max I",
           "Maximum QP value for I frame, (-1 = automatic)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-max-p:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MAX_P,
       g_param_spec_int ("qp-max-p", "QP Max P",
           "Maximum QP value for P frame, (-1 = automatic)", -1, 51,
           DEFAULT_QP, param_flags));
+
+  /**
+   * GstNvD3D11H265Enc:qp-max-b:
+   *
+   * Since: 1.26
+   */
   g_object_class_install_property (object_class, PROP_QP_MAX_B,
       g_param_spec_int ("qp-max-b", "Max QP B",
           "Maximum QP value for B frame, (-1 = automatic)", -1, 51,
@@ -488,6 +603,9 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
           "ignored if negotiated stream-format is \"hvc1\"",
           DEFAULT_REPEAT_SEQUENCE_HEADER, param_flags));
 
+  GstPadTemplate *pad_templ = gst_pad_template_new ("sink",
+      GST_PAD_SINK, GST_PAD_ALWAYS, cdata->sink_caps);
+  GstCaps *doc_caps = nullptr;
   switch (cdata->device_mode) {
     case GST_NV_ENCODER_DEVICE_CUDA:
       gst_element_class_set_static_metadata (element_class,
@@ -495,6 +613,7 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
           "Codec/Encoder/Video/Hardware",
           "Encode H.265 video streams using NVCODEC API CUDA Mode",
           "Seungha Yang <seungha@centricular.com>");
+      doc_caps = gst_caps_from_string (DOC_SINK_CAPS);
       break;
     case GST_NV_ENCODER_DEVICE_D3D11:
       gst_element_class_set_static_metadata (element_class,
@@ -502,6 +621,7 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
           "Codec/Encoder/Video/Hardware",
           "Encode H.265 video streams using NVCODEC API Direct3D11 Mode",
           "Seungha Yang <seungha@centricular.com>");
+      doc_caps = gst_caps_from_string (DOC_SINK_CAPS_D3D11);
       break;
     case GST_NV_ENCODER_DEVICE_AUTO_SELECT:
       gst_element_class_set_static_metadata (element_class,
@@ -509,18 +629,23 @@ gst_nv_h265_encoder_class_init (GstNvH265EncoderClass * klass, gpointer data)
           "Codec/Encoder/Video/Hardware",
           "Encode H.265 video streams using NVCODEC API auto GPU select Mode",
           "Seungha Yang <seungha@centricular.com>");
+      doc_caps = gst_caps_from_string (DOC_SINK_CAPS_AUTOGPU);
       break;
     default:
       g_assert_not_reached ();
       break;
   }
 
-  gst_element_class_add_pad_template (element_class,
-      gst_pad_template_new ("sink", GST_PAD_SINK, GST_PAD_ALWAYS,
-          cdata->sink_caps));
-  gst_element_class_add_pad_template (element_class,
-      gst_pad_template_new ("src", GST_PAD_SRC, GST_PAD_ALWAYS,
-          cdata->src_caps));
+  gst_pad_template_set_documentation_caps (pad_templ, doc_caps);
+  gst_caps_unref (doc_caps);
+  gst_element_class_add_pad_template (element_class, pad_templ);
+
+  pad_templ = gst_pad_template_new ("src",
+      GST_PAD_SRC, GST_PAD_ALWAYS, cdata->src_caps);
+  doc_caps = gst_caps_from_string (DOC_SRC_CAPS);
+  gst_pad_template_set_documentation_caps (pad_templ, doc_caps);
+  gst_caps_unref (doc_caps);
+  gst_element_class_add_pad_template (element_class, pad_templ);
 
   videoenc_class->getcaps = GST_DEBUG_FUNCPTR (gst_nv_h265_encoder_getcaps);
   videoenc_class->stop = GST_DEBUG_FUNCPTR (gst_nv_h265_encoder_stop);

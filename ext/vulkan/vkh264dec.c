@@ -64,6 +64,7 @@ struct _GstVulkanH264Picture
   StdVideoDecodeH264PictureInfo std_h264pic;
 
   gint32 slot_idx;
+  guint ref_count;
 };
 
 struct _GstVulkanH264Decoder
@@ -97,7 +98,7 @@ struct _GstVulkanH264Decoder
 static GstStaticPadTemplate gst_vulkan_h264dec_sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink", GST_PAD_SINK, GST_PAD_ALWAYS,
     GST_STATIC_CAPS ("video/x-h264, "
-        "profile = { (string) high, (string) main, (string) constrained-baseline, (string) baseline } ,"
+        "profile = { (string) high, (string) main, (string) constrained-baseline, (string) baseline, (string) extended } ,"
         "stream-format = { (string) avc, (string) byte-stream }, "
         "alignment = (string) au"));
 
@@ -401,8 +402,16 @@ gst_vulkan_h264_picture_new (GstVulkanH264Decoder * self, GstBuffer * out)
   GstVulkanH264Picture *pic;
 
   pic = g_new0 (GstVulkanH264Picture, 1);
+  g_atomic_int_inc (&pic->ref_count);
   gst_vulkan_decoder_picture_init (self->decoder, &pic->base, out);
 
+  return pic;
+}
+
+static inline gpointer
+gst_vulkan_h264_picture_ref (GstVulkanH264Picture * pic)
+{
+  g_atomic_int_inc (&pic->ref_count);
   return pic;
 }
 
@@ -413,6 +422,14 @@ gst_vulkan_h264_picture_free (gpointer data)
 
   gst_vulkan_decoder_picture_release (&pic->base);
   g_free (pic);
+}
+
+static inline void
+gst_vulkan_h264_picture_unref (gpointer data)
+{
+  GstVulkanH264Picture *pic = data;
+  if (g_atomic_int_dec_and_test (&pic->ref_count))
+    gst_vulkan_h264_picture_free (data);
 }
 
 static VkVideoChromaSubsamplingFlagBitsKHR
@@ -452,6 +469,9 @@ _get_h264_profile (GstH264Profile profile_idc)
     case GST_H264_PROFILE_BASELINE:
       return STD_VIDEO_H264_PROFILE_IDC_BASELINE;
     case GST_H264_PROFILE_MAIN:
+      /* Similar to baseline and constrained-baseline, extended is the same as
+       * main if we ignore ASO/FMO features. */
+    case GST_H264_PROFILE_EXTENDED:
       return STD_VIDEO_H264_PROFILE_IDC_MAIN;
     case GST_H264_PROFILE_HIGH:
       return STD_VIDEO_H264_PROFILE_IDC_HIGH;
@@ -663,7 +683,7 @@ gst_vulkan_h264_decoder_new_picture (GstH264Decoder * decoder,
     goto allocation_failed;
 
   pic = gst_vulkan_h264_picture_new (self, frame->output_buffer);
-  gst_h264_picture_set_user_data (picture, pic, gst_vulkan_h264_picture_free);
+  gst_h264_picture_set_user_data (picture, pic, gst_vulkan_h264_picture_unref);
 
   return GST_FLOW_OK;
 
@@ -680,7 +700,7 @@ gst_vulkan_h264_decoder_new_field_picture (GstH264Decoder * decoder,
     GstH264Picture * first_field, GstH264Picture * second_field)
 {
   GstVulkanH264Decoder *self = GST_VULKAN_H264_DECODER (decoder);
-  GstVulkanH264Picture *first_pic, *second_pic;
+  GstVulkanH264Picture *first_pic;
 
   GST_TRACE_OBJECT (self, "New field picture");
 
@@ -688,11 +708,10 @@ gst_vulkan_h264_decoder_new_field_picture (GstH264Decoder * decoder,
   if (!first_pic)
     return GST_FLOW_ERROR;
 
-  second_pic = gst_vulkan_h264_picture_new (self, first_pic->base.out);
-  gst_h264_picture_set_user_data (second_field, second_pic,
-      gst_vulkan_h264_picture_free);
+  gst_h264_picture_set_user_data (second_field,
+      gst_vulkan_h264_picture_ref (first_pic), gst_vulkan_h264_picture_unref);
 
-  GST_LOG_OBJECT (self, "New vulkan decode picture %p", second_pic);
+  GST_LOG_OBJECT (self, "New vulkan decode picture %p", second_field);
 
   return GST_FLOW_OK;
 }
@@ -982,7 +1001,7 @@ _fill_h264_pic (const GstH264Picture * picture, const GstH264Slice * slice,
 }
 
 static gint32
-_find_next_slot_idx (GArray * dpb)
+_find_next_slot_idx (GstH264Picture * picture, GArray * dpb)
 {
   gint32 i;
   guint len;
@@ -995,12 +1014,15 @@ _find_next_slot_idx (GArray * dpb)
   for (i = 0; i < len; i++) {
     GstH264Picture *pic = g_array_index (dpb, GstH264Picture *, i);
     GstVulkanH264Picture *h264_pic = gst_h264_picture_get_user_data (pic);
+    if (pic->nonexisting || pic->second_field)
+      continue;
     arr[h264_pic->slot_idx] = pic;
   }
 
   /* let's return the smallest available / not ref index */
   for (i = 0; i < len; i++) {
-    if (!arr[i])
+    if (!arr[i]
+        || (picture->second_field && picture->other_field == arr[i]))
       return i;
   }
 
@@ -1015,16 +1037,14 @@ _fill_h264_slot (GstH264Picture * picture,
   /* *INDENT-OFF* */
   *stdh264_ref = (StdVideoDecodeH264ReferenceInfo) {
     .flags = {
-      .top_field_flag =
-          (picture->field == GST_H264_PICTURE_FIELD_TOP_FIELD),
-      .bottom_field_flag =
-          (picture->field == GST_H264_PICTURE_FIELD_BOTTOM_FIELD),
+      .top_field_flag = 0,
+      .bottom_field_flag = 0,
       .is_non_existing = picture->nonexisting,
       .used_for_long_term_reference =
           GST_H264_PICTURE_IS_LONG_TERM_REF (picture),
     },
     .FrameNum = GST_H264_PICTURE_IS_LONG_TERM_REF (picture) ?
-        picture->long_term_pic_num : picture->pic_num,
+        picture->long_term_pic_num : picture->frame_num,
     /* .reserved = */
     /* .PicOrderCnt = */
   };
@@ -1036,15 +1056,19 @@ _fill_h264_slot (GstH264Picture * picture,
       stdh264_ref->PicOrderCnt[1] = picture->bottom_field_order_cnt;
       break;
     case GST_H264_PICTURE_FIELD_BOTTOM_FIELD:
-      if (picture->other_field)
+      stdh264_ref->flags.bottom_field_flag = 1;
+      if (picture->other_field) {
         stdh264_ref->PicOrderCnt[0] = picture->other_field->top_field_order_cnt;
-      else
+        stdh264_ref->flags.top_field_flag = 1;
+      } else
         stdh264_ref->PicOrderCnt[0] = 0;
       stdh264_ref->PicOrderCnt[1] = picture->bottom_field_order_cnt;
       break;
     case GST_H264_PICTURE_FIELD_TOP_FIELD:
       stdh264_ref->PicOrderCnt[0] = picture->top_field_order_cnt;
+      stdh264_ref->flags.top_field_flag = 1;
       if (picture->other_field) {
+        stdh264_ref->flags.bottom_field_flag = 1;
         stdh264_ref->PicOrderCnt[1] =
             picture->other_field->bottom_field_order_cnt;
       } else {
@@ -1122,13 +1146,11 @@ gst_vulkan_h264_decoder_start_picture (GstH264Decoder * decoder,
 
   GST_TRACE_OBJECT (self, "Start picture");
 
-
   ret = _update_parameters (self, self->need_sps_update ? sps : NULL, pps);
   if (ret != GST_FLOW_OK)
     return ret;
   if (self->need_sps_update)
     self->need_sps_update = FALSE;
-
 
   refs = gst_h264_dpb_get_pictures_all (dpb);
 
@@ -1136,39 +1158,43 @@ gst_vulkan_h264_decoder_start_picture (GstH264Decoder * decoder,
   g_assert (pic);
 
   _fill_h264_pic (picture, slice, &pic->vk_h264pic, &pic->std_h264pic);
-  pic->slot_idx = _find_next_slot_idx (refs);
+  /* Search for the next slot index in all available refs */
+  pic->slot_idx = _find_next_slot_idx (picture, refs);
+
+  g_array_unref (refs);
+  /* Create a new refs array to retrieve short-term and long term refs */
+  refs = g_array_sized_new (FALSE, TRUE, sizeof (GstH264Picture *), 16);
+  g_array_set_clear_func (refs, (GDestroyNotify) gst_clear_h264_picture);
 
   /* fill main slot */
   _fill_ref_slot (self, picture, &pic->base.slot,
       &pic->base.pic_res, &pic->vk_slot, &pic->std_ref, NULL);
 
-  j = 0;
-
+  gst_h264_dpb_get_pictures_short_term_ref (dpb, FALSE, FALSE, refs);
   /* Fill in short-term references */
+  j = 0;
   for (i = 0; i < refs->len; i++) {
     GstH264Picture *picture = g_array_index (refs, GstH264Picture *, i);
-    /* XXX: shall we add second fields? */
-    if (GST_H264_PICTURE_IS_SHORT_TERM_REF (picture)) {
-      _fill_ref_slot (self, picture, &pic->base.slots[j],
-          &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
-          &pic->base.refs[j]);
-      j++;
-    }
-    /* FIXME: do it in O(n) rather O(2n) */
+
+    _fill_ref_slot (self, picture, &pic->base.slots[j],
+        &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
+        &pic->base.refs[j]);
+    j++;
   }
 
+  g_array_set_size (refs, 0);
+  gst_h264_dpb_get_pictures_long_term_ref (dpb, FALSE, refs);
   /* Fill in long-term refs */
   for (i = 0; i < refs->len; i++) {
     GstH264Picture *picture = g_array_index (refs, GstH264Picture *, i);
-    /* XXX: shall we add non existing and second fields? */
-    if (GST_H264_PICTURE_IS_LONG_TERM_REF (picture)) {
-      _fill_ref_slot (self, picture, &pic->base.slots[j],
-          &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
-          &pic->base.refs[j]);
-      j++;
-    }
-  }
 
+    _fill_ref_slot (self, picture, &pic->base.slots[j],
+        &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
+        &pic->base.refs[j]);
+    j++;
+
+  }
+  g_array_set_size (refs, 0);
   g_array_unref (refs);
 
   /* *INDENT-OFF* */
@@ -1255,6 +1281,9 @@ gst_vulkan_h264_decoder_end_picture (GstH264Decoder * decoder,
     g_clear_error (&error);
     return GST_FLOW_ERROR;
   }
+
+  /* do not send the same slice data again */
+  g_clear_pointer (&pic->base.slice_offs, g_array_unref);
 
   return GST_FLOW_OK;
 }

@@ -98,6 +98,9 @@ struct _GstV4l2Decoder
   /* detected features */
   gboolean supports_holding_capture;
   gboolean supports_remove_buffers;
+
+  /* special state for doc generator */
+  gboolean doc_mode;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GstV4l2Decoder, gst_v4l2_decoder, GST_TYPE_OBJECT,
@@ -141,7 +144,6 @@ static void
 gst_v4l2_decoder_class_init (GstV4l2DecoderClass * klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
   gobject_class->finalize = gst_v4l2_decoder_finalize;
   gobject_class->get_property = gst_v4l2_decoder_get_property;
   gobject_class->set_property = gst_v4l2_decoder_set_property;
@@ -160,6 +162,9 @@ gst_v4l2_decoder_new (GstV4l2CodecDevice * device)
   decoder = g_object_new (GST_TYPE_V4L2_DECODER,
       "media-device", device->media_device_path,
       "video-device", device->video_device_path, NULL);
+
+  if (!g_strcmp0 (device->name, "docdec-proc"))
+    decoder->doc_mode = TRUE;
 
   return gst_object_ref_sink (decoder);
 }
@@ -181,6 +186,11 @@ gst_v4l2_decoder_open (GstV4l2Decoder * self)
   };
 
   guint32 capabilities;
+
+  if (self->doc_mode) {
+    self->opened = TRUE;
+    return TRUE;
+  }
 
   self->media_fd = open (self->media_device, 0);
   if (self->media_fd < 0) {
@@ -328,6 +338,19 @@ gst_v4l2_decoder_enum_sink_fmt (GstV4l2Decoder * self, gint i,
   gint ret;
 
   g_return_val_if_fail (self->opened, FALSE);
+
+  if (self->doc_mode) {
+    guint32 all_fmt[] = {
+      V4L2_PIX_FMT_H264_SLICE, V4L2_PIX_FMT_HEVC_SLICE, V4L2_PIX_FMT_VP8_FRAME,
+      V4L2_PIX_FMT_MPEG2_SLICE, V4L2_PIX_FMT_VP9_FRAME, V4L2_PIX_FMT_AV1_FRAME,
+    };
+
+    if (i >= G_N_ELEMENTS (all_fmt))
+      return FALSE;
+
+    *out_fmt = all_fmt[i];
+    return TRUE;
+  }
 
   ret = ioctl (self->video_fd, VIDIOC_ENUM_FMT, &fmtdesc);
   if (ret < 0) {
@@ -1141,13 +1164,11 @@ gst_v4l2_decoder_get_property (GObject * object, guint prop_id,
 /**
  * gst_v4l2_decoder_register:
  * @plugin: a #GstPlugin
- * @dec_type: A #GType for the codec
- * @class_init: The #GClassInitFunc for #dec_type
- * @instance_init: The #GInstanceInitFunc for #dec_type
+ * @dec_type: Base #GType for the codec
+ * @type_info: a #GTypeInfo for the codec
  * @element_name_tmpl: A string to use for the first codec found and as a template for the next ones.
  * @device: (transfer full) A #GstV4l2CodecDevice
  * @rank: The rank to use for the element
- * @class_data: (nullable) (transfer full) A #gpointer to pass as class_data, set to @device if null
  * @element_name (nullable) (out) Sets the pointer to the new element name
  *
  * Registers a decoder element as a subtype of @dec_type for @plugin.
@@ -1156,24 +1177,13 @@ gst_v4l2_decoder_get_property (GObject * object, guint prop_id,
  */
 void
 gst_v4l2_decoder_register (GstPlugin * plugin,
-    GType dec_type, GClassInitFunc class_init, gconstpointer class_data,
-    GInstanceInitFunc instance_init, const gchar * element_name_tmpl,
+    GType dec_type, GTypeInfo * type_info, const gchar * element_name_tmpl,
     GstV4l2CodecDevice * device, guint rank, gchar ** element_name)
 {
-  GTypeQuery type_query;
-  GTypeInfo type_info = { 0, };
   GType subtype;
   gchar *type_name;
 
-  g_type_query (dec_type, &type_query);
-  memset (&type_info, 0, sizeof (type_info));
-  type_info.class_size = type_query.class_size;
-  type_info.instance_size = type_query.instance_size;
-  type_info.class_init = class_init;
-  type_info.class_data = class_data;
-  type_info.instance_init = instance_init;
-
-  if (class_data == device)
+  if (type_info->class_data == device)
     GST_MINI_OBJECT_FLAG_SET (device, GST_MINI_OBJECT_FLAG_MAY_BE_LEAKED);
 
   /* The first decoder to be registered should use a constant name, like
@@ -1190,7 +1200,7 @@ gst_v4l2_decoder_register (GstPlugin * plugin,
     g_free (basename);
   }
 
-  subtype = g_type_register_static (dec_type, type_name, &type_info, 0);
+  subtype = g_type_register_static (dec_type, type_name, type_info, 0);
 
   if (!gst_element_register (plugin, type_name, rank, subtype)) {
     GST_WARNING ("Failed to register plugin '%s'", type_name);
@@ -1341,6 +1351,18 @@ gboolean
 gst_v4l2_decoder_has_remove_bufs (GstV4l2Decoder * self)
 {
   return self->supports_remove_buffers;
+}
+
+/**
+ * gst_v4l2_decoder_in_doc_mode:
+ * @slef: a #GstV4l2Decoder pointer
+ *
+ * Returns: %TRUE if running in documenetation genetator mode
+ */
+gboolean
+gst_v4l2_decoder_in_doc_mode (GstV4l2Decoder * self)
+{
+  return self->doc_mode;
 }
 
 GstV4l2Request *

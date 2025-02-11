@@ -1,6 +1,6 @@
 project('gst-plugins-bad', 'c', 'cpp',
-  version : '1.25.1',
-  meson_version : '>= 1.3',
+  version : '1.25.50',
+  meson_version : '>= 1.4',
   default_options : [ 'warning_level=1',
                       'buildtype=debugoptimized' ])
 
@@ -53,7 +53,6 @@ else
 endif
 
 cdata = configuration_data()
-cdata.set('ENABLE_NLS', 1)
 
 if cc.get_id() == 'msvc'
   msvc_args = [
@@ -617,6 +616,7 @@ endif
 
 # xgettext is optional (on Windows for instance)
 if find_program('xgettext', required : get_option('nls')).found()
+  cdata.set('ENABLE_NLS', 1)
   subdir('po')
 endif
 

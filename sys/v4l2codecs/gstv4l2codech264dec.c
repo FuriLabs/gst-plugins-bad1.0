@@ -17,9 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
+/**
+ * SECTION:element-v4l2slh264dec
+ * @title: v4l2slh264dec
+ * @short_description: V4L2 Stateless H.264 video decoder
+ *
+ * decodes H.264 bitstreams as DMABuf using Linux V4L2 Stateless API.
+ *
+ * ## Example launch line
+ * ```
+ * gst-launch-1.0 filesrc location=some.mov ! parsebin ! v4l2slh264dec ! autovideosink
+ * ```
+ *
+ * Since: 1.20
+ */
+
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#define GST_USE_UNSTABLE_API
+#include <gst/codecs/gsth264decoder.h>
 
 #include "gstv4l2codecallocator.h"
 #include "gstv4l2codech264dec.h"
@@ -35,6 +54,8 @@
 
 GST_DEBUG_CATEGORY_STATIC (v4l2_h264dec_debug);
 #define GST_CAT_DEFAULT v4l2_h264dec_debug
+
+#define GST_V4L2_CODEC_H264_DEC(obj) ((GstV4l2CodecH264Dec *) obj);
 
 enum
 {
@@ -59,6 +80,15 @@ GST_STATIC_PAD_TEMPLATE (GST_VIDEO_DECODER_SINK_NAME,
 
 static GstStaticCaps static_src_caps = GST_STATIC_CAPS (SRC_CAPS);
 static GstStaticCaps static_src_caps_no_drm = GST_STATIC_CAPS (SRC_CAPS_NO_DRM);
+
+typedef struct _GstV4l2CodecH264Dec GstV4l2CodecH264Dec;
+typedef struct _GstV4l2CodecH264DecClass GstV4l2CodecH264DecClass;
+
+struct _GstV4l2CodecH264DecClass
+{
+  GstH264DecoderClass parent_class;
+  GstV4l2CodecDevice *device;
+};
 
 struct _GstV4l2CodecH264Dec
 {
@@ -100,10 +130,7 @@ struct _GstV4l2CodecH264Dec
   GstMapInfo bitstream_map;
 };
 
-G_DEFINE_ABSTRACT_TYPE (GstV4l2CodecH264Dec, gst_v4l2_codec_h264_dec,
-    GST_TYPE_H264_DECODER);
-
-#define parent_class gst_v4l2_codec_h264_dec_parent_class
+static GstElementClass *parent_class = NULL;
 
 static gboolean
 is_frame_based (GstV4l2CodecH264Dec * self)
@@ -1501,12 +1528,7 @@ gst_v4l2_codec_h264_dec_get_property (GObject * object, guint prop_id,
 }
 
 static void
-gst_v4l2_codec_h264_dec_init (GstV4l2CodecH264Dec * self)
-{
-}
-
-static void
-gst_v4l2_codec_h264_dec_subinit (GstV4l2CodecH264Dec * self,
+gst_v4l2_codec_h264_dec_init (GstV4l2CodecH264Dec * self,
     GstV4l2CodecH264DecClass * klass)
 {
   self->decoder = gst_v4l2_decoder_new (klass->device);
@@ -1528,12 +1550,7 @@ gst_v4l2_codec_h264_dec_dispose (GObject * object)
 }
 
 static void
-gst_v4l2_codec_h264_dec_class_init (GstV4l2CodecH264DecClass * klass)
-{
-}
-
-static void
-gst_v4l2_codec_h264_dec_subclass_init (GstV4l2CodecH264DecClass * klass,
+gst_v4l2_codec_h264_dec_class_init (GstV4l2CodecH264DecClass * klass,
     GstV4l2CodecDevice * device)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1550,6 +1567,8 @@ gst_v4l2_codec_h264_dec_subclass_init (GstV4l2CodecH264DecClass * klass,
       "Codec/Decoder/Video/Hardware",
       "A V4L2 based H.264 video decoder",
       "Nicolas Dufresne <nicolas.dufresne@collabora.com>");
+
+  parent_class = g_type_class_peek_parent (klass);
 
   gst_element_class_add_static_pad_template (element_class, &sink_template);
   gst_element_class_add_pad_template (element_class,
@@ -1593,11 +1612,23 @@ void
 gst_v4l2_codec_h264_dec_register (GstPlugin * plugin, GstV4l2Decoder * decoder,
     GstV4l2CodecDevice * device, guint rank)
 {
-  GstCaps *src_caps;
+  GTypeInfo type_info = {
+    .class_size = sizeof (GstV4l2CodecH264DecClass),
+    .class_init = (GClassInitFunc) gst_v4l2_codec_h264_dec_class_init,
+    .class_data = gst_mini_object_ref (GST_MINI_OBJECT (device)),
+    .instance_size = sizeof (GstV4l2CodecH264Dec),
+    .instance_init = (GInstanceInitFunc) gst_v4l2_codec_h264_dec_init,
+  };
+  GstCaps *src_caps = NULL;
   guint version;
 
   GST_DEBUG_CATEGORY_INIT (v4l2_h264dec_debug, "v4l2codecs-h264dec", 0,
       "V4L2 stateless h264 decoder");
+
+  if (gst_v4l2_decoder_in_doc_mode (decoder)) {
+    device->src_caps = gst_static_caps_get (&static_src_caps);
+    goto register_element;
+  }
 
   if (!gst_v4l2_decoder_set_sink_fmt (decoder, V4L2_PIX_FMT_H264_SLICE,
           320, 240, 8))
@@ -1627,13 +1658,11 @@ gst_v4l2_codec_h264_dec_register (GstPlugin * plugin, GstV4l2Decoder * decoder,
     goto done;
   }
 
-  gst_v4l2_decoder_register (plugin,
-      GST_TYPE_V4L2_CODEC_H264_DEC,
-      (GClassInitFunc) gst_v4l2_codec_h264_dec_subclass_init,
-      gst_mini_object_ref (GST_MINI_OBJECT (device)),
-      (GInstanceInitFunc) gst_v4l2_codec_h264_dec_subinit,
+register_element:
+  gst_v4l2_decoder_register (plugin, GST_TYPE_H264_DECODER, &type_info,
       "v4l2sl%sh264dec", device, rank, NULL);
 
 done:
-  gst_caps_unref (src_caps);
+  if (src_caps)
+    gst_caps_unref (src_caps);
 }

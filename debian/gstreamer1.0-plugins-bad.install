@@ -107,7 +107,6 @@ usr/lib/*/gstreamer-1.0/libgstvmnc.so
 usr/lib/*/gstreamer-1.0/libgstvoaacenc.so
 usr/lib/*/gstreamer-1.0/libgstvoamrwbenc.so
 usr/lib/*/gstreamer-1.0/libgstwebp.so
-usr/lib/*/gstreamer-1.0/libgstwebrtcdsp.so
 usr/lib/*/gstreamer-1.0/libgstwildmidi.so
 usr/lib/*/gstreamer-1.0/libgstx265.so
 usr/lib/*/gstreamer-1.0/libgsty4mdec.so
@@ -119,6 +118,7 @@ usr/lib/*/gstreamer-1.0/libgstlc3.so
 usr/lib/*/gstreamer-1.0/libgstmse.so
 usr/lib/*/gstreamer-1.0/libgstsvtav1.so
 usr/lib/*/gstreamer-1.0/libgstunixfd.so
+usr/lib/*/gstreamer-1.0/libgstwebrtcdsp.so
 usr/lib/*/gstreamer-1.0/libgsttensordecoders.so
 usr/share/gstreamer-1.0/presets/
 usr/share/locale

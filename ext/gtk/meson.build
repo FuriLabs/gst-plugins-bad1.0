@@ -1,7 +1,3 @@
-if not use_wayland
-  subdir_done()
-endif
-
 gtkwayland_sources = [
   'gstplugin.c',
   'gstgtkutils.c',

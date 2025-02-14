@@ -97,7 +97,7 @@ conf_flags += -Dladspa=disabled -Dneon=disabled -Dopenaptx=disabled \
 endif
 
 # bookworm backport flags
-conf_flags += -Daja=disabled -Dqt6d3d11=disabled
+conf_flags += -Daja=disabled -Dqt6d3d11=disabled -Dwebrtcdsp=disabled
 
 %:
 	dh $@

@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.25.50-1ubuntu2) plucky; urgency=medium
+
+  * No-change rebuild for opencv 4.10.0.
+
+ -- Sudip Mukherjee <sudipm.mukherjee@gmail.com>  Wed, 19 Feb 2025 08:42:12 +0000
+
 gst-plugins-bad1.0 (1.25.50-1ubuntu1) plucky; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:

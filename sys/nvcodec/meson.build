@@ -1,6 +1,7 @@
 nvcodec_sources = [
   'gstcudabasetransform.c',
-  'gstcudaconverter.c',
+  'gstcudacompositor.cpp',
+  'gstcudaconverter.cpp',
   'gstcudaconvertscale.c',
   'gstcudaipc.cpp',
   'gstcudaipcclient.cpp',
@@ -8,9 +9,19 @@ nvcodec_sources = [
   'gstcudaipcsink.cpp',
   'gstcudaipcsrc.cpp',
   'gstcudamemorycopy.c',
+  'gstnvcodecutils.cpp',
+  'plugin.c'
+]
+
+# Only docstring-containing headers need listing here
+nvcodec_headers = [
+  'gstcudaconverter.h'
+]
+
+nvcodec_dgpu_sources = [
   'gstcuvidloader.c',
   'gstnvav1dec.cpp',
-  'gstnvbaseenc.c',
+  'gstnvav1encoder.cpp',
   'gstnvdec.c',
   'gstnvdecobject.cpp',
   'gstnvdecoder.cpp',
@@ -18,19 +29,12 @@ nvcodec_sources = [
   'gstnvencobject.cpp',
   'gstnvencoder.cpp',
   'gstnvh264dec.cpp',
-  'gstnvh264enc.c',
   'gstnvh264encoder.cpp',
   'gstnvh265dec.cpp',
-  'gstnvh265enc.c',
   'gstnvh265encoder.cpp',
   'gstnvjpegenc.cpp',
   'gstnvvp8dec.cpp',
-  'gstnvvp9dec.cpp',
-  'plugin.c',
-]
-
-nvmm_sources = [
-  'gstcudanvmm.c',
+  'gstnvvp9dec.cpp'
 ]
 
 nvcodec_win32_sources = [
@@ -42,6 +46,19 @@ nvcodec_unix_sources = [
   'gstcudaipcclient_unix.cpp',
   'gstcudaipcserver_unix.cpp',
 ]
+
+nvcodec_d3d12_sources = [
+  'gstcudainterop_d3d12.cpp',
+]
+
+doc_sources = []
+foreach s: nvcodec_sources + nvcodec_dgpu_sources + nvcodec_win32_sources + nvcodec_unix_sources + nvcodec_d3d12_sources + nvcodec_headers
+  doc_sources += meson.current_source_dir() / s
+endforeach
+
+plugin_sources += {
+  'nvcodec': pathsep.join(doc_sources)
+}
 
 if get_option('nvcodec').disabled()
   subdir_done()
@@ -63,18 +80,9 @@ if gstgl_dep.found()
 endif
 
 if host_system == 'linux'
-  have_nvmm = false
-  if cc.has_header('nvbufsurface.h')
-    have_nvmm = true
-  elif cc.has_header('/opt/nvidia/deepstream/deepstream/sources/includes/nvbufsurface.h')
-    # XXX: Should add an option for SDK path??
-    have_nvmm = true
-    plugin_incdirs += [include_directories('/opt/nvidia/deepstream/deepstream/sources/includes')]
-  endif
-
-  if have_nvmm
-    extra_args += ['-DHAVE_NVCODEC_NVMM']
-    nvcodec_sources += nvmm_sources
+  if have_nvbufsurface_h
+    extra_args += ['-DHAVE_CUDA_NVMM']
+    plugin_incdirs += gstcuda_nvmm_inc
   endif
 
   gio_unix_dep = dependency('gio-unix-2.0', required : get_option('nvcodec'))
@@ -83,6 +91,18 @@ if host_system == 'linux'
   nvcodec_sources += nvcodec_unix_sources
 else
   nvcodec_sources += nvcodec_win32_sources
+endif
+
+# if the system is not a tegra based system we add the other sources for encoding and decoding
+if not nvbuf_dep.found()
+  extra_args += ['-DHAVE_NVCODEC_DGPU']
+  nvcodec_sources += nvcodec_dgpu_sources
+endif
+
+if gstd3d12_dep.found() and cc.has_header('d3d12video.h')
+  extra_args += ['-DHAVE_GST_D3D12']
+  extra_deps += [gstd3d12_dep]
+  nvcodec_sources += nvcodec_d3d12_sources
 endif
 
 if cc.get_id() != 'msvc'
@@ -113,4 +133,3 @@ gstnvcodec = library('gstnvcodec',
   install_dir : plugins_install_dir,
 )
 plugins += [gstnvcodec]
-

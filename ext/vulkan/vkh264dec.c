@@ -26,10 +26,27 @@
 #include <gst/video/video.h>
 #include <gst/vulkan/vulkan.h>
 
+#include "gst/vulkan/gstvkdecoder-private.h"
 #include "gstvulkanelements.h"
 
 typedef struct _GstVulkanH264Decoder GstVulkanH264Decoder;
 typedef struct _GstVulkanH264Picture GstVulkanH264Picture;
+typedef struct _SPS SPS;
+typedef struct _PPS PPS;
+
+struct _SPS
+{
+  StdVideoH264SequenceParameterSet sps;
+  StdVideoH264HrdParameters hrd;
+  StdVideoH264SequenceParameterSetVui vui;
+  StdVideoH264ScalingLists scaling_lists;
+};
+
+struct _PPS
+{
+  StdVideoH264PictureParameterSet pps;
+  StdVideoH264ScalingLists scaling_lists;
+};
 
 struct _GstVulkanH264Picture
 {
@@ -47,6 +64,7 @@ struct _GstVulkanH264Picture
   StdVideoDecodeH264PictureInfo std_h264pic;
 
   gint32 slot_idx;
+  guint ref_count;
 };
 
 struct _GstVulkanH264Decoder
@@ -60,7 +78,7 @@ struct _GstVulkanH264Decoder
   GstVulkanDecoder *decoder;
 
   gboolean need_negotiation;
-  gboolean need_params_update;
+  gboolean need_sps_update;
 
   gint width;
   gint height;
@@ -72,12 +90,15 @@ struct _GstVulkanH264Decoder
   VkChromaLocation xloc, yloc;
 
   GstVideoCodecState *output_state;
+
+  SPS std_sps;
+  PPS std_pps;
 };
 
 static GstStaticPadTemplate gst_vulkan_h264dec_sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink", GST_PAD_SINK, GST_PAD_ALWAYS,
     GST_STATIC_CAPS ("video/x-h264, "
-        "profile = { (string) high, (string) main, (string) constrained-baseline, (string) baseline } ,"
+        "profile = { (string) high, (string) main, (string) constrained-baseline, (string) baseline, (string) extended } ,"
         "stream-format = { (string) avc, (string) byte-stream }, "
         "alignment = (string) au"));
 
@@ -134,18 +155,9 @@ gst_vulkan_h264_decoder_open (GstVideoDecoder * decoder)
     return FALSE;
   }
 
-  if (!gst_vulkan_device_run_context_query (GST_ELEMENT (decoder),
-          &self->device)) {
-    GError *error = NULL;
-    GST_DEBUG_OBJECT (self, "No device retrieved from peer elements");
-    self->device = gst_vulkan_instance_create_device (self->instance, &error);
-    if (!self->device) {
-      GST_ELEMENT_ERROR (self, RESOURCE, NOT_FOUND,
-          ("Failed to create vulkan device"),
-          ("%s", error ? error->message : ""));
-      g_clear_error (&error);
-      return FALSE;
-    }
+  if (!gst_vulkan_ensure_element_device (GST_ELEMENT (decoder), self->instance,
+          &self->device, 0)) {
+    return FALSE;
   }
 
   if (!gst_vulkan_queue_run_context_query (GST_ELEMENT (self),
@@ -161,7 +173,7 @@ gst_vulkan_h264_decoder_open (GstVideoDecoder * decoder)
     return FALSE;
   }
 
-  self->decoder = gst_vulkan_queue_create_decoder (self->decode_queue,
+  self->decoder = gst_vulkan_decoder_new_from_queue (self->decode_queue,
       VK_VIDEO_CODEC_OPERATION_DECODE_H264_BIT_KHR);
   if (!self->decoder) {
     GST_ELEMENT_ERROR (self, RESOURCE, NOT_FOUND,
@@ -290,7 +302,8 @@ gst_vulkan_h264_decoder_negotiate (GstVideoDecoder * decoder)
 
   self->output_state->caps = gst_video_info_to_caps (&self->output_state->info);
   gst_caps_set_features_simple (self->output_state->caps,
-      gst_caps_features_new (GST_CAPS_FEATURE_MEMORY_VULKAN_IMAGE, NULL));
+      gst_caps_features_new_static_str (GST_CAPS_FEATURE_MEMORY_VULKAN_IMAGE,
+          NULL));
 
   GST_INFO_OBJECT (self, "Negotiated caps %" GST_PTR_FORMAT,
       self->output_state->caps);
@@ -355,7 +368,7 @@ gst_vulkan_h264_decoder_decide_allocation (GstVideoDecoder * decoder,
 
   gst_vulkan_image_buffer_pool_config_set_allocation_params (config, usage,
       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, VK_IMAGE_LAYOUT_VIDEO_DECODE_DST_KHR,
-      VK_ACCESS_TRANSFER_WRITE_BIT);
+      VK_ACCESS_NONE);
   gst_vulkan_image_buffer_pool_config_set_decode_caps (config, profile_caps);
 
   gst_caps_unref (profile_caps);
@@ -383,29 +396,22 @@ bail:
   }
 }
 
-/* set a common pipeline stage valid for any queue to avoid Vulkan Validation
- * errors */
-static void
-reset_pipeline_stage_mask (GstBuffer * buf)
-{
-  guint i, n = gst_buffer_n_memory (buf);
-
-  for (i = 0; i < n; i++) {
-    GstVulkanImageMemory *vk_mem =
-        (GstVulkanImageMemory *) gst_buffer_peek_memory (buf, i);
-    vk_mem->barrier.parent.pipeline_stages = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
-  }
-}
-
 static GstVulkanH264Picture *
 gst_vulkan_h264_picture_new (GstVulkanH264Decoder * self, GstBuffer * out)
 {
   GstVulkanH264Picture *pic;
 
   pic = g_new0 (GstVulkanH264Picture, 1);
+  g_atomic_int_inc (&pic->ref_count);
   gst_vulkan_decoder_picture_init (self->decoder, &pic->base, out);
-  reset_pipeline_stage_mask (out);
 
+  return pic;
+}
+
+static inline gpointer
+gst_vulkan_h264_picture_ref (GstVulkanH264Picture * pic)
+{
+  g_atomic_int_inc (&pic->ref_count);
   return pic;
 }
 
@@ -416,6 +422,14 @@ gst_vulkan_h264_picture_free (gpointer data)
 
   gst_vulkan_decoder_picture_release (&pic->base);
   g_free (pic);
+}
+
+static inline void
+gst_vulkan_h264_picture_unref (gpointer data)
+{
+  GstVulkanH264Picture *pic = data;
+  if (g_atomic_int_dec_and_test (&pic->ref_count))
+    gst_vulkan_h264_picture_free (data);
 }
 
 static VkVideoChromaSubsamplingFlagBitsKHR
@@ -455,6 +469,9 @@ _get_h264_profile (GstH264Profile profile_idc)
     case GST_H264_PROFILE_BASELINE:
       return STD_VIDEO_H264_PROFILE_IDC_BASELINE;
     case GST_H264_PROFILE_MAIN:
+      /* Similar to baseline and constrained-baseline, extended is the same as
+       * main if we ignore ASO/FMO features. */
+    case GST_H264_PROFILE_EXTENDED:
       return STD_VIDEO_H264_PROFILE_IDC_MAIN;
     case GST_H264_PROFILE_HIGH:
       return STD_VIDEO_H264_PROFILE_IDC_HIGH;
@@ -638,7 +655,7 @@ gst_vulkan_h264_decoder_new_sequence (GstH264Decoder * decoder,
     }
   }
 
-  self->need_params_update = TRUE;
+  self->need_sps_update = TRUE;
 
   return GST_FLOW_OK;
 }
@@ -666,7 +683,7 @@ gst_vulkan_h264_decoder_new_picture (GstH264Decoder * decoder,
     goto allocation_failed;
 
   pic = gst_vulkan_h264_picture_new (self, frame->output_buffer);
-  gst_h264_picture_set_user_data (picture, pic, gst_vulkan_h264_picture_free);
+  gst_h264_picture_set_user_data (picture, pic, gst_vulkan_h264_picture_unref);
 
   return GST_FLOW_OK;
 
@@ -683,7 +700,7 @@ gst_vulkan_h264_decoder_new_field_picture (GstH264Decoder * decoder,
     GstH264Picture * first_field, GstH264Picture * second_field)
 {
   GstVulkanH264Decoder *self = GST_VULKAN_H264_DECODER (decoder);
-  GstVulkanH264Picture *first_pic, *second_pic;
+  GstVulkanH264Picture *first_pic;
 
   GST_TRACE_OBJECT (self, "New field picture");
 
@@ -691,39 +708,35 @@ gst_vulkan_h264_decoder_new_field_picture (GstH264Decoder * decoder,
   if (!first_pic)
     return GST_FLOW_ERROR;
 
-  second_pic = gst_vulkan_h264_picture_new (self, first_pic->base.out);
-  gst_h264_picture_set_user_data (second_field, second_pic,
-      gst_vulkan_h264_picture_free);
+  gst_h264_picture_set_user_data (second_field,
+      gst_vulkan_h264_picture_ref (first_pic), gst_vulkan_h264_picture_unref);
 
-  GST_LOG_OBJECT (self, "New vulkan decode picture %p", second_pic);
+  GST_LOG_OBJECT (self, "New vulkan decode picture %p", second_field);
 
   return GST_FLOW_OK;
 }
 
 static void
-_fill_sps (const GstH264SPS * sps, StdVideoH264SequenceParameterSet * std_sps,
-    StdVideoH264HrdParameters * vkhrd,
-    StdVideoH264SequenceParameterSetVui * vkvui,
-    StdVideoH264ScalingLists * vkscaling_lists)
+_fill_sps (const GstH264SPS * sps, SPS * std_sps)
 {
   const GstH264VUIParams *vui = &sps->vui_parameters;
   const GstH264HRDParams *hrd;
   int i;
 
   /* *INDENT-OFF* */
-  *vkscaling_lists = (StdVideoH264ScalingLists) {
+  std_sps->scaling_lists = (StdVideoH264ScalingLists) {
     .scaling_list_present_mask = sps->scaling_matrix_present_flag,
     .use_default_scaling_matrix_mask = 0, /* We already fill in the default matrix */
   };
 
   for (i = 0; i < STD_VIDEO_H264_SCALING_LIST_4X4_NUM_LISTS; i++) {
-    memcpy (vkscaling_lists->ScalingList4x4[i], sps->scaling_lists_4x4[i],
+    memcpy (std_sps->scaling_lists.ScalingList4x4[i], sps->scaling_lists_4x4[i],
         STD_VIDEO_H264_SCALING_LIST_4X4_NUM_ELEMENTS
         * sizeof (**sps->scaling_lists_4x4));
   }
 
   for (i = 0; i < STD_VIDEO_H264_SCALING_LIST_8X8_NUM_LISTS; i++) {
-    memcpy (vkscaling_lists->ScalingList8x8[i], sps->scaling_lists_8x8[i],
+    memcpy (std_sps->scaling_lists.ScalingList8x8[i], sps->scaling_lists_8x8[i],
             STD_VIDEO_H264_SCALING_LIST_8X8_NUM_ELEMENTS
             * sizeof (**sps->scaling_lists_8x8));
   }
@@ -737,7 +750,7 @@ _fill_sps (const GstH264SPS * sps, StdVideoH264SequenceParameterSet * std_sps,
       hrd = NULL;
 
     if (hrd) {
-      *vkhrd = (StdVideoH264HrdParameters) {
+      std_sps->hrd = (StdVideoH264HrdParameters) {
         .cpb_cnt_minus1 = hrd->cpb_cnt_minus1,
         .bit_rate_scale = hrd->bit_rate_scale,
         .cpb_size_scale = hrd->cpb_size_scale,
@@ -748,19 +761,19 @@ _fill_sps (const GstH264SPS * sps, StdVideoH264SequenceParameterSet * std_sps,
         .time_offset_length = hrd->time_offset_length,
       };
 
-      memcpy (vkhrd->bit_rate_value_minus1, hrd->bit_rate_value_minus1,
+      memcpy (std_sps->hrd.bit_rate_value_minus1, hrd->bit_rate_value_minus1,
           STD_VIDEO_H264_CPB_CNT_LIST_SIZE
           * sizeof (*hrd->bit_rate_value_minus1));
 
-      memcpy (vkhrd->cpb_size_value_minus1, hrd->cpb_size_value_minus1,
+      memcpy (std_sps->hrd.cpb_size_value_minus1, hrd->cpb_size_value_minus1,
           STD_VIDEO_H264_CPB_CNT_LIST_SIZE
           * sizeof (*hrd->cpb_size_value_minus1));
 
-      memcpy (vkhrd->cbr_flag, hrd->cbr_flag,
+      memcpy (std_sps->hrd.cbr_flag, hrd->cbr_flag,
           STD_VIDEO_H264_CPB_CNT_LIST_SIZE * sizeof (*hrd->cbr_flag));
     }
 
-    *vkvui = (StdVideoH264SequenceParameterSetVui) {
+    std_sps->vui = (StdVideoH264SequenceParameterSetVui) {
       .flags = {
         .aspect_ratio_info_present_flag = vui->aspect_ratio_info_present_flag,
         .overscan_info_present_flag = vui->overscan_info_present_flag,
@@ -789,11 +802,11 @@ _fill_sps (const GstH264SPS * sps, StdVideoH264SequenceParameterSet * std_sps,
       .chroma_sample_loc_type_top_field = vui->chroma_sample_loc_type_top_field,
       .chroma_sample_loc_type_bottom_field =
           vui->chroma_sample_loc_type_bottom_field,
-      .pHrdParameters = hrd ? vkhrd : NULL,
+      .pHrdParameters = &std_sps->hrd,
     };
   }
 
-  *std_sps = (StdVideoH264SequenceParameterSet) {
+  std_sps->sps = (StdVideoH264SequenceParameterSet) {
     .flags = {
       .constraint_set0_flag = sps->constraint_set0_flag,
       .constraint_set1_flag = sps->constraint_set1_flag,
@@ -835,8 +848,8 @@ _fill_sps (const GstH264SPS * sps, StdVideoH264SequenceParameterSet * std_sps,
     .frame_crop_top_offset = sps->frame_crop_top_offset,
     .frame_crop_bottom_offset = sps->frame_crop_bottom_offset,
     .pOffsetForRefFrame = sps->offset_for_ref_frame,
-    .pScalingLists = vkscaling_lists,
-    .pSequenceParameterSetVui = sps->vui_parameters_present_flag ? vkvui : NULL,
+    .pScalingLists = &std_sps->scaling_lists,
+    .pSequenceParameterSetVui = sps->vui_parameters_present_flag ? &std_sps->vui : NULL,
   };
   /* *INDENT-ON* */
 
@@ -844,30 +857,29 @@ _fill_sps (const GstH264SPS * sps, StdVideoH264SequenceParameterSet * std_sps,
 }
 
 static void
-_fill_pps (const GstH264PPS * pps, StdVideoH264PictureParameterSet * std_pps,
-    StdVideoH264ScalingLists * vkscaling_lists)
+_fill_pps (const GstH264PPS * pps, PPS * std_pps)
 {
   int i;
 
   /* *INDENT-OFF* */
-  *vkscaling_lists = (StdVideoH264ScalingLists) {
+  std_pps->scaling_lists = (StdVideoH264ScalingLists) {
     .scaling_list_present_mask = pps->pic_scaling_matrix_present_flag,
     .use_default_scaling_matrix_mask = 0, /* We already fill in the default matrix */
   };
 
   for (i = 0; i < STD_VIDEO_H264_SCALING_LIST_4X4_NUM_LISTS; i++) {
-    memcpy (vkscaling_lists->ScalingList4x4[i], pps->scaling_lists_4x4[i],
+    memcpy (std_pps->scaling_lists.ScalingList4x4[i], pps->scaling_lists_4x4[i],
         STD_VIDEO_H264_SCALING_LIST_4X4_NUM_ELEMENTS
         * sizeof (**pps->scaling_lists_4x4));
   }
 
   for (i = 0; i < STD_VIDEO_H264_SCALING_LIST_8X8_NUM_LISTS; i++) {
-    memcpy (vkscaling_lists->ScalingList8x8[i], pps->scaling_lists_8x8[i],
+    memcpy (std_pps->scaling_lists.ScalingList8x8[i], pps->scaling_lists_8x8[i],
         STD_VIDEO_H264_SCALING_LIST_8X8_NUM_ELEMENTS
         * sizeof (**pps->scaling_lists_8x8));
   }
 
-  *std_pps = (StdVideoH264PictureParameterSet) {
+  std_pps->pps = (StdVideoH264PictureParameterSet) {
     .flags = {
       .transform_8x8_mode_flag = pps->transform_8x8_mode_flag,
       .redundant_pic_cnt_present_flag = pps->redundant_pic_cnt_present_flag,
@@ -890,7 +902,7 @@ _fill_pps (const GstH264PPS * pps, StdVideoH264PictureParameterSet * std_pps,
     .chroma_qp_index_offset = pps->chroma_qp_index_offset,
     .second_chroma_qp_index_offset =
         (int8_t) pps->second_chroma_qp_index_offset,
-    .pScalingLists = vkscaling_lists,
+    .pScalingLists = &std_pps->scaling_lists,
   };
   /* *INDENT-ON* */
 
@@ -901,24 +913,16 @@ static GstFlowReturn
 _update_parameters (GstVulkanH264Decoder * self, const GstH264SPS * sps,
     const GstH264PPS * pps)
 {
-  /* SPS */
-  StdVideoH264SequenceParameterSet std_sps;
-  StdVideoH264HrdParameters hrd;
-  StdVideoH264SequenceParameterSetVui vui;
-  StdVideoH264ScalingLists sps_scaling_lists;
-
-  /* PPS */
-  StdVideoH264PictureParameterSet std_pps;
-  StdVideoH264ScalingLists pps_scaling_lists;
+  gboolean update = FALSE;
 
   VkVideoDecodeH264SessionParametersAddInfoKHR params = {
     .sType =
         VK_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_ADD_INFO_KHR,
     /* .pNext =  */
     .stdSPSCount = 1,
-    .pStdSPSs = &std_sps,
+    .pStdSPSs = &self->std_sps.sps,
     .stdPPSCount = 1,
-    .pStdPPSs = &std_pps,
+    .pStdPPSs = &self->std_pps.pps,
   };
   VkVideoDecodeH264SessionParametersCreateInfoKHR info = {
     .sType =
@@ -930,9 +934,18 @@ _update_parameters (GstVulkanH264Decoder * self, const GstH264SPS * sps,
   };
 
   GError *error = NULL;
+  if (sps) {
+    _fill_sps (sps, &self->std_sps);
+    update = TRUE;
+  }
 
-  _fill_sps (sps, &std_sps, &hrd, &vui, &sps_scaling_lists);
-  _fill_pps (pps, &std_pps, &pps_scaling_lists);
+  if (pps) {
+    _fill_pps (pps, &self->std_pps);
+    update = TRUE;
+  }
+
+  if (!update)
+    return GST_FLOW_OK;
 
   if (!gst_vulkan_decoder_update_video_session_parameters (self->decoder,
           &(GstVulkanDecoderParameters) {
@@ -988,7 +1001,7 @@ _fill_h264_pic (const GstH264Picture * picture, const GstH264Slice * slice,
 }
 
 static gint32
-_find_next_slot_idx (GArray * dpb)
+_find_next_slot_idx (GstH264Picture * picture, GArray * dpb)
 {
   gint32 i;
   guint len;
@@ -1001,12 +1014,15 @@ _find_next_slot_idx (GArray * dpb)
   for (i = 0; i < len; i++) {
     GstH264Picture *pic = g_array_index (dpb, GstH264Picture *, i);
     GstVulkanH264Picture *h264_pic = gst_h264_picture_get_user_data (pic);
+    if (pic->nonexisting || pic->second_field)
+      continue;
     arr[h264_pic->slot_idx] = pic;
   }
 
   /* let's return the smallest available / not ref index */
   for (i = 0; i < len; i++) {
-    if (!arr[i])
+    if (!arr[i]
+        || (picture->second_field && picture->other_field == arr[i]))
       return i;
   }
 
@@ -1021,16 +1037,14 @@ _fill_h264_slot (GstH264Picture * picture,
   /* *INDENT-OFF* */
   *stdh264_ref = (StdVideoDecodeH264ReferenceInfo) {
     .flags = {
-      .top_field_flag =
-          (picture->field == GST_H264_PICTURE_FIELD_TOP_FIELD),
-      .bottom_field_flag =
-          (picture->field == GST_H264_PICTURE_FIELD_BOTTOM_FIELD),
+      .top_field_flag = 0,
+      .bottom_field_flag = 0,
       .is_non_existing = picture->nonexisting,
       .used_for_long_term_reference =
           GST_H264_PICTURE_IS_LONG_TERM_REF (picture),
     },
     .FrameNum = GST_H264_PICTURE_IS_LONG_TERM_REF (picture) ?
-        picture->long_term_pic_num : picture->pic_num,
+        picture->long_term_pic_num : picture->frame_num,
     /* .reserved = */
     /* .PicOrderCnt = */
   };
@@ -1042,15 +1056,19 @@ _fill_h264_slot (GstH264Picture * picture,
       stdh264_ref->PicOrderCnt[1] = picture->bottom_field_order_cnt;
       break;
     case GST_H264_PICTURE_FIELD_BOTTOM_FIELD:
-      if (picture->other_field)
+      stdh264_ref->flags.bottom_field_flag = 1;
+      if (picture->other_field) {
         stdh264_ref->PicOrderCnt[0] = picture->other_field->top_field_order_cnt;
-      else
+        stdh264_ref->flags.top_field_flag = 1;
+      } else
         stdh264_ref->PicOrderCnt[0] = 0;
       stdh264_ref->PicOrderCnt[1] = picture->bottom_field_order_cnt;
       break;
     case GST_H264_PICTURE_FIELD_TOP_FIELD:
       stdh264_ref->PicOrderCnt[0] = picture->top_field_order_cnt;
+      stdh264_ref->flags.top_field_flag = 1;
       if (picture->other_field) {
+        stdh264_ref->flags.bottom_field_flag = 1;
         stdh264_ref->PicOrderCnt[1] =
             picture->other_field->bottom_field_order_cnt;
       } else {
@@ -1095,8 +1113,8 @@ _fill_ref_slot (GstVulkanH264Decoder * self, GstH264Picture * picture,
       .width = self->coded_width,
       .height = self->coded_height,
     },
-    .baseArrayLayer = self->decoder->layered_dpb ? pic->slot_idx : 0,
-    .imageViewBinding = pic->base.img_view_ref->view,
+   .baseArrayLayer = (self->decoder->layered_dpb && self->decoder->dedicated_dpb) ? pic->slot_idx : 0,
+   .imageViewBinding = pic->base.img_view_ref->view,
   };
 
   *slot = (VkVideoReferenceSlotInfoKHR) {
@@ -1110,8 +1128,8 @@ _fill_ref_slot (GstVulkanH264Decoder * self, GstH264Picture * picture,
   if (ref)
     *ref = &pic->base;
 
-  GST_TRACE_OBJECT (self, "0x%lx slotIndex: %d", res->imageViewBinding,
-      slot->slotIndex);
+  GST_TRACE_OBJECT (self, "0x%" G_GUINT64_FORMAT "x slotIndex: %d",
+      res->imageViewBinding, slot->slotIndex);
 }
 
 static GstFlowReturn
@@ -1128,12 +1146,11 @@ gst_vulkan_h264_decoder_start_picture (GstH264Decoder * decoder,
 
   GST_TRACE_OBJECT (self, "Start picture");
 
-  if (self->need_params_update) {
-    ret = _update_parameters (self, sps, pps);
-    if (ret != GST_FLOW_OK)
-      return ret;
-    self->need_params_update = FALSE;
-  }
+  ret = _update_parameters (self, self->need_sps_update ? sps : NULL, pps);
+  if (ret != GST_FLOW_OK)
+    return ret;
+  if (self->need_sps_update)
+    self->need_sps_update = FALSE;
 
   refs = gst_h264_dpb_get_pictures_all (dpb);
 
@@ -1141,39 +1158,43 @@ gst_vulkan_h264_decoder_start_picture (GstH264Decoder * decoder,
   g_assert (pic);
 
   _fill_h264_pic (picture, slice, &pic->vk_h264pic, &pic->std_h264pic);
-  pic->slot_idx = _find_next_slot_idx (refs);
+  /* Search for the next slot index in all available refs */
+  pic->slot_idx = _find_next_slot_idx (picture, refs);
+
+  g_array_unref (refs);
+  /* Create a new refs array to retrieve short-term and long term refs */
+  refs = g_array_sized_new (FALSE, TRUE, sizeof (GstH264Picture *), 16);
+  g_array_set_clear_func (refs, (GDestroyNotify) gst_clear_h264_picture);
 
   /* fill main slot */
   _fill_ref_slot (self, picture, &pic->base.slot,
       &pic->base.pic_res, &pic->vk_slot, &pic->std_ref, NULL);
 
-  j = 0;
-
+  gst_h264_dpb_get_pictures_short_term_ref (dpb, FALSE, FALSE, refs);
   /* Fill in short-term references */
+  j = 0;
   for (i = 0; i < refs->len; i++) {
     GstH264Picture *picture = g_array_index (refs, GstH264Picture *, i);
-    /* XXX: shall we add second fields? */
-    if (GST_H264_PICTURE_IS_SHORT_TERM_REF (picture)) {
-      _fill_ref_slot (self, picture, &pic->base.slots[j],
-          &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
-          &pic->base.refs[j]);
-      j++;
-    }
-    /* FIXME: do it in O(n) rather O(2n) */
+
+    _fill_ref_slot (self, picture, &pic->base.slots[j],
+        &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
+        &pic->base.refs[j]);
+    j++;
   }
 
+  g_array_set_size (refs, 0);
+  gst_h264_dpb_get_pictures_long_term_ref (dpb, FALSE, refs);
   /* Fill in long-term refs */
   for (i = 0; i < refs->len; i++) {
     GstH264Picture *picture = g_array_index (refs, GstH264Picture *, i);
-    /* XXX: shall we add non existing and second fields? */
-    if (GST_H264_PICTURE_IS_LONG_TERM_REF (picture)) {
-      _fill_ref_slot (self, picture, &pic->base.slots[j],
-          &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
-          &pic->base.refs[j]);
-      j++;
-    }
-  }
 
+    _fill_ref_slot (self, picture, &pic->base.slots[j],
+        &pic->base.pics_res[j], &pic->vk_slots[j], &pic->std_refs[j],
+        &pic->base.refs[j]);
+    j++;
+
+  }
+  g_array_set_size (refs, 0);
   g_array_unref (refs);
 
   /* *INDENT-OFF* */
@@ -1261,6 +1282,9 @@ gst_vulkan_h264_decoder_end_picture (GstH264Decoder * decoder,
     return GST_FLOW_ERROR;
   }
 
+  /* do not send the same slice data again */
+  g_clear_pointer (&pic->base.slice_offs, g_array_unref);
+
   return GST_FLOW_OK;
 }
 
@@ -1286,8 +1310,6 @@ gst_vulkan_h264_decoder_output_picture (GstH264Decoder * decoder,
   }
 
   gst_h264_picture_unref (picture);
-
-  reset_pipeline_stage_mask (frame->output_buffer);
 
   return gst_video_decoder_finish_frame (vdec, frame);
 }

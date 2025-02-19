@@ -191,10 +191,11 @@ gst_vulkan_device_constructed (GObject * object)
     VK_KHR_VIDEO_DECODE_QUEUE_EXTENSION_NAME,
     VK_KHR_VIDEO_DECODE_H264_EXTENSION_NAME,
     VK_KHR_VIDEO_DECODE_H265_EXTENSION_NAME,
-#ifdef VK_ENABLE_BETA_EXTENSIONS
     VK_KHR_VIDEO_ENCODE_QUEUE_EXTENSION_NAME,
-    VK_EXT_VIDEO_ENCODE_H264_EXTENSION_NAME,
-    VK_EXT_VIDEO_ENCODE_H265_EXTENSION_NAME,
+    VK_KHR_VIDEO_ENCODE_H264_EXTENSION_NAME,
+    VK_KHR_VIDEO_ENCODE_H265_EXTENSION_NAME,
+#if defined(VK_KHR_video_maintenance1)
+    VK_KHR_VIDEO_MAINTENANCE_1_EXTENSION_NAME,
 #endif
 #endif
   };
@@ -375,9 +376,7 @@ gst_vulkan_device_choose_queues (GstVulkanDevice * device)
   int graph_index, comp_index, tx_index;
 #if GST_VULKAN_HAVE_VIDEO_EXTENSIONS
   int dec_index = -1;
-#ifdef VK_ENABLE_BETA_EXTENSIONS
   int enc_index = -1;
-#endif
 #endif
 
   n_queue_families = device->physical_device->n_queue_families;
@@ -401,11 +400,9 @@ gst_vulkan_device_choose_queues (GstVulkanDevice * device)
   dec_index = _pick_queue_family (queue_family_props, n_queue_families,
       VK_QUEUE_VIDEO_DECODE_BIT_KHR, family_scores);
   array = _append_queue_create_info (array, dec_index, queue_family_props);
-#ifdef VK_ENABLE_BETA_EXTENSIONS
   enc_index = _pick_queue_family (queue_family_props, n_queue_families,
       VK_QUEUE_VIDEO_ENCODE_BIT_KHR, family_scores);
   array = _append_queue_create_info (array, enc_index, queue_family_props);
-#endif
 #endif
 
   g_free (family_scores);
@@ -551,8 +548,9 @@ gst_vulkan_device_get_queue (GstVulkanDevice * device, guint32 queue_family,
 /**
  * gst_vulkan_device_foreach_queue:
  * @device: a #GstVulkanDevice
- * @func: (scope call): a #GstVulkanDeviceForEachQueueFunc to run for each #GstVulkanQueue
- * @user_data: (closure func): user data to pass to each call of @func
+ * @func: (scope call) (closure user_data): a #GstVulkanDeviceForEachQueueFunc
+ *    to run for each #GstVulkanQueue
+ * @user_data: user data to pass to each call of @func
  *
  * Iterate over each queue family available on #GstVulkanDevice
  *
@@ -692,7 +690,7 @@ gst_vulkan_device_get_physical_device (GstVulkanDevice * device)
 /**
  * gst_context_set_vulkan_device:
  * @context: a #GstContext
- * @device: a #GstVulkanDevice
+ * @device: (transfer none) (nullable): a #GstVulkanDevice
  *
  * Sets @device on @context
  *
@@ -719,7 +717,7 @@ gst_context_set_vulkan_device (GstContext * context, GstVulkanDevice * device)
 /**
  * gst_context_get_vulkan_device:
  * @context: a #GstContext
- * @device: resulting #GstVulkanDevice
+ * @device: (out) (optional) (nullable) (transfer full): resulting #GstVulkanDevice
  *
  * Returns: Whether @device was in @context
  *
@@ -1097,12 +1095,12 @@ _choose_queue (GstVulkanDevice * device, GstVulkanQueue * queue,
 /**
  * gst_vulkan_device_select_queue
  * @device: a #GstVulkanDevice
- * @expected_flags:  a VkQueueFlagBits
+ * @expected_flags: a VkQueueFlagBits
  *
  * Select a compatible queue from the @device supporting the @expected_flags.
  *
- * Returns: (transfer full): a #GstVulkanQueue for @queue matching the
- *                           @expected_flags
+ * Returns: (transfer full) (nullable): a #GstVulkanQueue for @queue matching
+ *                                      the @expected_flags
  *
  * Since: 1.24
  */

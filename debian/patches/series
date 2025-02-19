@@ -1,4 +1,4 @@
 02_opencv-data-path.patch
 pcfile-requires-plugins-good
 Skip-failing-tests.patch
-0001-fix-build-without-wayland.patch
+0002-test-latomic.patch

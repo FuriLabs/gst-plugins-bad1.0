@@ -1,3 +1,16 @@
+gst-plugins-bad1.0 (1.25.90-1) experimental; urgency=medium
+
+  * d/patches: disable libs_vkwindow elements_vkdeviceprovider
+  * Revert "d/install: remove libweebrtcdsp"
+  * Revert "d/control: libwebrtc-audio-processing-dev removed"
+  * Revert "d/rules: webrtcdsp disabled" (Closes: #1094638)
+  * d/: disable webrtcdsp for hurd
+  * New upstream version 1.25.90
+  * d/control: update dependency version to 1.25.90
+  * d/control: remove Build-Depends gstreamer1.0-plugins-good
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Mon, 24 Feb 2025 16:31:36 +0100
+
 gst-plugins-bad1.0 (1.25.50-1) experimental; urgency=medium
 
   * New upstream version 1.25.50

@@ -628,6 +628,8 @@ gst_base_ts_mux_create_or_update_stream (GstBaseTsMux * mux,
     st = TSMUX_ST_VIDEO_H264;
   } else if (strcmp (mt, "video/x-h265") == 0) {
     st = TSMUX_ST_VIDEO_HEVC;
+  } else if (strcmp (mt, "video/x-h266") == 0) {
+    st = TSMUX_ST_VIDEO_VVC;
   } else if (strcmp (mt, "video/x-vp9") == 0) {
     if (mux->enable_custom_mappings) {
       st = TSMUX_ST_PS_VP9;
@@ -1782,8 +1784,10 @@ gst_base_ts_mux_request_new_pad (GstElement * element, GstPadTemplate * templ,
     }
     /* Make sure we don't use reserved PID.
      * FIXME : This should be extended to other variants (ex: ATSC) reserved PID */
-    if (pid < TSMUX_START_ES_PID)
+    if (pid < TSMUX_START_ES_PID) {
+      g_mutex_unlock (&mux->lock);
       goto invalid_stream_pid;
+    }
   } else {
     do {
       pid = tsmux_get_new_pid (mux->tsmux);
@@ -1816,7 +1820,7 @@ stream_exists:
 invalid_stream_pid:
   {
     GST_ELEMENT_ERROR (element, STREAM, MUX,
-        ("Invalid Elementary stream PID (0x%02u < 0x40)", pid), (NULL));
+        ("Invalid Elementary stream PID (0x%02x < 0x40)", pid), (NULL));
     return NULL;
   }
 }
@@ -2861,6 +2865,8 @@ static void
 gst_base_ts_mux_constructed (GObject * object)
 {
   GstBaseTsMux *mux = GST_BASE_TS_MUX (object);
+
+  GST_CALL_PARENT (G_OBJECT_CLASS, constructed, (object));
 
   /* initial state */
   g_mutex_lock (&mux->lock);

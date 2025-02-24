@@ -8915,6 +8915,112 @@
                 },
                 "rank": "none"
             },
+            "h264ccextractor": {
+                "author": "Seungha Yang <seungha@centricular.com>",
+                "description": "Extract GstVideoCaptionMeta from input H.264 stream",
+                "hierarchy": [
+                    "GstH264CCExtractor",
+                    "GstH264Decoder",
+                    "GstVideoDecoder",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "klass": "Codec/Video/Filter",
+                "pad-templates": {
+                    "sink": {
+                        "caps": "video/x-h264:\n      alignment: au\n         parsed: true\n",
+                        "direction": "sink",
+                        "presence": "always"
+                    },
+                    "src": {
+                        "caps": "closedcaption/x-cea-608:\n         format: { raw, s334-1a }\nclosedcaption/x-cea-708:\n         format: { cc_data, cdp }\n",
+                        "direction": "src",
+                        "presence": "always"
+                    }
+                },
+                "rank": "none"
+            },
+            "h264ccinserter": {
+                "author": "Seungha Yang <seungha@centricular.com>",
+                "description": "Insert closed caption data to H.264 streams",
+                "hierarchy": [
+                    "GstH264CCInserter",
+                    "GstCodecCCInserter",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "klass": "Codec/Video/Filter",
+                "pad-templates": {
+                    "sink": {
+                        "caps": "video/x-h264:\n      alignment: au\n",
+                        "direction": "sink",
+                        "presence": "always"
+                    },
+                    "src": {
+                        "caps": "video/x-h264:\n      alignment: au\n",
+                        "direction": "src",
+                        "presence": "always"
+                    }
+                },
+                "rank": "none"
+            },
+            "h265ccextractor": {
+                "author": "Seungha Yang <seungha@centricular.com>",
+                "description": "Extract GstVideoCaptionMeta from input H.265 stream",
+                "hierarchy": [
+                    "GstH265CCExtractor",
+                    "GstH265Decoder",
+                    "GstVideoDecoder",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "klass": "Codec/Video/Filter",
+                "pad-templates": {
+                    "sink": {
+                        "caps": "video/x-h265:\n      alignment: au\n         parsed: true\n",
+                        "direction": "sink",
+                        "presence": "always"
+                    },
+                    "src": {
+                        "caps": "closedcaption/x-cea-608:\n         format: { raw, s334-1a }\nclosedcaption/x-cea-708:\n         format: { cc_data, cdp }\n",
+                        "direction": "src",
+                        "presence": "always"
+                    }
+                },
+                "rank": "none"
+            },
+            "h265ccinserter": {
+                "author": "Seungha Yang <seungha@centricular.com>",
+                "description": "Insert closed caption data to H.265 streams",
+                "hierarchy": [
+                    "GstH265CCInserter",
+                    "GstCodecCCInserter",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "klass": "Codec/Video/Filter",
+                "pad-templates": {
+                    "sink": {
+                        "caps": "video/x-h265:\n      alignment: au\n",
+                        "direction": "sink",
+                        "presence": "always"
+                    },
+                    "src": {
+                        "caps": "video/x-h265:\n      alignment: au\n",
+                        "direction": "src",
+                        "presence": "always"
+                    }
+                },
+                "rank": "none"
+            },
             "line21decoder": {
                 "author": "Edward Hervey <edward@centricular.com>",
                 "description": "Extract line21 CC from SD video streams",
@@ -9099,6 +9205,57 @@
                         "value": "3"
                     }
                 ]
+            },
+            "GstCodecCCInsertMetaOrder": {
+                "kind": "enum",
+                "values": [
+                    {
+                        "desc": "Decode",
+                        "name": "decode",
+                        "value": "0"
+                    },
+                    {
+                        "desc": "Display",
+                        "name": "display",
+                        "value": "1"
+                    }
+                ]
+            },
+            "GstCodecCCInserter": {
+                "hierarchy": [
+                    "GstCodecCCInserter",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "kind": "object",
+                "properties": {
+                    "caption-meta-order": {
+                        "blurb": "Order of caption metas attached on buffers. In case of \"display\" order, inserter will reorder captions to decoding order",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "decode (0)",
+                        "mutable": "ready",
+                        "readable": true,
+                        "type": "GstCodecCCInsertMetaOrder",
+                        "writable": true
+                    },
+                    "remove-caption-meta": {
+                        "blurb": "Remove caption meta from outgoing video buffers",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "false",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "gboolean",
+                        "writable": true
+                    }
+                }
             },
             "GstLine21DecoderMode": {
                 "kind": "enum",
@@ -18765,7 +18922,7 @@
                 "long-name": "Video CODEC Test Sink",
                 "pad-templates": {
                     "sink": {
-                        "caps": "video/x-raw:\n         format: { Y444_12LE, I422_12LE, I420_12LE, Y444_10LE, I422_10LE, I420_10LE, Y444, Y42B, I420, NV12, GRAY8, GRAY10_LE16, GRAY10_LE32 }\n",
+                        "caps": "video/x-raw:\n         format: { Y444_12LE, I422_12LE, I420_12LE, Y444_10LE, I422_10LE, I420_10LE, Y444, Y42B, I420, NV12, GRAY8, GRAY10_LE16, GRAY10_LE32, GBR_10LE }\n",
                         "direction": "sink",
                         "presence": "always"
                     }
@@ -41441,7 +41598,7 @@
                 "long-name": "KMS video sink",
                 "pad-templates": {
                     "sink": {
-                        "caps": "video/x-raw:\n         format: { BGRA, RGBA, P016_LE, P010_10LE, NV24, BGRx, RGBx, RGB, BGR, Y42B, NV61, NV16, UYVY, YVYU, YUY2, I420, YV12, NV21, NV12, RGB16, BGR16 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n\nvideo/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw:\n         format: { BGRA, RGBA, P016_LE, NV12_10LE40, P010_10LE, NV24, BGRx, RGBx, RGB, BGR, Y42B, NV61, NV16, UYVY, YVYU, YUY2, I420, YV12, NV21, NV12, RGB16, BGR16 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n\nvideo/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "sink",
                         "presence": "always"
                     }
@@ -225381,7 +225538,7 @@
                 "long-name": "MPEG Transport Stream Muxer",
                 "pad-templates": {
                     "sink_%%d": {
-                        "caps": "video/mpeg:\n         parsed: true\n    mpegversion: { (int)1, (int)2, (int)4 }\n   systemstream: false\nvideo/x-dirac:\nimage/x-jpc:\n      alignment: frame\nvideo/x-av1:\n  stream-format: obu-stream\n      alignment: frame\nvideo/x-h264:\n  stream-format: byte-stream\n      alignment: { (string)au, (string)nal }\nvideo/x-h265:\n  stream-format: byte-stream\n      alignment: { (string)au, (string)nal }\naudio/mpeg:\n         parsed: true\n    mpegversion: 1\naudio/mpeg:\n         framed: true\n    mpegversion: { (int)2, (int)4 }\n  stream-format: { (string)adts, (string)raw }\naudio/x-lpcm:\n          width: { (int)16, (int)20, (int)24 }\n           rate: { (int)48000, (int)96000 }\n       channels: [ 1, 8 ]\n  dynamic_range: [ 0, 255 ]\n       emphasis: { (boolean)false, (boolean)true }\n           mute: { (boolean)false, (boolean)true }\naudio/x-ac3:\n         framed: true\naudio/x-dts:\n         framed: true\naudio/x-opus:\n       channels: [ 1, 255 ]\naudio/x-smpte-302m:\nsubpicture/x-dvb:\napplication/x-teletext:\nmeta/x-klv:\n         parsed: true\nmeta/x-id3:\n         parsed: true\nmeta/x-st-2038:\n      alignment: line\nvideo/x-vp9:\nimage/x-jpc:\n      alignment: frame\n        profile: [ 0, 49151 ]\nimage/x-jxsc:\n      alignment: frame\n       sampling: { (string)YCbCr-4:2:2, (string)YCbCr-4:4:4 }\n interlace-mode: progressive\nimage/x-jxsc:\n      alignment: frame\n       sampling: { (string)YCbCr-4:2:2, (string)YCbCr-4:4:4 }\n interlace-mode: fields\n    field-order: { (string)top-field-first, (string)bottom-field-first }\n",
+                        "caps": "video/mpeg:\n         parsed: true\n    mpegversion: { (int)1, (int)2, (int)4 }\n   systemstream: false\nvideo/x-dirac:\nimage/x-jpc:\n      alignment: frame\nvideo/x-av1:\n  stream-format: obu-stream\n      alignment: frame\nvideo/x-h264:\n  stream-format: byte-stream\n      alignment: { (string)au, (string)nal }\nvideo/x-h265:\n  stream-format: byte-stream\n      alignment: { (string)au, (string)nal }\nvideo/x-h266:\n  stream-format: byte-stream\n      alignment: { (string)au, (string)nal }\naudio/mpeg:\n         parsed: true\n    mpegversion: 1\naudio/mpeg:\n         framed: true\n    mpegversion: { (int)2, (int)4 }\n  stream-format: { (string)adts, (string)raw }\naudio/x-lpcm:\n          width: { (int)16, (int)20, (int)24 }\n           rate: { (int)48000, (int)96000 }\n       channels: [ 1, 8 ]\n  dynamic_range: [ 0, 255 ]\n       emphasis: { (boolean)false, (boolean)true }\n           mute: { (boolean)false, (boolean)true }\naudio/x-ac3:\n         framed: true\naudio/x-dts:\n         framed: true\naudio/x-opus:\n       channels: [ 1, 255 ]\naudio/x-smpte-302m:\nsubpicture/x-dvb:\napplication/x-teletext:\nmeta/x-klv:\n         parsed: true\nmeta/x-id3:\n         parsed: true\nmeta/x-st-2038:\n      alignment: line\nvideo/x-vp9:\nimage/x-jpc:\n      alignment: frame\n        profile: [ 0, 49151 ]\nimage/x-jxsc:\n      alignment: frame\n       sampling: { (string)YCbCr-4:2:2, (string)YCbCr-4:4:4 }\n interlace-mode: progressive\nimage/x-jxsc:\n      alignment: frame\n       sampling: { (string)YCbCr-4:2:2, (string)YCbCr-4:4:4 }\n interlace-mode: fields\n    field-order: { (string)top-field-first, (string)bottom-field-first }\n",
                         "direction": "sink",
                         "presence": "request",
                         "type": "GstBaseTsMuxPad"
@@ -234274,6 +234431,17 @@
                         "mutable": "null",
                         "readable": true,
                         "type": "GstNvEncoderSeiInsertMode",
+                        "writable": true
+                    },
+                    "extern-cuda-bufferpool": {
+                        "blurb": "GstCudaBufferPool prepared by application",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "mutable": "ready",
+                        "readable": true,
+                        "type": "GstObject",
                         "writable": true
                     }
                 }
@@ -249665,7 +249833,7 @@
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { NV12_10LE40, P010_10LE, NV12_10LE40_4L4, MT2110T, MT2110R, NV12, YUY2, NV12_4L4, NV12_32L32, NV12_16L32S, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { MT2110R, MT2110T, NV12_10LE40_4L4, NV12_10LE40, P010_10LE, YUY2, NV12_16L32S, NV12_32L32, NV12_4L4, NV12, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "src",
                         "presence": "always"
                     }
@@ -249718,7 +249886,7 @@
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { NV12_10LE40, P010_10LE, NV12_10LE40_4L4, MT2110T, MT2110R, NV12, YUY2, NV12_4L4, NV12_32L32, NV12_16L32S, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { MT2110R, MT2110T, NV12_10LE40_4L4, NV12_10LE40, P010_10LE, YUY2, NV12_16L32S, NV12_32L32, NV12_4L4, NV12, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "src",
                         "presence": "always"
                     }
@@ -249771,7 +249939,7 @@
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { NV12_10LE40, P010_10LE, NV12_10LE40_4L4, MT2110T, MT2110R, NV12, YUY2, NV12_4L4, NV12_32L32, NV12_16L32S, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { MT2110R, MT2110T, NV12_10LE40_4L4, NV12_10LE40, P010_10LE, YUY2, NV12_16L32S, NV12_32L32, NV12_4L4, NV12, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "src",
                         "presence": "always"
                     }
@@ -249824,7 +249992,7 @@
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { NV12_10LE40, P010_10LE, NV12_10LE40_4L4, MT2110T, MT2110R, NV12, YUY2, NV12_4L4, NV12_32L32, NV12_16L32S, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { MT2110R, MT2110T, NV12_10LE40_4L4, NV12_10LE40, P010_10LE, YUY2, NV12_16L32S, NV12_32L32, NV12_4L4, NV12, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "src",
                         "presence": "always"
                     }
@@ -249907,7 +250075,7 @@
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { NV12_10LE40, P010_10LE, NV12_10LE40_4L4, MT2110T, MT2110R, NV12, YUY2, NV12_4L4, NV12_32L32, NV12_16L32S, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { MT2110R, MT2110T, NV12_10LE40_4L4, NV12_10LE40, P010_10LE, YUY2, NV12_16L32S, NV12_32L32, NV12_4L4, NV12, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "src",
                         "presence": "always"
                     }
@@ -249990,7 +250158,7 @@
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { NV12_10LE40, P010_10LE, NV12_10LE40_4L4, MT2110T, MT2110R, NV12, YUY2, NV12_4L4, NV12_32L32, NV12_16L32S, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
+                        "caps": "video/x-raw(memory:DMABuf):\n         format: DMA_DRM\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\nvideo/x-raw:\n         format: { MT2110R, MT2110T, NV12_10LE40_4L4, NV12_10LE40, P010_10LE, YUY2, NV12_16L32S, NV12_32L32, NV12_4L4, NV12, I420 }\n          width: [ 1, 2147483647 ]\n         height: [ 1, 2147483647 ]\n      framerate: [ 0/1, 2147483647/1 ]\n",
                         "direction": "src",
                         "presence": "always"
                     }

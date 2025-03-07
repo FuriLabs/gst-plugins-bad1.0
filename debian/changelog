@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.25.90-2) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Fri, 07 Mar 2025 16:26:40 +0100
+
 gst-plugins-bad1.0 (1.25.90-1) experimental; urgency=medium
 
   * d/patches: disable libs_vkwindow elements_vkdeviceprovider

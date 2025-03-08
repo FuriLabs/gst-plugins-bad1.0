@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.25.90-3) unstable; urgency=high
+
+  * Team upload
+  * Restore Build-Depends gstreamer1.0-plugins-good for build tests
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 08 Mar 2025 09:59:26 -0500
+
 gst-plugins-bad1.0 (1.25.90-2) unstable; urgency=medium
 
   * Upload to unstable

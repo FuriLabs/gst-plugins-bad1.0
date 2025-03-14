@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.25.90-3ubuntu1) plucky; urgency=medium
+gst-plugins-bad1.0 (1.26.0-1ubuntu1) UNRELEASED; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:
     - Don't build wpewebkit plugins
@@ -17,92 +17,11 @@ gst-plugins-bad1.0 (1.25.90-3ubuntu1) plucky; urgency=medium
 
  -- Jeremy Bícha <jbicha@ubuntu.com>  Sun, 09 Mar 2025 11:19:57 -0400
 
-gst-plugins-bad1.0 (1.25.90-3) unstable; urgency=high
+gst-plugins-bad1.0 (1.26.0-1) unstable; urgency=medium
 
-  * Team upload
-  * Restore Build-Depends gstreamer1.0-plugins-good for build tests
-
- -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 08 Mar 2025 09:59:26 -0500
-
-gst-plugins-bad1.0 (1.25.90-2) unstable; urgency=medium
-
-  * Upload to unstable
-
- -- Marc Leeman <marc.leeman@gmail.com>  Fri, 07 Mar 2025 16:26:40 +0100
-
-gst-plugins-bad1.0 (1.25.90-1) experimental; urgency=medium
-
-  * d/patches: disable libs_vkwindow elements_vkdeviceprovider
-  * Revert "d/install: remove libweebrtcdsp"
-  * Revert "d/control: libwebrtc-audio-processing-dev removed"
-  * Revert "d/rules: webrtcdsp disabled" (Closes: #1094638)
-  * d/: disable webrtcdsp for hurd
-  * New upstream version 1.25.90
-  * d/control: update dependency version to 1.25.90
-  * d/control: remove Build-Depends gstreamer1.0-plugins-good
-
- -- Marc Leeman <marc.leeman@gmail.com>  Mon, 24 Feb 2025 16:31:36 +0100
-
-gst-plugins-bad1.0 (1.25.50-1ubuntu4) plucky; urgency=medium
-
-  * Rebuild against latest openh264
-
- -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 03 Mar 2025 08:03:37 -0500
-
-gst-plugins-bad1.0 (1.25.50-1ubuntu3) plucky; urgency=medium
-
-  * Rebuild against latest onnxruntime
-
- -- Jeremy Bícha <jbicha@ubuntu.com>  Sat, 22 Feb 2025 02:18:09 -0500
-
-gst-plugins-bad1.0 (1.25.50-1ubuntu2) plucky; urgency=medium
-
-  * No-change rebuild for opencv 4.10.0.
-
- -- Sudip Mukherjee <sudipm.mukherjee@gmail.com>  Wed, 19 Feb 2025 08:42:12 +0000
-
-gst-plugins-bad1.0 (1.25.50-1ubuntu1) plucky; urgency=medium
-
-  * Resynchronize with Debian. Remaining changes:
-    - Don't build wpewebkit plugins
-    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
-      moved to -good.
-    - Have gstreamer-plugins-bad-1.0.pc Require gstreamer-plugins-good-1.0 -
-      the package we've moved the referenced plugins to. This maintains
-      compatibility with upstream software and other distributions.
-    - Don't build the opencv binary packages on i386, avoiding a large tree
-      of numeric-related dependencies for a binary package it's not required
-      to support.
-    - d/control, d/gstreamer1.0-plugins-bad.install, d/rules:
-      + Don't require these Build-Depends on i386:
-        - libltc-dev, libfreeaptx-dev, libqrencode-dev, libzxing-dev, glslc,
-          liblrdf0-dev, libneon27-dev
-
- -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 14 Feb 2025 19:06:37 +0100
-
-gst-plugins-bad1.0 (1.25.50-1) experimental; urgency=medium
-
-  * New upstream version 1.25.50
-
- -- Marc Leeman <marc.leeman@gmail.com>  Tue, 11 Feb 2025 13:01:43 +0100
-
-gst-plugins-bad1.0 (1.25.1-3) experimental; urgency=medium
-
-  * d/patches: test for latomic generic
-  * d/rules: gstcuda missing on arm
-
- -- Marc Leeman <marc.leeman@gmail.com>  Thu, 06 Feb 2025 15:00:14 +0100
-
-gst-plugins-bad1.0 (1.25.1-2) experimental; urgency=medium
-
-  * d/control: bump GStreamer version dependency
-
- -- Marc Leeman <marc.leeman@gmail.com>  Tue, 21 Jan 2025 12:51:15 +0100
-
-gst-plugins-bad1.0 (1.25.1-1) experimental; urgency=medium
-
-  * d/gbp.conf: adjust for experimental
-  * New upstream version 1.25.1
+  [ Marc Leeman ]
+  * Revert "d/watch: pin on 1.24.x"
+  * New upstream version 1.26.0
   * d/patches: remove 0001-fix-build-without-wayland.patch
   * d/patches: refresh Skip-failing-tests.patch
   * d/rules: cuda-nvmm not available in debian yet
@@ -112,8 +31,27 @@ gst-plugins-bad1.0 (1.25.1-1) experimental; urgency=medium
   * d/rules: nvdswrapper not in debian yet
   * d/rules: svtjpegxs not in debian yet
   * d/install: install libgsttensordecoders.so
+  * d/control: bump GStreamer version dependency
+  * d/patches: test for latomic generic
+  * d/rules: gstcuda missing on arm
+  * d/patches: disable libs_vkwindow elements_vkdeviceprovider
+  * Revert "d/install: remove libweebrtcdsp"
+  * d/: disable webrtcdsp for hurd
+  * d/control: update dependency version to 1.25.90
 
- -- Marc Leeman <marc.leeman@gmail.com>  Wed, 15 Jan 2025 14:30:20 +0100
+  [ Jeremy Bícha ]
+  * Mark -good as only needed for build tests
+
+  [ Marc Leeman ]
+  * d/control: update GStreamer dependencies to >= 1.26.0
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 12 Mar 2025 10:50:20 +0100
+
+gst-plugins-bad1.0 (1.24.12-3) unstable; urgency=medium
+
+  * d/: disable webrtcdsp for hurd
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 19 Feb 2025 13:04:59 +0100
 
 gst-plugins-bad1.0 (1.24.12-2ubuntu1) plucky; urgency=medium
 

@@ -1,3 +1,408 @@
+=== release 1.26.0 ===
+
+2025-03-11 20:14:44 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* NEWS:
+	* README.md:
+	* RELEASE:
+	* gst-plugins-bad.doap:
+	* meson.build:
+	  Release 1.26.0
+
+2025-02-21 18:20:06 +0100  Ruben Gonzalez <rgonzalez@fluendo.com>
+
+	* sys/va/gstvacompositor.c:
+	  vacompositor: Add missing GST_VIDEO_CROP_META_API_TYPE
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8537>
+
+2025-03-07 09:54:35 +0100  Carlo Caione <ccaione@baylibre.com>
+
+	* sys/uvcgadget/uvc.c:
+	  uvcgadget: Properly implement GET_INFO control responses
+	  According to the UVC 1.5 specification, section 4.1.2, the GET_INFO request
+	  must return a bitmap indicating supported operations for the control.
+	  Value 0x00 indicates that neither GET nor SET operations are supported.
+	  This patch fixes control handling in the UVC gadget implementation to properly
+	  respond to GET_INFO requests with the correct bitmap, allowing host systems
+	  to properly detect supported control operations (none in this case).
+	  The pipeline I'm using to test this is:
+	  gst-launch-1.0 videotestsrc ! uvcsink v4l2sink::device=/dev/video0
+	  This is the equivalent of [0] but the difference is that we are now returning
+	  0x00 instead of 0x03.
+	  Without this change the host in my case is unable to probe the UVC gadget at
+	  all, automatically disconnecting the device after a few seconds.
+	  Following is the log when the gadget is not working (without this fix):
+	  usb 1-1.2: new high-speed USB device number 73 using xhci_hcd
+	  usb 1-1.2: New USB device found, idVendor=0525, idProduct=a4a2, bcdDevice= 5.15
+	  usb 1-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+	  usb 1-1.2: Product: UVC Gadget
+	  usb 1-1.2: Manufacturer: localhost.localdomain
+	  usb 1-1.2: SerialNumber: 0123456789
+	  usb 1-1.2: Found UVC 1.10 device UVC Gadget (0525:a4a2)
+	  usb 1-1.2: Failed to query (GET_INFO) UVC control 2 on unit 1: -110 (exp. 1).
+	  usb 1-1.2: UVC non compliance - GET_DEF(PROBE) not supported. Enabling workaround.
+	  uvcvideo 1-1.2:1.1: Failed to query (129) UVC probe control : -71 (exp. 34).
+	  uvcvideo 1-1.2:1.1: Failed to initialize the device (-71).
+	  cdc_subset 1-1.2:1.0: probe with driver cdc_subset failed with error -22
+	  cdc_subset 1-1.2:1.1: probe with driver cdc_subset failed with error -22
+	  usb 1-1.2: USB disconnect, device number 73
+	  With the fix the USB device is correctly probed:
+	  usb 1-1.2: new high-speed USB device number 88 using xhci_hcd
+	  usb 1-1.2: New USB device found, idVendor=0525, idProduct=a4a2, bcdDevice= 5.15
+	  usb 1-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+	  usb 1-1.2: Product: UVC Gadget
+	  usb 1-1.2: Manufacturer: localhost.localdomain
+	  usb 1-1.2: SerialNumber: 0123456789
+	  usb 1-1.2: Found UVC 1.10 device UVC Gadget (0525:a4a2)
+	  [0] camera/uvc-gadget@0df9d3ad
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8572>
+
+2025-03-06 10:22:00 +0100  Benjamin Gaignard <benjamin.gaignard@collabora.com>
+
+	* sys/v4l2codecs/gstv4l2decoder.c:
+	  v4l2codecs: Fix caps leak after sorting caps
+	  gst_v4l2_format_sort_caps() create a new caps which need to be
+	  release to avoid leak.
+	  Co-authored-by: Robert Mader <robert.mader@posteo.de>
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8583>
+
+2025-03-04 11:04:56 +0100  Benjamin Gaignard <benjamin.gaignard@collabora.com>
+
+	* sys/v4l2codecs/gstv4l2codecav1dec.c:
+	* sys/v4l2codecs/gstv4l2codech264dec.c:
+	* sys/v4l2codecs/gstv4l2codech265dec.c:
+	* sys/v4l2codecs/gstv4l2codecmpeg2dec.c:
+	* sys/v4l2codecs/gstv4l2codecvp8dec.c:
+	* sys/v4l2codecs/gstv4l2codecvp9dec.c:
+	  v4l2codecs: Release sink allocator when deciding allocation
+	  All decoders have the same design pattern in decide allocation
+	  and forgot to release sink allocator before allocating a new one.
+	  Fixing the memory leak by clearing sink allocator before creating
+	  the new one.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8583>
+
+2025-03-04 11:02:16 +0100  Benjamin Gaignard <benjamin.gaignard@collabora.com>
+
+	* sys/v4l2codecs/gstv4l2codecallocator.c:
+	  v4l2codecs: allocator: Fix buffers leak when using remove buffers
+	  When removing buffers from v4l2 queue do not forget to release
+	  the memory on gstreamer side.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8583>
+
+2025-03-07 01:09:23 +0900  Seungha Yang <seungha@centricular.com>
+
+	* ext/closedcaption/gsth264ccextractor.c:
+	* ext/closedcaption/gsth265ccextractor.c:
+	  h264ccextractor,h265ccextractor: Do not resend caps per output buffer
+	  Send caps event only when it's required
+	  Fixes: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4281
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8596>
+
+2025-03-06 11:24:28 +0100  Pablo García <pgarcia@fluendo.com>
+
+	* ext/curl/gstcurlbasesink.c:
+	* ext/curl/gstcurlfilesink.c:
+	* ext/curl/gstcurlftpsink.c:
+	* ext/curl/gstcurlhttpsink.c:
+	* ext/curl/gstcurlsmtpsink.c:
+	* ext/curl/gstcurltlssink.c:
+	  curl: replace #if with #ifdef (part 2)
+	  Continuation of 47d1262402c81a9054e618052deeff7414b4f75d, that is not enough.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8595>
+
+2025-03-03 11:30:38 +0100  Stéphane Cerveau <scerveau@igalia.com>
+
+	* gst-libs/gst/vulkan/gstvkimagememory.c:
+	* gst-libs/gst/vulkan/gstvkoperation.c:
+	  vulkan/operation: fix timeline semaphore extension detection
+	  As for synchronization2, the timeline semaphore has been
+	  been promoted in 1.2 and does not have to be enabled explicitely.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-03-03 12:59:02 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkoperation.c:
+	  vulkan/operation: fix synchronization2 extension detection
+	  The synchronization2 extension is a core part of Vulkan 1.3.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 21:22:32 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkdevice.c:
+	  vulkan/device: only enable relevant extensions
+	  Extensions can have a minimum set of dependencies (e.g. API version) and may
+	  also be promoted to core in a later version.  Don't explicitly enable extensions
+	  that fail to meet their requirements or that have been promoted to the core API.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 21:17:57 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkoperation.c:
+	  vulkan/operation: retrieve function pointers directly from the device
+	  The instance API version supported may not be of the same version supported by
+	  the device. It is possible that the function that is returned may be non-0
+	  but not functional due to the requested API version of the instance limiting the
+	  availability of calling the returned function.
+	  Can be reproduced by running a pipeline with GST_VULKAN_INSTANCE_API_VERSION=1.1
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 21:04:35 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkinstance.c:
+	  vulkan/instance: allow the requested api version to be larger than the supported
+	  Since Vulkan 1.1, the requested API version is the maximum API version that the
+	  application is expecting to use. It is also possible for individual devices
+	  (backed by potentially different drivers) may support a higher or lower API
+	  version than the instance.  Both cases (higher and lower) should be supported
+	  and as such, it is not an error to request an API version that is larger than
+	  the instance supported API version.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 20:57:15 +1100  Matthew Waters <matthew@centricular.com>
+
+	* ext/vulkan/gstvulkan.c:
+	  vulkan: plugin: add debug for why an instance fails to open
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 20:55:09 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkformat.c:
+	* gst-libs/gst/vulkan/gstvkformat.h:
+	* gst-libs/gst/vulkan/gstvkimagebufferpool.c:
+	* tests/check/libs/vkformat.c:
+	  vkformat: fix format_from_video_info_2 to actually runtime check versions and extensions
+	  If the vulkan plugin was compiled against a newer version than the supported
+	  vulkan runtime instance or device, then it was possible for format retrieval to
+	  fail.  Failure was due to unconditionally using newer extensions and features
+	  without runtime checking them.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 20:09:48 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkdecoder-private.c:
+	* gst-libs/gst/vulkan/gstvkinstance.c:
+	* gst-libs/gst/vulkan/gstvkinstance.h:
+	* gst-libs/gst/vulkan/gstvkphysicaldevice.c:
+	* tests/check/libs/vkdevice.c:
+	  vulkan: fix device related API version checks
+	  The API version exposed by a particular device can be completely different from
+	  what is exported by the parent instance.  Since Vulkan 1.1 it is also possible
+	  to use newer device API than supported by the instance API version (with the
+	  appropriate version checks).
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-02-25 14:57:33 +1100  Matthew Waters <matthew@centricular.com>
+
+	* gst-libs/gst/vulkan/gstvkphysicaldevice.c:
+	* gst-libs/gst/vulkan/gstvkphysicaldevice.h:
+	* tests/check/libs/vkdevice.c:
+	  vulkan/physicaldevice: add methods for retrieving and checking against an API version
+	  Most version checks should actually be done against the device API version and
+	  not the instance API version.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8554>
+
+2025-03-05 11:07:38 +0100  Pablo García <pgarcia@fluendo.com>
+
+	* ext/curl/gstcurlbasesink.c:
+	* ext/curl/gstcurlfilesink.c:
+	* ext/curl/gstcurlftpsink.c:
+	* ext/curl/gstcurlhttpsink.c:
+	* ext/curl/gstcurlsmtpsink.c:
+	* ext/curl/gstcurltlssink.c:
+	  curl: replace #if with #ifdef
+	  Using #if instead of #ifdef was causing some issues when cross-compiling, like:
+	  ../ext/curl/gstcurlsmtpsink.c:54:5: error: "HAVE_SYS_SOCKET_H" is not
+	  defined, evaluates to 0 [-Werror=undef]
+	  54 | #if HAVE_SYS_SOCKET_H
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8589>
+
+2025-03-05 13:29:20 +0100  Pablo García <pgarcia@fluendo.com>
+
+	* ext/curl/gstcurlbasesink.c:
+	* ext/curl/gstcurlfilesink.c:
+	* ext/curl/gstcurlftpsink.c:
+	* ext/curl/gstcurlhttpsink.c:
+	* ext/curl/gstcurlhttpsrc.h:
+	* ext/curl/gstcurlsftpsink.c:
+	* ext/curl/gstcurlsmtpsink.c:
+	* ext/curl/gstcurlsshsink.c:
+	* ext/curl/gstcurltlssink.c:
+	  curl: remove unnecesary reference to unistd.h
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8589>
+
+2025-02-21 16:24:58 -0600  Christopher Degawa <ccom@randomderp.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	* ext/svtav1/gstsvtav1enc.c:
+	  svtav1enc: update to use SVT-AV1 3.0.0 API changes
+	  Signed-off-by: Christopher Degawa <ccom@randomderp.com>
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8539>
+
+2025-03-04 14:33:29 +0100  Branko Subasic <branko@axis.com>
+
+	* ext/voamrwbenc/meson.build:
+	  voamrwbenc: Do not install anything unless dependency found
+	  If the dependency for the plugin is not found then nothing should be
+	  installed, neither the element nor documentation.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8586>
+
+2025-03-04 22:08:46 +0100  Carlos Bentzen <cadubentzen@igalia.com>
+
+	* gst/videoparsers/gsth266parse.c:
+	  h266parse: clear cache values with memset
+	  Fixes a stack overflow on Windows/MSVC.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8588>
+
+2025-03-04 15:01:24 +0530  Nirbheek Chauhan <nirbheek@centricular.com>
+
+	* ext/opencv/meson.build:
+	* gst-libs/gst/opencv/meson.build:
+	  meson: Replace disabler dependencies with not-found dependencies
+	  If a plugin gets disabled due to a `disabler()` dependency, the plugin
+	  docs build itself will get disabled because `all_plugins_paths` will
+	  become a disabler.
+	  This was actually happening with opencv on systems that don't have
+	  opencv available, and could happen with libsoup too if the build files
+	  change in the future.
+	  Let's avoid wasting hours of debugging for people. A not-found
+	  dependency has the same effect.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8582>
+
+2024-12-17 20:48:46 +0100  Stéphane Cerveau <scerveau@igalia.com>
+
+	* tests/check/elements/dashsink.c:
+	* tests/check/meson.build:
+	  tests: add dashsink unit test
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7916>
+
+2024-12-20 14:54:01 +0100  Stéphane Cerveau <scerveau@igalia.com>
+
+	* ext/dash/gstdashsink.c:
+	  dashsink: use gst_dash_sink_reset
+	  To be able to use the properties properly,
+	  the element should be reset by gst_dash_sink_reset
+	  during the state change from READY_PAUSED and PAUSED_READY.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7916>
+
+2024-12-19 18:22:06 +0100  Stéphane Cerveau <scerveau@igalia.com>
+
+	* ext/dash/gstdashsink.c:
+	  dashsink: send element message on event
+	  On new mpd update and new segment written, send
+	  an element message to signal the event.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7916>
+
+2024-11-18 12:26:25 +0100  Stéphane Cerveau <scerveau@igalia.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	* ext/dash/gstdashsink.c:
+	  dashsink: cleanup the teardown process
+	  The stream was keeping a reference to the sink, preventing
+	  it to be removed properly by the pipleline bin.
+	  Clean up and simplify the code to get the stream from the pad.
+	  Add more mutex protection against add/remove requested pad.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/7916>
+
+2025-02-28 13:06:34 -0300  Denis Yuji Shimizu <denis.shimizu@collabora.com>
+
+	* ext/analyticsoverlay/gstobjectdetectionoverlay.c:
+	  analytics: objectdetectionoverlay: improve event handling
+	  This change ensures that the `GST_EVENT_EOS`,
+	  `GST_EVENT_FLUSH_START` and `GST_EVENT_FLUSH_STOP`
+	  events are forwarded to the sink downstream.
+	  The logging message for `GST_EVENT_FLUSH_START`
+	  has also been fixed.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8576>
+
+2025-02-28 14:22:07 +0900  Dongyun Seo <dongyun.seo@lge.com>
+
+	* ext/soundtouch/gstpitch.cc:
+	  pitch: fix build error
+	  fix build error due to sound integer sample caps
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8570>
+
+2025-02-28 11:29:56 +0900  Elliot Chen <elliot.chen@nxp.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  gstplay: support disabling the selected track at startup
+	  In some cases, need to disable some type tracks at startup before
+	  receiving the stream collection message. And fix printing error log
+	  in this case.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8568>
+
+2025-02-26 10:39:06 +0100  Robert Mader <robert.mader@collabora.com>
+
+	* tests/examples/waylandsink/main.c:
+	  waylandsink/demo: Use playbin3 instead of playbin
+	  Video looping currently does not work reliably with the later
+	  and playbin3 is generally considered the better choice.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8561>
+
+2025-02-21 19:00:42 -0500  Olivier Crête <olivier.crete@collabora.com>
+
+	* ext/avtp/gstavtpsrc.c:
+	* ext/avtp/gstavtpsrc.h:
+	* ext/avtp/meson.build:
+	  avtpsrc: Use GSocket to have cancellable wait
+	  Otherwise it would block forever when there is no sender.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8550>
+
+2025-02-21 08:37:03 +0100  Roberto Viola <rviola@vicomtech.org>
+
+	* ext/dash/gstmpdperiodnode.c:
+	  dashsink: fix period duration in dynamic MPD
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8531>
+
+2025-02-21 09:35:37 +0800  Qian Hu (胡骞) <qian.hu@mediatek.com>
+
+	* gst-libs/gst/wayland/gstwldisplay.c:
+	  wayland: leverage unified object destruction for wl_callback
+	  This patch refactors gst_wl_display_callback_destroy() to use the
+	  recently introduced gst_wl_display_object_destroy() helper. Previously,
+	  the function manually handled wl_callback destruction with explicit
+	  lock/unlock calls and direct invocation of wl_callback_destroy().
+	  Switching to gst_wl_display_object_destroy() unifies the destruction
+	  process across similar objects, reducing code duplication and potential
+	  errors.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8242>
+
+2025-02-24 09:53:48 +0800  Qian Hu (胡骞) <qian.hu@mediatek.com>
+
+	* gst-libs/gst/wayland/gstwlwindow.c:
+	  wayland: fix crash issue during stop flow
+	  when received xdg config event fron wayland server,
+	  gst_wl_display_thread_run will call handle_xdg_surface_configure
+	  which protected by priv->sync_mutex.
+	  and in handle_xdg_surface_configure, configure_mutex also is locked
+	  but if waylandsink set state from paused to ready, that will dispose
+	  wlwindow, which will try to clear configure_mutex, and try to destroy
+	  xdg_surface,
+	  that do not proteced by anything.
+	  so, problem is:
+	  1) if clear configure_mutex(with locked state), clear lock will abort
+	  2) after xdg_surface destroy, handle_xdg_surface_config may still call
+	  ack_configure, that will lead wayland server go wrong
+	  so, this patch updates gst_wl_window_finalize to use the new
+	  destruction function for xdg_toplevel and xdg_surface, ensuring all
+	  destruction operations are properly synchronized.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8242>
+
+2025-02-24 09:43:12 +0800  Qian Hu (胡骞) <qian.hu@mediatek.com>
+
+	* gst-libs/gst/wayland/gstwldisplay.c:
+	* gst-libs/gst/wayland/gstwldisplay.h:
+	  wayland: add synchronized object destruction function
+	  Introduces a new generic destruction function
+	  gst_wl_display_object_destroy that ensures all
+	  destruction operations are protected by
+	  sync_mutex.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8242>
+
+2025-02-23 23:52:57 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* meson.build:
+	  Back to development after 1.25.90
+
 === release 1.25.90 ===
 
 2025-02-23 23:44:10 +0000  Tim-Philipp Müller <tim@centricular.com>

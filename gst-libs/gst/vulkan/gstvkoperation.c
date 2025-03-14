@@ -159,27 +159,32 @@ gst_vulkan_operation_constructed (GObject * object)
   GstVulkanDevice *device = priv->cmd_pool->queue->device;
 
 #if defined(VK_KHR_synchronization2)
-  priv->has_sync2 = gst_vulkan_device_is_extension_enabled (device,
+  priv->has_sync2 =
+      gst_vulkan_physical_device_check_api_version (device->physical_device, 1,
+      3, 0)
+      || gst_vulkan_device_is_extension_enabled (device,
       VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME);
 
   if (priv->has_sync2) {
-    priv->QueueSubmit2 = gst_vulkan_instance_get_proc_address (device->instance,
-        "vkQueueSubmit2");
+    if (gst_vulkan_physical_device_check_api_version (device->physical_device,
+            1, 3, 0))
+      priv->QueueSubmit2 =
+          gst_vulkan_device_get_proc_address (device, "vkQueueSubmit2");
+
     if (!priv->QueueSubmit2) {
       priv->QueueSubmit2 =
-          gst_vulkan_instance_get_proc_address (device->instance,
-          "vkQueueSubmit2KHR");
+          gst_vulkan_device_get_proc_address (device, "vkQueueSubmit2KHR");
     }
+
+    if (gst_vulkan_physical_device_check_api_version (device->physical_device,
+            1, 3, 0))
+      priv->CmdPipelineBarrier2 =
+          gst_vulkan_device_get_proc_address (device, "vkCmdPipelineBarrier2");
 
     if (!priv->CmdPipelineBarrier2) {
       priv->CmdPipelineBarrier2 =
-          gst_vulkan_instance_get_proc_address (device->instance,
-          "vkCmdPipelineBarrier2");
-      if (!priv->CmdPipelineBarrier2) {
-        priv->CmdPipelineBarrier2 =
-            gst_vulkan_instance_get_proc_address (device->instance,
-            "vkCmdPipelineBarrier2KHR");
-      }
+          gst_vulkan_device_get_proc_address (device,
+          "vkCmdPipelineBarrier2KHR");
     }
 
     priv->has_sync2 = (priv->QueueSubmit2 && priv->CmdPipelineBarrier2);
@@ -192,7 +197,10 @@ gst_vulkan_operation_constructed (GObject * object)
   priv->has_video_maintenance1 = gst_vulkan_video_has_maintenance1 (device);
 #endif
 #if defined(VK_KHR_timeline_semaphore)
-  priv->has_timeline = gst_vulkan_device_is_extension_enabled (device,
+  priv->has_timeline =
+      gst_vulkan_physical_device_check_api_version (device->physical_device, 1,
+      2, 0)
+      || gst_vulkan_device_is_extension_enabled (device,
       VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
 #endif
 #endif

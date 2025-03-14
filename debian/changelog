@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.26.0-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.26.0-1ubuntu1) plucky; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:
     - Don't build wpewebkit plugins
@@ -15,7 +15,7 @@ gst-plugins-bad1.0 (1.26.0-1ubuntu1) UNRELEASED; urgency=medium
         - libltc-dev, libfreeaptx-dev, libqrencode-dev, libzxing-dev, glslc,
           liblrdf0-dev, libneon27-dev
 
- -- Jeremy Bícha <jbicha@ubuntu.com>  Sun, 09 Mar 2025 11:19:57 -0400
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Fri, 14 Mar 2025 08:41:24 -0400
 
 gst-plugins-bad1.0 (1.26.0-1) unstable; urgency=medium
 

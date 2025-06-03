@@ -8,11 +8,11 @@ Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/gst-plugins-bad1.0/+bug/11
  meson.build | 1 +
  1 file changed, 1 insertion(+)
 
-Index: gst-plugins-bad1.0-1.25.50/meson.build
-===================================================================
---- gst-plugins-bad1.0-1.25.50.orig/meson.build	2025-02-14 18:26:34.605737501 +0100
-+++ gst-plugins-bad1.0-1.25.50/meson.build	2025-02-14 18:26:34.602737624 +0100
-@@ -569,6 +569,7 @@
+diff --git a/meson.build b/meson.build
+index 167d1f0..b8487cf 100644
+--- a/meson.build
++++ b/meson.build
+@@ -569,6 +569,7 @@ pkgconfig_subdirs = ['gstreamer-1.0']
  
  pkgconfig.generate(
    libraries : [gst_dep],

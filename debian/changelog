@@ -1,3 +1,14 @@
+gst-plugins-bad1.0 (1.26.0-1ubuntu2.1) plucky-security; urgency=medium
+
+  * SECURITY UPDATE: stack-based buffer overflow
+    - debian/patches/CVE-2025-3887-1.patch: Fix
+      max_dec_pic_buffering_minus1 bound check.
+    - debian/patches/CVE-2025-3887-2.patch: Fix
+      num_long_term_pics bound check.
+    - CVE-2025-3887
+
+ -- Fabian Toepfer <fabian.toepfer@canonical.com>  Tue, 03 Jun 2025 19:36:45 +0200
+
 gst-plugins-bad1.0 (1.26.0-1ubuntu2) plucky; urgency=medium
 
   * Rebuild against latest onnxruntime

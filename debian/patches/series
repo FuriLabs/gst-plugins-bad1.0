@@ -2,3 +2,5 @@
 pcfile-requires-plugins-good
 Skip-failing-tests.patch
 0002-test-latomic.patch
+CVE-2025-3887-1.patch
+CVE-2025-3887-2.patch

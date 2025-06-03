@@ -39,6 +39,25 @@
  *
  */
 
+/**
+ * SECTION:element-vah264lpenc
+ * @title: vah264lpenc
+ * @short_description: A VA-API based H264 low power video encoder
+ *
+ * vah264lpenc encodes raw video VA surfaces into H.264 bitstreams using
+ * the installed and chosen [VA-API](https://01.org/linuxmedia/vaapi)
+ * driver.
+ *
+ * The raw video frames in main memory can be imported into VA surfaces.
+ *
+ * ## Example launch line
+ * ```
+ * gst-launch-1.0 videotestsrc num-buffers=60 ! timeoverlay ! vah264lpenc ! h264parse ! mp4mux ! filesink location=test.mp4
+ * ```
+ *
+ * Since: 1.22
+ */
+
  /* @TODO:
   * 1. Look ahead, which can optimize the slice type and QP.
   * 2. Field encoding.
@@ -1400,9 +1419,9 @@ _decide_profile (GstVaH264Enc * self, VAProfile * _profile, guint * _rt_format)
         continue;
     }
 
-    /* baseline only support I/P mode. */
-    if (self->gop.num_bframes > 0) {
-      if (g_strstr_len (profile_name, -1, "baseline"))
+    /* baseline only support I/P mode and neither cabac nor dct8x8. */
+    if (!self->use_dct8x8 && !self->use_cabac && self->gop.num_bframes == 0) {
+      if (!g_strstr_len (profile_name, -1, "baseline"))
         continue;
     }
 

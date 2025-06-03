@@ -99,6 +99,7 @@ gst_va_filter_set_property (GObject * object, guint prop_id,
 
   switch (prop_id) {
     case PROP_DISPLAY:{
+      /* G_PARAM_CONSTRUCT_ONLY */
       g_assert (!self->display);
       self->display = g_value_dup_object (value);
       break;
@@ -585,6 +586,11 @@ static const struct _CBDesc {
   [VAProcColorBalanceAutoBrightness] =
       { "auto-brightness", "Auto-Brightness", "Enable auto brightness",
         GST_VA_FILTER_PROP_AUTO_BRIGHTNESS    },
+  /**
+   * GstVaPostProc:auto-contrast:
+   *
+   * Since: 1.20
+   */
   [VAProcColorBalanceAutoContrast] =
       { "auto-contrast", "Auto-Contrast", "Enable auto contrast",
         GST_VA_FILTER_PROP_AUTO_CONTRAST },
@@ -692,6 +698,13 @@ gst_va_filter_install_properties (GstVaFilter * self, GObjectClass * klass)
 
   if (self->pipeline_caps.mirror_flags != VA_MIRROR_NONE
       || self->pipeline_caps.rotation_flags != VA_ROTATION_NONE) {
+    /**
+     * GstVaPostProc:video-direction:
+     *
+     * Video direction: rotation and flipping
+     *
+     * Since: 1.20
+     */
     g_object_class_install_property (klass, GST_VA_FILTER_PROP_VIDEO_DIR,
         g_param_spec_enum ("video-direction", "Video Direction",
             "Video direction: rotation and flipping",

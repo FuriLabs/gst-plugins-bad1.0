@@ -1,4 +1,4 @@
-gst-plugins-bad1.0 (1.26.2-1ubuntu1) UNRELEASED; urgency=medium
+gst-plugins-bad1.0 (1.26.2-1ubuntu1) questing; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:
     - Don't build wpewebkit plugins

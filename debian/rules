@@ -122,16 +122,10 @@ endif
 
 override_dh_makeshlibs:
 	dh_makeshlibs -plibgstreamer-plugins-bad1.0-0 -X "/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0" -V 'libgstreamer-plugins-bad1.0-0 (>= $(gst_version))' -- -c4
+	dh_makeshlibs -plibgstreamer-plugins-extra1.0-0 -X "/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0" -V 'libgstreamer-plugins-extra1.0-0 (>= $(gst_version))' -- -c4
 	dh_makeshlibs -plibgstreamer-opencv1.0-0 -X "/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0" -V 'libgstreamer-opencv1.0-0 (>= $(gst_version))' -- -c4
 
 override_dh_install:
-	rm -rv $(CURDIR)/debian/tmp/usr/include/gstreamer-1.0/gst/basecamerabinsrc \
-		$(CURDIR)/debian/tmp/usr/include/gstreamer-1.0/gst/interfaces/photography* \
-		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstbasecamerabinsrc* \
-		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstphotography* \
-		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstjpegformat.so \
-		$(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstcamerabin.so
-
 	dh_install
 ifeq ($(DEB_HOST_ARCH_OS),linux)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstdvb.so
@@ -145,8 +139,8 @@ ifeq ($(DEB_HOST_ARCH_OS),linux)
 	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstwayland-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstkms.so
 	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstcuda-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
-	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstva.so
-	dh_install -plibgstreamer-plugins-bad1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstva-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_install -pgstreamer1.0-plugins-extra debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstva.so
+	dh_install -plibgstreamer-plugins-extra1.0-0 debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libgstva-1.0.so.* usr/lib/$(DEB_HOST_MULTIARCH)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstv4l2codecs.so
 ifneq ($(DEB_HOST_ARCH),i386)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstvulkan.so
@@ -174,7 +168,6 @@ endif
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstwebrtcdsp.so
 endif
 
-
 ifneq (,$(filter $(DEB_HOST_ARCH),armel arm64 armhf hurd))
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstnvcodec.so
 endif
@@ -191,8 +184,64 @@ ifeq ($(DEB_HOST_ARCH_ENDIAN),little)
 	dh_install -pgstreamer1.0-plugins-bad debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/gstreamer-1.0/libgstldac.so
 endif
 
+# REVIEW: All the moving below is to support the -extra package
+# set. Avoided using the .install files since that would require
+# expanding globs that exist in -bad. However, this also got very
+# ugly...
+	mkdir -p debian/libgstreamer-plugins-extra1.0-dev/usr/share/gir-1.0
+	mkdir -p debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst
+	mkdir -p debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig
+	mkdir -p debian/gir1.2-gst-plugins-extra-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0
+	mkdir -p debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/interfaces
+
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstbasecamerabinsrc-1.0.so \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/include/gstreamer-1.0/gst/basecamerabinsrc \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/
+
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstphotography-1.0.so \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/include/gstreamer-1.0/gst/interfaces/photography* \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/interfaces/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/gstreamer-photography-1.0.pc \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/
+
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstva-1.0.so \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/include/gstreamer-1.0/gst/va \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/gstreamer-va-1.0.pc \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/share/gir-1.0/GstVa-1.0.gir \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/share/gir-1.0
+	mv debian/gir1.2-gst-plugins-bad-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/GstVa-1.0.typelib \
+	   debian/gir1.2-gst-plugins-extra-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/
+
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstplay-1.0.so \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/include/gstreamer-1.0/gst/play \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/share/gir-1.0/GstPlay-1.0.gir \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/share/gir-1.0
+	mv debian/gir1.2-gst-plugins-bad-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/GstPlay-1.0.typelib \
+	   debian/gir1.2-gst-plugins-extra-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/gstreamer-play-1.0.pc \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/
+
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstcodecparsers-1.0.so \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/include/gstreamer-1.0/gst/codecparsers \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/
+
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstcodecs-1.0.so \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/share/gir-1.0/GstCodecs-1.0.gir \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/share/gir-1.0
+	mv debian/gir1.2-gst-plugins-bad-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/GstCodecs-1.0.typelib \
+	   debian/gir1.2-gst-plugins-extra-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/
+
 	mkdir -p $(CURDIR)/fake-home
 	HOME=$(CURDIR)/fake-home \
-	LD_LIBRARY_PATH=debian/libgstreamer-plugins-bad1.0-0/usr/lib/$(DEB_HOST_MULTIARCH):debian/libgstreamer-opencv1.0-0/usr/lib/$(DEB_HOST_MULTIARCH):$(LD_LIBRARY_PATH) \
+	LD_LIBRARY_PATH=debian/libgstreamer-plugins-bad1.0-0/usr/lib/$(DEB_HOST_MULTIARCH):debian/libgstreamer-opencv1.0-0/usr/lib/$(DEB_HOST_MULTIARCH):$(LD_LIBRARY_PATH):debian/libgstreamer-plugins-extra1.0-0/usr/lib/$(DEB_HOST_MULTIARCH) \
 	    dh_gstscancodecs
 	rm -rf $(CURDIR)/fake-home

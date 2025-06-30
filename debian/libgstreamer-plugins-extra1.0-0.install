@@ -1,0 +1,7 @@
+usr/lib/*/libgstbasecamerabinsrc-1.0.so.0*
+usr/lib/*/libgstphotography-1.0.so.0*
+usr/lib/*/libgstplay-1.0.so.*
+# gstlibva depends on this
+usr/lib/*/libgstcodecparsers-1.0.so.*
+# codecparsers has a symbol dependency on this
+usr/lib/*/libgstcodecs-1.0.so.*

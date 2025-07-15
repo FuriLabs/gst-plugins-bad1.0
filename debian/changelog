@@ -1,3 +1,28 @@
+gst-plugins-bad1.0 (1.28.0-1ubuntu2) resolute; urgency=medium
+
+  * Introduce -extra set (LP: #2089260)
+    - Ubuntu needs to distribute -bad in the universe repositories,
+      which causes several downstream packaging issues due to
+      applications in the main repositories depending on some of the
+      -bad elements.
+    - plugins-extra will contains a subset of the -bad plugins deemed
+      "not so bad". The naming convention comes from
+      https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6130
+    - Start with camerasrcbin, gstva, and gstplay, to ease the Ubuntu
+      paperwork required for transitioning packages from universe to
+      main. This will allow us to get rid of downstream (from Ubuntu)
+      packaging changes to awkwardly move elements from -bad to -good,
+      and some vendoring in GTK (for a now defunct
+      GstPlayer). Eventually, much of -bad would end up in -extra,
+      with only legally encumbered or truly bad plugins remaining.
+  * Fold jpegformat, camerabin, gstphotography back into the bad
+    source. They were being vendored in -good until 1.26.4-1ubuntu2.
+  * From MIR review (LP: #2121050)
+    - Start tracking libgstreamer-plugins-extra1.0-0.symbols.
+    - Disable LTO on ppc64el & s390x.
+
+ -- Charles <charles05@canonical.com>  Wed, 18 Feb 2026 10:01:32 +0000
+
 gst-plugins-bad1.0 (1.28.0-1ubuntu1) resolute; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:

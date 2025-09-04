@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.26.5-1ubuntu2) questing; urgency=medium
+
+  * Fix failing zbar test
+    See: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4592
+
+ -- Charles <charles05@canonical.com>  Thu, 04 Sep 2025 20:18:54 +0100
+
 gst-plugins-bad1.0 (1.26.5-1ubuntu1) questing; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:

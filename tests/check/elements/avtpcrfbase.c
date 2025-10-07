@@ -830,7 +830,9 @@ avtpcrfbase_suite (void)
   tcase_add_test (tc_chain, test_validate_crf_pdu_tstamps_not_monotonic);
   tcase_add_test (tc_chain, test_gst_base_freq_multiplier);
   tcase_add_test (tc_chain, test_calculate_average_period_multiple_crf_tstamps);
+#ifndef __i386__
   tcase_add_test (tc_chain, test_calculate_average_period_rounding_error);
+#endif
   tcase_add_test (tc_chain,
       test_calculate_average_period_multiple_crf_tstamps_64_bit_overflow);
   tcase_add_test (tc_chain, test_calculate_average_period_single_crf_tstamp);

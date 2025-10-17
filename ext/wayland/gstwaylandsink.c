@@ -63,6 +63,7 @@ enum
   PROP_FULLSCREEN,
   PROP_ROTATE_METHOD,
   PROP_DRM_DEVICE,
+  PROP_FORCE_ASPECT_RATIO,
   PROP_LAST
 };
 
@@ -159,7 +160,8 @@ gst_wayland_sink_class_init (GstWaylandSinkClass * klass)
   g_object_class_install_property (gobject_class, PROP_FULLSCREEN,
       g_param_spec_boolean ("fullscreen", "Fullscreen",
           "Whether the surface should be made fullscreen ", FALSE,
-          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+          G_PARAM_READWRITE | GST_PARAM_MUTABLE_PLAYING |
+          G_PARAM_STATIC_STRINGS));
 
   /**
    * waylandsink:rotate-method:
@@ -171,7 +173,8 @@ gst_wayland_sink_class_init (GstWaylandSinkClass * klass)
           "rotate method",
           "rotate method",
           GST_TYPE_VIDEO_ORIENTATION_METHOD, GST_VIDEO_ORIENTATION_IDENTITY,
-          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+          G_PARAM_READWRITE | GST_PARAM_MUTABLE_PLAYING |
+          G_PARAM_STATIC_STRINGS));
 
  /**
    * waylandsink:drm-device:
@@ -184,6 +187,18 @@ gst_wayland_sink_class_init (GstWaylandSinkClass * klass)
           NULL,
           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT_ONLY));
 
+ /**
+   * waylandsink:force-aspect-ratio:
+   *
+   * Since: 1.28
+   */
+  g_object_class_install_property (gobject_class, PROP_FORCE_ASPECT_RATIO,
+      g_param_spec_boolean ("force-aspect-ratio", "Force aspect ratio",
+          "When enabled, scaling will respect original aspect ratio",
+          TRUE,
+          G_PARAM_READWRITE | GST_PARAM_MUTABLE_PLAYING |
+          G_PARAM_STATIC_STRINGS));
+
 
  /**
   * waylandsink:render-rectangle:
@@ -194,6 +209,9 @@ gst_wayland_sink_class_init (GstWaylandSinkClass * klass)
   * Since: 1.22
   */
   gst_video_overlay_install_properties (gobject_class, PROP_LAST);
+
+  GST_DEBUG_CATEGORY_INIT (gstwayland_debug, "waylandsink", 0,
+      " wayland video sink");
 }
 
 static void
@@ -201,18 +219,22 @@ gst_wayland_sink_init (GstWaylandSink * self)
 {
   g_mutex_init (&self->display_lock);
   g_mutex_init (&self->render_lock);
+  self->force_aspect_ratio = TRUE;
 }
 
+/* must be called with the OBJECT_LOCK */
 static void
 gst_wayland_sink_set_fullscreen (GstWaylandSink * self, gboolean fullscreen)
 {
   if (fullscreen == self->fullscreen)
     return;
 
-  g_mutex_lock (&self->render_lock);
   self->fullscreen = fullscreen;
-  gst_wl_window_ensure_fullscreen (self->window, fullscreen);
-  g_mutex_unlock (&self->render_lock);
+  if (self->window) {
+    g_mutex_lock (&self->render_lock);
+    gst_wl_window_ensure_fullscreen (self->window, fullscreen);
+    g_mutex_unlock (&self->render_lock);
+  }
 }
 
 static void
@@ -252,6 +274,23 @@ gst_wayland_sink_set_rotate_method (GstWaylandSink * self,
   GST_OBJECT_UNLOCK (self);
 }
 
+/* must be called with the OBJECT_LOCK */
+static void
+gst_wayland_sink_set_force_aspect_ratio (GstWaylandSink * self,
+    gboolean force_aspect_ratio)
+{
+  if (force_aspect_ratio == self->force_aspect_ratio)
+    return;
+
+  self->force_aspect_ratio = force_aspect_ratio;
+  if (self->window) {
+    g_mutex_lock (&self->render_lock);
+    gst_wl_window_set_force_aspect_ratio (self->window,
+        self->force_aspect_ratio);
+    g_mutex_unlock (&self->render_lock);
+  }
+}
+
 static void
 gst_wayland_sink_get_property (GObject * object,
     guint prop_id, GValue * value, GParamSpec * pspec)
@@ -277,6 +316,11 @@ gst_wayland_sink_get_property (GObject * object,
     case PROP_DRM_DEVICE:
       GST_OBJECT_LOCK (self);
       g_value_set_string (value, self->drm_device);
+      GST_OBJECT_UNLOCK (self);
+      break;
+    case PROP_FORCE_ASPECT_RATIO:
+      GST_OBJECT_LOCK (self);
+      g_value_set_boolean (value, self->force_aspect_ratio);
       GST_OBJECT_UNLOCK (self);
       break;
     default:
@@ -311,6 +355,12 @@ gst_wayland_sink_set_property (GObject * object,
       /* G_PARAM_CONSTRUCT_ONLY */
       GST_OBJECT_LOCK (self);
       self->drm_device = g_value_dup_string (value);
+      GST_OBJECT_UNLOCK (self);
+      break;
+    case PROP_FORCE_ASPECT_RATIO:
+      GST_OBJECT_LOCK (self);
+      gst_wayland_sink_set_force_aspect_ratio (self,
+          g_value_get_boolean (value));
       GST_OBJECT_UNLOCK (self);
       break;
     default:
@@ -708,6 +758,11 @@ gst_wayland_sink_set_caps (GstBaseSink * bsink, GstCaps * caps)
       gst_video_info_dma_drm_init (&self->drm_info);
   }
 
+  self->have_mastering_info =
+      gst_video_mastering_display_info_from_caps (&self->minfo, caps);
+  self->have_light_info =
+      gst_video_content_light_level_from_caps (&self->linfo, caps);
+
   self->video_info_changed = TRUE;
   self->skip_dumb_buffer_copy = FALSE;
 
@@ -816,14 +871,23 @@ render_last_buffer (GstWaylandSink * self, gboolean redraw)
 {
   GstWlBuffer *wlbuffer;
   const GstVideoInfo *info = NULL;
+  const GstVideoMasteringDisplayInfo *minfo = NULL;
+  const GstVideoContentLightLevel *linfo = NULL;
 
   wlbuffer = gst_buffer_get_wl_buffer (self->display, self->last_buffer);
 
   if (G_UNLIKELY (self->video_info_changed && !redraw)) {
     info = &self->video_info;
+
+    if (self->have_mastering_info)
+      minfo = &self->minfo;
+
+    if (self->have_light_info)
+      linfo = &self->linfo;
+
     self->video_info_changed = FALSE;
   }
-  return gst_wl_window_render (self->window, wlbuffer, info);
+  return gst_wl_window_render_hdr (self->window, wlbuffer, info, minfo, linfo);
 }
 
 static void
@@ -866,6 +930,8 @@ gst_wayland_sink_show_frame (GstVideoSink * vsink, GstBuffer * buffer)
           G_CALLBACK (on_window_closed), self, 0);
       gst_wl_window_set_rotate_method (self->window,
           self->current_rotate_method);
+      gst_wl_window_set_force_aspect_ratio (self->window,
+          self->force_aspect_ratio);
     }
   }
 
@@ -1134,6 +1200,8 @@ gst_wayland_sink_set_window_handle (GstVideoOverlay * overlay, guintptr handle)
             &self->render_lock);
         gst_wl_window_set_rotate_method (self->window,
             self->current_rotate_method);
+        gst_wl_window_set_force_aspect_ratio (self->window,
+            self->force_aspect_ratio);
       }
     } else {
       GST_ERROR_OBJECT (self, "Failed to find display handle, "
@@ -1187,9 +1255,6 @@ gst_wayland_sink_expose (GstVideoOverlay * overlay)
 static gboolean
 plugin_init (GstPlugin * plugin)
 {
-  GST_DEBUG_CATEGORY_INIT (gstwayland_debug, "waylandsink", 0,
-      " wayland video sink");
-
   return GST_ELEMENT_REGISTER (waylandsink, plugin);
 }
 

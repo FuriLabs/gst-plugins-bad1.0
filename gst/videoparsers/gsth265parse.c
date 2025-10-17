@@ -231,6 +231,7 @@ gst_h265_parse_reset_stream_info (GstH265Parse * h265parse)
   h265parse->parsed_colorimetry.matrix = GST_VIDEO_COLOR_MATRIX_UNKNOWN;
   h265parse->parsed_colorimetry.transfer = GST_VIDEO_TRANSFER_UNKNOWN;
   h265parse->parsed_colorimetry.primaries = GST_VIDEO_COLOR_PRIMARIES_UNKNOWN;
+  h265parse->lcevc = FALSE;
   h265parse->have_pps = FALSE;
   h265parse->have_sps = FALSE;
   h265parse->have_vps = FALSE;
@@ -698,8 +699,9 @@ gst_h265_parse_process_sei_user_data (GstH265Parse * h265parse,
   GstByteReader br;
   GstVideoParseUtilsField field = GST_VIDEO_PARSE_UTILS_FIELD_1;
 
-  /* only US country code is currently supported */
+  /* only US and UK country codes are currently supported */
   switch (rud->country_code) {
+    case ITU_T_T35_COUNTRY_CODE_UK:
     case ITU_T_T35_COUNTRY_CODE_US:
       break;
     default:
@@ -1113,8 +1115,15 @@ gst_h265_parse_handle_frame_packetized (GstBaseParse * parse,
        * a replacement output buffer is provided anyway. */
       gst_h265_parse_parse_frame (parse, &tmp_frame);
       ret = gst_base_parse_finish_frame (parse, &tmp_frame, nl + nalu.size);
-      left -= nl + nalu.size;
+
+      /* Bail out if we get a flow error. */
+      if (ret != GST_FLOW_OK) {
+        gst_buffer_unmap (buffer, &map);
+        gst_buffer_unref (buffer);
+        return ret;
+      }
     }
+    left -= nl + nalu.size;
 
     parse_res = gst_h265_parser_identify_nalu_hevc (h265parse->nalparser,
         map.data, nalu.offset + nalu.size, map.size, nl, &nalu);
@@ -1123,17 +1132,53 @@ gst_h265_parse_handle_frame_packetized (GstBaseParse * parse,
   gst_buffer_unmap (buffer, &map);
 
   if (!h265parse->split_packetized) {
-    h265parse->marker = TRUE;
-    gst_h265_parse_parse_frame (parse, frame);
-    ret = gst_base_parse_finish_frame (parse, frame, map.size);
+    gint parsed = map.size - left;
+
+    /* Nothing to do if no NAL unit was parsed, the whole AU will be dropped
+     * below. */
+    if (parsed > 0) {
+      if (G_UNLIKELY (left)) {
+        /* Only part of the AU could be parsed, split out that part the rest
+         * will be dropped below. Should not be happening for nice HEVC. */
+        GST_WARNING_OBJECT (parse, "Problem parsing part of AU, keep part that "
+            "has been correctly parsed (%d bytes).", parsed);
+        buffer = gst_buffer_copy (frame->buffer);
+        GstBaseParseFrame tmp_frame;
+
+        gst_base_parse_frame_init (&tmp_frame);
+        tmp_frame.flags |= frame->flags;
+        tmp_frame.offset = frame->offset;
+        tmp_frame.overhead = frame->overhead;
+        tmp_frame.buffer = gst_buffer_copy_region (buffer, GST_BUFFER_COPY_ALL,
+            0, parsed);
+
+        h265parse->marker = TRUE;
+        gst_h265_parse_parse_frame (parse, &tmp_frame);
+        ret = gst_base_parse_finish_frame (parse, &tmp_frame, parsed);
+        gst_buffer_unref (buffer);
+
+        /* Bail out if we get a flow error. */
+        if (ret != GST_FLOW_OK) {
+          gst_buffer_unmap (buffer, &map);
+          gst_buffer_unref (buffer);
+          return ret;
+        }
+      } else {
+        /* The whole AU succesfully parsed. */
+        h265parse->marker = TRUE;
+        gst_h265_parse_parse_frame (parse, frame);
+        ret = gst_base_parse_finish_frame (parse, frame, map.size);
+      }
+    }
   } else {
     gst_buffer_unref (buffer);
-    if (G_UNLIKELY (left)) {
-      /* should not be happening for nice HEVC */
-      GST_WARNING_OBJECT (parse, "skipping leftover HEVC data %d", left);
-      frame->flags |= GST_BASE_PARSE_FRAME_FLAG_DROP;
-      ret = gst_base_parse_finish_frame (parse, frame, map.size);
-    }
+  }
+
+  if (G_UNLIKELY (left)) {
+    /* should not be happening for nice HEVC */
+    GST_WARNING_OBJECT (parse, "skipping leftover HEVC data %d", left);
+    frame->flags |= GST_BASE_PARSE_FRAME_FLAG_DROP;
+    ret = gst_base_parse_finish_frame (parse, frame, left);
   }
 
   if (parse_res == GST_H265_PARSER_NO_NAL_END ||
@@ -2519,6 +2564,11 @@ gst_h265_parse_update_src_caps (GstH265Parse * h265parse, GstCaps * caps)
           "Couldn't set content light level to caps");
     }
 
+    if (h265parse->user_data.lcevc_enhancement_data || h265parse->lcevc)
+      gst_caps_set_simple (caps, "lcevc", G_TYPE_BOOLEAN, TRUE, NULL);
+    else
+      gst_caps_set_simple (caps, "lcevc", G_TYPE_BOOLEAN, FALSE, NULL);
+
     src_caps = gst_pad_get_current_caps (GST_BASE_PARSE_SRC_PAD (h265parse));
 
     if (src_caps) {
@@ -3246,6 +3296,7 @@ gst_h265_parse_set_caps (GstBaseParse * parse, GstCaps * caps)
       &h265parse->fps_den);
   gst_structure_get_fraction (str, "pixel-aspect-ratio",
       &h265parse->upstream_par_n, &h265parse->upstream_par_d);
+  gst_structure_get_boolean (str, "lcevc", &h265parse->lcevc);
 
   /* get upstream format and align from caps */
   gst_h265_parse_format_from_caps (caps, &format, &align);
@@ -3325,19 +3376,7 @@ gst_h265_parse_set_caps (GstBaseParse * parse, GstCaps * caps)
   }
 
   if (format == h265parse->format && align == h265parse->align) {
-    /* do not set CAPS and passthrough mode if SPS/PPS have not been parsed */
-    if (h265parse->have_sps && h265parse->have_pps) {
-      /* Don't enable passthrough here. This element will parse various
-       * SEI messages which would be very important/useful for downstream
-       * (HDR, timecode for example)
-       */
-#if 0
-      gst_base_parse_set_passthrough (parse, TRUE);
-#endif
-
-      /* we did parse codec-data and might supplement src caps */
-      gst_h265_parse_update_src_caps (h265parse, caps);
-    }
+    h265parse->have_vps = TRUE;
   } else if (format == GST_H265_PARSE_FORMAT_HVC1
       || format == GST_H265_PARSE_FORMAT_HEV1) {
     /* if input != output, and input is hevc, must split before anything else */
@@ -3388,6 +3427,7 @@ remove_fields (GstCaps * caps, gboolean all)
       gst_structure_remove_field (s, "stream-format");
     }
     gst_structure_remove_field (s, "parsed");
+    gst_structure_remove_field (s, "lcevc");
   }
 }
 

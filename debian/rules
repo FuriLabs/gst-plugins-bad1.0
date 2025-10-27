@@ -7,6 +7,11 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export DEB_LDFLAGS_MAINT_APPEND = -Wl,-O1 -Wl,-z,defs
 export HOME=$(CURDIR)/fake-home
 
+ifneq (,$(filter ppc64el s390x,$(DEB_HOST_ARCH)))
+# See: https://git.launchpad.net/ubuntu/+source/lto-disabled-list/tree/lto-disabled-list
+export DEB_BUILD_OPTIONS += optimize=-lto
+endif
+
 # upstream version
 gst_version=$(shell echo $(DEB_VERSION) | cut -d '-' -f 1)
 

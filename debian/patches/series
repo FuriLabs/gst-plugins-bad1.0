@@ -1,5 +1,4 @@
 02_opencv-data-path.patch
-pcfile-requires-plugins-good
 default-soundfont.patch
 Skip-failing-tests.patch
 Skip-failing-tests-i386.patch

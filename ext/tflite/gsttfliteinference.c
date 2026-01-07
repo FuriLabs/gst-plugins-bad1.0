@@ -45,7 +45,7 @@
 #include <gst/gst.h>
 #include <gst/video/video.h>
 #include "gsttfliteinference.h"
-#include "modelinfo.h"
+#include <gst/analytics/analytics.h>
 
 #include <tensorflow/lite/c/common.h>
 
@@ -76,11 +76,14 @@ typedef struct _GstTFliteInferencePrivate
   GstVideoInfo video_info;
   guint8 *dest;
 
-  GstCaps *model_caps;
+  GstCaps *model_incaps;
+  GstCaps *model_outcaps;
+
 
   gint channels;
-  gdouble *means;
-  gdouble *stddevs;
+  gdouble *scales;
+  gdouble *offsets;
+  gsize num_channels;
 
 } GstTFliteInferencePrivate;
 
@@ -165,7 +168,7 @@ gst_tflite_inference_class_init (GstTFliteInferenceClass * klass)
 
 
   gst_element_class_set_static_metadata (element_class, "tfliteinference",
-      "Filter/Effect",
+      "Filter/Video",
       "Apply neural network to video frames and create tensor output",
       "Denis Shimizu <denis.shimizu@collabora.com>, "
       "Aaron Boxer <aaron.boxer@collabora.com>,"
@@ -203,6 +206,12 @@ gst_tflite_inference_init (GstTFliteInference * self)
   priv->tensor_templates = g_ptr_array_new_with_free_func ((GDestroyNotify)
       gst_tensor_free);
   priv->tflite_disabled = TRUE;
+  priv->scales = NULL;
+  priv->offsets = NULL;
+  priv->num_channels = 0;
+
+  /* Passthrough would propagate tensors caps upstream */
+  gst_base_transform_set_prefer_passthrough (GST_BASE_TRANSFORM (self), FALSE);
 }
 
 static void
@@ -213,6 +222,8 @@ gst_tflite_inference_finalize (GObject * object)
       gst_tflite_inference_get_instance_private (self);
 
   g_free (priv->model_file);
+  g_free (priv->scales);
+  g_free (priv->offsets);
   g_ptr_array_unref (priv->tensor_templates);
   G_OBJECT_CLASS (gst_tflite_inference_parent_class)->finalize (object);
 }
@@ -370,33 +381,14 @@ done:
 }
 
 static gboolean
-_get_input_params (GstTFliteInference * self, GstTensorDataType * data_type,
-    gint * width, gint * height, const gchar ** gst_format,
+_guess_tensor_data_type (GstTFliteInference * self, gsize dims_count,
+    gsize * dims, const gchar ** gst_format, gint * width, gint * height,
     gint * channels, gboolean * planar)
 {
-  GstTFliteInferencePrivate *priv =
-      gst_tflite_inference_get_instance_private (self);
-  const TfLiteTensor *input_tensor;
-  gint i_size = TfLiteInterpreterGetInputTensorCount (priv->interpreter);
-  gsize dims_count;
-  gsize *dims = NULL;
-
-  if (i_size != 1) {
-    GST_ERROR_OBJECT (self, "Currently only support model with a single"
-        " input tensor, but model has %d", i_size);
-    goto reject;
-  }
-
-  input_tensor = TfLiteInterpreterGetInputTensor (priv->interpreter, 0);
-  if (!convert_tensor_info (input_tensor, NULL, data_type, &dims_count, &dims)) {
-    GST_ERROR_OBJECT (self, "Input tensor has no dimensions, rejecting");
-    goto reject;
-  }
-
   if (dims_count < 2 || dims_count > 4) {
     GST_ERROR_OBJECT (self,
         "Don't know how to interpret tensors with %zu dimensions", dims_count);
-    goto reject;
+    return FALSE;
   }
 
   *planar = FALSE;
@@ -428,7 +420,7 @@ _get_input_params (GstTFliteInference * self, GstTensorDataType * data_type,
         *width = dims[1];
       } else {
         GST_ERROR_OBJECT (self, "Don't know how to interpret dims");
-        goto reject;
+        return FALSE;
       }
       break;
     case 4:
@@ -444,7 +436,7 @@ _get_input_params (GstTFliteInference * self, GstTensorDataType * data_type,
         *width = dims[2];
       } else {
         GST_ERROR_OBJECT (self, "Don't know how to interpret dims");
-        goto reject;
+        return FALSE;
       }
 
       if (*channels == 1) {
@@ -458,20 +450,43 @@ _get_input_params (GstTFliteInference * self, GstTensorDataType * data_type,
       } else {
         g_assert_not_reached ();
       }
-
       break;
   }
 
-  g_free (dims);
-
   return TRUE;
-
-reject:
-  g_free (dims);
-  return FALSE;
 }
 
+static gboolean
+_get_input_params (GstTFliteInference * self, GstTensorDataType * data_type,
+    gint * width, gint * height, const gchar ** gst_format,
+    gint * channels, gboolean * planar)
+{
+  GstTFliteInferencePrivate *priv =
+      gst_tflite_inference_get_instance_private (self);
+  const TfLiteTensor *input_tensor;
+  gint i_size = TfLiteInterpreterGetInputTensorCount (priv->interpreter);
+  gsize dims_count;
+  gsize *dims = NULL;
+  gboolean ret;
 
+  if (i_size != 1) {
+    GST_ERROR_OBJECT (self, "Currently only support model with a single"
+        " input tensor, but model has %d", i_size);
+    return FALSE;
+  }
+
+  input_tensor = TfLiteInterpreterGetInputTensor (priv->interpreter, 0);
+  if (convert_tensor_info (input_tensor, NULL, data_type, &dims_count, &dims)) {
+    ret = _guess_tensor_data_type (self, dims_count, dims, gst_format, width,
+        height, channels, planar);
+  } else {
+    GST_ERROR_OBJECT (self, "Input tensor has no dimensions, rejecting");
+    ret = FALSE;
+  }
+  g_free (dims);
+
+  return ret;
+}
 
 static gboolean
 gst_tflite_inference_start (GstBaseTransform * trans)
@@ -480,9 +495,11 @@ gst_tflite_inference_start (GstBaseTransform * trans)
   GstTFliteInferencePrivate *priv =
       gst_tflite_inference_get_instance_private (self);
   gboolean ret = FALSE;
-  ModelInfo *modelinfo = NULL;
+  GstAnalyticsModelInfo *modelinfo = NULL;
   gint i_size, o_size;
   GstTFliteInferenceClass *klass = GST_TFLITE_INFERENCE_GET_CLASS (self);
+  GstStructure *tensors_s = NULL;
+  GValue v_tensors_set = G_VALUE_INIT;
 
   GST_OBJECT_LOCK (self);
   if (gst_tflite_inference_has_session (self)) {
@@ -520,9 +537,11 @@ gst_tflite_inference_start (GstBaseTransform * trans)
     goto error;
   }
 
-  modelinfo = modelinfo_load (priv->model_file);
+  modelinfo = gst_analytics_modelinfo_load (priv->model_file);
   if (!modelinfo) {
-    GST_ERROR_OBJECT (self, "Can't find modelinfo for %s", priv->model_file);
+    GST_ERROR_OBJECT (self, "Failed to load modelinfo for %s. "
+        "This could be due to: file not found, unsupported version, "
+        "or invalid file format.", priv->model_file);
     goto error;
   }
 
@@ -544,7 +563,6 @@ gst_tflite_inference_start (GstBaseTransform * trans)
     gchar *tensor_name = NULL;
     gint width = 0, height = 0;
     const gchar *gst_format = NULL;
-    guint num_means, num_stddevs;
 
     if (!_get_input_params (self, &data_type, &width, &height, &gst_format,
             &priv->channels, &priv->planar)) {
@@ -559,7 +577,7 @@ gst_tflite_inference_start (GstBaseTransform * trans)
       goto error;
     }
 
-    tensor_name = modelinfo_find_tensor_name (modelinfo,
+    tensor_name = gst_analytics_modelinfo_find_tensor_name (modelinfo,
         MODELINFO_DIRECTION_INPUT, i, tname, data_type, dims_count, dims);
 
     if (tensor_name == NULL) {
@@ -572,43 +590,72 @@ gst_tflite_inference_start (GstBaseTransform * trans)
       g_free (dims_str);
     } else {
 
-      num_means = modelinfo_get_normalization_means (modelinfo,
-          tensor_name, priv->channels, &priv->means);
-      if (num_means != priv->channels) {
-        priv->means = g_renew (gdouble, priv->means, priv->channels);
+      /* Get per-channel scales and offsets from modelinfo */
+      /* For video input, we assume uint8 pixel values in range [0, 255] */
+      {
+        gdouble *input_mins = NULL;
+        gdouble *input_maxs = NULL;
+        gsize num_target_ranges;
+        gsize j;
 
-        /* initialize means array to zeroes */
-        if (num_means == 0) {
-          priv->means[0] = 0;
+        /* First, get the number of target ranges from modelinfo to allocate input ranges */
+        if (!gst_analytics_modelinfo_get_target_ranges (modelinfo, tensor_name,
+                &num_target_ranges, &input_mins, &input_maxs)) {
+          GST_ERROR_OBJECT (self,
+              "Failed to get target ranges from modelinfo for tensor %s",
+              tensor_name);
+          g_free (tensor_name);
+          goto error;
         }
-        for (guint j = 1; j < priv->channels; j++)
-          priv->means[j] = priv->means[0];
-      }
 
-      num_stddevs = modelinfo_get_normalization_stddevs (modelinfo,
-          tensor_name, priv->channels, &priv->stddevs);
-      if (num_stddevs != priv->channels) {
-        priv->stddevs = g_renew (gdouble, priv->stddevs, priv->channels);
+        /* Free the target ranges - we only needed them to know the count */
+        g_free (input_mins);
+        g_free (input_maxs);
 
-        /* initialize stddevs array to ones */
-        if (num_stddevs == 0) {
-          priv->stddevs[0] = 1.0;
+        /* Prepare input ranges - for video uint8 input, range is [0, 255] for all channels */
+        input_mins = g_new (gdouble, num_target_ranges);
+        input_maxs = g_new (gdouble, num_target_ranges);
+        for (j = 0; j < num_target_ranges; j++) {
+          input_mins[j] = 0.0;
+          input_maxs[j] = 255.0;
         }
-        for (guint j = 1; j < priv->channels; j++)
-          priv->stddevs[j] = priv->stddevs[0];
+
+        if (!gst_analytics_modelinfo_get_input_scales_offsets (modelinfo,
+                tensor_name, num_target_ranges, input_mins, input_maxs,
+                &priv->num_channels, &priv->scales, &priv->offsets)) {
+          GST_ERROR_OBJECT (self, "Failed to get scales/offsets for tensor %s",
+              tensor_name);
+          g_free (input_mins);
+          g_free (input_maxs);
+          g_free (tensor_name);
+          goto error;
+        }
+
+        g_free (input_mins);
+        g_free (input_maxs);
       }
 
     }
 
-    gst_clear_caps (&priv->model_caps);
-    priv->model_caps = gst_caps_new_empty_simple ("video/x-raw");
+    gst_clear_caps (&priv->model_incaps);
+    priv->model_incaps = gst_caps_new_empty_simple ("video/x-raw");
     if (width && height)
-      gst_caps_set_simple (priv->model_caps, "width", G_TYPE_INT, width,
+      gst_caps_set_simple (priv->model_incaps, "width", G_TYPE_INT, width,
           "height", G_TYPE_INT, height, NULL);
 
-    if (data_type == GST_TENSOR_DATA_TYPE_UINT8 && gst_format &&
-        priv->means == NULL && priv->stddevs == NULL)
-      gst_caps_set_simple (priv->model_caps, "format", G_TYPE_STRING,
+    /* Check if all channels are passthrough (scale=1.0, offset=0.0) */
+    gboolean is_passthrough = TRUE;
+    if (priv->scales && priv->offsets) {
+      for (gsize c = 0; c < priv->num_channels; c++) {
+        if (priv->scales[c] != 1.0 || priv->offsets[c] != 0.0) {
+          is_passthrough = FALSE;
+          break;
+        }
+      }
+    }
+
+    if (data_type == GST_TENSOR_DATA_TYPE_UINT8 && gst_format && is_passthrough)
+      gst_caps_set_simple (priv->model_incaps, "format", G_TYPE_STRING,
           gst_format, NULL);
 
     g_free (tensor_name);
@@ -619,7 +666,14 @@ gst_tflite_inference_start (GstBaseTransform * trans)
     goto error;
   }
 
+  gst_clear_caps (&priv->model_outcaps);
   o_size = TfLiteInterpreterGetOutputTensorCount (priv->interpreter);
+
+  if (o_size != 0) {
+    tensors_s = gst_structure_new_empty ("tensorgroups");
+    g_value_init (&v_tensors_set, GST_TYPE_UNIQUE_LIST);
+  }
+
   for (guint i = 0; i < o_size; i++) {
     const TfLiteTensor *tflite_tensor =
         TfLiteInterpreterGetOutputTensor (priv->interpreter, i);
@@ -636,7 +690,7 @@ gst_tflite_inference_start (GstBaseTransform * trans)
       continue;
     }
 
-    tensor_name = modelinfo_find_tensor_name (modelinfo,
+    tensor_name = gst_analytics_modelinfo_find_tensor_name (modelinfo,
         MODELINFO_DIRECTION_OUTPUT, i, tname, data_type, dims_count, dims);
 
 
@@ -654,26 +708,75 @@ gst_tflite_inference_start (GstBaseTransform * trans)
 
     GstTensor *t = gst_tensor_alloc (dims_count);
 
-    gchar *id = modelinfo_get_id (modelinfo, tensor_name);
+    gchar *id = gst_analytics_modelinfo_get_id (modelinfo, tensor_name);
     GST_DEBUG_OBJECT (self, "Mapping output_tensor[%d]:%s of type %s and"
         " dims %s to id %s", i, tname,
         gst_tensor_data_type_get_name (data_type), dims_str, id);
-    g_free (id);
     g_free (dims_str);
 
-    t->id = modelinfo_get_quark_id (modelinfo, tensor_name);
+    /* Get dims-order from modelinfo (defaults to row-major if not specified) */
+    GstTensorDimOrder dims_order =
+        gst_analytics_modelinfo_get_dims_order (modelinfo, tensor_name);
+    const gchar *dims_order_str =
+        dims_order ==
+        GST_TENSOR_DIM_ORDER_COL_MAJOR ? "col-major" : "row-major";
+
+    t->id = gst_analytics_modelinfo_get_quark_id (modelinfo, tensor_name);
     t->layout = GST_TENSOR_LAYOUT_CONTIGUOUS;
     t->data_type = data_type;
-    t->dims_order = GST_TENSOR_DIM_ORDER_ROW_MAJOR;
+    t->dims_order = dims_order;
     memcpy (t->dims, dims, sizeof (gsize) * t->num_dims);
 
+    GstStructure *tensor_desc = gst_structure_new_empty ("tensor/strided");
+
+    /* Setting dims */
+    GValue val_dims = G_VALUE_INIT, val = G_VALUE_INIT;
+    GValue val_caps = G_VALUE_INIT;
+    GValue val_dt = G_VALUE_INIT;
+
+    gst_value_array_init (&val_dims, t->num_dims);
+    g_value_init (&val, G_TYPE_INT);
+    g_value_init (&val_caps, GST_TYPE_CAPS);
+    g_value_init (&val_dt, G_TYPE_STRING);
+
+    for (gsize i = 0; i < t->num_dims; i++) {
+      g_value_set_int (&val, t->dims[i] ? t->dims[i] : 0);
+      gst_value_array_append_value (&val_dims, &val);
+    }
+
+    gst_structure_set (tensor_desc, "dims-order", G_TYPE_STRING, dims_order_str,
+        "tensor-id", G_TYPE_STRING, id, NULL);
+
+    gst_structure_take_value (tensor_desc, "dims", &val_dims);
+    g_value_unset (&val);
+
+    /* Setting datatype */
+    g_value_set_string (&val_dt, gst_tensor_data_type_get_name (t->data_type));
+    gst_structure_take_value (tensor_desc, "type", &val_dt);
+
+    /* tensor caps */
+    GstCaps *tensor_caps = gst_caps_new_full (tensor_desc, NULL);
+
+    /* Append tensor caps to set */
+    gst_value_set_caps (&val_caps, tensor_caps);
+    gst_caps_unref (tensor_caps);
+    gst_value_unique_list_append_and_take_value (&v_tensors_set, &val_caps);
+
+
+    if (i == (o_size - 1)) {
+      gchar *gid = gst_analytics_modelinfo_get_group_id (modelinfo);
+      gst_structure_set_value (tensors_s, gid, &v_tensors_set);
+      g_free (gid);
+
+      priv->model_outcaps = gst_caps_new_simple ("video/x-raw", "tensors",
+          GST_TYPE_STRUCTURE, tensors_s, NULL);
+    }
     g_free (dims);
 
     g_ptr_array_add (priv->tensor_templates, t);
 
     g_free (tensor_name);
   }
-
 
   TfLiteTensor *itensor = TfLiteInterpreterGetInputTensor (priv->interpreter,
       0);
@@ -685,7 +788,7 @@ gst_tflite_inference_start (GstBaseTransform * trans)
 
 done:
   if (modelinfo)
-    modelinfo_free (modelinfo);
+    gst_analytics_modelinfo_free (modelinfo);
 
   GST_OBJECT_UNLOCK (self);
 
@@ -720,7 +823,7 @@ gst_tflite_inference_stop (GstBaseTransform * trans)
     TfLiteModelDelete (priv->model);
   priv->model = NULL;
 
-  gst_clear_caps (&priv->model_caps);
+  gst_clear_caps (&priv->model_incaps);
 
   g_ptr_array_set_size (priv->tensor_templates, 0);
 
@@ -734,18 +837,35 @@ gst_tflite_inference_transform_caps (GstBaseTransform * trans,
   GstTFliteInference *self = GST_TFLITE_INFERENCE (trans);
   GstTFliteInferencePrivate *priv =
       gst_tflite_inference_get_instance_private (self);
-  GstCaps *other_caps;
+  GstCaps *other_caps, *restrictions;
 
-  if (priv->model_caps == NULL) {
+  if (priv->model_incaps == NULL) {
     other_caps = gst_caps_ref (caps);
     goto done;
   }
 
   GST_DEBUG_OBJECT (self, "Applying caps restrictions: %" GST_PTR_FORMAT,
-      priv->model_caps);
+      priv->model_incaps);
 
-  other_caps = gst_caps_intersect_full (caps, priv->model_caps,
-      GST_CAPS_INTERSECT_FIRST);
+  if (direction == GST_PAD_SINK) {
+    restrictions = gst_caps_intersect_full (caps, priv->model_incaps,
+        GST_CAPS_INTERSECT_FIRST);
+    other_caps = gst_caps_intersect (restrictions, priv->model_outcaps);
+    gst_caps_unref (restrictions);
+  } else if (direction == GST_PAD_SRC) {
+    /* Remove tensors from caps if no upstream element produce tensors. */
+    GstCaps *tmp_caps = gst_caps_copy (caps);
+
+    if (!gst_caps_is_empty (tmp_caps)) {
+      GstStructure *tstruct = gst_caps_get_structure (tmp_caps, 0);
+      gst_structure_remove_field (tstruct, "tensors");
+    }
+
+    other_caps = gst_caps_intersect_full (tmp_caps, priv->model_incaps,
+        GST_CAPS_INTERSECT_FIRST);
+    gst_caps_unref (tmp_caps);
+  }
+
 
 done:
   if (filter_caps) {
@@ -787,19 +907,18 @@ gst_tflite_inference_transform_ip (GstBaseTransform * trans, GstBuffer * buf)
   return GST_FLOW_OK;
 }
 
-#define _convert_image_remove_alpha(Type, dst, srcPtr,                        \
-    srcSamplesPerPixel, stride, means, stddevs)                                  \
+#define _convert_image_scale_offset(Type, dst, srcPtr,                        \
+    srcSamplesPerPixel, stride, scales, offsets)                               \
 G_STMT_START {                                                                \
   size_t destIndex = 0;                                                       \
   Type tmp;                                                                   \
                                                                               \
-  if (!priv->planar) {                                                        \
+  if (!planar) {                                                              \
     for (int32_t j = 0; j < dstHeight; ++j) {                                 \
       for (int32_t i = 0; i < dstWidth; ++i) {                                \
         for (int32_t k = 0; k < dstChannels; ++k) {                           \
           tmp = *srcPtr[k];                                                   \
-          tmp += means[k];                                                    \
-          dst[destIndex++] = (Type)(tmp / stddevs[k]);                        \
+          dst[destIndex++] = (Type)(tmp * scales[k] + offsets[k]);            \
           srcPtr[k] += srcSamplesPerPixel;                                    \
         }                                                                     \
       }                                                                       \
@@ -814,8 +933,7 @@ G_STMT_START {                                                                \
       for (int32_t i = 0; i < dstWidth; ++i) {                                \
         for (int32_t k = 0; k < dstChannels; ++k) {                           \
           tmp = *srcPtr[k];                                                   \
-          tmp += means[k];                                                    \
-          destPtr[k][destIndex] = (Type)(tmp / stddevs[k]);                   \
+          destPtr[k][destIndex] = (Type)(tmp * scales[k] + offsets[k]);       \
           srcPtr[k] += srcSamplesPerPixel;                                    \
         }                                                                     \
         destIndex++;                                                          \
@@ -829,41 +947,23 @@ G_STMT_START {                                                                \
 G_STMT_END;
 
 static void
-gst_tflite_inference_convert_image_remove_alpha_u8 (GstTFliteInference * self,
-    guint8 * dst, gint dstWidth, gint dstHeight, gint dstChannels,
-    guint8 ** srcPtr, guint8 srcSamplesPerPixel,
-    guint32 stride, const gdouble * means, const gdouble * stddevs)
+convert_image_scale_offset_u8 (guint8 * dst, gint dstWidth, gint dstHeight,
+    gint dstChannels, gboolean planar, guint8 ** srcPtr,
+    guint8 srcSamplesPerPixel, guint32 stride, const gdouble * scales,
+    const gdouble * offsets)
 {
-  GstTFliteInferencePrivate *priv =
-      gst_tflite_inference_get_instance_private (self);
-  static const gdouble zeros[] = { 0, 0, 0, 0 };
-  static const gdouble ones[] = { 1.0, 1.0, 1.0, 1.0 };
-  if (means == NULL)
-    means = zeros;
-  if (stddevs == NULL)
-    stddevs = ones;
-
-  _convert_image_remove_alpha (guint8, dst, srcPtr, srcSamplesPerPixel,
-      stride, means, stddevs);
+  _convert_image_scale_offset (guint8, dst, srcPtr, srcSamplesPerPixel,
+      stride, scales, offsets);
 }
 
 static void
-gst_tflite_inference_convert_image_remove_alpha_f32 (GstTFliteInference * self,
-    gfloat * dst, gint dstWidth, gint dstHeight, gint dstChannels,
-    guint8 ** srcPtr, guint8 srcSamplesPerPixel,
-    guint32 stride, const gdouble * means, const gdouble * stddevs)
+convert_image_scale_offset_f32 (gfloat * dst, gint dstWidth, gint dstHeight,
+    gint dstChannels, gboolean planar, guint8 ** srcPtr,
+    guint8 srcSamplesPerPixel, guint32 stride, const gdouble * scales,
+    const gdouble * offsets)
 {
-  GstTFliteInferencePrivate *priv =
-      gst_tflite_inference_get_instance_private (self);
-  static const gdouble zeros[] = { 0, 0, 0, 0 };
-  static const gdouble two_five_fives[] = { 255.0, 255.0, 255.0, 255.0 };
-  if (means == NULL)
-    means = zeros;
-  if (stddevs == NULL)
-    stddevs = two_five_fives;
-
-  _convert_image_remove_alpha (gfloat, dst, srcPtr, srcSamplesPerPixel,
-      stride, means, stddevs);
+  _convert_image_scale_offset (gfloat, dst, srcPtr, srcSamplesPerPixel,
+      stride, scales, offsets);
 }
 
 static gboolean
@@ -938,9 +1038,9 @@ gst_tflite_inference_process (GstBaseTransform * trans, GstBuffer * buf)
 
         if (dest == NULL)
           return false;
-        gst_tflite_inference_convert_image_remove_alpha_u8 (self,
-            dest, width, height, channels, srcPtr,
-            srcSamplesPerPixel, stride, priv->means, priv->stddevs);
+        convert_image_scale_offset_u8 (dest, width, height, channels,
+            priv->planar, srcPtr, srcSamplesPerPixel, stride, priv->scales,
+            priv->offsets);
         break;
       }
       case GST_TENSOR_DATA_TYPE_FLOAT32:{
@@ -948,9 +1048,9 @@ gst_tflite_inference_process (GstBaseTransform * trans, GstBuffer * buf)
 
         if (dest == NULL)
           return false;
-        gst_tflite_inference_convert_image_remove_alpha_f32 (self, dest,
-            width, height, channels, srcPtr,
-            srcSamplesPerPixel, stride, priv->means, priv->stddevs);
+        convert_image_scale_offset_f32 (dest, width, height, channels,
+            priv->planar, srcPtr, srcSamplesPerPixel, stride, priv->scales,
+            priv->offsets);
         break;
       }
       default:{

@@ -5,3 +5,4 @@ Skip-failing-tests.patch
 Skip-failing-tests-i386.patch
 Skip-failing-tests-big-endian.patch
 Skip-failing-tests-riscv64.patch
+0001_meson-vmaf_dep-missing-variable.patch

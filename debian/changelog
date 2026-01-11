@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.27.90-1ubuntu2) resolute; urgency=medium
+
+  * d/{control,rules}: Do not include libtensorflow-lite-dev and zxing
+    on i386, they are not built for i386.
+
+ -- Charles <charles05@canonical.com>  Mon, 12 Jan 2026 09:01:16 +0000
+
 gst-plugins-bad1.0 (1.27.90-1ubuntu1) resolute; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:

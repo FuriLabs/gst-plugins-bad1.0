@@ -1,3 +1,20 @@
+gst-plugins-bad1.0 (1.27.90-1ubuntu3) resolute; urgency=medium
+
+  * No-change rebuild for libonnxruntime soname change.
+    - Since
+      https://tracker.debian.org/news/1707835/accepted-onnxruntime-1231dfsg-1-source-amd64-all-into-experimental/
+      landed in experimental, builds in Launchpad depending on
+      gstreamer1.0-plugins-bad are failing to resolve the
+      libonnxruntime dependency. See for example,
+      https://launchpadlibrarian.net/844034972/buildlog_ubuntu-resolute-amd64.gst-thumbnailers_1.0~alpha.3-0ubuntu1_BUILDING.txt.gz
+    - The idea to rebuild gstreamer1.0-plugins-bad in the -proposed
+      environment to get the new libonnxruntime soname depended on by
+      the packages' control file, so that transitive dependencies
+      won't try and resolve the libonnxruntime-providers (=
+      1.21.0+dfsg-3) package, which isn't installable in -proposed.
+
+ -- Charles <charles05@canonical.com>  Tue, 20 Jan 2026 16:01:42 +0000
+
 gst-plugins-bad1.0 (1.27.90-1ubuntu2) resolute; urgency=medium
 
   * d/{control,rules}: Do not include libtensorflow-lite-dev and zxing

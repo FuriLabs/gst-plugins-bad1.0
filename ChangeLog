@@ -1,3 +1,215 @@
+=== release 1.28.0 ===
+
+2026-01-27 17:02:33 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* NEWS:
+	* README.md:
+	* RELEASE:
+	* gst-plugins-bad.doap:
+	* meson.build:
+	  Release 1.28.0
+
+2026-01-27 15:14:41 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* ext/lcevcdecoder/gstlcevch264decodebin.c:
+	* ext/lcevcdecoder/gstlcevch265decodebin.c:
+	* ext/lcevcdecoder/gstlcevch266decodebin.c:
+	  lcevch26xdecodebin: don't autoplug for now until issues with non-LCEVC streams are fixed
+	  See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4870
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10612>
+
+2026-01-25 17:18:08 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* po/LINGUAS:
+	* po/ar.po:
+	* po/hr.po:
+	* po/ro.po:
+	  gst-plugins-bad: update translations
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10598>
+
+2026-01-19 18:48:39 +0100  Rafael Caricio <rcaricio@netflix.com>
+
+	* sys/applemedia/vtdec.c:
+	  vtdec: check AV1 support during caps negotiation
+	  Override getcaps vfunc to filter out video/x-av1 from advertised caps
+	  when hardware decoding is not supported, rather than failing later in
+	  set_format. This allows proper fallback to other decoders during
+	  autoplugging.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10562>
+
+2026-01-20 20:27:40 +0530  Nirbheek Chauhan <nirbheek@centricular.com>
+
+	* ext/rtmp/gstrtmp.c:
+	* ext/rtmp/gstrtmpsink.c:
+	* ext/rtmp/gstrtmpsrc.c:
+	  rtmp: Emit a deprecation warning in init
+	  After 1.28.0 is released, we will remove this plugin and have the
+	  rtmp2 plugin register these features.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10574>
+
+2026-01-18 17:09:10 +0530  Nirbheek Chauhan <nirbheek@centricular.com>
+
+	* meson.build:
+	* meson.options:
+	  meson: Don't disable orc support when orcc is not available
+	  This was breaking usage of orc when cross-compiling with no orcc
+	  available in PATH. We can use the orc-dist.{c,h} files in that case as
+	  long as the orc library itself is available. Using the subproject, for
+	  example.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10553>
+
+2025-12-20 19:56:37 +0530  Nirbheek Chauhan <nirbheek@centricular.com>
+
+	* sys/androidmedia/gstamc.c:
+	* sys/androidmedia/gstamcutils.c:
+	* sys/androidmedia/gstamcutils.h:
+	* sys/androidmedia/gstamcvideoenc.c:
+	* sys/androidmedia/gstjniutils.c:
+	* sys/androidmedia/gstjniutils.h:
+	* sys/androidmedia/jni/gstamc-codeclist-jni.c:
+	* sys/androidmedia/meson.build:
+	  amc: Fix init on Android API < 29
+	  Not finding isHardwareAccelerated() is an error only for API >= 29.
+	  Fixes https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4693
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10426>
+
+2025-12-20 19:55:45 +0530  Nirbheek Chauhan <nirbheek@centricular.com>
+
+	* sys/androidmedia/gstjniutils.c:
+	  amc: Fix whitespace around gst_amc_jni_call_*_method macros
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10426>
+
+2026-01-14 19:07:40 -0600  Christopher Degawa <ccom@randomderp.com>
+
+	* ext/svtav1/gstsvtav1enc.c:
+	  svtav1enc: handle deprecations from SVT-AV1 4.0.0
+	  `enable_adaptive_quantization` was replaced by `aq_mode` since it's not
+	  a boolean. `target_socket` was removed entirely. If someone wants to
+	  pin the encoder to a specific socket, they will have to use external
+	  means like numactl etc.
+	  Signed-off-by: Christopher Degawa <ccom@randomderp.com>
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10543>
+
+2026-01-12 16:09:38 +0900  Seungha Yang <seungha@centricular.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	* sys/win32ipc/gstwin32ipc.cpp:
+	* sys/win32ipc/gstwin32ipcbasesink.cpp:
+	* sys/win32ipc/gstwin32ipcbasesrc.cpp:
+	* sys/win32ipc/gstwin32ipcsink.cpp:
+	* sys/win32ipc/gstwin32ipcsrc.cpp:
+	  win32ipc: Update plugin docs
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10529>
+
+2026-01-12 16:07:54 +0900  Seungha Yang <seungha@centricular.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	* sys/d3d12/gstd3d12fisheyedewarp.cpp:
+	* sys/d3d12/gstd3d12memorycopy.cpp:
+	* sys/d3d12/gstd3d12overlaycompositor.cpp:
+	* sys/d3d12/gstd3d12remap.cpp:
+	  d3d12: Update plugin docs
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10529>
+
+2026-01-12 15:23:24 +0900  Seungha Yang <seungha@centricular.com>
+
+	* docs/plugins/gst_plugins_cache.json:
+	  wasapi2: Update plugin docs
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10529>
+
+2026-01-12 07:34:24 +0100  Víctor Manuel Jáquez Leal <vjaquez@igalia.com>
+
+	* sys/va/gstvaencoder.c:
+	  va: encoder: don't fail at close if config isn't created
+	  With the last refactor, the configuration of the encoder is lazy, so it's
+	  possible to close the encoder without even opened it. But still return FALSE if
+	  closing the encoder with no config ID, which generated spurious error logs.
+	  This patch also resets the state of the encoder while closing.
+	  Fixes: #4852
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10528>
+
+2026-01-13 09:46:48 +0100  Sjoerd Simons <sjoerd@collabora.com>
+
+	* ext/onnx/gstonnxinference.c:
+	  onnx: Reset memory_info after freeing
+	  For clarity also reset memory_info to NULL after freeing it.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10535>
+
+2026-01-13 08:33:36 +0100  Sjoerd Simons <sjoerd@collabora.com>
+
+	* ext/onnx/gstonnxinference.c:
+	  onnxinference: Fix invalid free of output names
+	  Ensure the output_names array has been allocated before trying to free
+	  its elements. This situation happens when the model validation fails
+	  before the output names are assigned; I ran into it due to an
+	  incorrect model info file.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10535>
+
+2026-01-10 21:27:30 +0100  Ruben Gonzalez <rgonzalez@fluendo.com>
+
+	* tests/check/meson.build:
+	  bad: fix indentation
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10527>
+
+2026-01-10 15:29:50 +0100  Ruben Gonzalez <rgonzalez@fluendo.com>
+
+	* gst/closedcaption/meson.build:
+	* tests/check/meson.build:
+	  closedcaption: map with meson options
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10527>
+
+2026-01-07 14:06:03 +0200  Sebastian Dröge <sebastian@centricular.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  play: Check correct flags for deciding whether a track is enabled
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10503>
+
+2026-01-07 13:25:55 +0200  Sebastian Dröge <sebastian@centricular.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  play: Move subtitle enabled condition to the right place
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10503>
+
+2026-01-06 18:29:30 +0200  Sebastian Dröge <sebastian@centricular.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  play: Don't access currently selected audio/video/subtitle stream ids without mutex
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10503>
+
+2026-01-06 18:25:41 +0200  Sebastian Dröge <sebastian@centricular.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  play: Don't do the same stream selection multiple times
+	  playbin3 doesn't respond with a streams-selected message in that case, and apart
+	  from that it's also inefficient.
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10503>
+
+2026-01-06 14:20:30 +0200  Sebastian Dröge <sebastian@centricular.com>
+
+	* gst-libs/gst/play/gstplay.c:
+	  play: Ignore streams-selected messages for old selections
+	  It might happen that we received a new stream-collection and sent a new
+	  select-streams event in the meantime, and reacting to the old streams-selected
+	  message can cause inconsistent states if the streams have changed.
+	  See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9851
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10503>
+
+2025-12-27 18:47:42 +0200  Sebastian Dröge <sebastian@centricular.com>
+
+	* ext/webrtc/gstwebrtcbin.c:
+	* gst-libs/gst/webrtc/ice.c:
+	* gst-libs/gst/webrtc/nice/nice.c:
+	  webrtc: Change promise in gst_webrtc_ice_close() to `transfer none`
+	  This is more in line with other API taking a promise and makes it easier for
+	  calling code to keep a reference to the promise around.
+	  Fixes https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4819
+	  Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10460>
+
+2026-01-05 20:20:51 +0000  Tim-Philipp Müller <tim@centricular.com>
+
+	* meson.build:
+	  Back to development after 1.27.90
+
 === release 1.27.90 ===
 
 2026-01-05 20:15:10 +0000  Tim-Philipp Müller <tim@centricular.com>

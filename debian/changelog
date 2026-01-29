@@ -1,80 +1,14 @@
-gst-plugins-bad1.0 (1.27.90-1ubuntu3) resolute; urgency=medium
-
-  * No-change rebuild for libonnxruntime soname change.
-    - Since
-      https://tracker.debian.org/news/1707835/accepted-onnxruntime-1231dfsg-1-source-amd64-all-into-experimental/
-      landed in experimental, builds in Launchpad depending on
-      gstreamer1.0-plugins-bad are failing to resolve the
-      libonnxruntime dependency. See for example,
-      https://launchpadlibrarian.net/844034972/buildlog_ubuntu-resolute-amd64.gst-thumbnailers_1.0~alpha.3-0ubuntu1_BUILDING.txt.gz
-    - The idea to rebuild gstreamer1.0-plugins-bad in the -proposed
-      environment to get the new libonnxruntime soname depended on by
-      the packages' control file, so that transitive dependencies
-      won't try and resolve the libonnxruntime-providers (=
-      1.21.0+dfsg-3) package, which isn't installable in -proposed.
-
- -- Charles <charles05@canonical.com>  Tue, 20 Jan 2026 16:01:42 +0000
-
-gst-plugins-bad1.0 (1.27.90-1ubuntu2) resolute; urgency=medium
-
-  * d/{control,rules}: Do not include libtensorflow-lite-dev and zxing
-    on i386, they are not built for i386.
-
- -- Charles <charles05@canonical.com>  Mon, 12 Jan 2026 09:01:16 +0000
-
-gst-plugins-bad1.0 (1.27.90-1ubuntu1) resolute; urgency=medium
-
-  * Resynchronize with Debian. Remaining changes:
-    - Don't build wpewebkit plugins
-    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
-      moved to -good.
-    - Have gstreamer-plugins-bad-1.0.pc Require gstreamer-plugins-good-1.0 -
-      the package we've moved the referenced plugins to. This maintains
-      compatibility with upstream software and other distributions.
-    - Don't build the opencv binary packages on i386, avoiding a large tree
-      of numeric-related dependencies for a binary package it's not required
-      to support.
-    - d/control, d/gstreamer1.0-plugins-bad.install, d/rules:
-      + Don't require these Build-Depends on i386:
-        - libltc-dev, libfreeaptx-dev, libqrencode-dev, libzxing-dev,
-          liblrdf0-dev, libneon27-dev, libopenni2-dev
-
-  [ Jeremy Bícha ]
-  * Skip a redirect test that began failing once curl was updated to 8.16
-    (Closes: #1098871. Mitigates: #1114141.)
-  * Add patches to skip specific tests on some architectures
-  * Stop ignoring non-skipped test failures on release architectures
-  * Add an autopkgtest to ensure that build tests still pass when dependencies
-    change
-  * Restore default soundfont patch (Closes: #1018145)
-  * Fix logic error in big endian skip test patch
-  * Stop skipping the curl redirect build test (Closes: #1114141)
-  * autopkgtest: Don't run on riscv64
-
-  [ Simon McVittie ]
-  * d/control: Add Build-Depends on systematic names for gir1.2-*-dev packages
-  * d/control: Replace libgirepository1.0-dev B-D with gobject-introspection
-  * gir1.2-gst-plugins-bad-1.0: Add ${gir:Provides}
-  * libgstreamer-plugins-bad1.0-dev: Add ${gir:Provides}
-  * libgstreamer-plugins-bad1.0-dev: Add ${gir:Depends}
-
- -- Charles <charles05@canonical.com>  Thu, 8 Jan 2026 14:28:32 +0100
-
-gst-plugins-bad1.0 (1.27.90-1) experimental; urgency=medium
-
-  * New upstream version 1.27.90
-  * d/control: update dependencies to 1.27.90
-
- -- Marc Leeman <marc.leeman@gmail.com>  Tue, 06 Jan 2026 11:23:27 +0100
-
-gst-plugins-bad1.0 (1.27.50-1) experimental; urgency=medium
-
-  [ Dylan Aïssi ]
-  * Build the TensorFlow Lite (LiteRT) plugin
+gst-plugins-bad1.0 (1.28.0-1) unstable; urgency=medium
 
   [ Marc Leeman ]
-  * New upstream version 1.27.50
-  * d/control: update dependencies to >= 1.27.50
+  * d/rules: disable tflite
+  * d/rules: disable wpe2
+  * d/install: gsty4m moved to good
+  * d/install: install libgsthip.so
+  * d/control: remove  superfluous-file-pattern gst/y4m/gsty4mdec.[ch]
+  * d/control: bump minimal version after new symbols
+  * d/control: libvulkan-dev minimal 1.4.317
+  * d/copyright: superfluous-file-pattern gst/inter/gstintertest.c
   * d/patches: refresh Skip-failing-tests
   * d/rules: disable mpeghdec, not in debian
   * d/rules: disable vmaf, not in debian
@@ -82,25 +16,85 @@ gst-plugins-bad1.0 (1.27.50-1) experimental; urgency=medium
   * d/rules: disable vulkan, dependency sdl3 not in debian
   * d/control: remove libvulkan-dev because of sdl3 dep
   * d/install: install libgsthip
+  * d/: do not enable hip elements on hurd
+  * d/rules: not hurd is linux
+  * New upstream version 1.28.0
+  * Revert "d/gbp.conf: adjust for experimental"
+  * d/control: update dependencies to 1.28.0
+  * d/patches: refresh
 
- -- Marc Leeman <marc.leeman@gmail.com>  Thu, 11 Dec 2025 12:51:31 +0100
+  [ Dylan Aïssi ]
+  * Build the TensorFlow Lite (LiteRT) plugin
 
-gst-plugins-bad1.0 (1.27.2-1ubuntu1) resolute; urgency=medium
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 28 Jan 2026 14:22:06 +0100
 
-  * Resynchronize with Debian. Remaining changes:
-    - Don't build wpewebkit plugins
-    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
-      moved to -good.
-    - Have gstreamer-plugins-bad-1.0.pc Require gstreamer-plugins-good-1.0 -
-      the package we've moved the referenced plugins to. This maintains
-      compatibility with upstream software and other distributions.
-    - Don't build the opencv binary packages on i386, avoiding a large tree
-      of numeric-related dependencies for a binary package it's not required
-      to support.
-    - d/control, d/gstreamer1.0-plugins-bad.install, d/rules:
-      + Don't require these Build-Depends on i386:
-        - libltc-dev, libfreeaptx-dev, libqrencode-dev, libzxing-dev,
-          liblrdf0-dev, libneon27-dev
+gst-plugins-bad1.0 (1.26.10-2) unstable; urgency=medium
+
+  * re-upload bad to unstable
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Thu, 08 Jan 2026 11:02:48 +0100
+
+gst-plugins-bad1.0 (1.26.10-1) unstable; urgency=medium
+
+  * New upstream version 1.26.10
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Fri, 26 Dec 2025 18:11:00 +0100
+
+gst-plugins-bad1.0 (1.26.9-1) unstable; urgency=medium
+
+  * d/control: bump Standards-Version to 4.7.2
+  * New upstream version 1.26.9
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 02 Dec 2025 09:50:33 +0100
+
+gst-plugins-bad1.0 (1.26.8-1) unstable; urgency=medium
+
+  * New upstream version 1.26.8
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 12 Nov 2025 10:45:58 +0100
+
+gst-plugins-bad1.0 (1.26.7-2) unstable; urgency=medium
+
+  * Team upload
+
+  [ Marc Leeman ]
+  * d/control: bump meson version to match meson.build
+
+  [ Charles ]
+  * Add several more autopkgtests
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Mon, 03 Nov 2025 17:48:43 -0500
+
+gst-plugins-bad1.0 (1.26.7-1) unstable; urgency=medium
+
+  * New upstream version 1.26.7
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 15 Oct 2025 10:05:19 +0200
+
+gst-plugins-bad1.0 (1.26.6-5) unstable; urgency=medium
+
+  * autopkgtest: Don't run on riscv64
+  * Revert increasing the build test timeout since it was ineffective
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 09 Oct 2025 11:42:50 -0400
+
+gst-plugins-bad1.0 (1.26.6-4) unstable; urgency=medium
+
+  * Increase build test timeout for riscv64 autopkgtest
+  * Stop skipping the curl redirect build test (Closes: #1114141)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 08 Oct 2025 15:22:53 -0400
+
+gst-plugins-bad1.0 (1.26.6-3) unstable; urgency=medium
+
+  * Team upload
+  * Fix logic error in big endian skip test patch
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Wed, 08 Oct 2025 04:46:44 -0400
+
+gst-plugins-bad1.0 (1.26.6-2) unstable; urgency=medium
+
+  * Team upload
 
   [ Jeremy Bícha ]
   * Skip a redirect test that began failing once curl was updated to 8.16
@@ -110,9 +104,6 @@ gst-plugins-bad1.0 (1.27.2-1ubuntu1) resolute; urgency=medium
   * Add an autopkgtest to ensure that build tests still pass when dependencies
     change
   * Restore default soundfont patch (Closes: #1018145)
-  * Fix logic error in big endian skip test patch
-  * Stop skipping the curl redirect build test (Closes: #1114141)
-  * autopkgtest: Don't run on riscv64
 
   [ Simon McVittie ]
   * d/control: Add Build-Depends on systematic names for gir1.2-*-dev packages
@@ -121,31 +112,13 @@ gst-plugins-bad1.0 (1.27.2-1ubuntu1) resolute; urgency=medium
   * libgstreamer-plugins-bad1.0-dev: Add ${gir:Provides}
   * libgstreamer-plugins-bad1.0-dev: Add ${gir:Depends}
 
- -- Charles <charles05@canonical.com>  Fri, 25 Jul 2025 21:00:25 +0200
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Tue, 07 Oct 2025 20:24:44 -0400
 
-gst-plugins-bad1.0 (1.27.2-1) experimental; urgency=medium
+gst-plugins-bad1.0 (1.26.6-1) unstable; urgency=medium
 
-  * New upstream version 1.27.2
-  * d/control: bump minimal version after new symbols
-  * d/control: libvulkan-dev minimal 1.4.317
-  * d/copyright: superfluous-file-pattern gst/inter/gstintertest.c
+  * New upstream version 1.26.6
 
- -- Marc Leeman <marc.leeman@gmail.com>  Thu, 11 Sep 2025 12:42:50 +0200
-
-gst-plugins-bad1.0 (1.27.1-1) experimental; urgency=medium
-
-  * Revert "d/watch: pin to 1.26.x"
-  * d/gbp.conf: adjust for experimental
-  * New upstream version 1.27.1
-  * d/rules: disable tflite
-  * d/control: bump Standards-Version
-  * d/rules: disable wpe2
-  * d/install: gsty4m moved to good
-  * d/install: install libgsthip.so
-  * d/control: remove  superfluous-file-pattern gst/y4m/gsty4mdec.[ch]
-  * d/control: API change, gst deps to 1.27.1
-
- -- Marc Leeman <marc.leeman@gmail.com>  Tue, 12 Aug 2025 13:58:54 +0200
+ -- Marc Leeman <marc.leeman@gmail.com>  Mon, 15 Sep 2025 10:59:29 +0200
 
 gst-plugins-bad1.0 (1.26.5-2) unstable; urgency=medium
 

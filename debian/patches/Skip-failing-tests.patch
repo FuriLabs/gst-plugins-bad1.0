@@ -21,9 +21,9 @@ index 7e8606e..c5ea414 100644
    [['elements/avwait.c'], get_option('timecode').disabled()],
 -  [['elements/camerabin.c'], get_option('camerabin2').disabled()],
 +  [['elements/camerabin.c'], true, ],
-   [['elements/ccconverter.c'], false, [gstvideo_dep]],
-   [['elements/cccombiner.c']],
-   [['elements/ccextractor.c']],
+   [['elements/ccconverter.c'], get_option('closedcaption').disabled(), [gstvideo_dep]],
+   [['elements/cccombiner.c'], get_option('closedcaption').disabled()],
+   [['elements/ccextractor.c'], get_option('closedcaption').disabled()],
 @@ -83,8 +83,8 @@ base_tests = [
    [['elements/switchbin.c'], get_option('switchbin').disabled()],
    [['elements/videoframe-audiolevel.c'], get_option('videoframe_audiolevel').disabled()],

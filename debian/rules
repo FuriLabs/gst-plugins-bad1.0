@@ -97,7 +97,7 @@ endif
 ifeq ($(DEB_HOST_ARCH),i386)
 conf_flags += -Dladspa=disabled -Dneon=disabled -Dopenaptx=disabled \
               -Dopenni2=disabled -Dqroverlay=disabled -Dvulkan=disabled \
-              -Dtflite=disabled
+              -Dtflite=disabled -Dhip=disabled
 endif
 
 # bookworm backport flags

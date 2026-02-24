@@ -17,7 +17,7 @@ gst-plugins-bad1.0 (1.28.0-1ubuntu2) resolute; urgency=medium
       with only legally encumbered or truly bad plugins remaining.
   * Fold jpegformat, camerabin, gstphotography back into the bad
     source. They were being vendored in -good until 1.26.4-1ubuntu2.
-  * From MIR review (LP: #2121050)
+  * From MIR review (LP #2121050)
     - Start tracking libgstreamer-plugins-extra1.0-0.symbols.
     - Disable LTO on ppc64el & s390x.
 

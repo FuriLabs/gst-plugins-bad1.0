@@ -1,6 +1,5 @@
 Source: gst-plugins-bad1.0
 Section: libs
-Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 XSBC-Original-Maintainer: Maintainers of GStreamer packages <gst-plugins-bad1.0@packages.debian.org>
 Uploaders: Sebastian Dröge <slomo@debian.org>,
@@ -67,7 +66,6 @@ Build-Depends: debhelper-compat (= 13),
                libmpcdec-dev,
                libneon27-dev [!i386],
                libnice-dev (>= 0.1.20),
-               libonnxruntime-dev [amd64 arm64 armhf riscv64],
                libopenal-dev (>= 1:1.14),
                libopencv-dev (>= 3.0.0) [amd64 arm64 armel armhf mips64el ppc64el riscv64 s390x alpha powerpc ppc64 sparc64],
                libopenexr-dev,
@@ -118,7 +116,7 @@ Build-Depends: debhelper-compat (= 13),
                xvfb
 Build-Conflicts: libopenaptx-dev
 Rules-Requires-Root: no
-Standards-Version: 4.7.2
+Standards-Version: 4.7.3
 Vcs-Git: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0.git
 Vcs-Browser: https://salsa.debian.org/gstreamer-team/gst-plugins-bad1.0/
 Homepage: https://gstreamer.freedesktop.org

@@ -1,3 +1,46 @@
+gst-plugins-bad1.0 (1.28.1-2ubuntu1) resolute; urgency=medium
+
+  * Resynchronize with Debian. Remaining changes:
+    - d/rules:
+      + Depend on gobject-introspection.
+      + Build ONNX neural network plugin.
+      + Enable Vulkan, SDL3 is available in Ubuntu (and Debian,
+        but they disable there for some reason.)
+    - Don't build wpewebkit plugins (gstreamer1.0-wpe).
+    - Stop installing camerabin2 basecamerabin jpegformat - plugins which have
+      moved to -good.
+      + d/control: Have libgstreamer-plugins-bad1.0-dev depend on
+        libgstreamer-plugins-good1.0-dev to reflect the above.
+      + d/rules: Remove these modules from the -bad package.
+    - d/gbp.conf: Ubuntu VCS tags.
+    - d/p/pcfile-requires-plugins-good:
+      Have gstreamer-plugins-bad-1.0.pc Require gstreamer-plugins-good-1.0 -
+      the package we've moved the referenced plugins to. This maintains
+      compatibility with upstream software and other distributions.
+    - Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+    - d/control, d/gstreamer1.0-plugins-bad.install, d/rules: Disable unavailable features on i386
+      + Don't require these Build-Depends on i386: libfreeaptx-dev,
+        liblrdf0-dev, libltc-dev, libneon27-dev, libzxing-dev, libopenni2-dev,
+        libqrencode-dev,  libtensorflow-lite-dev, and libzxing-dev.
+      + Disable ladspa, neon, openaptx, openni2, qroverlay, vulkan,
+        tflite, and hip on i386, since they're not built there for
+        Ubuntu.
+    - plugins-extra split:
+      + Introduce a new package containing a subset of -bad plugins
+        that will be included in Ubuntu main.
+        - libgstcamerabin, libgstcodecparsers, libgstcodecs, libgstphotography, libgstplay
+      + Have gstreamer1.0-plugins-bad depend on gstreamer1.0-plugins-extra.
+      + Replace+Break gstreamer1.0-plugins-good versions where -bad
+        plugins were patched in.
+      + libgstreamer-plugins-extra1.0-0.symbols: Add symbol file for new package.
+      + d/rules: Manually move the remaining components from -bad into -extra.
+    - Disable LTO on ppc64el & s390x.
+    - d/libgstreamer-plugins-extra1.0-0.symbols: Update for new release.
+
+ -- Charles <charles05@canonical.com>  Sun, 22 Mar 2026 12:42:45 +0000
+
 gst-plugins-bad1.0 (1.28.1-2) unstable; urgency=medium
 
   * Revert "Build the ONNX neural network plugin"

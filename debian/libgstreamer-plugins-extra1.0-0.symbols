@@ -89,6 +89,7 @@ libgstcodecparsers-1.0.so.0 libgstreamer-plugins-extra1.0-0 #MINVER#
  gst_h265_get_profile_from_sps@Base 1.27.2
  gst_h265_parse_pps@Base 1.27.2
  gst_h265_parse_sps@Base 1.27.2
+ gst_h265_parse_sps_ext@Base 1.28.1
  gst_h265_parse_vps@Base 1.27.2
  gst_h265_parser_free@Base 1.27.2
  gst_h265_parser_identify_and_split_nalu_hevc@Base 1.27.2
@@ -104,7 +105,9 @@ libgstcodecparsers-1.0.so.0 libgstreamer-plugins-extra1.0-0 #MINVER#
  gst_h265_parser_parse_pps@Base 1.27.2
  gst_h265_parser_parse_sei@Base 1.27.2
  gst_h265_parser_parse_slice_hdr@Base 1.27.2
+ gst_h265_parser_parse_slice_hdr_ext@Base 1.28.1
  gst_h265_parser_parse_sps@Base 1.27.2
+ gst_h265_parser_parse_sps_ext@Base 1.28.1
  gst_h265_parser_parse_vps@Base 1.27.2
  gst_h265_parser_update_pps@Base 1.27.2
  gst_h265_parser_update_sps@Base 1.27.2
@@ -270,6 +273,7 @@ libgstcodecs-1.0.so.0 libgstreamer-plugins-extra1.0-0 #MINVER#
  gst_h264_picture_new@Base 1.27.2
  gst_h264_picture_set_reference@Base 1.27.2
  gst_h265_decoder_get_picture@Base 1.27.2
+ gst_h265_decoder_get_sps_ext@Base 1.28.1
  gst_h265_decoder_get_type@Base 1.27.2
  gst_h265_decoder_set_process_ref_pic_lists@Base 1.27.2
  gst_h265_dpb_add@Base 1.27.2

@@ -7,10 +7,10 @@ This could mean that openjpeg is broken on these architectures!
  tests/check/meson.build | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Index: gst-plugins-bad1.0/tests/check/meson.build
-===================================================================
---- gst-plugins-bad1.0.orig/tests/check/meson.build
-+++ gst-plugins-bad1.0/tests/check/meson.build
+diff --git a/tests/check/meson.build b/tests/check/meson.build
+index 9d7c535..6925932 100644
+--- a/tests/check/meson.build
++++ b/tests/check/meson.build
 @@ -68,7 +68,7 @@ base_tests = [
    [['elements/nvenc.c'], false, [gstgl_dep, gmodule_dep]],
    [['elements/nvdec.c'], not gstgl_dep.found(), [gstgl_dep, gmodule_dep]],

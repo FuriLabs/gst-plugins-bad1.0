@@ -1,11 +1,16 @@
-Description: meson missing vmaf_dep variable with vmaf disabled
-Author: Marc Leeman <marc.leeman@gmail.com>
-Last-Update: 2025-12-11
+From: Marc Leeman <marc.leeman@gmail.com>
+Date: Sun, 22 Mar 2026 12:41:52 +0000
+Subject: meson missing vmaf_dep variable with vmaf disabled
 
-Index: gst-plugins-bad1.0/tests/check/meson.build
-===================================================================
---- gst-plugins-bad1.0.orig/tests/check/meson.build
-+++ gst-plugins-bad1.0/tests/check/meson.build
+Last-Update: 2025-12-11
+---
+ tests/check/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/check/meson.build b/tests/check/meson.build
+index ff326ce..8a4d55d 100644
+--- a/tests/check/meson.build
++++ b/tests/check/meson.build
 @@ -172,7 +172,7 @@ if host_machine.system() != 'windows'
      [['elements/netsim.c'], true ],
      [['elements/shm.c'], not shm_enabled, shm_deps],

@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.28.1-2ubuntu2) resolute; urgency=medium
+
+  * d/rules: Move newly added GstCodecParsers-1.0.{gir,typelib} to the
+    -extra package to avoid a -extra->-bad dependency.
+
+ -- Charles <charles05@canonical.com>  Mon, 23 Mar 2026 22:48:58 +0000
+
 gst-plugins-bad1.0 (1.28.1-2ubuntu1) resolute; urgency=medium
 
   * Resynchronize with Debian. Remaining changes:

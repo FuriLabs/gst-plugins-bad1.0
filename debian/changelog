@@ -1,3 +1,16 @@
+gst-plugins-bad1.0 (1.29.1-1) experimental; urgency=medium
+
+  [ Marc Leeman ]
+  * d/gbp.conf: adjust for experimental
+  * New upstream version 1.29.1
+  * d/control: update gst dep to >= 1.29.1
+  * d/patches: remove 0001_meson-vmaf_dep-missing-variable
+
+  [ Dylan Aïssi ]
+  * Build the ONNX neural network plugin
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Mon, 23 Mar 2026 12:10:19 +0100
+
 gst-plugins-bad1.0 (1.28.1-2) unstable; urgency=medium
 
   * Revert "Build the ONNX neural network plugin"

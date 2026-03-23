@@ -237,6 +237,10 @@ endif
 	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/
 	mv debian/libgstreamer-plugins-bad1.0-dev/usr/include/gstreamer-1.0/gst/codecparsers \
 	   debian/libgstreamer-plugins-extra1.0-dev/usr/include/gstreamer-1.0/gst/
+	mv debian/libgstreamer-plugins-bad1.0-dev/usr/share/gir-1.0/GstCodecParsers-1.0.gir \
+	   debian/libgstreamer-plugins-extra1.0-dev/usr/share/gir-1.0
+	mv debian/gir1.2-gst-plugins-bad-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/GstCodecParsers-1.0.typelib \
+	   debian/gir1.2-gst-plugins-extra-1.0/usr/lib/$(DEB_HOST_MULTIARCH)/girepository-1.0/
 
 	mv debian/libgstreamer-plugins-bad1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/libgstcodecs-1.0.so \
 	   debian/libgstreamer-plugins-extra1.0-dev/usr/lib/$(DEB_HOST_MULTIARCH)/

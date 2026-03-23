@@ -1,5 +1,6 @@
 /* GStreamer
- * Copyright (C) 2025 Seungha Yang <seungha@centricular.com>
+ * Copyright (C) 2025 Collabora Ltd.
+ *   @author: Jakub Adam <jakub.adam@collabora.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -12,21 +13,19 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
+ * License along with this library; if not, write to the0
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
 
 #pragma once
 
-#include "gstcodecccinserter.h"
+#include "gstvadevice.h"
 
 G_BEGIN_DECLS
 
-#define GST_TYPE_H264_CC_INSERTER (gst_h264_cc_inserter_get_type())
-G_DECLARE_FINAL_TYPE (GstH264CCInserter, gst_h264_cc_inserter,
-    GST, H264_CC_INSERTER, GstCodecCCInserter);
-
-GST_ELEMENT_REGISTER_DECLARE (h264ccinserter);
+gboolean  gst_va_overlay_compositor_register  (GstPlugin * plugin,
+                                               GstVaDevice * device,
+                                               guint rank);
 
 G_END_DECLS

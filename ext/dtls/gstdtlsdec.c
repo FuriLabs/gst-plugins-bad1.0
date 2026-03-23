@@ -80,6 +80,7 @@ enum
   PROP_SRTP_CIPHER,
   PROP_SRTP_AUTH,
   PROP_CONNECTION_STATE,
+  PROP_VERSION,
   NUM_PROPERTIES
 };
 
@@ -118,6 +119,8 @@ static GstFlowReturn sink_chain_list (GstPad *, GstObject * parent,
 static GstDtlsAgent *get_agent_by_pem (const gchar * pem);
 static void agent_weak_ref_notify (gchar * pem, GstDtlsAgent *);
 static void create_connection (GstDtlsDec *, gchar * id);
+static void clear_signals (GstDtlsDec *);
+
 static void connection_weak_ref_notify (gchar * id, GstDtlsConnection *);
 
 static void
@@ -191,6 +194,20 @@ gst_dtls_dec_class_init (GstDtlsDecClass * klass)
       GST_DTLS_TYPE_CONNECTION_STATE,
       GST_DTLS_CONNECTION_STATE_NEW, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GstDtlsDec:version:
+   *
+   * The negotiated DTLS protocol version, represented as 2 bytes. Each
+   * component of the version is translated to a byte using `hex(255 -
+   * component)`. For instance if the version is 1.3, the resulting value will
+   * be `0xFEFC`.
+   *
+   * Since: 1.30
+   */
+  properties[PROP_VERSION] =
+      g_param_spec_uint ("version", "DTLS version", "Negotiated version", 0,
+      G_MAXUINT16, 0, G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
   gst_element_class_add_static_pad_template (element_class, &src_template);
@@ -213,6 +230,10 @@ gst_dtls_dec_init (GstDtlsDec * self)
   self->decoder_key = NULL;
   self->srtp_cipher = DEFAULT_SRTP_CIPHER;
   self->srtp_auth = DEFAULT_SRTP_AUTH;
+
+  self->signal_peer_certificate = 0;
+  self->signal_decoder_key = 0;
+  self->signal_state_changed = 0;
 
   g_mutex_init (&self->src_mutex);
 
@@ -261,6 +282,7 @@ gst_dtls_dec_dispose (GObject * object)
   }
 
   if (self->connection) {
+    clear_signals (self);
     g_object_unref (self->connection);
     self->connection = NULL;
   }
@@ -328,6 +350,13 @@ gst_dtls_dec_get_property (GObject * object, guint prop_id, GValue * value,
       else
         g_value_set_enum (value, GST_DTLS_CONNECTION_STATE_CLOSED);
       break;
+    case PROP_VERSION:
+      if (self->connection)
+        g_object_get_property (G_OBJECT (self->connection), "version", value);
+      else
+        g_value_set_uint (value, 0);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (self, prop_id, pspec);
   }
@@ -342,11 +371,11 @@ gst_dtls_dec_change_state (GstElement * element, GstStateChange transition)
   switch (transition) {
     case GST_STATE_CHANGE_NULL_TO_READY:
       if (self->connection) {
-        g_signal_connect_object (self->connection,
-            "on-decoder-key", G_CALLBACK (on_key_received), self, 0);
-        g_signal_connect_object (self->connection,
+        self->signal_decoder_key = g_signal_connect (self->connection,
+            "on-decoder-key", G_CALLBACK (on_key_received), self);
+        self->signal_peer_certificate = g_signal_connect (self->connection,
             "on-peer-certificate", G_CALLBACK (on_peer_certificate_received),
-            self, 0);
+            self);
       } else {
         GST_WARNING_OBJECT (self,
             "trying to change state to ready without connection id and pem");
@@ -732,6 +761,27 @@ get_agent_by_pem (const gchar * pem)
 }
 
 static void
+clear_signals (GstDtlsDec * self)
+{
+  if (self->connection) {
+    if (self->signal_decoder_key) {
+      g_signal_handler_disconnect (self->connection, self->signal_decoder_key);
+      self->signal_decoder_key = 0;
+    }
+    if (self->signal_peer_certificate) {
+      g_signal_handler_disconnect (self->connection,
+          self->signal_peer_certificate);
+      self->signal_peer_certificate = 0;
+    }
+    if (self->signal_state_changed) {
+      g_signal_handler_disconnect (self->connection,
+          self->signal_state_changed);
+      self->signal_state_changed = 0;
+    }
+  }
+}
+
+static void
 agent_weak_ref_notify (gchar * pem, GstDtlsAgent * agent)
 {
   G_LOCK (agent_table);
@@ -786,8 +836,7 @@ create_connection (GstDtlsDec * self, gchar * id)
   g_return_if_fail (GST_IS_DTLS_AGENT (self->agent));
 
   if (self->connection) {
-    g_signal_handlers_disconnect_by_func (self->connection,
-        on_connection_state_changed, self);
+    clear_signals (self);
     g_object_unref (self->connection);
     self->connection = NULL;
   }
@@ -807,9 +856,9 @@ create_connection (GstDtlsDec * self, gchar * id)
 
   self->connection =
       g_object_new (GST_TYPE_DTLS_CONNECTION, "agent", self->agent, NULL);
-  g_signal_connect_object (self->connection,
+  g_signal_connect (self->connection,
       "notify::connection-state", G_CALLBACK (on_connection_state_changed),
-      self, 0);
+      self);
   on_connection_state_changed (NULL, NULL, self);
 
   g_object_weak_ref (G_OBJECT (self->connection),

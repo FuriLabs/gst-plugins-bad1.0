@@ -32,8 +32,6 @@
 #if defined(APPLEMEDIA_MOLTENVK)
 #include <gst/vulkan/vulkan.h>
 #endif
-#include <gst/codecparsers/gsth264parser.h>
-#include <gst/codecparsers/gstav1parser.h>
 
 G_BEGIN_DECLS
 
@@ -47,13 +45,6 @@ typedef struct _GstVtdec GstVtdec;
 typedef struct _GstVtdecClass GstVtdecClass;
 
 #define GST_VTDEC_DPB_MAX_SIZE 16
-
-typedef enum
-{
-    NoneSupported   = 0,
-    Av1Supported    = 1 << 0,
-    Vp9Supported    = 1 << 1,
-} SupplementalSupport;
 
 struct _GstVtdec
 {
@@ -84,13 +75,11 @@ struct _GstVtdec
 #endif
 
   gboolean require_hardware;
-  SupplementalSupport codec_support;
 
   gboolean av1_needs_sequence_header;  /* TRUE if we need to wait for sequence header OBU before creating session */
   GstBuffer *av1_sequence_header_obu;  /* Store the sequence header OBU for format description */
 
-  guint8* vp9_vpcc;
-  gsize   vp9_vpcc_size;
+  GstBuffer *vp9_vpcc;
 };
 
 struct _GstVtdecClass

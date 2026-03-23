@@ -276,14 +276,14 @@ _GET_FRAME (GstH264EncoderFrame * frame)
 }
 
 static StdVideoH264SliceType
-gst_vulkan_h264_slice_type (GstH264SliceType type)
+gst_vulkan_h264_slice_type (GstH26XGOPType type)
 {
   switch (type) {
-    case GST_H264_I_SLICE:
+    case GST_H26X_GOP_TYPE_I:
       return STD_VIDEO_H264_SLICE_TYPE_I;
-    case GST_H264_P_SLICE:
+    case GST_H26X_GOP_TYPE_P:
       return STD_VIDEO_H264_SLICE_TYPE_P;
-    case GST_H264_B_SLICE:
+    case GST_H26X_GOP_TYPE_B:
       return STD_VIDEO_H264_SLICE_TYPE_B;
     default:
       GST_WARNING ("Unsupported picture type '%d'", type);
@@ -371,7 +371,7 @@ gst_vulkan_h264_level_idc (int level_idc)
   return STD_VIDEO_H264_LEVEL_IDC_INVALID;
 }
 
-static GstH264Level
+static gint
 gst_h264_level_idc_from_vk (StdVideoH264LevelIdc vk_level_idc)
 {
   for (guint i = 0; i < G_N_ELEMENTS (H264LevelMap); i++) {
@@ -684,6 +684,7 @@ gst_vulkan_h264_encoder_new_sequence (GstH264Encoder * encoder,
   GstVulkanVideoCapabilities vk_caps;
   VkVideoEncodeH264CapabilitiesKHR *vk_h264_caps;
   GstVulkanEncoderQualityProperties quality_props;
+  StdVideoH264LevelIdc vk_max_level;
 
   if (!self->encoder) {
     GST_ELEMENT_ERROR (self, RESOURCE, NOT_FOUND,
@@ -885,6 +886,14 @@ gst_vulkan_h264_encoder_new_sequence (GstH264Encoder * encoder,
     return GST_FLOW_NOT_NEGOTIATED;
   }
 
+  /* gallium drivers always reply 1.0 level idc  */
+  vk_max_level = vk_caps.encoder.codec.h264.maxLevelIdc;
+  if (vk_max_level > STD_VIDEO_H264_LEVEL_IDC_1_0 && *level > 0) {
+    gint max_level = gst_h264_level_idc_from_vk (vk_max_level);
+    if (max_level >= 0)
+      *level = MIN (max_level, *level);
+  }
+
   gst_h264_encoder_set_max_num_references (encoder,
       vk_h264_caps->maxPPictureL0ReferenceCount,
       vk_h264_caps->maxL1ReferenceCount);
@@ -1076,15 +1085,17 @@ gst_vulkan_h264_encoder_new_parameters (GstH264Encoder * encoder,
   self->pps.sequence = &self->sps;
 
   {
+    GstVideoEncoder *vencoder = GST_VIDEO_ENCODER_CAST (self);
     GstCaps *caps;
     GstVideoInfo *info = &self->in_state->info;
     const char *profile, *level;
     GstVideoCodecState *out_state;
 
     profile = gst_vulkan_h264_profile_name (self->params.sps.profile_idc);
+    if (!profile)
+      return GST_FLOW_ERROR;
     level = gst_vulkan_h264_level_name (self->params.sps.level_idc);
-
-    if (!(profile && level))
+    if (!level)
       return GST_FLOW_ERROR;
 
     caps = gst_caps_new_simple ("video/x-h264", "profile", G_TYPE_STRING,
@@ -1093,9 +1104,21 @@ gst_vulkan_h264_encoder_new_parameters (GstH264Encoder * encoder,
         GST_VIDEO_INFO_HEIGHT (info), "alignment", G_TYPE_STRING, "au",
         "stream-format", G_TYPE_STRING, "byte-stream", NULL);
 
+    out_state = gst_video_encoder_get_output_state (vencoder);
+    if (out_state) {
+      gboolean early_return = FALSE;
+
+      if (out_state->caps)
+        early_return = gst_caps_is_subset (out_state->caps, caps);
+      gst_video_codec_state_unref (out_state);
+      if (early_return) {
+        gst_caps_unref (caps);
+        return GST_FLOW_OK;
+      }
+    }
+
     out_state =
-        gst_video_encoder_set_output_state (GST_VIDEO_ENCODER_CAST (self),
-        caps, self->in_state);
+        gst_video_encoder_set_output_state (vencoder, caps, self->in_state);
     gst_video_codec_state_unref (out_state);
   }
 
@@ -1475,7 +1498,7 @@ _setup_slice (GstVulkanH264Encoder * self, GstH264EncoderFrame * h264_frame,
     GstH264SliceHdr * slice_hdr)
 {
   GstVulkanH264EncoderFrame *vk_frame = _GET_FRAME (h264_frame);
-  GstH264SliceType slice_type = h264_frame->type.slice_type;
+  GstH264SliceType slice_type = (GstH264SliceType) h264_frame->gop.type;
 
   /* *INDENT-OFF* */
   vk_frame->slice_hdr = (StdVideoEncodeH264SliceHeader) {
@@ -1485,7 +1508,7 @@ _setup_slice (GstVulkanH264Encoder * self, GstH264EncoderFrame * h264_frame,
           slice_hdr->num_ref_idx_active_override_flag,
     },
     .first_mb_in_slice = slice_hdr->first_mb_in_slice, /* 0 */
-    .slice_type = gst_vulkan_h264_slice_type(h264_frame->type.slice_type),
+    .slice_type = gst_vulkan_h264_slice_type (h264_frame->gop.type),
     .cabac_init_idc = slice_hdr->cabac_init_idc,
     .disable_deblocking_filter_idc = slice_hdr->disable_deblocking_filter_idc,
     .slice_qp_delta = slice_hdr->slice_qp_delta,
@@ -1563,20 +1586,19 @@ _reset_rc_props (GstVulkanH264Encoder * self)
 }
 
 static StdVideoH264PictureType
-_gst_slice_type_2_vk_pic_type (GstH264GOPFrame * frame)
+_gst_slice_type_2_vk_pic_type (GstH26XGOP * frame)
 {
-  if ((frame->slice_type == GST_H264_I_SLICE) && frame->is_ref)
+  if (GST_H26X_GOP_IS_IDR (frame))
     return STD_VIDEO_H264_PICTURE_TYPE_IDR;
-  switch (frame->slice_type) {
-    case GST_H264_B_SLICE:
+  switch (frame->type) {
+    case GST_H26X_GOP_TYPE_B:
       return STD_VIDEO_H264_PICTURE_TYPE_B;
-    case GST_H264_P_SLICE:
+    case GST_H26X_GOP_TYPE_P:
       return STD_VIDEO_H264_PICTURE_TYPE_P;
-    case GST_H264_I_SLICE:
+    case GST_H26X_GOP_TYPE_I:
       return STD_VIDEO_H264_PICTURE_TYPE_I;
     default:
-      GST_WARNING ("Unsupported slice type '%d' for picture",
-          frame->slice_type);
+      GST_WARNING ("Unsupported slice type '%d' for picture", frame->type);
       return STD_VIDEO_H264_PICTURE_TYPE_INVALID;
   }
 }
@@ -1614,9 +1636,8 @@ gst_vulkan_h264_encoder_encode_frame (GstH264Encoder * base,
   /* *INDENT-OFF* */
   vk_frame->h264pic_info = (StdVideoEncodeH264PictureInfo) {
     .flags = {
-      .IdrPicFlag = ((h264_frame->type.slice_type == GST_H264_I_SLICE)
-          && h264_frame->type.is_ref),
-      .is_reference = h264_frame->type.is_ref,
+      .IdrPicFlag = GST_H26X_GOP_IS_IDR (&h264_frame->gop),
+      .is_reference = h264_frame->gop.is_ref,
       .no_output_of_prior_pics_flag =
           slice_hdr->dec_ref_pic_marking.no_output_of_prior_pics_flag,
       .long_term_reference_flag =
@@ -1627,7 +1648,7 @@ gst_vulkan_h264_encoder_encode_frame (GstH264Encoder * base,
     .seq_parameter_set_id = self->params.sps.seq_parameter_set_id,
     .pic_parameter_set_id = self->params.pps.pic_parameter_set_id,
     .idr_pic_id = slice_hdr->idr_pic_id,
-    .primary_pic_type = _gst_slice_type_2_vk_pic_type (&h264_frame->type),
+    .primary_pic_type = _gst_slice_type_2_vk_pic_type (&h264_frame->gop),
     .frame_num = h264_frame->gop_frame_num,
     .PicOrderCnt = h264_frame->poc,
     .temporal_id = 0,  /* no support for MVC extension */

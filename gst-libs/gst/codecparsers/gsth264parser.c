@@ -1830,18 +1830,26 @@ gst_h264_parser_identify_and_split_nalu_avc (GstH264NalParser * nalparser,
 GstH264ParserResult
 gst_h264_parser_parse_nal (GstH264NalParser * nalparser, GstH264NalUnit * nalu)
 {
-  GstH264SPS sps;
-  GstH264PPS pps;
+  GstH264ParserResult res = GST_H264_PARSER_OK;
 
   switch (nalu->type) {
-    case GST_H264_NAL_SPS:
-      return gst_h264_parser_parse_sps (nalparser, nalu, &sps);
+    case GST_H264_NAL_SPS:{
+      GstH264SPS sps;
+
+      res = gst_h264_parser_parse_sps (nalparser, nalu, &sps);
+      gst_h264_sps_clear (&sps);
       break;
-    case GST_H264_NAL_PPS:
-      return gst_h264_parser_parse_pps (nalparser, nalu, &pps);
+    }
+    case GST_H264_NAL_PPS:{
+      GstH264PPS pps;
+
+      res = gst_h264_parser_parse_pps (nalparser, nalu, &pps);
+      gst_h264_pps_clear (&pps);
+      break;
+    }
   }
 
-  return GST_H264_PARSER_OK;
+  return res;
 }
 
 /**
@@ -2935,6 +2943,11 @@ gst_h264_quant_matrix_4x4_get_raster_from_zigzag (guint8 out_quant[16],
  * Calculate framerate of a video sequence using @sps VUI information,
  * @field_pic_flag from a slice header and @pic_struct from #GstH264PicTiming SEI
  * message.
+ *
+ * **WARNING** This assumes that *all* pictures are identical ! Do not use this
+ * with content on which you are not 100% certain it's not telecine material, or
+ * other types of content which will use different picture types throughout the
+ * stream.
  *
  * If framerate is variable or can't be determined, @fps_num will be set to 0
  * and @fps_den to 1.

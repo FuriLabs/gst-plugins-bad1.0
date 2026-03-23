@@ -36,29 +36,35 @@ if __name__ == "__main__":
 
     module = os.path.basename(os.path.normpath(source_root))
 
-    print('Copying README.md into dist staging directory ..')
-    readme_src = os.path.join(source_root, '..', '..', 'README.md')
-    shutil.copy2(readme_src, dist_root)
+    # These modules have custom READMEs, keep those
+    if module not in ['gst-docs', 'gst-python', 'gstreamer-sharp']:
+        print('Copying README.md into dist staging directory ..')
+        readme_src = os.path.join(source_root, '..', '..', 'README.md')
+        shutil.copy2(readme_src, dist_root)
 
     # Release notes (instead of NEWS) - could also write it out as NEWS.md
     print('Copying release notes into dist staging directory ..')
-    relnotes_src = os.path.join(source_root, '..', '..', 'release-notes', major_minor, f'release-notes-{major_minor}.md')
+    relnotes_src = os.path.join(
+        source_root, '..', '..', 'release-notes', major_minor, f'release-notes-{major_minor}.md')
     with open(relnotes_src, 'r') as f:
         lines = f.readlines()
     if not f'### {project_version}\n' in lines:
-        sys.exit(f'Update {relnotes_src} first, must contain a section for {project_version}')
+        sys.exit(
+            f'Update {relnotes_src} first, must contain a section for {project_version}')
     if not project_version.endswith('.0'):
         found = False
         for line in lines:
             if line.startswith('The latest') and project_version in line:
                 found = True
         if not found:
-            sys.exit(f'Update {relnotes_src} first, header should say latest version is {project_version}.')
+            sys.exit(
+                f'Update {relnotes_src} first, header should say latest version is {project_version}.')
     shutil.copy2(relnotes_src, dist_root)
 
     # RELEASE
     print('Copying RELEASE into dist staging directory ..')
-    rel_src = os.path.join(source_root, '..', '..', 'release-notes', major_minor, f'RELEASE-{major_minor}.template')
+    rel_src = os.path.join(source_root, '..', '..', 'release-notes',
+                           major_minor, f'RELEASE-{major_minor}.template')
     with open(rel_src, 'r') as f:
         lines = f.readlines()
 

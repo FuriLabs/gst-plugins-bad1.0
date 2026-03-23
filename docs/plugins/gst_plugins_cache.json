@@ -9049,10 +9049,10 @@
             },
             "h264ccinserter": {
                 "author": "Seungha Yang <seungha@centricular.com>",
-                "description": "Insert closed caption data to H.264 streams",
+                "description": "Insert closed caption SEI messages into H.264 streams",
                 "hierarchy": [
                     "GstH264CCInserter",
-                    "GstCodecCCInserter",
+                    "GstCodecSEIInserter",
                     "GstElement",
                     "GstObject",
                     "GInitiallyUnowned",
@@ -9069,6 +9069,59 @@
                         "caps": "video/x-h264:\n      alignment: au\n",
                         "direction": "src",
                         "presence": "always"
+                    }
+                },
+                "rank": "none"
+            },
+            "h264seiinserter": {
+                "author": "Seungha Yang <seungha@centricular.com>",
+                "description": "Insert SEI messages into H.264 streams",
+                "hierarchy": [
+                    "GstH264SEIInserter",
+                    "GstH264CCInserter",
+                    "GstCodecSEIInserter",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "klass": "Codec/Video/Filter",
+                "pad-templates": {
+                    "sink": {
+                        "caps": "video/x-h264:\n      alignment: au\n",
+                        "direction": "sink",
+                        "presence": "always"
+                    },
+                    "src": {
+                        "caps": "video/x-h264:\n      alignment: au\n",
+                        "direction": "src",
+                        "presence": "always"
+                    }
+                },
+                "properties": {
+                    "remove-sei-unregistered-meta": {
+                        "blurb": "Remove SEI unregistered user data meta from outgoing video buffers",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "false",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "gboolean",
+                        "writable": true
+                    },
+                    "sei-types": {
+                        "blurb": "Which SEI message types to insert",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "unregistered+cc",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "GstCodecSEIInsertType",
+                        "writable": true
                     }
                 },
                 "rank": "none"
@@ -9102,10 +9155,10 @@
             },
             "h265ccinserter": {
                 "author": "Seungha Yang <seungha@centricular.com>",
-                "description": "Insert closed caption data to H.265 streams",
+                "description": "Insert closed caption SEI messages into H.265 streams",
                 "hierarchy": [
                     "GstH265CCInserter",
-                    "GstCodecCCInserter",
+                    "GstCodecSEIInserter",
                     "GstElement",
                     "GstObject",
                     "GInitiallyUnowned",
@@ -9122,6 +9175,59 @@
                         "caps": "video/x-h265:\n      alignment: au\n",
                         "direction": "src",
                         "presence": "always"
+                    }
+                },
+                "rank": "none"
+            },
+            "h265seiinserter": {
+                "author": "Seungha Yang <seungha@centricular.com>",
+                "description": "Insert SEI messages into H.265 streams",
+                "hierarchy": [
+                    "GstH265SEIInserter",
+                    "GstH265CCInserter",
+                    "GstCodecSEIInserter",
+                    "GstElement",
+                    "GstObject",
+                    "GInitiallyUnowned",
+                    "GObject"
+                ],
+                "klass": "Codec/Video/Filter",
+                "pad-templates": {
+                    "sink": {
+                        "caps": "video/x-h265:\n      alignment: au\n",
+                        "direction": "sink",
+                        "presence": "always"
+                    },
+                    "src": {
+                        "caps": "video/x-h265:\n      alignment: au\n",
+                        "direction": "src",
+                        "presence": "always"
+                    }
+                },
+                "properties": {
+                    "remove-sei-unregistered-meta": {
+                        "blurb": "Remove SEI unregistered user data meta from outgoing video buffers",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "false",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "gboolean",
+                        "writable": true
+                    },
+                    "sei-types": {
+                        "blurb": "Which SEI message types to insert",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "unregistered+cc",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "GstCodecSEIInsertType",
+                        "writable": true
                     }
                 },
                 "rank": "none"
@@ -9311,7 +9417,7 @@
                     }
                 ]
             },
-            "GstCodecCCInsertMetaOrder": {
+            "GstCodecSEIInsertMetaOrder": {
                 "kind": "enum",
                 "values": [
                     {
@@ -9326,9 +9432,24 @@
                     }
                 ]
             },
-            "GstCodecCCInserter": {
+            "GstCodecSEIInsertType": {
+                "kind": "flags",
+                "values": [
+                    {
+                        "desc": "Closed caption",
+                        "name": "cc",
+                        "value": "0x00000001"
+                    },
+                    {
+                        "desc": "Unregistered user data",
+                        "name": "unregistered",
+                        "value": "0x00000002"
+                    }
+                ]
+            },
+            "GstCodecSEIInserter": {
                 "hierarchy": [
-                    "GstCodecCCInserter",
+                    "GstCodecSEIInserter",
                     "GstElement",
                     "GstObject",
                     "GInitiallyUnowned",
@@ -9345,7 +9466,7 @@
                         "default": "decode (0)",
                         "mutable": "ready",
                         "readable": true,
-                        "type": "GstCodecCCInsertMetaOrder",
+                        "type": "GstCodecSEIInsertMetaOrder",
                         "writable": true
                     },
                     "remove-caption-meta": {
@@ -20342,7 +20463,7 @@
                         "construct": true,
                         "construct-only": false,
                         "controllable": false,
-                        "default": "rp188any (3)",
+                        "default": "rp188vitc1 (0)",
                         "mutable": "null",
                         "readable": true,
                         "type": "GstDecklinkTimecodeFormat",
@@ -22627,6 +22748,20 @@
                         "readable": true,
                         "type": "guint",
                         "writable": false
+                    },
+                    "version": {
+                        "blurb": "Negotiated version",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "0",
+                        "max": "65535",
+                        "min": "0",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "guint",
+                        "writable": false
                     }
                 },
                 "rank": "none",
@@ -22737,6 +22872,20 @@
                         "readable": true,
                         "type": "guint",
                         "writable": false
+                    },
+                    "version": {
+                        "blurb": "Negotiated version",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "0",
+                        "max": "65535",
+                        "min": "0",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "guint",
+                        "writable": false
                     }
                 },
                 "rank": "none",
@@ -22798,6 +22947,20 @@
                         "mutable": "null",
                         "readable": true,
                         "type": "GstDtlsConnectionState",
+                        "writable": false
+                    },
+                    "dtls-version": {
+                        "blurb": "Negotiated version",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "0",
+                        "max": "65535",
+                        "min": "0",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "guint",
                         "writable": false
                     },
                     "peer-pem": {
@@ -22908,6 +23071,20 @@
                         "mutable": "null",
                         "readable": true,
                         "type": "GstDtlsConnectionState",
+                        "writable": false
+                    },
+                    "dtls-version": {
+                        "blurb": "Negotiated version",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "0",
+                        "max": "65535",
+                        "min": "0",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "guint",
                         "writable": false
                     },
                     "is-client": {
@@ -246149,12 +246326,12 @@
                 "long-name": "Pitch controller",
                 "pad-templates": {
                     "sink": {
-                        "caps": "audio/x-raw:\n         format: F32LE\n           rate: [ 8000, 2147483647 ]\n       channels: [ 1, 2147483647 ]\n         layout: interleaved\n",
+                        "caps": "audio/x-raw:\n         format: F32LE\n           rate: [ 8000, 192000 ]\n       channels: [ 1, 16 ]\n         layout: interleaved\n",
                         "direction": "sink",
                         "presence": "always"
                     },
                     "src": {
-                        "caps": "audio/x-raw:\n         format: F32LE\n           rate: [ 8000, 2147483647 ]\n       channels: [ 1, 2147483647 ]\n         layout: interleaved\n",
+                        "caps": "audio/x-raw:\n         format: F32LE\n           rate: [ 8000, 192000 ]\n       channels: [ 1, 16 ]\n         layout: interleaved\n",
                         "direction": "src",
                         "presence": "always"
                     }
@@ -247844,6 +248021,17 @@
                             }
                         ],
                         "return-type": "GstCaps",
+                        "when": "last"
+                    },
+                    "invalidate-key": {
+                        "action": true,
+                        "args": [
+                            {
+                                "name": "arg0",
+                                "type": "guint"
+                            }
+                        ],
+                        "return-type": "void",
                         "when": "last"
                     },
                     "remove-key": {
@@ -250091,6 +250279,18 @@
                     }
                 },
                 "properties": {
+                    "ancillary-meta-locations": {
+                        "blurb": "Locations to use for ancillary meta",
+                        "conditionally-available": false,
+                        "construct": false,
+                        "construct-only": false,
+                        "controllable": false,
+                        "default": "NULL",
+                        "mutable": "null",
+                        "readable": true,
+                        "type": "gchararray",
+                        "writable": true
+                    },
                     "auto-resync": {
                         "blurb": "If true resync last known timecode from upstream, otherwise only count up from the last known one",
                         "conditionally-available": false,
@@ -250351,6 +250551,11 @@
                         "desc": "Buffer running time as timecode",
                         "name": "running-time",
                         "value": "6"
+                    },
+                    {
+                        "desc": "Ancillary meta in ST12-2 or ST12-3 format",
+                        "name": "ancillary-meta",
+                        "value": "7"
                     }
                 ]
             }

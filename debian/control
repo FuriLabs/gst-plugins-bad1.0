@@ -371,8 +371,8 @@ Depends: libgstreamer-plugins-extra1.0-0 (= ${binary:Version}),
          libgstreamer1.0-dev,
          ${gir:Depends},
          ${misc:Depends}
-Breaks: libgstreamer-plugins-bad1.0-dev (<< 1.28.0-1ubuntu2), libgstreamer-plugins-good1.0-dev (<< 1.28.0-1ubuntu3)
-Replaces: libgstreamer-plugins-bad1.0-dev (<< 1.28.0-1ubuntu2), libgstreamer-plugins-good1.0-dev (<< 1.28.0-1ubuntu3)
+Breaks: libgstreamer-plugins-bad1.0-dev (<< 1.28.1-2ubuntu2), libgstreamer-plugins-good1.0-dev (<< 1.28.0-1ubuntu3)
+Replaces: libgstreamer-plugins-bad1.0-dev (<< 1.28.1-2ubuntu2), libgstreamer-plugins-good1.0-dev (<< 1.28.0-1ubuntu3)
 Provides: ${gir:Provides}
 Description: GStreamer development files for libraries from the "extra" set
  GStreamer is a streaming media framework, based on graphs of filters
@@ -395,8 +395,8 @@ Architecture: any
 Multi-Arch: same
 Depends: ${gir:Depends}, ${misc:Depends}, ${shlibs:Depends}
 Provides: ${gir:Provides}
-Breaks: gir1.2-gst-plugins-bad-1.0 (<< 1.28.0-1ubuntu2)
-Replaces: gir1.2-gst-plugins-bad-1.0 (<< 1.28.0-1ubuntu2)
+Breaks: gir1.2-gst-plugins-bad-1.0 (<< 1.28.1-2ubuntu2)
+Replaces: gir1.2-gst-plugins-bad-1.0 (<< 1.28.1-2ubuntu2)
 Description: GObject introspection data for the GStreamer libraries from the "extra" set
  GStreamer is a streaming media framework, based on graphs of filters
  which operate on media data.  Applications using this library can do

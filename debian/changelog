@@ -1,3 +1,10 @@
+gst-plugins-bad1.0 (1.28.1-2ubuntu3) resolute; urgency=medium
+
+  * Stop having the bad -dev package depend on libgstreamer-plugins-good1.0-dev
+    (LP: #2147647)
+
+ -- Jeremy Bícha <jbicha@ubuntu.com>  Thu, 09 Apr 2026 10:35:47 -0400
+
 gst-plugins-bad1.0 (1.28.1-2ubuntu2) resolute; urgency=medium
 
   * d/rules: Move newly added GstCodecParsers-1.0.{gir,typelib} to the

@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.28.2-1ubuntu2) stonking; urgency=medium
+
+  * No-change rebuild for libopenexr-3-4-33.
+
+ -- Rik Mills <rikmills@kde.org>  Sat, 23 May 2026 11:40:08 +0100
+
 gst-plugins-bad1.0 (1.28.2-1ubuntu1) resolute; urgency=medium
 
   [ Charles ]

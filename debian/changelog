@@ -1,3 +1,41 @@
+gst-plugins-bad1.0 (1.28.4-1ubuntu1) stonking; urgency=medium
+
+  [ Charles ]
+  * Resynchronize with Debian. Remaining changes:
+    - d/rules:
+      + Disable LTO on ppc64el & s390x.
+      + Enable Vulkan, SDL3 is available in Ubuntu (and Debian,
+        but they disable there for some reason.)
+    - d/gbp.conf: Ubuntu VCS tags.
+    - Don't build wpewebkit plugins (gstreamer1.0-wpe).
+    - Don't build the opencv binary packages on i386, avoiding a large tree
+      of numeric-related dependencies for a binary package it's not required
+      to support.
+    - d/control, d/gstreamer1.0-plugins-bad.install, d/rules: Disable unavailable features on i386
+      + Don't require these Build-Depends on i386: libfreeaptx-dev,
+        liblrdf0-dev, libltc-dev, libneon27-dev, libzxing-dev, libopenni2-dev,
+        libqrencode-dev,  libtensorflow-lite-dev, and libzxing-dev.
+      + Disable ladspa, neon, openaptx, openni2, qroverlay, vulkan,
+        tflite, and hip on i386, since they're not built there for
+        Ubuntu.
+    - d/libgstreamer-plugins-bad1.0-0.install:
+      + Stop installing basecamerabin, codecparsers, codecs, photography
+        and play - plugins which have moved to -good.
+      + d/rules: Remove these modules from the -bad package.
+    - plugins-extra split:
+      + Introduce a new package containing a subset of -bad plugins
+        that will be included in Ubuntu main.
+        - libgstcamerabin, libgstcodecparsers, libgstcodecs, libgstphotography, libgstplay
+      + Have gstreamer1.0-plugins-bad depend on gstreamer1.0-plugins-extra.
+      + Replace+Break gstreamer1.0-plugins-good versions where -bad
+        plugins were patched in.
+      + libgstreamer-plugins-extra1.0-0.symbols: Add symbol file for new package.
+      + d/rules: Manually move the remaining components from -bad into -extra.
+    - d/patches/openssl4-dtls-bio-retry-read.patch: Fix FTBFS with
+      OpenSSL4 (Closes: 1138375) (LP: #2154923)
+
+ -- Charles <charles05@canonical.com>  Thu, 18 Jun 2026 18:04:23 +0100
+
 gst-plugins-bad1.0 (1.28.4-1) unstable; urgency=medium
 
   * New upstream version 1.28.4

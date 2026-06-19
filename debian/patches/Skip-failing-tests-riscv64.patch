@@ -9,7 +9,7 @@ so maybe extending its timeout would be a better fix
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tests/check/meson.build b/tests/check/meson.build
-index 6925932..ff326ce 100644
+index d8b046e..8e13825 100644
 --- a/tests/check/meson.build
 +++ b/tests/check/meson.build
 @@ -30,7 +30,7 @@ base_tests = [
@@ -21,7 +21,7 @@ index 6925932..ff326ce 100644
    [['elements/autoconvert.c'], get_option('autoconvert').disabled()],
    [['elements/autovideoconvert.c'], get_option('autoconvert').disabled()],
    [['elements/avwait.c'], get_option('timecode').disabled()],
-@@ -148,7 +148,7 @@ if host_machine.system() != 'windows'
+@@ -149,7 +149,7 @@ if host_machine.system() != 'windows'
      [['elements/avtpcrfsync.c'], true, [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
      [['elements/avtpcrfutil.c'], not avtp_dep.found(), [avtp_dep], ['../../ext/avtp/gstavtpcrfutil.c', '../../ext/avtp/gstavtpcrfbase.c']],
      [['elements/avtpcvfpay.c'], not avtp_dep.found(), [avtp_dep]],

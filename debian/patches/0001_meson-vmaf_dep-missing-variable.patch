@@ -8,10 +8,10 @@ Last-Update: 2025-12-11
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tests/check/meson.build b/tests/check/meson.build
-index ff326ce..8a4d55d 100644
+index 8e13825..5dc9f75 100644
 --- a/tests/check/meson.build
 +++ b/tests/check/meson.build
-@@ -172,7 +172,7 @@ if host_machine.system() != 'windows'
+@@ -173,7 +173,7 @@ if host_machine.system() != 'windows'
      [['elements/netsim.c'], true ],
      [['elements/shm.c'], not shm_enabled, shm_deps],
      [['elements/unixfd.c'], not gio_unix_dep.found()],

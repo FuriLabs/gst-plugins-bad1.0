@@ -1,3 +1,24 @@
+gst-plugins-bad1.0 (1.28.4-1) unstable; urgency=medium
+
+  * New upstream version 1.28.4
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Mon, 15 Jun 2026 09:09:07 +0200
+
+gst-plugins-bad1.0 (1.28.3-1) unstable; urgency=medium
+
+  * New upstream version 1.28.3
+  * d/control: bump BD libgstreamer1.0-dev to 1.28.3
+  * d/patches: refresh
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 12 May 2026 10:14:58 +0200
+
+gst-plugins-bad1.0 (1.28.2-2) unstable; urgency=medium
+
+  * d/control: bring orc build dependency with meson version
+  * d/control: remove libkate-dev from Build-Depends (Closes: #1134864)
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Wed, 29 Apr 2026 10:40:31 +0200
+
 gst-plugins-bad1.0 (1.28.2-1ubuntu2) stonking; urgency=medium
 
   * No-change rebuild for libopenexr-3-4-33.

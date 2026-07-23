@@ -297,13 +297,18 @@ av1_bitstreamfn_leb128 (GstBitReader * br, GstAV1ParserResult * retval)
     if (*retval != GST_AV1_PARSER_OK)
       return 0;
 
-    value |= (((gint) leb128_byte & 0x7f) << (i * 7));
+    value |= (((guint64) leb128_byte & 0x7f) << (i * 7));
     if (!(leb128_byte & 0x80))
       break;
+
+    if (i == 7 && leb128_byte & 0x80) {
+      *retval = GST_AV1_PARSER_BITSTREAM_ERROR;
+      return 0;
+    }
   }
 
   /* check for bitstream conformance see chapter4.10.5 */
-  if (value < GST_AV1_LEB128_MAX_VALUE) {
+  if (value <= GST_AV1_LEB128_MAX_VALUE) {
     return (guint32) value;
   } else {
     GST_WARNING ("invalid leb128");
@@ -4343,6 +4348,8 @@ gst_av1_parser_parse_tile_list_obu (GstAV1Parser * parser,
   }
 
   for (tile = 0; tile <= tile_list->tile_count_minus_1; tile++) {
+    guint32 tile_data_size;
+
     if (AV1_REMAINING_BITS (br) < 8 + 8 + 8 + 16) {
       retval = GST_AV1_PARSER_NO_MORE_DATA;
       goto error;
@@ -4357,8 +4364,8 @@ gst_av1_parser_parse_tile_list_obu (GstAV1Parser * parser,
     tile_list->entry[tile].coded_tile_data =
         obu->data + gst_bit_reader_get_pos (br) / 8;
     /* skip the coded_tile_data */
-    if (!gst_bit_reader_skip (br,
-            tile_list->entry[tile].tile_data_size_minus_1 + 1)) {
+    tile_data_size = tile_list->entry[tile].tile_data_size_minus_1 + 1;
+    if (!gst_bit_reader_skip (br, tile_data_size * 8)) {
       retval = GST_AV1_PARSER_NO_MORE_DATA;
       goto error;
     }

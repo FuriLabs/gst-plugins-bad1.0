@@ -149,6 +149,7 @@ struct _GstAV1Parse
   gboolean keyframe;
   gboolean show_frame;
   gboolean seen_non_padding;
+  gboolean lcevc;
   GstVideoParseUserData user_data;
 
   GstClockTime buffer_pts;
@@ -234,7 +235,8 @@ _obu_name (GstAV1OBUType type)
 }
 
 static guint32
-_read_leb128 (guint8 * data, GstAV1ParserResult * retval, guint32 * consumed)
+_read_leb128 (guint8 * data, gsize size, GstAV1ParserResult * retval,
+    guint32 * consumed)
 {
   guint8 leb128_byte = 0;
   guint64 value = 0;
@@ -243,7 +245,7 @@ _read_leb128 (guint8 * data, GstAV1ParserResult * retval, guint32 * consumed)
   GstBitReader br;
   guint32 cur_pos;
 
-  gst_bit_reader_init (&br, data, GST_AV1_LEB128_MAX_SIZE);
+  gst_bit_reader_init (&br, data, size);
 
   cur_pos = gst_bit_reader_get_pos (&br);
   for (i = 0; i < GST_AV1_LEB128_MAX_SIZE; i++) {
@@ -254,14 +256,19 @@ _read_leb128 (guint8 * data, GstAV1ParserResult * retval, guint32 * consumed)
       return 0;
     }
 
-    value |= (((gint) leb128_byte & 0x7f) << (i * 7));
+    value |= (((guint64) leb128_byte & 0x7f) << (i * 7));
     if (!(leb128_byte & 0x80))
       break;
+
+    if (i == 7 && leb128_byte & 0x80) {
+      *retval = GST_AV1_PARSER_BITSTREAM_ERROR;
+      return 0;
+    }
   }
 
   *consumed = (gst_bit_reader_get_pos (&br) - cur_pos) / 8;
   /* check for bitstream conformance see chapter4.10.5 */
-  if (value < GST_AV1_LEB128_MAX_VALUE) {
+  if (value <= GST_AV1_LEB128_MAX_VALUE) {
     *retval = GST_AV1_PARSER_OK;
     return (guint32) value;
   } else {
@@ -345,6 +352,7 @@ gst_av1_parse_reset (GstAV1Parse * self)
   self->highest_spatial_id = 0;
   self->first_frame = TRUE;
   self->seen_non_padding = FALSE;
+  self->lcevc = FALSE;
   gst_video_clear_user_data (&self->user_data, FALSE);
   gst_av1_parse_reset_obu_data_state (self);
   g_clear_pointer (&self->colorimetry, g_free);
@@ -765,14 +773,8 @@ gst_av1_parse_update_src_caps (GstAV1Parse * self, GstCaps * caps)
 
   final_caps = gst_caps_copy (sink_caps);
 
-  if (s && gst_structure_has_field (s, "width") &&
-      gst_structure_has_field (s, "height")) {
-    gst_structure_get_int (s, "width", &width);
-    gst_structure_get_int (s, "height", &height);
-  } else {
-    width = self->width;
-    height = self->height;
-  }
+  width = self->width;
+  height = self->height;
 
   if (width > 0 && height > 0)
     gst_caps_set_simple (final_caps, "width", G_TYPE_INT, width,
@@ -928,6 +930,9 @@ gst_av1_parse_update_src_caps (GstAV1Parse * self, GstCaps * caps)
         gst_video_hdr_format_to_string (GST_VIDEO_HDR_FORMAT_HDR10_PLUS), NULL);
   }
 
+  if (self->user_data.lcevc_enhancement_data || self->lcevc)
+    gst_caps_set_simple (final_caps, "lcevc", G_TYPE_BOOLEAN, TRUE, NULL);
+
   src_caps = gst_pad_get_current_caps (GST_BASE_PARSE_SRC_PAD (self));
 
   if (!(src_caps && gst_caps_is_strictly_equal (src_caps, final_caps))) {
@@ -991,7 +996,7 @@ gst_av1_parse_negotiate (GstAV1Parse * self, GstCaps * in_caps)
   }
 
   /* prefer TU alignment with obu-stream format as the default */
-  if (gst_av1_parse_caps_has_tu_alignment (self, caps)) {
+  if (caps && gst_av1_parse_caps_has_tu_alignment (self, caps)) {
     self->align = GST_AV1_PARSE_ALIGN_TEMPORAL_UNIT;
     self->stream_format = GST_AV1_PARSE_STREAM_FORMAT_OBU;
     goto done;
@@ -1104,6 +1109,7 @@ gst_av1_parse_set_sink_caps (GstBaseParse * parse, GstCaps * caps)
   /* accept upstream info if provided */
   gst_structure_get_int (str, "width", &self->width);
   gst_structure_get_int (str, "height", &self->height);
+  gst_structure_get_boolean (str, "lcevc", &self->lcevc);
   profile = gst_structure_get_string (str, "profile");
   if (profile)
     self->profile = gst_av1_parse_profile_from_string (profile);
@@ -1662,6 +1668,7 @@ gst_av1_parse_process_itut_t35 (GstAV1Parse * self,
   GstByteReader br;
 
   switch (itut_t35->itu_t_t35_country_code) {
+    case ITU_T_T35_COUNTRY_CODE_UK:
     case ITU_T_T35_COUNTRY_CODE_US:
       break;
     default:
@@ -1682,6 +1689,11 @@ gst_av1_parse_process_itut_t35 (GstAV1Parse * self,
 
   gst_video_parse_user_data (GST_ELEMENT (self), &self->user_data, &br,
       GST_VIDEO_PARSE_UTILS_FIELD_1, provider_code);
+
+  if (!self->lcevc && self->user_data.lcevc_enhancement_data != NULL) {
+    self->lcevc = TRUE;
+    self->update_caps = TRUE;
+  }
 }
 
 /* frame_complete will be set true if it is the frame edge. */
@@ -2377,7 +2389,7 @@ again:
     goto out;
   }
 
-  tu_sz = _read_leb128 (map_info.data, &res, &consumed);
+  tu_sz = _read_leb128 (map_info.data, map_info.size, &res, &consumed);
   if (tu_sz == 0 || res != GST_AV1_PARSER_OK) {
     /* error to get the TU size, should not be annex b. */
     goto out;

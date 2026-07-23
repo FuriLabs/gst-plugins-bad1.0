@@ -964,6 +964,11 @@ gst_h265_parse_process_nal (GstH265Parse * h265parse, GstH265NalUnit * nalu)
       if (no_rasl_output_flag && is_irap
           && slice.first_slice_segment_in_pic_flag == 1) {
         if (h265parse->mastering_display_info_state ==
+            GST_H265_PARSE_SEI_ACTIVE ||
+            h265parse->content_light_level_state == GST_H265_PARSE_SEI_ACTIVE)
+          h265parse->update_caps = TRUE;
+
+        if (h265parse->mastering_display_info_state ==
             GST_H265_PARSE_SEI_PARSED)
           h265parse->mastering_display_info_state = GST_H265_PARSE_SEI_ACTIVE;
         else if (h265parse->mastering_display_info_state ==
@@ -2074,8 +2079,9 @@ get_compatible_profile_caps (GstH265SPS * sps, GstH265Profile profile)
     }
 
     gst_caps_set_value (caps, "profile", &compat_profiles);
-    g_value_unset (&compat_profiles);
   }
+
+  g_value_unset (&compat_profiles);
 
   return caps;
 }
@@ -2358,16 +2364,8 @@ gst_h265_parse_update_src_caps (GstH265Parse * h265parse, GstCaps * caps)
 
       caps = gst_caps_copy (sink_caps);
 
-      /* sps should give this but upstream overrides */
-      if (s && gst_structure_has_field (s, "width"))
-        gst_structure_get_int (s, "width", &width);
-      else
-        width = h265parse->width;
-
-      if (s && gst_structure_has_field (s, "height"))
-        gst_structure_get_int (s, "height", &height);
-      else
-        height = h265parse->height;
+      width = h265parse->width;
+      height = h265parse->height;
 
       gst_caps_set_simple (caps, "width", G_TYPE_INT, width,
           "height", G_TYPE_INT, height, NULL);
@@ -3296,6 +3294,9 @@ gst_h265_parse_pre_push_frame (GstBaseParse * parse, GstBaseParseFrame * frame)
 
       if (h265parse->sei_pic_struct != GST_H265_SEI_PIC_STRUCT_FRAME)
         flags |= GST_VIDEO_TIME_CODE_FLAGS_INTERLACED;
+
+      if (h265parse->time_code.discontinuity_flag[i])
+        flags |= GST_VIDEO_TIME_CODE_FLAGS_DISCONT;
 
       /* Equation D-26 (without and tOffset)
        *

@@ -502,13 +502,25 @@ gst_h264_parse_vui_parameters (GstH264SPS * sps, NalReader * nr)
   if (vui->bitstream_restriction_flag) {
     READ_UINT8 (nr, vui->motion_vectors_over_pic_boundaries_flag, 1);
     READ_UE (nr, vui->max_bytes_per_pic_denom);
-    READ_UE_MAX (nr, vui->max_bits_per_mb_denom, 16);
-    READ_UE_MAX (nr, vui->log2_max_mv_length_horizontal, 16);
-    READ_UE_MAX (nr, vui->log2_max_mv_length_vertical, 16);
+    WARN_UE_MAX (nr, vui->max_bits_per_mb_denom, 16);
+    WARN_UE_MAX (nr, vui->log2_max_mv_length_horizontal, 16);
+    WARN_UE_MAX (nr, vui->log2_max_mv_length_vertical, 16);
     READ_UE (nr, vui->num_reorder_frames);
     READ_UE (nr, vui->max_dec_frame_buffering);
   }
 
+  return TRUE;
+
+warning:
+  GST_WARNING_ONCE ("Error detected, clearing bitstream restriction flag");
+  vui->bitstream_restriction_flag = 0;
+  vui->motion_vectors_over_pic_boundaries_flag = 0;
+  vui->max_bytes_per_pic_denom = 0;
+  vui->max_bits_per_mb_denom = 0;
+  vui->log2_max_mv_length_horizontal = 0;
+  vui->log2_max_mv_length_vertical = 0;
+  vui->num_reorder_frames = 0;
+  vui->max_dec_frame_buffering = 0;
   return TRUE;
 
 error:
@@ -2044,8 +2056,6 @@ gst_h264_parse_sps_mvc_data (NalReader * nr, GstH264SPS * sps)
   READ_UE_MAX (nr, mvc->num_views_minus1, GST_H264_MAX_VIEW_COUNT - 1);
 
   mvc->view = g_new0 (GstH264SPSExtMVCView, mvc->num_views_minus1 + 1);
-  if (!mvc->view)
-    goto error_allocation_failed;
 
   for (i = 0; i <= mvc->num_views_minus1; i++)
     READ_UE_MAX (nr, mvc->view[i].view_id, GST_H264_MAX_VIEW_ID);
@@ -2083,8 +2093,6 @@ gst_h264_parse_sps_mvc_data (NalReader * nr, GstH264SPS * sps)
   mvc->level_value =
       g_new0 (GstH264SPSExtMVCLevelValue,
       mvc->num_level_values_signalled_minus1 + 1);
-  if (!mvc->level_value)
-    goto error_allocation_failed;
 
   for (i = 0; i <= mvc->num_level_values_signalled_minus1; i++) {
     GstH264SPSExtMVCLevelValue *const level_value = &mvc->level_value[i];
@@ -2095,8 +2103,6 @@ gst_h264_parse_sps_mvc_data (NalReader * nr, GstH264SPS * sps)
     level_value->applicable_op =
         g_new0 (GstH264SPSExtMVCLevelValueOp,
         level_value->num_applicable_ops_minus1 + 1);
-    if (!level_value->applicable_op)
-      goto error_allocation_failed;
 
     for (j = 0; j <= level_value->num_applicable_ops_minus1; j++) {
       GstH264SPSExtMVCLevelValueOp *const op = &level_value->applicable_op[j];
@@ -2105,8 +2111,6 @@ gst_h264_parse_sps_mvc_data (NalReader * nr, GstH264SPS * sps)
 
       READ_UE_MAX (nr, op->num_target_views_minus1, 1023);
       op->target_view_id = g_new (guint16, op->num_target_views_minus1 + 1);
-      if (!op->target_view_id)
-        goto error_allocation_failed;
 
       for (k = 0; k <= op->num_target_views_minus1; k++)
         READ_UE_MAX (nr, op->target_view_id[k], GST_H264_MAX_VIEW_ID);
@@ -2114,11 +2118,6 @@ gst_h264_parse_sps_mvc_data (NalReader * nr, GstH264SPS * sps)
     }
   }
   return TRUE;
-
-error_allocation_failed:
-  GST_WARNING ("failed to allocate memory");
-  gst_h264_sps_clear (sps);
-  return FALSE;
 
 error:
   gst_h264_sps_clear (sps);
@@ -2636,15 +2635,19 @@ gst_h264_sps_mvc_clear (GstH264SPS * sps)
   g_free (mvc->view);
   mvc->view = NULL;
 
-  for (i = 0; i <= mvc->num_level_values_signalled_minus1; i++) {
-    GstH264SPSExtMVCLevelValue *const level_value = &mvc->level_value[i];
+  if (mvc->level_value) {
+    for (i = 0; i <= mvc->num_level_values_signalled_minus1; i++) {
+      GstH264SPSExtMVCLevelValue *const level_value = &mvc->level_value[i];
 
-    for (j = 0; j <= level_value->num_applicable_ops_minus1; j++) {
-      g_free (level_value->applicable_op[j].target_view_id);
-      level_value->applicable_op[j].target_view_id = NULL;
+      if (level_value->applicable_op) {
+        for (j = 0; j <= level_value->num_applicable_ops_minus1; j++) {
+          g_free (level_value->applicable_op[j].target_view_id);
+          level_value->applicable_op[j].target_view_id = NULL;
+        }
+      }
+      g_free (level_value->applicable_op);
+      level_value->applicable_op = NULL;
     }
-    g_free (level_value->applicable_op);
-    level_value->applicable_op = NULL;
   }
   g_free (mvc->level_value);
   mvc->level_value = NULL;

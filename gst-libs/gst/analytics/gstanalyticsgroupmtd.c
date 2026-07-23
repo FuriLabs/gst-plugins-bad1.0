@@ -45,8 +45,6 @@ typedef struct _GstAnalyticsGroupMtdData GstAnalyticsGroupMtdData;
 
 /*
  * GstAnalyticsGroupMtdData:
- * @semantic_tag: Semantic meaning of this grouping where a value of NULL means
- *    no semantic is defined for the group.
  * @members_len: Number of allocated member slots
  * @members_count: Number of assigned member slot
  * @members_allocated: TRUE if members was dynamically allocated, FALSE if using inplace storage
@@ -60,7 +58,6 @@ typedef struct _GstAnalyticsGroupMtdData GstAnalyticsGroupMtdData;
  */
 struct _GstAnalyticsGroupMtdData
 {
-  GstIdStr semantic_tag;
   gsize members_len;
   gsize members_count;
   gboolean members_allocated;
@@ -92,58 +89,6 @@ GstAnalyticsMtdType
 gst_analytics_group_mtd_get_mtd_type (void)
 {
   return (GstAnalyticsMtdType) & group_impl;
-}
-
-/**
- * gst_analytics_group_mtd_has_semantic_tag:
- * @handle: handle
- * @tag: tag string to compare against
- *
- * Check if the group's semantic tag matches @tag. An empty or unset tag never
- * matches.
- *
- * Returns: %TRUE if the group's semantic tag equals @tag.
- *
- * Since: 1.30
- */
-gboolean
-gst_analytics_group_mtd_has_semantic_tag (const GstAnalyticsGroupMtd * handle,
-    const gchar * tag)
-{
-  GstAnalyticsGroupMtdData *mtddata;
-  g_return_val_if_fail (handle, FALSE);
-  g_return_val_if_fail (tag, FALSE);
-
-  mtddata = gst_analytics_relation_meta_get_mtd_data (handle->meta, handle->id);
-  g_return_val_if_fail (mtddata != NULL, FALSE);
-
-  return gst_id_str_is_equal_to_str (&mtddata->semantic_tag, tag);
-}
-
-/**
- * gst_analytics_group_mtd_semantic_tag_has_prefix:
- * @handle: handle
- * @prefix: prefix string to test against
- *
- * Check if the group's semantic tag starts with @prefix. An empty or unset tag
- * never matches.
- *
- * Returns: %TRUE if the group's semantic tag starts with @prefix.
- *
- * Since: 1.30
- */
-gboolean
-gst_analytics_group_mtd_semantic_tag_has_prefix (const GstAnalyticsGroupMtd *
-    handle, const gchar * prefix)
-{
-  GstAnalyticsGroupMtdData *mtddata;
-  g_return_val_if_fail (handle, FALSE);
-  g_return_val_if_fail (prefix, FALSE);
-
-  mtddata = gst_analytics_relation_meta_get_mtd_data (handle->meta, handle->id);
-  g_return_val_if_fail (mtddata != NULL, FALSE);
-
-  return g_str_has_prefix (gst_id_str_as_str (&mtddata->semantic_tag), prefix);
 }
 
 /**
@@ -300,7 +245,6 @@ gst_analytics_relation_meta_add_group_mtd (GstAnalyticsRelationMeta * instance,
     group_mtd_data->members = g_malloc_n (pre_alloc_size, sizeof (guint));
     group_mtd_data->members_count = 0;
     group_mtd_data->members_allocated = TRUE;
-    gst_id_str_init (&group_mtd_data->semantic_tag);
   } else {
     return FALSE;
   }
@@ -341,7 +285,6 @@ gst_analytics_relation_meta_add_group_mtd_with_size (GstAnalyticsRelationMeta *
     group_data->members_count = 0;
     group_data->members = group_data->members_inplace;
     group_data->members_allocated = FALSE;
-    gst_id_str_init (&group_data->semantic_tag);
   } else {
     return FALSE;
   }
@@ -422,38 +365,6 @@ gst_analytics_group_mtd_add_member (GstAnalyticsGroupMtd * handle,
 }
 
 /**
- * gst_analytics_group_mtd_set_semantic_tag:
- * @handle: handle of #GstAnalyticsMtd where to set semantic_tag
- * @tag: (nullable): string representing a semantic type of grouping, or %NULL
- *   to clear the tag
- *
- * Set grouping semantic tag. This gives a context to understand the grouping.
- * For example "hand-21-kp", "human-pose-17-kp" that give a specific context
- * allowing to understand the grouping semantic. Pass %NULL to clear the tag.
- *
- * Returns: TRUE is semantic_tag was set successfully
- *
- * Since: 1.30
- */
-gboolean
-gst_analytics_group_mtd_set_semantic_tag (GstAnalyticsGroupMtd * handle,
-    const gchar * tag)
-{
-  g_return_val_if_fail (handle, FALSE);
-
-  GstAnalyticsGroupMtdData *group_data =
-      gst_analytics_relation_meta_get_mtd_data (handle->meta, handle->id);
-  g_return_val_if_fail (group_data != NULL, FALSE);
-
-  if (tag)
-    gst_id_str_set (&group_data->semantic_tag, tag);
-  else
-    gst_id_str_clear (&group_data->semantic_tag);
-
-  return TRUE;
-}
-
-/**
  * gst_analytics_relation_meta_get_group_mtd:
  * @meta: Instance of #GstAnalyticsRelationMeta
  * @an_meta_id: Id of #GstAnalyticsGroupMtd instance to retrieve
@@ -482,11 +393,6 @@ gst_analytics_group_mtd_transform (GstBuffer * transbuf,
   dst_data =
       gst_analytics_relation_meta_get_mtd_data (transmtd->meta, transmtd->id);
   g_return_val_if_fail (dst_data != NULL, FALSE);
-
-  GstIdStr tmp = GST_ID_STR_INIT;
-  gst_id_str_copy_into (&tmp, &dst_data->semantic_tag);
-  gst_id_str_init (&dst_data->semantic_tag);
-  gst_id_str_move (&dst_data->semantic_tag, &tmp);
 
   /* For dynamically allocated members we need to make an independent copy.
    * For in-place storage, fix up the pointer to the new location since it
@@ -518,6 +424,4 @@ gst_analytics_group_mtd_clear (GstBuffer * buffer, GstAnalyticsMtd * mtd)
   if (groupdata->members_allocated) {
     g_free (groupdata->members);
   }
-
-  gst_id_str_clear (&groupdata->semantic_tag);
 }

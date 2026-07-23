@@ -83,6 +83,9 @@
  * up to this size */
 #define MAX_PES_PAYLOAD (32 * 1024 * 1024)
 
+/* enable ignore-pcr if no PCR is seen within this milliseconds interval */
+#define IGNORE_PCR_THRESHOLD (1000 * GST_MSECOND)
+
 GST_DEBUG_CATEGORY_STATIC (ts_demux_debug);
 #define GST_CAT_DEFAULT ts_demux_debug
 
@@ -299,6 +302,7 @@ enum
   PROP_EMIT_STATS,
   PROP_LATENCY,
   PROP_SEND_SCTE35_EVENTS,
+  PROP_IGNORE_CONTINUITY_COUNTER,
   /* FILL ME */
 };
 
@@ -422,6 +426,28 @@ gst_ts_demux_class_init (GstTSDemuxClass * klass)
           G_MAXINT, DEFAULT_LATENCY,
           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * tsdemux:ignore-continuity-counter:
+   *
+   * Ignoring discontinuities in the stream continuity counters
+   *
+   * Some streams (HLS) are poorly generated and reset the continuity
+   * counter at fragment boundaries when there is no packet loss. The
+   * only way to handle those streams properly is to ignore the mismatch
+   * by setting this property to TRUE. In general, this property should
+   * not be otherwise used.
+   *
+   * Since: 1.30
+   */
+  g_object_class_install_property (gobject_class,
+      PROP_IGNORE_CONTINUITY_COUNTER,
+      g_param_spec_boolean ("ignore-continuity-counter",
+          "Ignore continuity counter",
+          "Ignore mismatched stream continuity counters in badly constructed streams",
+          FALSE,
+          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
+          GST_PARAM_MUTABLE_PLAYING));
+
   element_class = GST_ELEMENT_CLASS (klass);
   gst_element_class_add_pad_template (element_class,
       gst_static_pad_template_get (&video_template));
@@ -490,6 +516,8 @@ gst_ts_demux_init (GstTSDemux * demux)
 {
   MpegTSBase *base = (MpegTSBase *) demux;
 
+  demux->ignore_continuity_counter = FALSE;
+
   base->stream_size = sizeof (TSDemuxStream);
   base->parse_private_sections = TRUE;
   /* We are not interested in sections (all handled by mpegtsbase) */
@@ -526,6 +554,12 @@ gst_ts_demux_set_property (GObject * object, guint prop_id,
     case PROP_LATENCY:
       demux->latency = g_value_get_int (value);
       break;
+    case PROP_IGNORE_CONTINUITY_COUNTER:{
+      MpegTSBase *base = (MpegTSBase *) demux;
+      base->packetizer->ignore_continuity_counter =
+          demux->ignore_continuity_counter = g_value_get_boolean (value);
+      break;
+    }
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -549,6 +583,9 @@ gst_ts_demux_get_property (GObject * object, guint prop_id,
       break;
     case PROP_LATENCY:
       g_value_set_int (value, demux->latency);
+      break;
+    case PROP_IGNORE_CONTINUITY_COUNTER:
+      g_value_set_boolean (value, demux->ignore_continuity_counter);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1121,7 +1158,7 @@ handle_psi (MpegTSBase * base, GstMpegtsSection * section)
     GList *tmp;
     gboolean forward = FALSE;
 
-    if (demux->send_scte35_events) {
+    if (demux->send_scte35_events && demux->program) {
       for (tmp = demux->program->stream_list; tmp; tmp = tmp->next) {
         TSDemuxStream *stream = (TSDemuxStream *) tmp->data;
 
@@ -2653,7 +2690,7 @@ check_pending_buffers (GstTSDemux * demux)
         dur = MPEGTIME_TO_GSTTIME (lastval - firstval);
         GST_DEBUG_OBJECT (tmpstream->pad,
             "Pending content duration: %" GST_TIME_FORMAT, GST_TIME_ARGS (dur));
-        if (dur > 500 * GST_MSECOND) {
+        if (dur > IGNORE_PCR_THRESHOLD) {
           exceeded_threshold = TRUE;
           break;
         }
@@ -2669,7 +2706,8 @@ check_pending_buffers (GstTSDemux * demux)
     /* Except if we've exceed the maximum amount of pending buffers, in which
      * case we ignore PCR from now on */
     GST_DEBUG_OBJECT (demux,
-        "Saw more than 500ms of data without PCR. Ignoring PCR from now on");
+        "Saw more than %" GST_TIME_FORMAT " of data without PCR. "
+        "Ignoring PCR from now on", GST_TIME_ARGS (IGNORE_PCR_THRESHOLD));
     GST_MPEGTS_BASE (demux)->ignore_pcr = TRUE;
     demux->program->pcr_pid = 0x1fff;
     g_object_notify (G_OBJECT (demux), "ignore-pcr");
@@ -3914,7 +3952,8 @@ gst_ts_demux_handle_packet (GstTSDemux * demux, TSDemuxStream * stream,
       packet->scram_afc_cc & 0x30, cc, packet->payload);
 
   /* Check continuity */
-  if (stream->continuity_counter != CONTINUITY_UNSET) {
+  if (!demux->ignore_continuity_counter
+      && stream->continuity_counter != CONTINUITY_UNSET) {
     if (((stream->continuity_counter + 1) % 16) != cc) {
       if (stream->state != PENDING_PACKET_EMPTY) {
 #ifndef GST_DISABLE_GST_DEBUG

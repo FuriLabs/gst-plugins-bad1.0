@@ -28,11 +28,11 @@ BIO_FLAGS_AUTO_EOF, and BIO_eof returns 1 whenever that flag is set.
  ext/dtls/gstdtlsconnection.c | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/ext/dtls/gstdtlsconnection.c b/ext/dtls/gstdtlsconnection.c
-index 757ca7e..3fd6e2c 100644
---- a/ext/dtls/gstdtlsconnection.c
-+++ b/ext/dtls/gstdtlsconnection.c
-@@ -1217,8 +1217,9 @@ bio_method_read (BIO * bio, char *out_buffer, int size)
+Index: gst-plugins-bad1.0/ext/dtls/gstdtlsconnection.c
+===================================================================
+--- gst-plugins-bad1.0.orig/ext/dtls/gstdtlsconnection.c
++++ gst-plugins-bad1.0/ext/dtls/gstdtlsconnection.c
+@@ -1236,8 +1236,9 @@ bio_method_read (BIO * bio, char *out_bu
    internal_size = priv->bio_buffer_len - priv->bio_buffer_offset;
  
    if (!priv->bio_buffer) {

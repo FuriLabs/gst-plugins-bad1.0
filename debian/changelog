@@ -1,3 +1,21 @@
+gst-plugins-bad1.0 (1.29.2-1) experimental; urgency=medium
+
+  [ Marc Leeman ]
+  * d/control: gstreamer1.0-wpe, depend on gstreamer1.0-gl (Closes: #1141906)
+  * d/rules: enable msdk with oneVPL backend
+  * New upstream version 1.29.2
+  * d/control: update dependencies to 1.29.2
+  * d/rules: CK_TIMEOUT_MULTIPLIER=2 (mpegtsmux test) (Closes: #1142875)
+  * d/patches: refresh Skip-failing-tests.patch
+  * d/patches: refresh Skip-failing-tests-big-endian.patch
+  * d/patches: refresh Skip-failing-tests-riscv64.patch
+  * d/patches: refresh openssl4-dtls-bio-retry-read.patch
+
+  [ Charles ]
+  * Fix FTBS in openssl 4.0
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Tue, 28 Jul 2026 09:11:40 +0200
+
 gst-plugins-bad1.0 (1.29.1-1) experimental; urgency=medium
 
   [ Marc Leeman ]

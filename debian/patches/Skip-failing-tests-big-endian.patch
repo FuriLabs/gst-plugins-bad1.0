@@ -11,7 +11,7 @@ Index: gst-plugins-bad1.0/tests/check/meson.build
 ===================================================================
 --- gst-plugins-bad1.0.orig/tests/check/meson.build
 +++ gst-plugins-bad1.0/tests/check/meson.build
-@@ -68,7 +68,7 @@ base_tests = [
+@@ -71,7 +71,7 @@ base_tests = [
    [['elements/nvenc.c'], false, [gstgl_dep, gmodule_dep]],
    [['elements/nvdec.c'], not gstgl_dep.found(), [gstgl_dep, gmodule_dep]],
    [['elements/svthevcenc.c'], not svthevcenc_dep.found(), [svthevcenc_dep]],

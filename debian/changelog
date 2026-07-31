@@ -1,3 +1,9 @@
+gst-plugins-bad1.0 (1.29.2-2) experimental; urgency=medium
+
+  * d/: disable tflite (tensorflow lite) in trixie
+
+ -- Marc Leeman <marc.leeman@gmail.com>  Fri, 31 Jul 2026 13:36:26 +0200
+
 gst-plugins-bad1.0 (1.29.2-1) experimental; urgency=medium
 
   [ Marc Leeman ]
